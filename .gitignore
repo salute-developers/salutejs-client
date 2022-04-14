@@ -1,0 +1,29 @@
+##### OS FILES
+.DS_Store
+.history
+
+##### Editors
+.*.swp
+.idea
+.vscode
+.vs
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+##### BUILD
+node_modules/
+cypress/videos/
+npm-debug.log
+dist/
+esm/
+umd/
+*.tsbuildinfo
+build/
+
+# cypress
+cypress/screenshots/
+cypress/videos/
+
+.cache
+.env
