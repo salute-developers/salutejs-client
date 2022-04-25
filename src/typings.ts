@@ -96,9 +96,7 @@ export interface AssistantServerActionAppInfo {
     appversionId?: string;
 }
 
-export type AssistantServerAction =
-    | { action_id: string; parameters?: Record<string, unknown> }
-    | { type: string; payload?: Record<string, unknown> };
+export type AssistantServerAction = { action_id: string; parameters?: any } | { type: string; payload?: any };
 
 export type AssistantCommands =
     | ActionCommand
@@ -159,9 +157,9 @@ export interface AssistantActionCommand {
     };
 }
 
-export interface AssistantSmartAppData {
+export interface AssistantSmartAppData<P = any> {
     type: 'smart_app_data';
-    smart_app_data: Record<string, unknown>;
+    smart_app_data: P;
     sdk_meta?: SdkMeta;
 }
 
@@ -174,10 +172,10 @@ export interface AssistantSmartAppError {
     sdk_meta?: SdkMeta;
 }
 
-export interface AssistantSmartAppCommand extends AssistantSmartAppData {
+export interface AssistantSmartAppCommand<T = string, P = any> extends AssistantSmartAppData {
     smart_app_data: {
-        type: string;
-        payload?: Record<string, unknown>;
+        type: T;
+        payload?: P;
     };
     sdk_meta?: SdkMeta;
 }
