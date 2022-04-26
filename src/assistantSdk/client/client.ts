@@ -129,7 +129,9 @@ export const createClient = (
 
             isSsml ? clientSendText(text, {}, 'application/ssml') : clientSendText(text, {});
 
-            if (sendDisableDubbing) {
+            const isStillNeedReturnDubbing = prevDubbing === protocol.configuration.settings.dubbing;
+
+            if (sendDisableDubbing && isStillNeedReturnDubbing) {
                 sendSettings({ dubbing: prevDubbing });
             }
 
