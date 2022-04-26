@@ -39,7 +39,6 @@ describe('Проверяем createAssistantDev', () => {
     it('Проверяем инициализацию ассистента - ожидаем отправку OPEN_ASSISTANT, InitalSettings, initPhrase', (done) => {
         let settingsReceived: boolean;
         let openReceived: boolean;
-        let phraseReceived: boolean;
         server.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
             initProtocol(socket);
@@ -58,14 +57,9 @@ describe('Проверяем createAssistantDev', () => {
                 }
 
                 if (message.text && message.text.data === INIT_PHRASE) {
-                    phraseReceived = true;
-                }
-
-                // eslint-disable-next-line eqeqeq
-                if (openReceived != undefined && settingsReceived != undefined && phraseReceived != undefined) {
                     expect(openReceived, 'OPEN_ASSISTANT получен').to.be.true;
                     expect(settingsReceived, 'initialSetting получен').to.be.true;
-                    expect(phraseReceived, 'initPhrase получен').to.be.true;
+                    expect(true, 'initPhrase получен').to.be.true;
                     done();
                 }
             });
