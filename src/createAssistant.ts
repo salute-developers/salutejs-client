@@ -305,7 +305,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
         >(
             action: {
                 type: string;
-                payload: Record<string, unknown>;
+                payload?: any;
             },
             onData?: ObserverFunc<D>,
             onError?: ObserverFunc<E>,
