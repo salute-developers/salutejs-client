@@ -13,8 +13,10 @@ import {
     Cancel,
     ICancel,
     IMessage,
+    IChatHistoryRequest,
+    ChatHistoryRequest,
 } from '../../proto';
-import { VpsVersion } from '../../typings';
+import { VpsVersion, GetHistoryRequestClient, GetHistoryRequestProto } from '../../typings';
 
 export type BatchableMethods = {
     sendText: (
@@ -73,6 +75,7 @@ export const createClientMethods = ({
             | { legacyDevice: LegacyDevice }
             | { initialSettings: InitialSettings }
             | { cancel: Cancel }
+            | IChatHistoryRequest
         ) & {
             last: 1 | -1;
             messageName?: string;
@@ -109,6 +112,43 @@ export const createClientMethods = ({
                 initialSettings: InitialSettings.create(data),
                 last: last ? 1 : -1,
                 ...params,
+            },
+            messageId,
+        });
+    };
+
+    const getHistoryRequest = (
+        data: Required<Omit<IChatHistoryRequest, 'getHistoryRequest'>> & { history?: GetHistoryRequestClient },
+        last = true,
+        messageId = getMessageId(),
+    ) => {
+        const { uuid, device, history: historyClient } = data;
+        const historyProto: GetHistoryRequestProto = { messageTypes: historyClient?.messageTypes };
+
+        // Мапим объект настроек от пользователя в формат объекта протобафа
+        if (historyClient?.app) {
+            historyProto.app = Object.entries(historyClient.app).reduce(
+                (acc, [key, value]) => ({ ...acc, [key]: { value } }),
+                {},
+            );
+        }
+
+        if (historyClient?.offset) {
+            historyProto.offset = Object.entries(historyClient.offset).reduce(
+                (acc, [key, value]) => ({ ...acc, [key]: { value: value.toString() } }),
+                {},
+            );
+        }
+
+        return send({
+            payload: {
+                ...ChatHistoryRequest.create({
+                    uuid,
+                    device,
+                    getHistoryRequest: historyProto,
+                }),
+                messageName: 'GET_HISTORY',
+                last: last ? 1 : -1,
             },
             messageId,
         });
@@ -278,6 +318,7 @@ export const createClientMethods = ({
     return {
         sendDevice,
         sendInitialSettings,
+        getHistoryRequest,
         sendCancel,
         sendLegacyDevice,
         sendSettings,

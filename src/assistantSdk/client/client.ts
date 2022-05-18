@@ -1,5 +1,6 @@
 import { createNanoEvents } from '../../nanoevents';
-import { SystemMessageDataType, OriginalMessageType, MessageNames, AppInfo } from '../../typings';
+import { SystemMessageDataType, OriginalMessageType, MessageNames, AppInfo, HistoryMessages } from '../../typings';
+import { GetHistoryResponse } from '../../proto';
 
 import { BatchableMethods, createProtocol } from './protocol';
 
@@ -7,6 +8,7 @@ export interface ClientEvents {
     voice: (voice: Uint8Array, original: OriginalMessageType) => void;
     status: (status: OriginalMessageType['status'], original: OriginalMessageType) => void;
     systemMessage: (systemMessage: SystemMessageDataType, original: OriginalMessageType) => void;
+    history: (historyMessages: HistoryMessages[], original: OriginalMessageType) => void;
 }
 
 export type SystemMessage = SystemMessageDataType & {
@@ -169,6 +171,16 @@ export const createClient = (
 
         if (message.status) {
             emit('status', message.status, message);
+        }
+
+        if (message.messageName === 'TAKE_HISTORY' && message.bytes?.data) {
+            const history = GetHistoryResponse.decode(message.bytes?.data).historyMessages;
+            const parsedHistory: HistoryMessages[] = history.map((historyMessage) => ({
+                ...historyMessage,
+                content: JSON.parse(historyMessage.content || ''),
+            }));
+
+            emit('history', parsedHistory, message);
         }
     });
 
