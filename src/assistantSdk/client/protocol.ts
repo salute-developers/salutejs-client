@@ -109,6 +109,7 @@ export const createProtocol = (
     let status: 'connecting' | 'connected' | 'ready' | 'closed' = 'closed';
     let destroyed = false;
     let clearReadyTimer: number; // ид таймера установки состояния ready
+    let cancelUpdatingSettingsWhenSocketReady = () => {}; // отменяет обновление настроек VPS при готовности сокета
 
     const getMessageId = () => {
         return currentMessageId++;
@@ -201,11 +202,18 @@ export const createProtocol = (
     };
 
     const updateSettings = (obj: Partial<VpsConfiguration['settings']>) => {
+        const isSocketReady = status === 'connected' || status === 'ready';
+
+        cancelUpdatingSettingsWhenSocketReady();
+
         Object.assign(currentSettings.settings, obj);
 
-        if (status === 'connected' || status === 'ready') {
-            sendSettingsOriginal(obj);
+        if (!isSocketReady) {
+            cancelUpdatingSettingsWhenSocketReady = on('ready', () => updateSettings(obj));
+            return;
         }
+
+        sendSettingsOriginal(obj);
     };
 
     subscriptions.push(

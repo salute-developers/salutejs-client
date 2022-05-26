@@ -188,7 +188,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
     const transport = createTransport(configuration.fakeVps?.createFakeWS);
     const protocol = createProtocol(transport, {
         ...configuration,
-        // выключаем озвучку, пока голос не готов
+        // пока голос не готов, выключаем озвучку
         settings: { ...configuration.settings, dubbing: !voiceReady ? -1 : configuration.settings.dubbing },
     });
     const client = createClient(protocol, metaProvider);
@@ -197,8 +197,13 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         (event) => emit('assistant', event),
         () => {
             voiceReady = true;
-            // когда голос готов, возвращаем первоначальное состояние
-            protocol.changeSettings({ dubbing: settings.disableDubbing ? -1 : 1 });
+
+            // когда голос готов, обновляем настройки, если они отличаются от текущих
+            const currentDubbing = settings.disableDubbing === false ? 1 : -1;
+
+            if (protocol.configuration.settings.dubbing !== currentDubbing) {
+                protocol.changeSettings({ dubbing: currentDubbing });
+            }
         },
     );
 
