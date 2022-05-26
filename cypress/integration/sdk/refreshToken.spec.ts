@@ -2,9 +2,9 @@
 
 import { Server } from 'mock-socket';
 
-import { createAssistantClient } from '../../src';
-import { Message } from '../../src/proto';
-import { sendMessage } from '../support/helpers/socket.helpers';
+import { createAssistantClient } from '../../../src';
+import { Message } from '../../../src/proto';
+import { sendMessage } from '../../support/helpers/socket.helpers';
 
 describe('Проверяем обновление токена', () => {
     const token1 = 'token1';
