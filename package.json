@@ -97,7 +97,7 @@
     ],
     "sideEffects": false,
     "auto": {
-        "baseBranch": "main",
+        "baseBranch": "master",
         "plugins": [
             [
                 "npm",
