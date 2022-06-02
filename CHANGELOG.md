@@ -1,3 +1,15 @@
+# v1.1.1 (Thu Jun 02 2022)
+
+#### 🐛 Bug Fix
+
+- fix: Revert отправлять сначала текст, затем мету [#11](https://github.com/salute-developers/salutejs-client/pull/11) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.1.0 (Thu May 26 2022)
 
 #### 🚀 Enhancement
