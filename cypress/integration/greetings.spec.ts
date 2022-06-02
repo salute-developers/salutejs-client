@@ -2,8 +2,8 @@
 
 import { Server } from 'mock-socket';
 
-import { createAssistantClient } from '../../../src';
-import { Message } from '../../../src/proto';
+import { createAssistantClient } from '../../src';
+import { Message } from '../../src/proto';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ArgumentsType<T> = T extends (...args: infer U) => any ? U : never;

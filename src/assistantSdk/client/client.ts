@@ -70,7 +70,6 @@ export const createClient = (
     /** вызывает sendSystemMessage, куда подкладывает мету */
     const sendMeta = async (
         sendSystemMessage: (data: { data: Record<string, unknown>; messageName?: string }, last: boolean) => void,
-        last = false,
     ) => {
         const meta = provideMeta ? await provideMeta() : {};
 
@@ -80,7 +79,7 @@ export const createClient = (
                     data: meta,
                     messageName: '',
                 },
-                last,
+                false,
             );
         }
     };
@@ -119,20 +118,21 @@ export const createClient = (
             return undefined;
         }
 
-        return protocol.batch(async ({ sendSystemMessage, sendText: clientSendText, messageId }) => {
-            const textType = isSsml ? 'application/ssml' : undefined;
+        return protocol.batch(async ({ sendSystemMessage, sendText: clientSendText, sendSettings, messageId }) => {
+            await sendMeta(sendSystemMessage);
             const prevDubbing = protocol.configuration.settings.dubbing;
             const sendDisableDubbing = prevDubbing !== -1 && shouldSendDisableDubbing;
 
             if (sendDisableDubbing) {
-                protocol.changeSettings({ dubbing: -1 });
+                await sendSettings({ dubbing: -1 }, false);
             }
 
-            clientSendText(text, { last: -1 }, textType);
-            await sendMeta(sendSystemMessage, true);
+            isSsml ? clientSendText(text, {}, 'application/ssml') : clientSendText(text, {});
 
-            if (sendDisableDubbing && protocol.configuration.settings.dubbing !== 1) {
-                protocol.changeSettings({ dubbing: 1 });
+            const isStillNeedReturnDubbing = prevDubbing === protocol.configuration.settings.dubbing;
+
+            if (sendDisableDubbing && isStillNeedReturnDubbing) {
+                sendSettings({ dubbing: prevDubbing });
             }
 
             return messageId;
