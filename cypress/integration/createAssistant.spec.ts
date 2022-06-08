@@ -7,6 +7,7 @@ import { Hints, Suggestions } from '@salutejs/scenario';
 describe('Проверяем createAssistant', () => {
     beforeEach(() => {
         window.appInitialData = [];
+        window.__ASSISTANT_CLIENT__ = {};
         window.AssistantHost = {
             close: cy.stub(),
             ready: () => window.AssistantClient?.onStart(),
@@ -82,14 +83,14 @@ describe('Проверяем createAssistant', () => {
     it('Проверяем автовызов AssistantHost.ready', async () => {
         cy.spy(window.AssistantHost, 'ready');
         initAssistant();
-        await new Promise(resolve => setTimeout(resolve)); 
+        await new Promise((resolve) => setTimeout(resolve));
         expect(window.AssistantHost.ready).to.calledOnce;
     });
 
     it('Проверяем вызов ready вручную', async () => {
         cy.spy(window.AssistantHost, 'ready');
         const assistant = initAssistant({ ready: false });
-        await new Promise(resolve => setTimeout(resolve)); 
+        await new Promise((resolve) => setTimeout(resolve));
         expect(window.AssistantHost.ready).to.not.called;
         assistant.ready();
         expect(window.AssistantHost.ready).to.calledOnce;
@@ -255,5 +256,35 @@ describe('Проверяем createAssistant', () => {
 
         expect(appInitialData).to.deep.equals([]);
         expect(window.AssistantHost.ready).to.calledOnce;
+    });
+
+    describe('window.__ASSISTANT_CLIENT__', () => {
+        it('Mid из window.appInitialData сохраняется и не изменяется', () => {
+            const assistant = initAssistant({ ready: false });
+            const [, , smartAppData] = initialData;
+
+            window.appInitialData = [...initialData];
+            assistant.ready();
+
+            expect(window.__ASSISTANT_CLIENT__.firstMessageId).equal(smartAppData.sdk_meta.mid);
+            window.AssistantClient.onData({ ...smartAppData, sdk_meta: { mid: '234' } });
+            window.AssistantClient.onData({ ...smartAppData, sdk_meta: { mid: '345' } });
+            expect(window.__ASSISTANT_CLIENT__.firstMessageId).equal(smartAppData.sdk_meta.mid);
+        });
+
+        it('При отсутствии команды с mid в window.appInitialData, mid берётся из следующих комманд и не изменяется', () => {
+            const [character, insets, smartAppData] = initialData;
+            const assistant = initAssistant({ ready: false });
+
+            window.appInitialData = [character, insets];
+            assistant.ready();
+
+            expect(window.__ASSISTANT_CLIENT__.firstMessageId).equal(undefined);
+            window.AssistantClient.onData(smartAppData);
+            expect(window.__ASSISTANT_CLIENT__.firstMessageId).equal(smartAppData.sdk_meta.mid);
+            window.AssistantClient.onData({ ...smartAppData, sdk_meta: { mid: '234' } });
+            window.AssistantClient.onData({ ...smartAppData, sdk_meta: { mid: '345' } });
+            expect(window.__ASSISTANT_CLIENT__.firstMessageId).equal(smartAppData.sdk_meta.mid);
+        });
     });
 });
