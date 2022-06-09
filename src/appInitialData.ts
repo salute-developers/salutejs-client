@@ -26,7 +26,7 @@ export const appInitialData = (() => {
 
     return {
         /**
-         * Прочитать appInitialData
+         * Прочитать appInitialData. Запоминает состояние на момент прочтения
          * @returns Массив комманд
          */
         pull: () => {
@@ -34,6 +34,11 @@ export const appInitialData = (() => {
             pulled = [...(window.appInitialData || [])];
             return [...pulled];
         },
+        /**
+         * Прочитать appInitialData. Только возвращает текущее состояние initialData
+         * @returns Массив комманд
+         */
+        get: () => [...(window.appInitialData || [])],
         /**
          * Зафиксировать текущее состояние appInitialData
          */
@@ -72,18 +77,18 @@ export const appInitialData = (() => {
          * @returns Первое сообщение, соответствующее параметрам или undefined
          */
         find: <T>({ type, command }: { type?: string; command?: string }): T | undefined => {
-            const data = [...(window.appInitialData || [])];
-            const result = data.find((data) => {
-                if (!command && type && type === data.type) {
+            const initialCommands = [...(window.appInitialData || [])];
+            const result = initialCommands.find((initialCommand) => {
+                if (!command && type && type === initialCommand.type) {
                     return true;
                 }
-                const isCommandInSmartAppData = command && 'smart_app_data' in data;
+                const isCommandInSmartAppData = command && 'smart_app_data' in initialCommand;
                 if (!isCommandInSmartAppData) {
                     return;
                 }
                 if (
-                    command === ((data.smart_app_data as unknown) as { command: string }).command ||
-                    command === (data.smart_app_data as AssistantSmartAppCommand['smart_app_data']).type
+                    command === ((initialCommand.smart_app_data as unknown) as { command: string }).command ||
+                    command === (initialCommand.smart_app_data as AssistantSmartAppCommand['smart_app_data']).type
                 ) {
                     return true;
                 }

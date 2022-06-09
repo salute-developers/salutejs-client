@@ -183,10 +183,22 @@ export const createAssistant = <A extends AssistantSmartAppData>({
         }
     };
 
+    const saveFirstMessageId = (mid: string) => {
+        // eslint-disable-next-line no-underscore-dangle
+        if (typeof window.__ASSISTANT_CLIENT__.firstMessageId === 'undefined') {
+            // eslint-disable-next-line no-underscore-dangle
+            window.__ASSISTANT_CLIENT__.firstMessageId = mid;
+        }
+    };
+
     window.AssistantClient = {
         onData: (command: AssistantClientCommand) => {
             if (appInitialData.isCommitted(command)) {
                 return;
+            }
+
+            if ((command.sdk_meta?.mid || '-1') !== '-1') {
+                saveFirstMessageId(command.sdk_meta?.mid!);
             }
 
             /// фильтр команды 'назад'
@@ -239,6 +251,12 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     };
 
     const readyFn = () => {
+        const firstMid = appInitialData.get().find((c) => (c.sdk_meta?.mid || '-1') !== '-1')?.sdk_meta?.mid || '-1';
+
+        if (firstMid !== '-1') {
+            saveFirstMessageId(firstMid);
+        }
+
         appInitialData.commit();
         window.AssistantHost?.ready();
     };
