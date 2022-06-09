@@ -1,3 +1,15 @@
+# v1.2.0 (Thu Jun 09 2022)
+
+#### 🚀 Enhancement
+
+- feat: Добавлено поле firstMessageId в window.__ASSISTANT_CLIENT__ [#13](https://github.com/salute-developers/salutejs-client/pull/13) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.1.1 (Thu Jun 02 2022)
 
 #### 🐛 Bug Fix
