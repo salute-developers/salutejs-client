@@ -259,32 +259,43 @@ describe('Проверяем createAssistant', () => {
     });
 
     describe('window.__ASSISTANT_CLIENT__', () => {
-        it('Mid из window.appInitialData сохраняется и не изменяется', () => {
+        it('Mid smartAppData из window.appInitialData сохраняется и не изменяется. Mid другой команды не берётся', () => {
             const assistant = initAssistant({ ready: false });
             const [, , smartAppData] = initialData;
+            const commandNavigation = {
+                type: 'navigation',
+                navigation: { command: 'UP' },
+                sdk_meta: { mid: '7652349' },
+            };
 
-            window.appInitialData = [...initialData];
+            window.appInitialData = [commandNavigation, ...initialData];
             assistant.ready();
 
-            expect(window.__ASSISTANT_CLIENT__.firstMessageId).equal(smartAppData.sdk_meta.mid);
+            expect(window.__ASSISTANT_CLIENT__.firstSmartAppDataMid).equal(smartAppData.sdk_meta.mid);
             window.AssistantClient.onData({ ...smartAppData, sdk_meta: { mid: '234' } });
             window.AssistantClient.onData({ ...smartAppData, sdk_meta: { mid: '345' } });
-            expect(window.__ASSISTANT_CLIENT__.firstMessageId).equal(smartAppData.sdk_meta.mid);
+            expect(window.__ASSISTANT_CLIENT__.firstSmartAppDataMid).equal(smartAppData.sdk_meta.mid);
         });
 
-        it('При отсутствии команды с mid в window.appInitialData, mid берётся из следующих комманд и не изменяется', () => {
+        it('При отсутствии smartAppData в window.appInitialData, mid берётся из следующих команд и не изменяется. Mid другой команды не берётся', () => {
             const [character, insets, smartAppData] = initialData;
+            const commandNavigation = {
+                type: 'navigation',
+                navigation: { command: 'UP' },
+                sdk_meta: { mid: '7652349' },
+            };
             const assistant = initAssistant({ ready: false });
 
             window.appInitialData = [character, insets];
             assistant.ready();
 
-            expect(window.__ASSISTANT_CLIENT__.firstMessageId).equal(undefined);
+            expect(window.__ASSISTANT_CLIENT__.firstSmartAppDataMid).equal(undefined);
+            window.AssistantClient.onData({ ...commandNavigation, sdk_meta: { mid: '984' } });
             window.AssistantClient.onData(smartAppData);
-            expect(window.__ASSISTANT_CLIENT__.firstMessageId).equal(smartAppData.sdk_meta.mid);
+            expect(window.__ASSISTANT_CLIENT__.firstSmartAppDataMid).equal(smartAppData.sdk_meta.mid);
             window.AssistantClient.onData({ ...smartAppData, sdk_meta: { mid: '234' } });
             window.AssistantClient.onData({ ...smartAppData, sdk_meta: { mid: '345' } });
-            expect(window.__ASSISTANT_CLIENT__.firstMessageId).equal(smartAppData.sdk_meta.mid);
+            expect(window.__ASSISTANT_CLIENT__.firstSmartAppDataMid).equal(smartAppData.sdk_meta.mid);
         });
     });
 });

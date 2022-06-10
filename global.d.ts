@@ -7,7 +7,7 @@ export declare global {
     interface Window {
         __ASSISTANT_CLIENT__: {
             version: string;
-            firstMessageId?: string;
+            firstSmartAppDataMid?: string;
         };
         webkitAudioContext?: new () => AudioContext;
     }

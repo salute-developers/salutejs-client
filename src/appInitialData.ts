@@ -35,7 +35,7 @@ export const appInitialData = (() => {
             return [...pulled];
         },
         /**
-         * Прочитать appInitialData. Только возвращает текущее состояние initialData
+         * Прочитать appInitialData
          * @returns Массив комманд
          */
         get: () => [...(window.appInitialData || [])],
