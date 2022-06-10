@@ -183,11 +183,11 @@ export const createAssistant = <A extends AssistantSmartAppData>({
         }
     };
 
-    const saveFirstMessageId = (mid: string) => {
+    const saveFirstSmartAppDataMid = (mid: string) => {
         // eslint-disable-next-line no-underscore-dangle
-        if (typeof window.__ASSISTANT_CLIENT__.firstMessageId === 'undefined') {
+        if (typeof window.__ASSISTANT_CLIENT__.firstSmartAppDataMid === 'undefined') {
             // eslint-disable-next-line no-underscore-dangle
-            window.__ASSISTANT_CLIENT__.firstMessageId = mid;
+            window.__ASSISTANT_CLIENT__.firstSmartAppDataMid = mid;
         }
     };
 
@@ -197,8 +197,8 @@ export const createAssistant = <A extends AssistantSmartAppData>({
                 return;
             }
 
-            if ((command.sdk_meta?.mid || '-1') !== '-1') {
-                saveFirstMessageId(command.sdk_meta?.mid!);
+            if (command.type === 'smart_app_data' && (command.sdk_meta?.mid || '-1') !== '-1') {
+                saveFirstSmartAppDataMid(command.sdk_meta?.mid!);
             }
 
             /// фильтр команды 'назад'
@@ -251,10 +251,13 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     };
 
     const readyFn = () => {
-        const firstMid = appInitialData.get().find((c) => (c.sdk_meta?.mid || '-1') !== '-1')?.sdk_meta?.mid || '-1';
+        const firstSmartAppDataMid =
+            appInitialData.get().find((c) => {
+                return c.type === 'smart_app_data' && (c.sdk_meta?.mid || '-1') !== '-1';
+            })?.sdk_meta?.mid || '-1';
 
-        if (firstMid !== '-1') {
-            saveFirstMessageId(firstMid);
+        if (firstSmartAppDataMid !== '-1') {
+            saveFirstSmartAppDataMid(firstSmartAppDataMid);
         }
 
         appInitialData.commit();
