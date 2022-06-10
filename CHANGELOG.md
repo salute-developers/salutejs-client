@@ -1,3 +1,15 @@
+# v1.2.1 (Fri Jun 10 2022)
+
+#### 🐛 Bug Fix
+
+- fix: Изменение firstMessageId в firstSmartAppDataMid [#14](https://github.com/salute-developers/salutejs-client/pull/14) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.2.0 (Thu Jun 09 2022)
 
 #### 🚀 Enhancement
