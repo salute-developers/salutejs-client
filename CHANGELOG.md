@@ -1,3 +1,15 @@
+# v1.3.0 (Thu Jun 23 2022)
+
+#### 🚀 Enhancement
+
+- feat: Обновлена версия Scenario [#9](https://github.com/salute-developers/salutejs-client/pull/9) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.2.1 (Fri Jun 10 2022)
 
 #### 🐛 Bug Fix
