@@ -1,3 +1,15 @@
+# v1.4.0 (Mon Jul 04 2022)
+
+#### 🚀 Enhancement
+
+- Добавлена поддержка GetHistoryRequest [#4](https://github.com/salute-developers/salutejs-client/pull/4) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.3.1 (Mon Jul 04 2022)
 
 #### 🐛 Bug Fix
