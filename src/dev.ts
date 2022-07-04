@@ -29,7 +29,7 @@ const APP_VERSION = 'process.env.APP_VERSION';
 const HOST_APP_ID = 'ru.sb' + 'erb' + 'ank.sdakit.demo';
 
 const FEATURES = JSON.stringify({
-    appTypes: ['DIALOG', 'WEB_APP'],
+    appTypes: ['DIALOG', 'WEB_APP', 'CHAT_APP'],
 });
 
 const legacyDevice = {
