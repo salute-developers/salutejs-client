@@ -15,6 +15,7 @@ import {
     CharacterId,
     AssistantBackgroundApp,
     AssistantCommand,
+    HistoryMessages,
 } from '../typings';
 
 import { createClient } from './client/client';
@@ -98,6 +99,7 @@ export type AssistantEvents = {
     command: (command: AssistantCommand) => void;
     status: (status: OriginalMessageType['status']) => void;
     error: (error: AssistantError) => void;
+    history: (history: HistoryMessages[]) => void;
 };
 
 export interface CreateAssistantDevOptions {
@@ -283,6 +285,13 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         }),
     );
 
+    // история на запрос GetHistoryRequest
+    subscriptions.push(
+        client.on('history', (history) => {
+            emit('history', history);
+        }),
+    );
+
     // обработка входящих команд, и событий аппа
     subscriptions.push(
         client.on('systemMessage', (systemMessage: SystemMessageDataType, originalMessage: OriginalMessageType) => {
@@ -417,6 +426,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         closeApp,
         listen: voice.listen,
         sendServerAction,
+        getHistoryRequest: protocol.getHistoryRequest,
         sendText,
         start,
         stop: () => {

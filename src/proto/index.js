@@ -41,6 +41,8 @@
          * @property {IBytes|null} [bytes] Message bytes
          * @property {IInitialSettings|null} [initialSettings] Message initialSettings
          * @property {ICancel|null} [cancel] Message cancel
+         * @property {IGetHistoryRequest|null} [getHistoryRequest] Message getHistoryRequest
+         * @property {IMute|null} [mute] Message mute
          * @property {number|Long|null} [timestamp] Message timestamp
          * @property {Object.<string,string>|null} [meta] Message meta
          */
@@ -215,6 +217,22 @@
         Message.prototype.cancel = null;
     
         /**
+         * Message getHistoryRequest.
+         * @member {IGetHistoryRequest|null|undefined} getHistoryRequest
+         * @memberof Message
+         * @instance
+         */
+        Message.prototype.getHistoryRequest = null;
+    
+        /**
+         * Message mute.
+         * @member {IMute|null|undefined} mute
+         * @memberof Message
+         * @instance
+         */
+        Message.prototype.mute = null;
+    
+        /**
          * Message timestamp.
          * @member {number|Long} timestamp
          * @memberof Message
@@ -235,12 +253,12 @@
     
         /**
          * Message content.
-         * @member {"voice"|"text"|"systemMessage"|"legacyDevice"|"settings"|"status"|"device"|"bytes"|"initialSettings"|"cancel"|undefined} content
+         * @member {"voice"|"text"|"systemMessage"|"legacyDevice"|"settings"|"status"|"device"|"bytes"|"initialSettings"|"cancel"|"getHistoryRequest"|"mute"|undefined} content
          * @memberof Message
          * @instance
          */
         Object.defineProperty(Message.prototype, "content", {
-            get: $util.oneOfGetter($oneOfFields = ["voice", "text", "systemMessage", "legacyDevice", "settings", "status", "device", "bytes", "initialSettings", "cancel"]),
+            get: $util.oneOfGetter($oneOfFields = ["voice", "text", "systemMessage", "legacyDevice", "settings", "status", "device", "bytes", "initialSettings", "cancel", "getHistoryRequest", "mute"]),
             set: $util.oneOfSetter($oneOfFields)
         });
     
@@ -312,6 +330,10 @@
                     writer.uint32(/* id 20, wireType 2 =*/162).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 2 =*/18).string(message.meta[keys[i]]).ldelim();
             if (message.cancel != null && Object.hasOwnProperty.call(message, "cancel"))
                 $root.Cancel.encode(message.cancel, writer.uint32(/* id 21, wireType 2 =*/170).fork()).ldelim();
+            if (message.getHistoryRequest != null && Object.hasOwnProperty.call(message, "getHistoryRequest"))
+                $root.GetHistoryRequest.encode(message.getHistoryRequest, writer.uint32(/* id 22, wireType 2 =*/178).fork()).ldelim();
+            if (message.mute != null && Object.hasOwnProperty.call(message, "mute"))
+                $root.Mute.encode(message.mute, writer.uint32(/* id 23, wireType 2 =*/186).fork()).ldelim();
             return writer;
         };
     
@@ -404,6 +426,12 @@
                     break;
                 case 21:
                     message.cancel = $root.Cancel.decode(reader, reader.uint32());
+                    break;
+                case 22:
+                    message.getHistoryRequest = $root.GetHistoryRequest.decode(reader, reader.uint32());
+                    break;
+                case 23:
+                    message.mute = $root.Mute.decode(reader, reader.uint32());
                     break;
                 case 19:
                     message.timestamp = reader.int64();
@@ -597,6 +625,26 @@
                         return "cancel." + error;
                 }
             }
+            if (message.getHistoryRequest != null && message.hasOwnProperty("getHistoryRequest")) {
+                if (properties.content === 1)
+                    return "content: multiple values";
+                properties.content = 1;
+                {
+                    var error = $root.GetHistoryRequest.verify(message.getHistoryRequest);
+                    if (error)
+                        return "getHistoryRequest." + error;
+                }
+            }
+            if (message.mute != null && message.hasOwnProperty("mute")) {
+                if (properties.content === 1)
+                    return "content: multiple values";
+                properties.content = 1;
+                {
+                    var error = $root.Mute.verify(message.mute);
+                    if (error)
+                        return "mute." + error;
+                }
+            }
             if (message.timestamp != null && message.hasOwnProperty("timestamp"))
                 if (!$util.isInteger(message.timestamp) && !(message.timestamp && $util.isInteger(message.timestamp.low) && $util.isInteger(message.timestamp.high)))
                     return "timestamp: integer|Long expected";
@@ -705,6 +753,16 @@
                 if (typeof object.cancel !== "object")
                     throw TypeError(".Message.cancel: object expected");
                 message.cancel = $root.Cancel.fromObject(object.cancel);
+            }
+            if (object.getHistoryRequest != null) {
+                if (typeof object.getHistoryRequest !== "object")
+                    throw TypeError(".Message.getHistoryRequest: object expected");
+                message.getHistoryRequest = $root.GetHistoryRequest.fromObject(object.getHistoryRequest);
+            }
+            if (object.mute != null) {
+                if (typeof object.mute !== "object")
+                    throw TypeError(".Message.mute: object expected");
+                message.mute = $root.Mute.fromObject(object.mute);
             }
             if (object.timestamp != null)
                 if ($util.Long)
@@ -845,6 +903,16 @@
                 object.cancel = $root.Cancel.toObject(message.cancel, options);
                 if (options.oneofs)
                     object.content = "cancel";
+            }
+            if (message.getHistoryRequest != null && message.hasOwnProperty("getHistoryRequest")) {
+                object.getHistoryRequest = $root.GetHistoryRequest.toObject(message.getHistoryRequest, options);
+                if (options.oneofs)
+                    object.content = "getHistoryRequest";
+            }
+            if (message.mute != null && message.hasOwnProperty("mute")) {
+                object.mute = $root.Mute.toObject(message.mute, options);
+                if (options.oneofs)
+                    object.content = "mute";
             }
             return object;
         };
@@ -3667,6 +3735,3555 @@
         };
     
         return Cancel;
+    })();
+    
+    $root.Mute = (function() {
+    
+        /**
+         * Properties of a Mute.
+         * @exports IMute
+         * @interface IMute
+         */
+    
+        /**
+         * Constructs a new Mute.
+         * @exports Mute
+         * @classdesc Represents a Mute.
+         * @implements IMute
+         * @constructor
+         * @param {IMute=} [properties] Properties to set
+         */
+        function Mute(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * Creates a new Mute instance using the specified properties.
+         * @function create
+         * @memberof Mute
+         * @static
+         * @param {IMute=} [properties] Properties to set
+         * @returns {Mute} Mute instance
+         */
+        Mute.create = function create(properties) {
+            return new Mute(properties);
+        };
+    
+        /**
+         * Encodes the specified Mute message. Does not implicitly {@link Mute.verify|verify} messages.
+         * @function encode
+         * @memberof Mute
+         * @static
+         * @param {IMute} message Mute message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Mute.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified Mute message, length delimited. Does not implicitly {@link Mute.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Mute
+         * @static
+         * @param {IMute} message Mute message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Mute.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes a Mute message from the specified reader or buffer.
+         * @function decode
+         * @memberof Mute
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Mute} Mute
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Mute.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Mute();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes a Mute message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Mute
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Mute} Mute
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Mute.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies a Mute message.
+         * @function verify
+         * @memberof Mute
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Mute.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            return null;
+        };
+    
+        /**
+         * Creates a Mute message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Mute
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Mute} Mute
+         */
+        Mute.fromObject = function fromObject(object) {
+            if (object instanceof $root.Mute)
+                return object;
+            return new $root.Mute();
+        };
+    
+        /**
+         * Creates a plain object from a Mute message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Mute
+         * @static
+         * @param {Mute} message Mute
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Mute.toObject = function toObject() {
+            return {};
+        };
+    
+        /**
+         * Converts this Mute to JSON.
+         * @function toJSON
+         * @memberof Mute
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Mute.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return Mute;
+    })();
+    
+    $root.GetHistoryRequest = (function() {
+    
+        /**
+         * Properties of a GetHistoryRequest.
+         * @exports IGetHistoryRequest
+         * @interface IGetHistoryRequest
+         * @property {Array.<string>|null} [messageTypes] GetHistoryRequest messageTypes
+         * @property {IApp|null} [app] GetHistoryRequest app
+         * @property {IOffset|null} [offset] GetHistoryRequest offset
+         */
+    
+        /**
+         * Constructs a new GetHistoryRequest.
+         * @exports GetHistoryRequest
+         * @classdesc Represents a GetHistoryRequest.
+         * @implements IGetHistoryRequest
+         * @constructor
+         * @param {IGetHistoryRequest=} [properties] Properties to set
+         */
+        function GetHistoryRequest(properties) {
+            this.messageTypes = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * GetHistoryRequest messageTypes.
+         * @member {Array.<string>} messageTypes
+         * @memberof GetHistoryRequest
+         * @instance
+         */
+        GetHistoryRequest.prototype.messageTypes = $util.emptyArray;
+    
+        /**
+         * GetHistoryRequest app.
+         * @member {IApp|null|undefined} app
+         * @memberof GetHistoryRequest
+         * @instance
+         */
+        GetHistoryRequest.prototype.app = null;
+    
+        /**
+         * GetHistoryRequest offset.
+         * @member {IOffset|null|undefined} offset
+         * @memberof GetHistoryRequest
+         * @instance
+         */
+        GetHistoryRequest.prototype.offset = null;
+    
+        /**
+         * Creates a new GetHistoryRequest instance using the specified properties.
+         * @function create
+         * @memberof GetHistoryRequest
+         * @static
+         * @param {IGetHistoryRequest=} [properties] Properties to set
+         * @returns {GetHistoryRequest} GetHistoryRequest instance
+         */
+        GetHistoryRequest.create = function create(properties) {
+            return new GetHistoryRequest(properties);
+        };
+    
+        /**
+         * Encodes the specified GetHistoryRequest message. Does not implicitly {@link GetHistoryRequest.verify|verify} messages.
+         * @function encode
+         * @memberof GetHistoryRequest
+         * @static
+         * @param {IGetHistoryRequest} message GetHistoryRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetHistoryRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.messageTypes != null && message.messageTypes.length)
+                for (var i = 0; i < message.messageTypes.length; ++i)
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.messageTypes[i]);
+            if (message.app != null && Object.hasOwnProperty.call(message, "app"))
+                $root.App.encode(message.app, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            if (message.offset != null && Object.hasOwnProperty.call(message, "offset"))
+                $root.Offset.encode(message.offset, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified GetHistoryRequest message, length delimited. Does not implicitly {@link GetHistoryRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof GetHistoryRequest
+         * @static
+         * @param {IGetHistoryRequest} message GetHistoryRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetHistoryRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes a GetHistoryRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof GetHistoryRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {GetHistoryRequest} GetHistoryRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetHistoryRequest.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.GetHistoryRequest();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    if (!(message.messageTypes && message.messageTypes.length))
+                        message.messageTypes = [];
+                    message.messageTypes.push(reader.string());
+                    break;
+                case 2:
+                    message.app = $root.App.decode(reader, reader.uint32());
+                    break;
+                case 3:
+                    message.offset = $root.Offset.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes a GetHistoryRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof GetHistoryRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {GetHistoryRequest} GetHistoryRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetHistoryRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies a GetHistoryRequest message.
+         * @function verify
+         * @memberof GetHistoryRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GetHistoryRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.messageTypes != null && message.hasOwnProperty("messageTypes")) {
+                if (!Array.isArray(message.messageTypes))
+                    return "messageTypes: array expected";
+                for (var i = 0; i < message.messageTypes.length; ++i)
+                    if (!$util.isString(message.messageTypes[i]))
+                        return "messageTypes: string[] expected";
+            }
+            if (message.app != null && message.hasOwnProperty("app")) {
+                var error = $root.App.verify(message.app);
+                if (error)
+                    return "app." + error;
+            }
+            if (message.offset != null && message.hasOwnProperty("offset")) {
+                var error = $root.Offset.verify(message.offset);
+                if (error)
+                    return "offset." + error;
+            }
+            return null;
+        };
+    
+        /**
+         * Creates a GetHistoryRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof GetHistoryRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {GetHistoryRequest} GetHistoryRequest
+         */
+        GetHistoryRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.GetHistoryRequest)
+                return object;
+            var message = new $root.GetHistoryRequest();
+            if (object.messageTypes) {
+                if (!Array.isArray(object.messageTypes))
+                    throw TypeError(".GetHistoryRequest.messageTypes: array expected");
+                message.messageTypes = [];
+                for (var i = 0; i < object.messageTypes.length; ++i)
+                    message.messageTypes[i] = String(object.messageTypes[i]);
+            }
+            if (object.app != null) {
+                if (typeof object.app !== "object")
+                    throw TypeError(".GetHistoryRequest.app: object expected");
+                message.app = $root.App.fromObject(object.app);
+            }
+            if (object.offset != null) {
+                if (typeof object.offset !== "object")
+                    throw TypeError(".GetHistoryRequest.offset: object expected");
+                message.offset = $root.Offset.fromObject(object.offset);
+            }
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from a GetHistoryRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof GetHistoryRequest
+         * @static
+         * @param {GetHistoryRequest} message GetHistoryRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GetHistoryRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.messageTypes = [];
+            if (options.defaults) {
+                object.app = null;
+                object.offset = null;
+            }
+            if (message.messageTypes && message.messageTypes.length) {
+                object.messageTypes = [];
+                for (var j = 0; j < message.messageTypes.length; ++j)
+                    object.messageTypes[j] = message.messageTypes[j];
+            }
+            if (message.app != null && message.hasOwnProperty("app"))
+                object.app = $root.App.toObject(message.app, options);
+            if (message.offset != null && message.hasOwnProperty("offset"))
+                object.offset = $root.Offset.toObject(message.offset, options);
+            return object;
+        };
+    
+        /**
+         * Converts this GetHistoryRequest to JSON.
+         * @function toJSON
+         * @memberof GetHistoryRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GetHistoryRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return GetHistoryRequest;
+    })();
+    
+    $root.App = (function() {
+    
+        /**
+         * Properties of an App.
+         * @exports IApp
+         * @interface IApp
+         * @property {google.protobuf.IStringValue|null} [type] App type
+         * @property {google.protobuf.IStringValue|null} [projectId] App projectId
+         * @property {google.protobuf.IStringValue|null} [systemName] App systemName
+         */
+    
+        /**
+         * Constructs a new App.
+         * @exports App
+         * @classdesc Represents an App.
+         * @implements IApp
+         * @constructor
+         * @param {IApp=} [properties] Properties to set
+         */
+        function App(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * App type.
+         * @member {google.protobuf.IStringValue|null|undefined} type
+         * @memberof App
+         * @instance
+         */
+        App.prototype.type = null;
+    
+        /**
+         * App projectId.
+         * @member {google.protobuf.IStringValue|null|undefined} projectId
+         * @memberof App
+         * @instance
+         */
+        App.prototype.projectId = null;
+    
+        /**
+         * App systemName.
+         * @member {google.protobuf.IStringValue|null|undefined} systemName
+         * @memberof App
+         * @instance
+         */
+        App.prototype.systemName = null;
+    
+        /**
+         * Creates a new App instance using the specified properties.
+         * @function create
+         * @memberof App
+         * @static
+         * @param {IApp=} [properties] Properties to set
+         * @returns {App} App instance
+         */
+        App.create = function create(properties) {
+            return new App(properties);
+        };
+    
+        /**
+         * Encodes the specified App message. Does not implicitly {@link App.verify|verify} messages.
+         * @function encode
+         * @memberof App
+         * @static
+         * @param {IApp} message App message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        App.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.type != null && Object.hasOwnProperty.call(message, "type"))
+                $root.google.protobuf.StringValue.encode(message.type, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.projectId != null && Object.hasOwnProperty.call(message, "projectId"))
+                $root.google.protobuf.StringValue.encode(message.projectId, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            if (message.systemName != null && Object.hasOwnProperty.call(message, "systemName"))
+                $root.google.protobuf.StringValue.encode(message.systemName, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified App message, length delimited. Does not implicitly {@link App.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof App
+         * @static
+         * @param {IApp} message App message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        App.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes an App message from the specified reader or buffer.
+         * @function decode
+         * @memberof App
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {App} App
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        App.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.App();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.type = $root.google.protobuf.StringValue.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.projectId = $root.google.protobuf.StringValue.decode(reader, reader.uint32());
+                    break;
+                case 3:
+                    message.systemName = $root.google.protobuf.StringValue.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes an App message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof App
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {App} App
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        App.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies an App message.
+         * @function verify
+         * @memberof App
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        App.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.type != null && message.hasOwnProperty("type")) {
+                var error = $root.google.protobuf.StringValue.verify(message.type);
+                if (error)
+                    return "type." + error;
+            }
+            if (message.projectId != null && message.hasOwnProperty("projectId")) {
+                var error = $root.google.protobuf.StringValue.verify(message.projectId);
+                if (error)
+                    return "projectId." + error;
+            }
+            if (message.systemName != null && message.hasOwnProperty("systemName")) {
+                var error = $root.google.protobuf.StringValue.verify(message.systemName);
+                if (error)
+                    return "systemName." + error;
+            }
+            return null;
+        };
+    
+        /**
+         * Creates an App message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof App
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {App} App
+         */
+        App.fromObject = function fromObject(object) {
+            if (object instanceof $root.App)
+                return object;
+            var message = new $root.App();
+            if (object.type != null) {
+                if (typeof object.type !== "object")
+                    throw TypeError(".App.type: object expected");
+                message.type = $root.google.protobuf.StringValue.fromObject(object.type);
+            }
+            if (object.projectId != null) {
+                if (typeof object.projectId !== "object")
+                    throw TypeError(".App.projectId: object expected");
+                message.projectId = $root.google.protobuf.StringValue.fromObject(object.projectId);
+            }
+            if (object.systemName != null) {
+                if (typeof object.systemName !== "object")
+                    throw TypeError(".App.systemName: object expected");
+                message.systemName = $root.google.protobuf.StringValue.fromObject(object.systemName);
+            }
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from an App message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof App
+         * @static
+         * @param {App} message App
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        App.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.type = null;
+                object.projectId = null;
+                object.systemName = null;
+            }
+            if (message.type != null && message.hasOwnProperty("type"))
+                object.type = $root.google.protobuf.StringValue.toObject(message.type, options);
+            if (message.projectId != null && message.hasOwnProperty("projectId"))
+                object.projectId = $root.google.protobuf.StringValue.toObject(message.projectId, options);
+            if (message.systemName != null && message.hasOwnProperty("systemName"))
+                object.systemName = $root.google.protobuf.StringValue.toObject(message.systemName, options);
+            return object;
+        };
+    
+        /**
+         * Converts this App to JSON.
+         * @function toJSON
+         * @memberof App
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        App.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return App;
+    })();
+    
+    $root.Offset = (function() {
+    
+        /**
+         * Properties of an Offset.
+         * @exports IOffset
+         * @interface IOffset
+         * @property {google.protobuf.IStringValue|null} [limit] Offset limit
+         * @property {google.protobuf.IStringValue|null} [contentId] Offset contentId
+         */
+    
+        /**
+         * Constructs a new Offset.
+         * @exports Offset
+         * @classdesc Represents an Offset.
+         * @implements IOffset
+         * @constructor
+         * @param {IOffset=} [properties] Properties to set
+         */
+        function Offset(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * Offset limit.
+         * @member {google.protobuf.IStringValue|null|undefined} limit
+         * @memberof Offset
+         * @instance
+         */
+        Offset.prototype.limit = null;
+    
+        /**
+         * Offset contentId.
+         * @member {google.protobuf.IStringValue|null|undefined} contentId
+         * @memberof Offset
+         * @instance
+         */
+        Offset.prototype.contentId = null;
+    
+        /**
+         * Creates a new Offset instance using the specified properties.
+         * @function create
+         * @memberof Offset
+         * @static
+         * @param {IOffset=} [properties] Properties to set
+         * @returns {Offset} Offset instance
+         */
+        Offset.create = function create(properties) {
+            return new Offset(properties);
+        };
+    
+        /**
+         * Encodes the specified Offset message. Does not implicitly {@link Offset.verify|verify} messages.
+         * @function encode
+         * @memberof Offset
+         * @static
+         * @param {IOffset} message Offset message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Offset.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.limit != null && Object.hasOwnProperty.call(message, "limit"))
+                $root.google.protobuf.StringValue.encode(message.limit, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.contentId != null && Object.hasOwnProperty.call(message, "contentId"))
+                $root.google.protobuf.StringValue.encode(message.contentId, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified Offset message, length delimited. Does not implicitly {@link Offset.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Offset
+         * @static
+         * @param {IOffset} message Offset message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Offset.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes an Offset message from the specified reader or buffer.
+         * @function decode
+         * @memberof Offset
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Offset} Offset
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Offset.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Offset();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.limit = $root.google.protobuf.StringValue.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.contentId = $root.google.protobuf.StringValue.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes an Offset message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Offset
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Offset} Offset
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Offset.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies an Offset message.
+         * @function verify
+         * @memberof Offset
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Offset.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.limit != null && message.hasOwnProperty("limit")) {
+                var error = $root.google.protobuf.StringValue.verify(message.limit);
+                if (error)
+                    return "limit." + error;
+            }
+            if (message.contentId != null && message.hasOwnProperty("contentId")) {
+                var error = $root.google.protobuf.StringValue.verify(message.contentId);
+                if (error)
+                    return "contentId." + error;
+            }
+            return null;
+        };
+    
+        /**
+         * Creates an Offset message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Offset
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Offset} Offset
+         */
+        Offset.fromObject = function fromObject(object) {
+            if (object instanceof $root.Offset)
+                return object;
+            var message = new $root.Offset();
+            if (object.limit != null) {
+                if (typeof object.limit !== "object")
+                    throw TypeError(".Offset.limit: object expected");
+                message.limit = $root.google.protobuf.StringValue.fromObject(object.limit);
+            }
+            if (object.contentId != null) {
+                if (typeof object.contentId !== "object")
+                    throw TypeError(".Offset.contentId: object expected");
+                message.contentId = $root.google.protobuf.StringValue.fromObject(object.contentId);
+            }
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from an Offset message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Offset
+         * @static
+         * @param {Offset} message Offset
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Offset.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.limit = null;
+                object.contentId = null;
+            }
+            if (message.limit != null && message.hasOwnProperty("limit"))
+                object.limit = $root.google.protobuf.StringValue.toObject(message.limit, options);
+            if (message.contentId != null && message.hasOwnProperty("contentId"))
+                object.contentId = $root.google.protobuf.StringValue.toObject(message.contentId, options);
+            return object;
+        };
+    
+        /**
+         * Converts this Offset to JSON.
+         * @function toJSON
+         * @memberof Offset
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Offset.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return Offset;
+    })();
+    
+    $root.ChatHistoryRequest = (function() {
+    
+        /**
+         * Properties of a ChatHistoryRequest.
+         * @exports IChatHistoryRequest
+         * @interface IChatHistoryRequest
+         * @property {IUuid|null} [uuid] ChatHistoryRequest uuid
+         * @property {IDevice|null} [device] ChatHistoryRequest device
+         * @property {IGetHistoryRequest|null} [getHistoryRequest] ChatHistoryRequest getHistoryRequest
+         */
+    
+        /**
+         * Constructs a new ChatHistoryRequest.
+         * @exports ChatHistoryRequest
+         * @classdesc Represents a ChatHistoryRequest.
+         * @implements IChatHistoryRequest
+         * @constructor
+         * @param {IChatHistoryRequest=} [properties] Properties to set
+         */
+        function ChatHistoryRequest(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * ChatHistoryRequest uuid.
+         * @member {IUuid|null|undefined} uuid
+         * @memberof ChatHistoryRequest
+         * @instance
+         */
+        ChatHistoryRequest.prototype.uuid = null;
+    
+        /**
+         * ChatHistoryRequest device.
+         * @member {IDevice|null|undefined} device
+         * @memberof ChatHistoryRequest
+         * @instance
+         */
+        ChatHistoryRequest.prototype.device = null;
+    
+        /**
+         * ChatHistoryRequest getHistoryRequest.
+         * @member {IGetHistoryRequest|null|undefined} getHistoryRequest
+         * @memberof ChatHistoryRequest
+         * @instance
+         */
+        ChatHistoryRequest.prototype.getHistoryRequest = null;
+    
+        /**
+         * Creates a new ChatHistoryRequest instance using the specified properties.
+         * @function create
+         * @memberof ChatHistoryRequest
+         * @static
+         * @param {IChatHistoryRequest=} [properties] Properties to set
+         * @returns {ChatHistoryRequest} ChatHistoryRequest instance
+         */
+        ChatHistoryRequest.create = function create(properties) {
+            return new ChatHistoryRequest(properties);
+        };
+    
+        /**
+         * Encodes the specified ChatHistoryRequest message. Does not implicitly {@link ChatHistoryRequest.verify|verify} messages.
+         * @function encode
+         * @memberof ChatHistoryRequest
+         * @static
+         * @param {IChatHistoryRequest} message ChatHistoryRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChatHistoryRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uuid != null && Object.hasOwnProperty.call(message, "uuid"))
+                $root.Uuid.encode(message.uuid, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.device != null && Object.hasOwnProperty.call(message, "device"))
+                $root.Device.encode(message.device, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            if (message.getHistoryRequest != null && Object.hasOwnProperty.call(message, "getHistoryRequest"))
+                $root.GetHistoryRequest.encode(message.getHistoryRequest, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified ChatHistoryRequest message, length delimited. Does not implicitly {@link ChatHistoryRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ChatHistoryRequest
+         * @static
+         * @param {IChatHistoryRequest} message ChatHistoryRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChatHistoryRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes a ChatHistoryRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof ChatHistoryRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ChatHistoryRequest} ChatHistoryRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChatHistoryRequest.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ChatHistoryRequest();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uuid = $root.Uuid.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.device = $root.Device.decode(reader, reader.uint32());
+                    break;
+                case 4:
+                    message.getHistoryRequest = $root.GetHistoryRequest.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes a ChatHistoryRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ChatHistoryRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ChatHistoryRequest} ChatHistoryRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChatHistoryRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies a ChatHistoryRequest message.
+         * @function verify
+         * @memberof ChatHistoryRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ChatHistoryRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uuid != null && message.hasOwnProperty("uuid")) {
+                var error = $root.Uuid.verify(message.uuid);
+                if (error)
+                    return "uuid." + error;
+            }
+            if (message.device != null && message.hasOwnProperty("device")) {
+                var error = $root.Device.verify(message.device);
+                if (error)
+                    return "device." + error;
+            }
+            if (message.getHistoryRequest != null && message.hasOwnProperty("getHistoryRequest")) {
+                var error = $root.GetHistoryRequest.verify(message.getHistoryRequest);
+                if (error)
+                    return "getHistoryRequest." + error;
+            }
+            return null;
+        };
+    
+        /**
+         * Creates a ChatHistoryRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof ChatHistoryRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {ChatHistoryRequest} ChatHistoryRequest
+         */
+        ChatHistoryRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.ChatHistoryRequest)
+                return object;
+            var message = new $root.ChatHistoryRequest();
+            if (object.uuid != null) {
+                if (typeof object.uuid !== "object")
+                    throw TypeError(".ChatHistoryRequest.uuid: object expected");
+                message.uuid = $root.Uuid.fromObject(object.uuid);
+            }
+            if (object.device != null) {
+                if (typeof object.device !== "object")
+                    throw TypeError(".ChatHistoryRequest.device: object expected");
+                message.device = $root.Device.fromObject(object.device);
+            }
+            if (object.getHistoryRequest != null) {
+                if (typeof object.getHistoryRequest !== "object")
+                    throw TypeError(".ChatHistoryRequest.getHistoryRequest: object expected");
+                message.getHistoryRequest = $root.GetHistoryRequest.fromObject(object.getHistoryRequest);
+            }
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from a ChatHistoryRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof ChatHistoryRequest
+         * @static
+         * @param {ChatHistoryRequest} message ChatHistoryRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ChatHistoryRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.uuid = null;
+                object.device = null;
+                object.getHistoryRequest = null;
+            }
+            if (message.uuid != null && message.hasOwnProperty("uuid"))
+                object.uuid = $root.Uuid.toObject(message.uuid, options);
+            if (message.device != null && message.hasOwnProperty("device"))
+                object.device = $root.Device.toObject(message.device, options);
+            if (message.getHistoryRequest != null && message.hasOwnProperty("getHistoryRequest"))
+                object.getHistoryRequest = $root.GetHistoryRequest.toObject(message.getHistoryRequest, options);
+            return object;
+        };
+    
+        /**
+         * Converts this ChatHistoryRequest to JSON.
+         * @function toJSON
+         * @memberof ChatHistoryRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ChatHistoryRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return ChatHistoryRequest;
+    })();
+    
+    $root.Uuid = (function() {
+    
+        /**
+         * Properties of an Uuid.
+         * @exports IUuid
+         * @interface IUuid
+         * @property {string|null} [userId] Uuid userId
+         * @property {string|null} [userChannel] Uuid userChannel
+         * @property {string|null} [sub] Uuid sub
+         */
+    
+        /**
+         * Constructs a new Uuid.
+         * @exports Uuid
+         * @classdesc Represents an Uuid.
+         * @implements IUuid
+         * @constructor
+         * @param {IUuid=} [properties] Properties to set
+         */
+        function Uuid(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * Uuid userId.
+         * @member {string} userId
+         * @memberof Uuid
+         * @instance
+         */
+        Uuid.prototype.userId = "";
+    
+        /**
+         * Uuid userChannel.
+         * @member {string} userChannel
+         * @memberof Uuid
+         * @instance
+         */
+        Uuid.prototype.userChannel = "";
+    
+        /**
+         * Uuid sub.
+         * @member {string} sub
+         * @memberof Uuid
+         * @instance
+         */
+        Uuid.prototype.sub = "";
+    
+        /**
+         * Creates a new Uuid instance using the specified properties.
+         * @function create
+         * @memberof Uuid
+         * @static
+         * @param {IUuid=} [properties] Properties to set
+         * @returns {Uuid} Uuid instance
+         */
+        Uuid.create = function create(properties) {
+            return new Uuid(properties);
+        };
+    
+        /**
+         * Encodes the specified Uuid message. Does not implicitly {@link Uuid.verify|verify} messages.
+         * @function encode
+         * @memberof Uuid
+         * @static
+         * @param {IUuid} message Uuid message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Uuid.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.userId);
+            if (message.userChannel != null && Object.hasOwnProperty.call(message, "userChannel"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.userChannel);
+            if (message.sub != null && Object.hasOwnProperty.call(message, "sub"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.sub);
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified Uuid message, length delimited. Does not implicitly {@link Uuid.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof Uuid
+         * @static
+         * @param {IUuid} message Uuid message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        Uuid.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes an Uuid message from the specified reader or buffer.
+         * @function decode
+         * @memberof Uuid
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {Uuid} Uuid
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Uuid.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Uuid();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.userId = reader.string();
+                    break;
+                case 2:
+                    message.userChannel = reader.string();
+                    break;
+                case 3:
+                    message.sub = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes an Uuid message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof Uuid
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {Uuid} Uuid
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        Uuid.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies an Uuid message.
+         * @function verify
+         * @memberof Uuid
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        Uuid.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.userId != null && message.hasOwnProperty("userId"))
+                if (!$util.isString(message.userId))
+                    return "userId: string expected";
+            if (message.userChannel != null && message.hasOwnProperty("userChannel"))
+                if (!$util.isString(message.userChannel))
+                    return "userChannel: string expected";
+            if (message.sub != null && message.hasOwnProperty("sub"))
+                if (!$util.isString(message.sub))
+                    return "sub: string expected";
+            return null;
+        };
+    
+        /**
+         * Creates an Uuid message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof Uuid
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {Uuid} Uuid
+         */
+        Uuid.fromObject = function fromObject(object) {
+            if (object instanceof $root.Uuid)
+                return object;
+            var message = new $root.Uuid();
+            if (object.userId != null)
+                message.userId = String(object.userId);
+            if (object.userChannel != null)
+                message.userChannel = String(object.userChannel);
+            if (object.sub != null)
+                message.sub = String(object.sub);
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from an Uuid message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof Uuid
+         * @static
+         * @param {Uuid} message Uuid
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        Uuid.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.userId = "";
+                object.userChannel = "";
+                object.sub = "";
+            }
+            if (message.userId != null && message.hasOwnProperty("userId"))
+                object.userId = message.userId;
+            if (message.userChannel != null && message.hasOwnProperty("userChannel"))
+                object.userChannel = message.userChannel;
+            if (message.sub != null && message.hasOwnProperty("sub"))
+                object.sub = message.sub;
+            return object;
+        };
+    
+        /**
+         * Converts this Uuid to JSON.
+         * @function toJSON
+         * @memberof Uuid
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        Uuid.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return Uuid;
+    })();
+    
+    $root.GetHistoryResponse = (function() {
+    
+        /**
+         * Properties of a GetHistoryResponse.
+         * @exports IGetHistoryResponse
+         * @interface IGetHistoryResponse
+         * @property {Array.<IHistoryMessages>|null} [historyMessages] GetHistoryResponse historyMessages
+         */
+    
+        /**
+         * Constructs a new GetHistoryResponse.
+         * @exports GetHistoryResponse
+         * @classdesc Represents a GetHistoryResponse.
+         * @implements IGetHistoryResponse
+         * @constructor
+         * @param {IGetHistoryResponse=} [properties] Properties to set
+         */
+        function GetHistoryResponse(properties) {
+            this.historyMessages = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * GetHistoryResponse historyMessages.
+         * @member {Array.<IHistoryMessages>} historyMessages
+         * @memberof GetHistoryResponse
+         * @instance
+         */
+        GetHistoryResponse.prototype.historyMessages = $util.emptyArray;
+    
+        /**
+         * Creates a new GetHistoryResponse instance using the specified properties.
+         * @function create
+         * @memberof GetHistoryResponse
+         * @static
+         * @param {IGetHistoryResponse=} [properties] Properties to set
+         * @returns {GetHistoryResponse} GetHistoryResponse instance
+         */
+        GetHistoryResponse.create = function create(properties) {
+            return new GetHistoryResponse(properties);
+        };
+    
+        /**
+         * Encodes the specified GetHistoryResponse message. Does not implicitly {@link GetHistoryResponse.verify|verify} messages.
+         * @function encode
+         * @memberof GetHistoryResponse
+         * @static
+         * @param {IGetHistoryResponse} message GetHistoryResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetHistoryResponse.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.historyMessages != null && message.historyMessages.length)
+                for (var i = 0; i < message.historyMessages.length; ++i)
+                    $root.HistoryMessages.encode(message.historyMessages[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified GetHistoryResponse message, length delimited. Does not implicitly {@link GetHistoryResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof GetHistoryResponse
+         * @static
+         * @param {IGetHistoryResponse} message GetHistoryResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        GetHistoryResponse.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes a GetHistoryResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof GetHistoryResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {GetHistoryResponse} GetHistoryResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetHistoryResponse.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.GetHistoryResponse();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    if (!(message.historyMessages && message.historyMessages.length))
+                        message.historyMessages = [];
+                    message.historyMessages.push($root.HistoryMessages.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes a GetHistoryResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof GetHistoryResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {GetHistoryResponse} GetHistoryResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        GetHistoryResponse.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies a GetHistoryResponse message.
+         * @function verify
+         * @memberof GetHistoryResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        GetHistoryResponse.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.historyMessages != null && message.hasOwnProperty("historyMessages")) {
+                if (!Array.isArray(message.historyMessages))
+                    return "historyMessages: array expected";
+                for (var i = 0; i < message.historyMessages.length; ++i) {
+                    var error = $root.HistoryMessages.verify(message.historyMessages[i]);
+                    if (error)
+                        return "historyMessages." + error;
+                }
+            }
+            return null;
+        };
+    
+        /**
+         * Creates a GetHistoryResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof GetHistoryResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {GetHistoryResponse} GetHistoryResponse
+         */
+        GetHistoryResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.GetHistoryResponse)
+                return object;
+            var message = new $root.GetHistoryResponse();
+            if (object.historyMessages) {
+                if (!Array.isArray(object.historyMessages))
+                    throw TypeError(".GetHistoryResponse.historyMessages: array expected");
+                message.historyMessages = [];
+                for (var i = 0; i < object.historyMessages.length; ++i) {
+                    if (typeof object.historyMessages[i] !== "object")
+                        throw TypeError(".GetHistoryResponse.historyMessages: object expected");
+                    message.historyMessages[i] = $root.HistoryMessages.fromObject(object.historyMessages[i]);
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from a GetHistoryResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof GetHistoryResponse
+         * @static
+         * @param {GetHistoryResponse} message GetHistoryResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        GetHistoryResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.historyMessages = [];
+            if (message.historyMessages && message.historyMessages.length) {
+                object.historyMessages = [];
+                for (var j = 0; j < message.historyMessages.length; ++j)
+                    object.historyMessages[j] = $root.HistoryMessages.toObject(message.historyMessages[j], options);
+            }
+            return object;
+        };
+    
+        /**
+         * Converts this GetHistoryResponse to JSON.
+         * @function toJSON
+         * @memberof GetHistoryResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        GetHistoryResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return GetHistoryResponse;
+    })();
+    
+    $root.HistoryMessages = (function() {
+    
+        /**
+         * Properties of a HistoryMessages.
+         * @exports IHistoryMessages
+         * @interface IHistoryMessages
+         * @property {string|null} [content] HistoryMessages content
+         * @property {string|null} [contentId] HistoryMessages contentId
+         * @property {string|null} [timeCreated] HistoryMessages timeCreated
+         */
+    
+        /**
+         * Constructs a new HistoryMessages.
+         * @exports HistoryMessages
+         * @classdesc Represents a HistoryMessages.
+         * @implements IHistoryMessages
+         * @constructor
+         * @param {IHistoryMessages=} [properties] Properties to set
+         */
+        function HistoryMessages(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+    
+        /**
+         * HistoryMessages content.
+         * @member {string} content
+         * @memberof HistoryMessages
+         * @instance
+         */
+        HistoryMessages.prototype.content = "";
+    
+        /**
+         * HistoryMessages contentId.
+         * @member {string} contentId
+         * @memberof HistoryMessages
+         * @instance
+         */
+        HistoryMessages.prototype.contentId = "";
+    
+        /**
+         * HistoryMessages timeCreated.
+         * @member {string} timeCreated
+         * @memberof HistoryMessages
+         * @instance
+         */
+        HistoryMessages.prototype.timeCreated = "";
+    
+        /**
+         * Creates a new HistoryMessages instance using the specified properties.
+         * @function create
+         * @memberof HistoryMessages
+         * @static
+         * @param {IHistoryMessages=} [properties] Properties to set
+         * @returns {HistoryMessages} HistoryMessages instance
+         */
+        HistoryMessages.create = function create(properties) {
+            return new HistoryMessages(properties);
+        };
+    
+        /**
+         * Encodes the specified HistoryMessages message. Does not implicitly {@link HistoryMessages.verify|verify} messages.
+         * @function encode
+         * @memberof HistoryMessages
+         * @static
+         * @param {IHistoryMessages} message HistoryMessages message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        HistoryMessages.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.content != null && Object.hasOwnProperty.call(message, "content"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.content);
+            if (message.contentId != null && Object.hasOwnProperty.call(message, "contentId"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.contentId);
+            if (message.timeCreated != null && Object.hasOwnProperty.call(message, "timeCreated"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.timeCreated);
+            return writer;
+        };
+    
+        /**
+         * Encodes the specified HistoryMessages message, length delimited. Does not implicitly {@link HistoryMessages.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof HistoryMessages
+         * @static
+         * @param {IHistoryMessages} message HistoryMessages message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        HistoryMessages.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+    
+        /**
+         * Decodes a HistoryMessages message from the specified reader or buffer.
+         * @function decode
+         * @memberof HistoryMessages
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {HistoryMessages} HistoryMessages
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        HistoryMessages.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.HistoryMessages();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.content = reader.string();
+                    break;
+                case 2:
+                    message.contentId = reader.string();
+                    break;
+                case 3:
+                    message.timeCreated = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+    
+        /**
+         * Decodes a HistoryMessages message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof HistoryMessages
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {HistoryMessages} HistoryMessages
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        HistoryMessages.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+    
+        /**
+         * Verifies a HistoryMessages message.
+         * @function verify
+         * @memberof HistoryMessages
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        HistoryMessages.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.content != null && message.hasOwnProperty("content"))
+                if (!$util.isString(message.content))
+                    return "content: string expected";
+            if (message.contentId != null && message.hasOwnProperty("contentId"))
+                if (!$util.isString(message.contentId))
+                    return "contentId: string expected";
+            if (message.timeCreated != null && message.hasOwnProperty("timeCreated"))
+                if (!$util.isString(message.timeCreated))
+                    return "timeCreated: string expected";
+            return null;
+        };
+    
+        /**
+         * Creates a HistoryMessages message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof HistoryMessages
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {HistoryMessages} HistoryMessages
+         */
+        HistoryMessages.fromObject = function fromObject(object) {
+            if (object instanceof $root.HistoryMessages)
+                return object;
+            var message = new $root.HistoryMessages();
+            if (object.content != null)
+                message.content = String(object.content);
+            if (object.contentId != null)
+                message.contentId = String(object.contentId);
+            if (object.timeCreated != null)
+                message.timeCreated = String(object.timeCreated);
+            return message;
+        };
+    
+        /**
+         * Creates a plain object from a HistoryMessages message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof HistoryMessages
+         * @static
+         * @param {HistoryMessages} message HistoryMessages
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        HistoryMessages.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.content = "";
+                object.contentId = "";
+                object.timeCreated = "";
+            }
+            if (message.content != null && message.hasOwnProperty("content"))
+                object.content = message.content;
+            if (message.contentId != null && message.hasOwnProperty("contentId"))
+                object.contentId = message.contentId;
+            if (message.timeCreated != null && message.hasOwnProperty("timeCreated"))
+                object.timeCreated = message.timeCreated;
+            return object;
+        };
+    
+        /**
+         * Converts this HistoryMessages to JSON.
+         * @function toJSON
+         * @memberof HistoryMessages
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        HistoryMessages.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+    
+        return HistoryMessages;
+    })();
+    
+    $root.google = (function() {
+    
+        /**
+         * Namespace google.
+         * @exports google
+         * @namespace
+         */
+        var google = {};
+    
+        google.protobuf = (function() {
+    
+            /**
+             * Namespace protobuf.
+             * @memberof google
+             * @namespace
+             */
+            var protobuf = {};
+    
+            protobuf.DoubleValue = (function() {
+    
+                /**
+                 * Properties of a DoubleValue.
+                 * @memberof google.protobuf
+                 * @interface IDoubleValue
+                 * @property {number|null} [value] DoubleValue value
+                 */
+    
+                /**
+                 * Constructs a new DoubleValue.
+                 * @memberof google.protobuf
+                 * @classdesc Represents a DoubleValue.
+                 * @implements IDoubleValue
+                 * @constructor
+                 * @param {google.protobuf.IDoubleValue=} [properties] Properties to set
+                 */
+                function DoubleValue(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * DoubleValue value.
+                 * @member {number} value
+                 * @memberof google.protobuf.DoubleValue
+                 * @instance
+                 */
+                DoubleValue.prototype.value = 0;
+    
+                /**
+                 * Creates a new DoubleValue instance using the specified properties.
+                 * @function create
+                 * @memberof google.protobuf.DoubleValue
+                 * @static
+                 * @param {google.protobuf.IDoubleValue=} [properties] Properties to set
+                 * @returns {google.protobuf.DoubleValue} DoubleValue instance
+                 */
+                DoubleValue.create = function create(properties) {
+                    return new DoubleValue(properties);
+                };
+    
+                /**
+                 * Encodes the specified DoubleValue message. Does not implicitly {@link google.protobuf.DoubleValue.verify|verify} messages.
+                 * @function encode
+                 * @memberof google.protobuf.DoubleValue
+                 * @static
+                 * @param {google.protobuf.IDoubleValue} message DoubleValue message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                DoubleValue.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
+                        writer.uint32(/* id 1, wireType 1 =*/9).double(message.value);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified DoubleValue message, length delimited. Does not implicitly {@link google.protobuf.DoubleValue.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof google.protobuf.DoubleValue
+                 * @static
+                 * @param {google.protobuf.IDoubleValue} message DoubleValue message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                DoubleValue.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes a DoubleValue message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof google.protobuf.DoubleValue
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {google.protobuf.DoubleValue} DoubleValue
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                DoubleValue.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.DoubleValue();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.value = reader.double();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes a DoubleValue message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof google.protobuf.DoubleValue
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {google.protobuf.DoubleValue} DoubleValue
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                DoubleValue.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies a DoubleValue message.
+                 * @function verify
+                 * @memberof google.protobuf.DoubleValue
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DoubleValue.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (typeof message.value !== "number")
+                            return "value: number expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates a DoubleValue message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof google.protobuf.DoubleValue
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {google.protobuf.DoubleValue} DoubleValue
+                 */
+                DoubleValue.fromObject = function fromObject(object) {
+                    if (object instanceof $root.google.protobuf.DoubleValue)
+                        return object;
+                    var message = new $root.google.protobuf.DoubleValue();
+                    if (object.value != null)
+                        message.value = Number(object.value);
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from a DoubleValue message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof google.protobuf.DoubleValue
+                 * @static
+                 * @param {google.protobuf.DoubleValue} message DoubleValue
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DoubleValue.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults)
+                        object.value = 0;
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        object.value = options.json && !isFinite(message.value) ? String(message.value) : message.value;
+                    return object;
+                };
+    
+                /**
+                 * Converts this DoubleValue to JSON.
+                 * @function toJSON
+                 * @memberof google.protobuf.DoubleValue
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DoubleValue.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return DoubleValue;
+            })();
+    
+            protobuf.FloatValue = (function() {
+    
+                /**
+                 * Properties of a FloatValue.
+                 * @memberof google.protobuf
+                 * @interface IFloatValue
+                 * @property {number|null} [value] FloatValue value
+                 */
+    
+                /**
+                 * Constructs a new FloatValue.
+                 * @memberof google.protobuf
+                 * @classdesc Represents a FloatValue.
+                 * @implements IFloatValue
+                 * @constructor
+                 * @param {google.protobuf.IFloatValue=} [properties] Properties to set
+                 */
+                function FloatValue(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * FloatValue value.
+                 * @member {number} value
+                 * @memberof google.protobuf.FloatValue
+                 * @instance
+                 */
+                FloatValue.prototype.value = 0;
+    
+                /**
+                 * Creates a new FloatValue instance using the specified properties.
+                 * @function create
+                 * @memberof google.protobuf.FloatValue
+                 * @static
+                 * @param {google.protobuf.IFloatValue=} [properties] Properties to set
+                 * @returns {google.protobuf.FloatValue} FloatValue instance
+                 */
+                FloatValue.create = function create(properties) {
+                    return new FloatValue(properties);
+                };
+    
+                /**
+                 * Encodes the specified FloatValue message. Does not implicitly {@link google.protobuf.FloatValue.verify|verify} messages.
+                 * @function encode
+                 * @memberof google.protobuf.FloatValue
+                 * @static
+                 * @param {google.protobuf.IFloatValue} message FloatValue message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                FloatValue.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
+                        writer.uint32(/* id 1, wireType 5 =*/13).float(message.value);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified FloatValue message, length delimited. Does not implicitly {@link google.protobuf.FloatValue.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof google.protobuf.FloatValue
+                 * @static
+                 * @param {google.protobuf.IFloatValue} message FloatValue message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                FloatValue.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes a FloatValue message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof google.protobuf.FloatValue
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {google.protobuf.FloatValue} FloatValue
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                FloatValue.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.FloatValue();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.value = reader.float();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes a FloatValue message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof google.protobuf.FloatValue
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {google.protobuf.FloatValue} FloatValue
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                FloatValue.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies a FloatValue message.
+                 * @function verify
+                 * @memberof google.protobuf.FloatValue
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                FloatValue.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (typeof message.value !== "number")
+                            return "value: number expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates a FloatValue message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof google.protobuf.FloatValue
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {google.protobuf.FloatValue} FloatValue
+                 */
+                FloatValue.fromObject = function fromObject(object) {
+                    if (object instanceof $root.google.protobuf.FloatValue)
+                        return object;
+                    var message = new $root.google.protobuf.FloatValue();
+                    if (object.value != null)
+                        message.value = Number(object.value);
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from a FloatValue message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof google.protobuf.FloatValue
+                 * @static
+                 * @param {google.protobuf.FloatValue} message FloatValue
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                FloatValue.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults)
+                        object.value = 0;
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        object.value = options.json && !isFinite(message.value) ? String(message.value) : message.value;
+                    return object;
+                };
+    
+                /**
+                 * Converts this FloatValue to JSON.
+                 * @function toJSON
+                 * @memberof google.protobuf.FloatValue
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                FloatValue.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return FloatValue;
+            })();
+    
+            protobuf.Int64Value = (function() {
+    
+                /**
+                 * Properties of an Int64Value.
+                 * @memberof google.protobuf
+                 * @interface IInt64Value
+                 * @property {number|Long|null} [value] Int64Value value
+                 */
+    
+                /**
+                 * Constructs a new Int64Value.
+                 * @memberof google.protobuf
+                 * @classdesc Represents an Int64Value.
+                 * @implements IInt64Value
+                 * @constructor
+                 * @param {google.protobuf.IInt64Value=} [properties] Properties to set
+                 */
+                function Int64Value(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * Int64Value value.
+                 * @member {number|Long} value
+                 * @memberof google.protobuf.Int64Value
+                 * @instance
+                 */
+                Int64Value.prototype.value = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+    
+                /**
+                 * Creates a new Int64Value instance using the specified properties.
+                 * @function create
+                 * @memberof google.protobuf.Int64Value
+                 * @static
+                 * @param {google.protobuf.IInt64Value=} [properties] Properties to set
+                 * @returns {google.protobuf.Int64Value} Int64Value instance
+                 */
+                Int64Value.create = function create(properties) {
+                    return new Int64Value(properties);
+                };
+    
+                /**
+                 * Encodes the specified Int64Value message. Does not implicitly {@link google.protobuf.Int64Value.verify|verify} messages.
+                 * @function encode
+                 * @memberof google.protobuf.Int64Value
+                 * @static
+                 * @param {google.protobuf.IInt64Value} message Int64Value message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Int64Value.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).int64(message.value);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified Int64Value message, length delimited. Does not implicitly {@link google.protobuf.Int64Value.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof google.protobuf.Int64Value
+                 * @static
+                 * @param {google.protobuf.IInt64Value} message Int64Value message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Int64Value.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes an Int64Value message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof google.protobuf.Int64Value
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {google.protobuf.Int64Value} Int64Value
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Int64Value.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.Int64Value();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.value = reader.int64();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes an Int64Value message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof google.protobuf.Int64Value
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {google.protobuf.Int64Value} Int64Value
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Int64Value.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies an Int64Value message.
+                 * @function verify
+                 * @memberof google.protobuf.Int64Value
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Int64Value.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (!$util.isInteger(message.value) && !(message.value && $util.isInteger(message.value.low) && $util.isInteger(message.value.high)))
+                            return "value: integer|Long expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates an Int64Value message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof google.protobuf.Int64Value
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {google.protobuf.Int64Value} Int64Value
+                 */
+                Int64Value.fromObject = function fromObject(object) {
+                    if (object instanceof $root.google.protobuf.Int64Value)
+                        return object;
+                    var message = new $root.google.protobuf.Int64Value();
+                    if (object.value != null)
+                        if ($util.Long)
+                            (message.value = $util.Long.fromValue(object.value)).unsigned = false;
+                        else if (typeof object.value === "string")
+                            message.value = parseInt(object.value, 10);
+                        else if (typeof object.value === "number")
+                            message.value = object.value;
+                        else if (typeof object.value === "object")
+                            message.value = new $util.LongBits(object.value.low >>> 0, object.value.high >>> 0).toNumber();
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from an Int64Value message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof google.protobuf.Int64Value
+                 * @static
+                 * @param {google.protobuf.Int64Value} message Int64Value
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Int64Value.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults)
+                        if ($util.Long) {
+                            var long = new $util.Long(0, 0, false);
+                            object.value = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.value = options.longs === String ? "0" : 0;
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (typeof message.value === "number")
+                            object.value = options.longs === String ? String(message.value) : message.value;
+                        else
+                            object.value = options.longs === String ? $util.Long.prototype.toString.call(message.value) : options.longs === Number ? new $util.LongBits(message.value.low >>> 0, message.value.high >>> 0).toNumber() : message.value;
+                    return object;
+                };
+    
+                /**
+                 * Converts this Int64Value to JSON.
+                 * @function toJSON
+                 * @memberof google.protobuf.Int64Value
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Int64Value.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return Int64Value;
+            })();
+    
+            protobuf.UInt64Value = (function() {
+    
+                /**
+                 * Properties of a UInt64Value.
+                 * @memberof google.protobuf
+                 * @interface IUInt64Value
+                 * @property {number|Long|null} [value] UInt64Value value
+                 */
+    
+                /**
+                 * Constructs a new UInt64Value.
+                 * @memberof google.protobuf
+                 * @classdesc Represents a UInt64Value.
+                 * @implements IUInt64Value
+                 * @constructor
+                 * @param {google.protobuf.IUInt64Value=} [properties] Properties to set
+                 */
+                function UInt64Value(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * UInt64Value value.
+                 * @member {number|Long} value
+                 * @memberof google.protobuf.UInt64Value
+                 * @instance
+                 */
+                UInt64Value.prototype.value = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+    
+                /**
+                 * Creates a new UInt64Value instance using the specified properties.
+                 * @function create
+                 * @memberof google.protobuf.UInt64Value
+                 * @static
+                 * @param {google.protobuf.IUInt64Value=} [properties] Properties to set
+                 * @returns {google.protobuf.UInt64Value} UInt64Value instance
+                 */
+                UInt64Value.create = function create(properties) {
+                    return new UInt64Value(properties);
+                };
+    
+                /**
+                 * Encodes the specified UInt64Value message. Does not implicitly {@link google.protobuf.UInt64Value.verify|verify} messages.
+                 * @function encode
+                 * @memberof google.protobuf.UInt64Value
+                 * @static
+                 * @param {google.protobuf.IUInt64Value} message UInt64Value message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                UInt64Value.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.value);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified UInt64Value message, length delimited. Does not implicitly {@link google.protobuf.UInt64Value.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof google.protobuf.UInt64Value
+                 * @static
+                 * @param {google.protobuf.IUInt64Value} message UInt64Value message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                UInt64Value.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes a UInt64Value message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof google.protobuf.UInt64Value
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {google.protobuf.UInt64Value} UInt64Value
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                UInt64Value.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.UInt64Value();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.value = reader.uint64();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes a UInt64Value message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof google.protobuf.UInt64Value
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {google.protobuf.UInt64Value} UInt64Value
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                UInt64Value.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies a UInt64Value message.
+                 * @function verify
+                 * @memberof google.protobuf.UInt64Value
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UInt64Value.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (!$util.isInteger(message.value) && !(message.value && $util.isInteger(message.value.low) && $util.isInteger(message.value.high)))
+                            return "value: integer|Long expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates a UInt64Value message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof google.protobuf.UInt64Value
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {google.protobuf.UInt64Value} UInt64Value
+                 */
+                UInt64Value.fromObject = function fromObject(object) {
+                    if (object instanceof $root.google.protobuf.UInt64Value)
+                        return object;
+                    var message = new $root.google.protobuf.UInt64Value();
+                    if (object.value != null)
+                        if ($util.Long)
+                            (message.value = $util.Long.fromValue(object.value)).unsigned = true;
+                        else if (typeof object.value === "string")
+                            message.value = parseInt(object.value, 10);
+                        else if (typeof object.value === "number")
+                            message.value = object.value;
+                        else if (typeof object.value === "object")
+                            message.value = new $util.LongBits(object.value.low >>> 0, object.value.high >>> 0).toNumber(true);
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from a UInt64Value message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof google.protobuf.UInt64Value
+                 * @static
+                 * @param {google.protobuf.UInt64Value} message UInt64Value
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UInt64Value.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults)
+                        if ($util.Long) {
+                            var long = new $util.Long(0, 0, true);
+                            object.value = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.value = options.longs === String ? "0" : 0;
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (typeof message.value === "number")
+                            object.value = options.longs === String ? String(message.value) : message.value;
+                        else
+                            object.value = options.longs === String ? $util.Long.prototype.toString.call(message.value) : options.longs === Number ? new $util.LongBits(message.value.low >>> 0, message.value.high >>> 0).toNumber(true) : message.value;
+                    return object;
+                };
+    
+                /**
+                 * Converts this UInt64Value to JSON.
+                 * @function toJSON
+                 * @memberof google.protobuf.UInt64Value
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UInt64Value.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return UInt64Value;
+            })();
+    
+            protobuf.Int32Value = (function() {
+    
+                /**
+                 * Properties of an Int32Value.
+                 * @memberof google.protobuf
+                 * @interface IInt32Value
+                 * @property {number|null} [value] Int32Value value
+                 */
+    
+                /**
+                 * Constructs a new Int32Value.
+                 * @memberof google.protobuf
+                 * @classdesc Represents an Int32Value.
+                 * @implements IInt32Value
+                 * @constructor
+                 * @param {google.protobuf.IInt32Value=} [properties] Properties to set
+                 */
+                function Int32Value(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * Int32Value value.
+                 * @member {number} value
+                 * @memberof google.protobuf.Int32Value
+                 * @instance
+                 */
+                Int32Value.prototype.value = 0;
+    
+                /**
+                 * Creates a new Int32Value instance using the specified properties.
+                 * @function create
+                 * @memberof google.protobuf.Int32Value
+                 * @static
+                 * @param {google.protobuf.IInt32Value=} [properties] Properties to set
+                 * @returns {google.protobuf.Int32Value} Int32Value instance
+                 */
+                Int32Value.create = function create(properties) {
+                    return new Int32Value(properties);
+                };
+    
+                /**
+                 * Encodes the specified Int32Value message. Does not implicitly {@link google.protobuf.Int32Value.verify|verify} messages.
+                 * @function encode
+                 * @memberof google.protobuf.Int32Value
+                 * @static
+                 * @param {google.protobuf.IInt32Value} message Int32Value message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Int32Value.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).int32(message.value);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified Int32Value message, length delimited. Does not implicitly {@link google.protobuf.Int32Value.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof google.protobuf.Int32Value
+                 * @static
+                 * @param {google.protobuf.IInt32Value} message Int32Value message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Int32Value.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes an Int32Value message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof google.protobuf.Int32Value
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {google.protobuf.Int32Value} Int32Value
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Int32Value.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.Int32Value();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.value = reader.int32();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes an Int32Value message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof google.protobuf.Int32Value
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {google.protobuf.Int32Value} Int32Value
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Int32Value.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies an Int32Value message.
+                 * @function verify
+                 * @memberof google.protobuf.Int32Value
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Int32Value.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (!$util.isInteger(message.value))
+                            return "value: integer expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates an Int32Value message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof google.protobuf.Int32Value
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {google.protobuf.Int32Value} Int32Value
+                 */
+                Int32Value.fromObject = function fromObject(object) {
+                    if (object instanceof $root.google.protobuf.Int32Value)
+                        return object;
+                    var message = new $root.google.protobuf.Int32Value();
+                    if (object.value != null)
+                        message.value = object.value | 0;
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from an Int32Value message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof google.protobuf.Int32Value
+                 * @static
+                 * @param {google.protobuf.Int32Value} message Int32Value
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Int32Value.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults)
+                        object.value = 0;
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        object.value = message.value;
+                    return object;
+                };
+    
+                /**
+                 * Converts this Int32Value to JSON.
+                 * @function toJSON
+                 * @memberof google.protobuf.Int32Value
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Int32Value.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return Int32Value;
+            })();
+    
+            protobuf.UInt32Value = (function() {
+    
+                /**
+                 * Properties of a UInt32Value.
+                 * @memberof google.protobuf
+                 * @interface IUInt32Value
+                 * @property {number|null} [value] UInt32Value value
+                 */
+    
+                /**
+                 * Constructs a new UInt32Value.
+                 * @memberof google.protobuf
+                 * @classdesc Represents a UInt32Value.
+                 * @implements IUInt32Value
+                 * @constructor
+                 * @param {google.protobuf.IUInt32Value=} [properties] Properties to set
+                 */
+                function UInt32Value(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * UInt32Value value.
+                 * @member {number} value
+                 * @memberof google.protobuf.UInt32Value
+                 * @instance
+                 */
+                UInt32Value.prototype.value = 0;
+    
+                /**
+                 * Creates a new UInt32Value instance using the specified properties.
+                 * @function create
+                 * @memberof google.protobuf.UInt32Value
+                 * @static
+                 * @param {google.protobuf.IUInt32Value=} [properties] Properties to set
+                 * @returns {google.protobuf.UInt32Value} UInt32Value instance
+                 */
+                UInt32Value.create = function create(properties) {
+                    return new UInt32Value(properties);
+                };
+    
+                /**
+                 * Encodes the specified UInt32Value message. Does not implicitly {@link google.protobuf.UInt32Value.verify|verify} messages.
+                 * @function encode
+                 * @memberof google.protobuf.UInt32Value
+                 * @static
+                 * @param {google.protobuf.IUInt32Value} message UInt32Value message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                UInt32Value.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.value);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified UInt32Value message, length delimited. Does not implicitly {@link google.protobuf.UInt32Value.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof google.protobuf.UInt32Value
+                 * @static
+                 * @param {google.protobuf.IUInt32Value} message UInt32Value message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                UInt32Value.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes a UInt32Value message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof google.protobuf.UInt32Value
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {google.protobuf.UInt32Value} UInt32Value
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                UInt32Value.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.UInt32Value();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.value = reader.uint32();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes a UInt32Value message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof google.protobuf.UInt32Value
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {google.protobuf.UInt32Value} UInt32Value
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                UInt32Value.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies a UInt32Value message.
+                 * @function verify
+                 * @memberof google.protobuf.UInt32Value
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UInt32Value.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (!$util.isInteger(message.value))
+                            return "value: integer expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates a UInt32Value message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof google.protobuf.UInt32Value
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {google.protobuf.UInt32Value} UInt32Value
+                 */
+                UInt32Value.fromObject = function fromObject(object) {
+                    if (object instanceof $root.google.protobuf.UInt32Value)
+                        return object;
+                    var message = new $root.google.protobuf.UInt32Value();
+                    if (object.value != null)
+                        message.value = object.value >>> 0;
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from a UInt32Value message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof google.protobuf.UInt32Value
+                 * @static
+                 * @param {google.protobuf.UInt32Value} message UInt32Value
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UInt32Value.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults)
+                        object.value = 0;
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        object.value = message.value;
+                    return object;
+                };
+    
+                /**
+                 * Converts this UInt32Value to JSON.
+                 * @function toJSON
+                 * @memberof google.protobuf.UInt32Value
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UInt32Value.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return UInt32Value;
+            })();
+    
+            protobuf.BoolValue = (function() {
+    
+                /**
+                 * Properties of a BoolValue.
+                 * @memberof google.protobuf
+                 * @interface IBoolValue
+                 * @property {boolean|null} [value] BoolValue value
+                 */
+    
+                /**
+                 * Constructs a new BoolValue.
+                 * @memberof google.protobuf
+                 * @classdesc Represents a BoolValue.
+                 * @implements IBoolValue
+                 * @constructor
+                 * @param {google.protobuf.IBoolValue=} [properties] Properties to set
+                 */
+                function BoolValue(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * BoolValue value.
+                 * @member {boolean} value
+                 * @memberof google.protobuf.BoolValue
+                 * @instance
+                 */
+                BoolValue.prototype.value = false;
+    
+                /**
+                 * Creates a new BoolValue instance using the specified properties.
+                 * @function create
+                 * @memberof google.protobuf.BoolValue
+                 * @static
+                 * @param {google.protobuf.IBoolValue=} [properties] Properties to set
+                 * @returns {google.protobuf.BoolValue} BoolValue instance
+                 */
+                BoolValue.create = function create(properties) {
+                    return new BoolValue(properties);
+                };
+    
+                /**
+                 * Encodes the specified BoolValue message. Does not implicitly {@link google.protobuf.BoolValue.verify|verify} messages.
+                 * @function encode
+                 * @memberof google.protobuf.BoolValue
+                 * @static
+                 * @param {google.protobuf.IBoolValue} message BoolValue message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                BoolValue.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).bool(message.value);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified BoolValue message, length delimited. Does not implicitly {@link google.protobuf.BoolValue.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof google.protobuf.BoolValue
+                 * @static
+                 * @param {google.protobuf.IBoolValue} message BoolValue message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                BoolValue.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes a BoolValue message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof google.protobuf.BoolValue
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {google.protobuf.BoolValue} BoolValue
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                BoolValue.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.BoolValue();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.value = reader.bool();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes a BoolValue message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof google.protobuf.BoolValue
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {google.protobuf.BoolValue} BoolValue
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                BoolValue.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies a BoolValue message.
+                 * @function verify
+                 * @memberof google.protobuf.BoolValue
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                BoolValue.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (typeof message.value !== "boolean")
+                            return "value: boolean expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates a BoolValue message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof google.protobuf.BoolValue
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {google.protobuf.BoolValue} BoolValue
+                 */
+                BoolValue.fromObject = function fromObject(object) {
+                    if (object instanceof $root.google.protobuf.BoolValue)
+                        return object;
+                    var message = new $root.google.protobuf.BoolValue();
+                    if (object.value != null)
+                        message.value = Boolean(object.value);
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from a BoolValue message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof google.protobuf.BoolValue
+                 * @static
+                 * @param {google.protobuf.BoolValue} message BoolValue
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                BoolValue.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults)
+                        object.value = false;
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        object.value = message.value;
+                    return object;
+                };
+    
+                /**
+                 * Converts this BoolValue to JSON.
+                 * @function toJSON
+                 * @memberof google.protobuf.BoolValue
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                BoolValue.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return BoolValue;
+            })();
+    
+            protobuf.StringValue = (function() {
+    
+                /**
+                 * Properties of a StringValue.
+                 * @memberof google.protobuf
+                 * @interface IStringValue
+                 * @property {string|null} [value] StringValue value
+                 */
+    
+                /**
+                 * Constructs a new StringValue.
+                 * @memberof google.protobuf
+                 * @classdesc Represents a StringValue.
+                 * @implements IStringValue
+                 * @constructor
+                 * @param {google.protobuf.IStringValue=} [properties] Properties to set
+                 */
+                function StringValue(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * StringValue value.
+                 * @member {string} value
+                 * @memberof google.protobuf.StringValue
+                 * @instance
+                 */
+                StringValue.prototype.value = "";
+    
+                /**
+                 * Creates a new StringValue instance using the specified properties.
+                 * @function create
+                 * @memberof google.protobuf.StringValue
+                 * @static
+                 * @param {google.protobuf.IStringValue=} [properties] Properties to set
+                 * @returns {google.protobuf.StringValue} StringValue instance
+                 */
+                StringValue.create = function create(properties) {
+                    return new StringValue(properties);
+                };
+    
+                /**
+                 * Encodes the specified StringValue message. Does not implicitly {@link google.protobuf.StringValue.verify|verify} messages.
+                 * @function encode
+                 * @memberof google.protobuf.StringValue
+                 * @static
+                 * @param {google.protobuf.IStringValue} message StringValue message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                StringValue.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
+                        writer.uint32(/* id 1, wireType 2 =*/10).string(message.value);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified StringValue message, length delimited. Does not implicitly {@link google.protobuf.StringValue.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof google.protobuf.StringValue
+                 * @static
+                 * @param {google.protobuf.IStringValue} message StringValue message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                StringValue.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes a StringValue message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof google.protobuf.StringValue
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {google.protobuf.StringValue} StringValue
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                StringValue.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.StringValue();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.value = reader.string();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes a StringValue message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof google.protobuf.StringValue
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {google.protobuf.StringValue} StringValue
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                StringValue.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies a StringValue message.
+                 * @function verify
+                 * @memberof google.protobuf.StringValue
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                StringValue.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (!$util.isString(message.value))
+                            return "value: string expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates a StringValue message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof google.protobuf.StringValue
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {google.protobuf.StringValue} StringValue
+                 */
+                StringValue.fromObject = function fromObject(object) {
+                    if (object instanceof $root.google.protobuf.StringValue)
+                        return object;
+                    var message = new $root.google.protobuf.StringValue();
+                    if (object.value != null)
+                        message.value = String(object.value);
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from a StringValue message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof google.protobuf.StringValue
+                 * @static
+                 * @param {google.protobuf.StringValue} message StringValue
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                StringValue.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults)
+                        object.value = "";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        object.value = message.value;
+                    return object;
+                };
+    
+                /**
+                 * Converts this StringValue to JSON.
+                 * @function toJSON
+                 * @memberof google.protobuf.StringValue
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                StringValue.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return StringValue;
+            })();
+    
+            protobuf.BytesValue = (function() {
+    
+                /**
+                 * Properties of a BytesValue.
+                 * @memberof google.protobuf
+                 * @interface IBytesValue
+                 * @property {Uint8Array|null} [value] BytesValue value
+                 */
+    
+                /**
+                 * Constructs a new BytesValue.
+                 * @memberof google.protobuf
+                 * @classdesc Represents a BytesValue.
+                 * @implements IBytesValue
+                 * @constructor
+                 * @param {google.protobuf.IBytesValue=} [properties] Properties to set
+                 */
+                function BytesValue(properties) {
+                    if (properties)
+                        for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+    
+                /**
+                 * BytesValue value.
+                 * @member {Uint8Array} value
+                 * @memberof google.protobuf.BytesValue
+                 * @instance
+                 */
+                BytesValue.prototype.value = $util.newBuffer([]);
+    
+                /**
+                 * Creates a new BytesValue instance using the specified properties.
+                 * @function create
+                 * @memberof google.protobuf.BytesValue
+                 * @static
+                 * @param {google.protobuf.IBytesValue=} [properties] Properties to set
+                 * @returns {google.protobuf.BytesValue} BytesValue instance
+                 */
+                BytesValue.create = function create(properties) {
+                    return new BytesValue(properties);
+                };
+    
+                /**
+                 * Encodes the specified BytesValue message. Does not implicitly {@link google.protobuf.BytesValue.verify|verify} messages.
+                 * @function encode
+                 * @memberof google.protobuf.BytesValue
+                 * @static
+                 * @param {google.protobuf.IBytesValue} message BytesValue message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                BytesValue.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
+                        writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.value);
+                    return writer;
+                };
+    
+                /**
+                 * Encodes the specified BytesValue message, length delimited. Does not implicitly {@link google.protobuf.BytesValue.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof google.protobuf.BytesValue
+                 * @static
+                 * @param {google.protobuf.IBytesValue} message BytesValue message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                BytesValue.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+    
+                /**
+                 * Decodes a BytesValue message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof google.protobuf.BytesValue
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {google.protobuf.BytesValue} BytesValue
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                BytesValue.decode = function decode(reader, length) {
+                    if (!(reader instanceof $Reader))
+                        reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.BytesValue();
+                    while (reader.pos < end) {
+                        var tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1:
+                            message.value = reader.bytes();
+                            break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+    
+                /**
+                 * Decodes a BytesValue message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof google.protobuf.BytesValue
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {google.protobuf.BytesValue} BytesValue
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                BytesValue.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof $Reader))
+                        reader = new $Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+    
+                /**
+                 * Verifies a BytesValue message.
+                 * @function verify
+                 * @memberof google.protobuf.BytesValue
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                BytesValue.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (!(message.value && typeof message.value.length === "number" || $util.isString(message.value)))
+                            return "value: buffer expected";
+                    return null;
+                };
+    
+                /**
+                 * Creates a BytesValue message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof google.protobuf.BytesValue
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {google.protobuf.BytesValue} BytesValue
+                 */
+                BytesValue.fromObject = function fromObject(object) {
+                    if (object instanceof $root.google.protobuf.BytesValue)
+                        return object;
+                    var message = new $root.google.protobuf.BytesValue();
+                    if (object.value != null)
+                        if (typeof object.value === "string")
+                            $util.base64.decode(object.value, message.value = $util.newBuffer($util.base64.length(object.value)), 0);
+                        else if (object.value.length)
+                            message.value = object.value;
+                    return message;
+                };
+    
+                /**
+                 * Creates a plain object from a BytesValue message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof google.protobuf.BytesValue
+                 * @static
+                 * @param {google.protobuf.BytesValue} message BytesValue
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                BytesValue.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    var object = {};
+                    if (options.defaults)
+                        if (options.bytes === String)
+                            object.value = "";
+                        else {
+                            object.value = [];
+                            if (options.bytes !== Array)
+                                object.value = $util.newBuffer(object.value);
+                        }
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        object.value = options.bytes === String ? $util.base64.encode(message.value, 0, message.value.length) : options.bytes === Array ? Array.prototype.slice.call(message.value) : message.value;
+                    return object;
+                };
+    
+                /**
+                 * Converts this BytesValue to JSON.
+                 * @function toJSON
+                 * @memberof google.protobuf.BytesValue
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                BytesValue.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+    
+                return BytesValue;
+            })();
+    
+            return protobuf;
+        })();
+    
+        return google;
     })();
 
     return $root;

@@ -11,7 +11,17 @@ import {
     Meta,
 } from '@salutejs/scenario';
 
-import { IDevice, ILegacyDevice, IMessage, ISettings, Message } from './proto';
+import {
+    IDevice,
+    ILegacyDevice,
+    IMessage,
+    ISettings,
+    IGetHistoryRequest,
+    IHistoryMessages,
+    IApp,
+    IOffset,
+    Message,
+} from './proto';
 
 export { Message } from './proto';
 
@@ -534,3 +544,26 @@ export type AssistantPostMessage =
     | {
           type: 'onBack';
       };
+
+export type GetHistoryRequestProto = IGetHistoryRequest;
+
+export type GetHistoryRequestClient = IGetHistoryRequest & {
+    app?: Partial<Pick<AppInfo, 'systemName' | 'projectId'> & { type: AppInfo['frontendType'] }> | null;
+    offset?: IOffset & {
+        limit?: number;
+        contentId?: string;
+    };
+};
+
+export type HistoryMessages = IHistoryMessages & {
+    content: {
+        additional_info: string;
+        messageId: number;
+        type: string;
+        system: {
+            app_info?: AppInfo;
+            items: ItemType[];
+            time: Meta['time'];
+        };
+    };
+};
