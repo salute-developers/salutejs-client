@@ -1,3 +1,15 @@
+# v1.3.1 (Mon Jul 04 2022)
+
+#### 🐛 Bug Fix
+
+- createSmartAppDebugger не запускает чатаппы [#15](https://github.com/salute-developers/salutejs-client/pull/15) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.3.0 (Thu Jun 23 2022)
 
 #### 🚀 Enhancement
