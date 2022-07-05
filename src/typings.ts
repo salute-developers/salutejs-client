@@ -547,7 +547,7 @@ export type AssistantPostMessage =
 
 export type GetHistoryRequestProto = IGetHistoryRequest;
 
-export type GetHistoryRequestClient = IGetHistoryRequest & {
+export type GetHistoryRequestClient = Omit<IGetHistoryRequest, 'app' | 'offset'> & {
     app?: Partial<Pick<AppInfo, 'systemName' | 'projectId'> & { type: AppInfo['frontendType'] }> | null;
     offset?: IOffset & {
         limit?: number;
@@ -555,7 +555,7 @@ export type GetHistoryRequestClient = IGetHistoryRequest & {
     };
 };
 
-export type HistoryMessages = IHistoryMessages & {
+export type HistoryMessages = Omit<IHistoryMessages, 'content'> & {
     content: {
         additional_info: string;
         messageId: number;
