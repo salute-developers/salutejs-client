@@ -1,3 +1,15 @@
+# v1.4.1 (Tue Jul 05 2022)
+
+#### 🐛 Bug Fix
+
+- fix: Исправлены типы для GetHistoryRequset [#16](https://github.com/salute-developers/salutejs-client/pull/16) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.4.0 (Mon Jul 04 2022)
 
 #### 🚀 Enhancement
