@@ -358,18 +358,16 @@ export type SystemMessageDataType = {
         emotionId: EmotionId;
     };
     server_action?: AssistantServerAction;
-    meta?:
-        | {
-              current_app: {
-                  app_info: AppInfo;
-                  state: AssistantAppState;
-              };
-              background_apps: {
-                  app_info: AppInfo;
-                  state: AssistantAppState;
-              }[];
-          }
-        | Meta;
+    meta?: {
+        current_app: {
+            app_info: AppInfo;
+            state: AssistantAppState;
+        };
+        background_apps: {
+            app_info: AppInfo;
+            state: AssistantAppState;
+        }[];
+    } & Meta;
     sdk_meta?: SdkMeta;
 };
 

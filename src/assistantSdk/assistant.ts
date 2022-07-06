@@ -127,7 +127,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
 
     const backgroundApps: { [key: string]: AssistantBackgroundApp & { commandsSubscribers: unknown[] } } = {};
 
-    const metaProvider = async (): Promise<Partial<Pick<SystemMessageDataType, 'app_info' | 'meta'>>> => {
+    const metaProvider = async (): Promise<Required<Pick<SystemMessageDataType, 'meta'>>> => {
         // Стейт нужен только для канваса
         const appState =
             app !== null && app.info.frontendType === 'WEB_APP' && app.getState
@@ -249,8 +249,10 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         appInfo: AppInfo,
         items: PermissionType[],
     ) => {
-        const data = await getAnswerForRequestPermissions(requestMessageId, appInfo, items);
-        client.sendData(data, 'SERVER_ACTION');
+        const { meta: answer, ...data } = await getAnswerForRequestPermissions(requestMessageId, appInfo, items);
+        const { meta } = await metaProvider();
+
+        client.sendData({ ...data, meta: { ...meta, ...answer } }, 'SERVER_ACTION');
     };
 
     subscriptions.push(protocol.on('ready', () => emit('vps', { type: 'ready' })));

@@ -36,7 +36,11 @@ export const createClient = (
         });
 
     /** отправляет произвольный systemMessage, не подкладывает мету */
-    const sendData = (data: Record<string, unknown>, messageName = ''): number | Long => {
+    const sendData = (
+        data: Record<string, unknown>,
+        messageName = '',
+        meta?: Record<string, string>,
+    ): number | Long => {
         const messageId = protocol.getMessageId();
 
         protocol.sendSystemMessage(
@@ -46,6 +50,7 @@ export const createClient = (
             },
             true,
             messageId,
+            { meta },
         );
 
         return messageId;
