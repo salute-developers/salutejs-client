@@ -137,10 +137,6 @@ export const createVoice = (
             return;
         }
 
-        if (settings.disableListening) {
-            return;
-        }
-
         // повторные вызовы не пройдут, пока пользователь не разрешит/запретит аудио
         if (listener.status === 'stopped') {
             return client.createVoiceStream(({ sendVoice, messageId, onMessage }) => {
@@ -203,7 +199,7 @@ export const createVoice = (
                     isPlaying = false;
                     emit({ emotion: 'idle' });
 
-                    if (mesId === autolistenMesId) {
+                    if (mesId === autolistenMesId && !settings.disableListening) {
                         listen();
                     }
                 }),
@@ -264,11 +260,11 @@ export const createVoice = (
 
             if (autoListening) {
                 /// если озвучка включена - сохраняем mesId чтобы включить слушание после озвучки
-                /// если озвучка выключена - включаем слушание сразу
+                /// если озвучка выключена - включаем слушание сразу, если оно включено
 
                 if (!settings.disableDubbing) {
                     autolistenMesId = originalMessage.messageId.toString();
-                } else {
+                } else if (!settings.disableListening) {
                     listen();
                 }
             }

@@ -60,7 +60,7 @@ const promiseTimeout = <T>(promise: Promise<T>, timeout: number): Promise<T> => 
 export interface AssistantSettings {
     /** Отключение фичи воспроизведения голоса */
     disableDubbing: boolean;
-    /** Отключение фичи слушания речи */
+    /** Отключение фичи автослушания речи */
     disableListening: boolean;
     /** Отправка текстовых сообщений с type: application/ssml */
     sendTextAsSsml: boolean;
