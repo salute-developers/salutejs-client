@@ -39,9 +39,7 @@ const createVoiceSettings = (listener: ReturnType<typeof createVoiceListener>) =
 
         subscribers.push(
             listener.on('status', (status) => {
-                const willBeDubbing = voicePlayer && !settings.disableDubbing;
-
-                if (status === 'stopped' && !willBeDubbing) {
+                if (status === 'stopped') {
                     tryApply();
                 }
             }),
