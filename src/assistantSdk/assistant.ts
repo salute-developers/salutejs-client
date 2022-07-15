@@ -333,7 +333,6 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
                                     type: 'command',
                                     command: command as ActionCommand,
                                 });
-                                return;
                             }
 
                             if (
