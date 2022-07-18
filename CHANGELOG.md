@@ -1,3 +1,15 @@
+# v1.4.2 (Mon Jul 18 2022)
+
+#### 🐛 Bug Fix
+
+- fix: Теперь после command.type === action обработка items не прерывается [#22](https://github.com/salute-developers/salutejs-client/pull/22) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.4.1 (Tue Jul 05 2022)
 
 #### 🐛 Bug Fix
