@@ -1,3 +1,15 @@
+# v1.4.3 (Tue Jul 19 2022)
+
+#### 🐛 Bug Fix
+
+- Включение автослушания после мьюта [#21](https://github.com/salute-developers/salutejs-client/pull/21) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.4.2 (Mon Jul 18 2022)
 
 #### 🐛 Bug Fix
