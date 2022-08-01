@@ -22,7 +22,7 @@ import { createClient } from './client/client';
 import { createProtocol, ProtocolError } from './client/protocol';
 import { createTransport } from './client/transport';
 import { getAnswerForRequestPermissions, getTime } from './meta';
-import { createVoice } from './voice/voice';
+import { createVoice, TtsEvent } from './voice/voice';
 
 const STATE_UPDATE_TIMEOUT = 200;
 
@@ -100,6 +100,7 @@ export type AssistantEvents = {
     status: (status: OriginalMessageType['status']) => void;
     error: (error: AssistantError) => void;
     history: (history: HistoryMessages[]) => void;
+    tts: (event: TtsEvent) => void;
 };
 
 export interface CreateAssistantDevOptions {
@@ -196,7 +197,14 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
     const client = createClient(protocol, metaProvider);
     const voice = createVoice(
         client,
-        (event) => emit('assistant', event),
+        (event) => {
+            if (typeof event.tts !== 'undefined') {
+                emit('tts', event.tts);
+                return;
+            }
+
+            emit('assistant', event);
+        },
         () => {
             voiceReady = true;
 

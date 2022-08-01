@@ -1,5 +1,5 @@
 import { createClient } from '../client/client';
-import { EmotionId, OriginalMessageType, SystemMessageDataType } from '../../typings';
+import { AppInfo, EmotionId, OriginalMessageType, SystemMessageDataType } from '../../typings';
 
 import { createMusicRecognizer } from './recognizers/musicRecognizer';
 import { createSpeechRecognizer } from './recognizers/speechRecognizer';
@@ -75,11 +75,18 @@ const createVoiceSettings = (listener: ReturnType<typeof createVoiceListener>) =
     };
 };
 
+export interface TtsEvent {
+    status: 'start' | 'stop';
+    messageId: number;
+    appInfo: AppInfo;
+}
+
 export const createVoice = (
     client: ReturnType<typeof createClient>,
     emit: (event: {
         asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // lasr и mid нужен для отправки исх бабла в чат
         emotion?: EmotionId;
+        tts?: TtsEvent;
     }) => void,
     /// пока onReady не вызван, треки не воспроизводятся
     /// когда случится onReady, очередь треков начнет проигрываться
@@ -91,6 +98,8 @@ export const createVoice = (
     const speechRecognizer = createSpeechRecognizer(listener);
     const subscriptions: Array<() => void> = [];
     const settings = createVoiceSettings(listener);
+    const appInfoDict: Record<string, AppInfo> = {};
+    const mesIdQueue: Array<string> = [];
 
     let isPlaying = false; // проигрывается/не проигрывается озвучка
     let autolistenMesId: string | null = null; // id сообщения, после проигрывания которого, нужно активировать слушание
@@ -189,9 +198,10 @@ export const createVoice = (
 
             // начало проигрывания озвучки
             subscriptions.push(
-                voicePlayer.on('play', () => {
+                voicePlayer.on('play', (mesId: string) => {
                     isPlaying = true;
                     emit({ emotion: 'talk' });
+                    emit({ tts: { status: 'start', messageId: Number(mesId), appInfo: appInfoDict[mesId] } });
                 }),
             );
 
@@ -200,10 +210,19 @@ export const createVoice = (
                 voicePlayer.on('end', (mesId: string) => {
                     isPlaying = false;
                     emit({ emotion: 'idle' });
+                    emit({ tts: { status: 'stop', messageId: Number(mesId), appInfo: appInfoDict[mesId] } });
 
                     if (mesId === autolistenMesId) {
                         listen();
                     }
+
+                    // очистка сохраненных appInfo и messageId
+                    let idx = 0;
+                    do {
+                        delete appInfoDict[mesId];
+                    } while (mesIdQueue[idx++] !== mesId);
+
+                    mesIdQueue.splice(0, idx);
                 }),
             );
 
@@ -259,13 +278,19 @@ export const createVoice = (
     subscriptions.push(
         client.on('systemMessage', (systemMessage: SystemMessageDataType, originalMessage: OriginalMessageType) => {
             const { auto_listening: autoListening } = systemMessage;
+            const messageId = originalMessage.messageId.toString();
+
+            if (typeof systemMessage.app_info !== 'undefined') {
+                appInfoDict[messageId] = systemMessage.app_info;
+                mesIdQueue.push(messageId);
+            }
 
             if (autoListening) {
                 /// если озвучка включена - сохраняем mesId чтобы включить слушание после озвучки
                 /// если озвучка выключена - включаем слушание сразу
 
                 if (!settings.disableDubbing) {
-                    autolistenMesId = originalMessage.messageId.toString();
+                    autolistenMesId = messageId;
                 } else {
                     listen();
                 }
