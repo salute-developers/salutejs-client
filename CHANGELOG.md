@@ -1,3 +1,15 @@
+# v1.5.0 (Tue Aug 02 2022)
+
+#### 🚀 Enhancement
+
+- Подписка на события озвучки [#24](https://github.com/salute-developers/salutejs-client/pull/24) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.4.3 (Tue Jul 19 2022)
 
 #### 🐛 Bug Fix
