@@ -340,6 +340,22 @@ export const initializeAssistantSDK = ({
         updateDevUI();
     });
 
+    assistant.on('tts', (event) => {
+        if (event.status === 'start') {
+            window.AssistantClient?.onTtsStateChanged?.({
+                status: 'tts_start',
+                message_id: event.messageId,
+                owner: event.appInfo.applicationId === appInfo?.applicationId,
+            });
+        } else if (event.status === 'stop') {
+            window.AssistantClient?.onTtsStateChanged?.({
+                status: 'tts_stop',
+                message_id: event.messageId,
+                owner: event.appInfo.applicationId === appInfo?.applicationId,
+            });
+        }
+    });
+
     updateDevUI();
     enableRecord && renderAssistantRecordPanel(recorder, saver);
 

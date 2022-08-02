@@ -11,6 +11,7 @@ import {
     AssistantPostMessage,
     Hints,
     Suggestions,
+    TtsState,
 } from './typings';
 import { createNanoEvents } from './nanoevents';
 import { createNanoObservable, ObserverFunc } from './nanoobservable';
@@ -25,6 +26,7 @@ export interface AssistantEvents<A extends AssistantSmartAppData> {
     error: <T extends AssistantSmartAppError['smart_app_error'] = AssistantSmartAppError['smart_app_error']>(
         error: T,
     ) => void;
+    ttsChanged: (state: TtsState) => void;
 }
 
 export interface SendDataParams {
@@ -233,6 +235,9 @@ export const createAssistant = <A extends AssistantSmartAppData>({
             }
 
             emitCommand(command as AssistantClientCustomizedCommand<A>);
+        },
+        onTtsStateChanged: (state) => {
+            emit('ttsChanged', state);
         },
         onRequestState: () => {
             return currentGetState();

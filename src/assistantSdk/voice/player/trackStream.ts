@@ -118,7 +118,7 @@ export const createTrackStream = (
         source.connect(ctx.destination);
         source.onended = () => {
             queue.remove(source);
-            if (queue.ended) {
+            if (queue.ended && status !== 'end') {
                 status = 'end';
                 onEnd && onEnd();
             }

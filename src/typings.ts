@@ -228,6 +228,12 @@ export interface AssistantSystemCommand {
     system: { command: string; [key: string]: unknown };
 }
 
+export interface TtsState {
+    status: 'tts_start' | 'tts_stop';
+    message_id: number;
+    owner: boolean;
+}
+
 export type AssistantClientCustomizedCommand<T extends AssistantSmartAppData> =
     | AssistantAppContext
     | AssistantThemeCommand
@@ -242,6 +248,7 @@ export type AssistantClientCommand = AssistantClientCustomizedCommand<AssistantS
 
 export interface AssistantClient {
     onStart?: () => void;
+    onTtsStateChanged?: (state: TtsState) => void;
     onRequestState?: () => Record<string, unknown>;
     onRequestRecoveryState?: () => unknown;
     onData?: (command: AssistantClientCommand) => void;

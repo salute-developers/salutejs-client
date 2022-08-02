@@ -241,6 +241,14 @@ ____
 
 Осуществляет подписку на событие получения данных с бэкенда. Получает команды из `appInitialData`, если при запуске смартапа не была вызвана команда `getInitialData()`.
 
+#### on('ttsChanged', cb: ({ status: 'tts_start' | 'tts_stop', message_id: number, owner: boolean }) => void).
+
+Выполняет подписку на события начала и окончания озвучки.<br>
+`status` - состояние озвучки, начало или окончание.<br>
+`message_id` - идентификатор сообщения с озвучкой.<br>
+`owner` - флаг принадлежности озвучки текущему смартапу.
+
+
 #### sendAction({ type: string; payload: Record<string, unknown> }, params?: { name?: string; requestId?: string }) => void
 
 Передает ошибки и обработчики ответа от бэкенда. <br>
