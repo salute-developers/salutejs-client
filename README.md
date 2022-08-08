@@ -141,7 +141,7 @@ Assitant Client доступен для подключения через `<scri
 ```html
 <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@salutejs/client@1.0.0/umd/assistant.development.min.js"></script>
+<script src="https://unpkg.com/@salutejs/client@stable/umd/assistant.development.min.js"></script>
 <script>
   const client = assistant.createSmartappDebugger({
             // Токен из Кабинета разработчика
@@ -158,7 +158,7 @@ Assitant Client доступен для подключения через `<scri
 
 Пример, для использования на устройствах:
 ```html
-<script src="https://unpkg.com/@salutejs/client@1.0.0/umd/assistant.production.min.js"></script>
+<script src="https://unpkg.com/@salutejs/client@stable/umd/assistant.production.min.js"></script>
 <script>
   const client = assistant.createAssistant({ getState: () => ({}), getRecoveryState: () => ({}), });
 </script>
