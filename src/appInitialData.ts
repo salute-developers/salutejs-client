@@ -1,5 +1,37 @@
 import { AssistantClientCommand, AssistantClientCustomizedCommand, AssistantSmartAppCommand } from './typings';
 
+type AnyObject = { [key: string]: unknown };
+
+const isDeepEqual = (a: AnyObject | unknown, b: AnyObject | unknown): boolean => {
+    // Простое значение
+    if (typeof a !== 'object' || a === null) {
+        return a === b;
+    }
+
+    // Массив
+    if (Array.isArray(a)) {
+        if (!Array.isArray(b) || a.length !== b.length) {
+            return false;
+        }
+
+        return !a.some((valA: unknown, key: number) => !isDeepEqual(valA, b[key]));
+    }
+
+    // Словарь
+    if (typeof b !== 'object' || b === null) {
+        return false;
+    }
+
+    const entriesA = Object.entries(a);
+    const entriesB = Object.entries(b);
+
+    if (entriesA.length !== entriesB.length) {
+        return false;
+    }
+
+    return !entriesA.some(([key, valA]: [string, unknown]) => !(key in b && isDeepEqual(valA, (b as AnyObject)[key])));
+};
+
 const findCommandIndex = (arr: AssistantClientCommand[], command: AssistantClientCommand) => {
     let index = -1;
 
@@ -9,8 +41,8 @@ const findCommandIndex = (arr: AssistantClientCommand[], command: AssistantClien
         index = arr.findIndex((c) => c.type === 'insets');
     } else if (command.type === 'app_context') {
         index = arr.findIndex((c) => c.type === 'app_context');
-    } else if (command.sdk_meta && command.sdk_meta?.mid && command.sdk_meta?.mid !== '-1') {
-        index = arr.findIndex((c) => c.sdk_meta?.mid === command.sdk_meta?.mid);
+    } else {
+        index = arr.findIndex((c) => isDeepEqual(c, command));
     }
 
     return index;
