@@ -258,6 +258,30 @@ describe('Проверяем createAssistant', () => {
         expect(window.AssistantHost.ready).to.calledOnce;
     });
 
+    it('Не эмитить команды повторяющиеся из appInitialData, эмитить разные команды с одним mid', () => {
+        const stubOnCommand = cy.stub();
+        const assistant = initAssistant({ ready: false });
+        const userCommand1 = {
+            type: 'smart_app_data',
+            smart_app_data: { command: 'USER_COMMAND_1' },
+            sdk_meta: { mid: '112233' },
+        };
+        const userCommand2 = {
+            type: 'smart_app_data',
+            smart_app_data: { command: 'USER_COMMAND_2' },
+            sdk_meta: { mid: '112233' },
+        };
+
+        window.appInitialData = [...initialData, userCommand1];
+
+        assistant.ready();
+        assistant.on('command', (command) => stubOnCommand(command.command));
+
+        window.AssistantClient.onData(userCommand1);
+        window.AssistantClient.onData(userCommand2);
+        expect(stubOnCommand).to.be.calledOnceWith(userCommand2.smart_app_data.command);
+    });
+
     describe('window.__ASSISTANT_CLIENT__', () => {
         it('Mid smartAppData из window.appInitialData сохраняется и не изменяется. Mid другой команды не берётся', () => {
             const assistant = initAssistant({ ready: false });
