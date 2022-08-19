@@ -1,3 +1,17 @@
+# v1.5.1 (Fri Aug 19 2022)
+
+#### 🐛 Bug Fix
+
+- fix: Теперь разные команды могут иметь один mid и будут заэмичены [#28](https://github.com/salute-developers/salutejs-client/pull/28) ([@evgeniysemin](https://github.com/evgeniysemin))
+- docs: ссылки на stable-пакеты [#25](https://github.com/salute-developers/salutejs-client/pull/25) ([@Yeti-or](https://github.com/Yeti-or))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- Vasiliy ([@Yeti-or](https://github.com/Yeti-or))
+
+---
+
 # v1.5.0 (Tue Aug 02 2022)
 
 #### 🚀 Enhancement
