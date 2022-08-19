@@ -114,4 +114,15 @@ describe('Проверяем изменение настроек озвучки'
             assistantClient.start();
         });
     });
+
+    it('При неактивных озвучке и слушании changeSettings применит настройки сразу', () => {});
+    it('При включенной озвучке changeSettings применит настройки при завершении озвучки', () => {});
+    it('При выключенной озвучке changeSettings применит настройки при прекращении слушания', () => {});
+
+    it('sendText останавливает озвучку и слушание', () => {});
+    it('sendText при shouldSendDisableDubbing: отправляет {dubbing: -1}', () => {});
+    it('sendText при shouldSendDisableDubbing: не отправляет {dubbing: -1}, если озвучка уже выключена', () => {});
+    it('sendText при shouldSendDisableDubbing: если озвучка была выключена в процессе sendText, то {dubbing: 1} не отправится', () => {});
+
+    it('stopVoice останавливает озвучку и слушание', () => {});
 });
