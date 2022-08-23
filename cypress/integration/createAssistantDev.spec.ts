@@ -198,19 +198,20 @@ describe('Проверяем createAssistantDev', () => {
                 const message = Message.decode((mes as Uint8Array).slice(4));
                 if (message.systemMessage?.data && message.systemMessage?.data !== '{}') {
                     const data: SystemMessageDataType = JSON.parse(message.systemMessage.data);
-                    const { app_info, server_action, meta } = data;
+                    const { app_info, server_action } = data;
+                    const current_app = JSON.parse(message.meta.current_app);
 
                     if (!app_info || app_info.frontendStateId !== APP_INFO.frontendStateId) {
                         return;
                     }
 
                     expect(server_action).to.ok;
-                    expect(meta).to.ok;
+                    expect(message.meta).to.ok;
 
                     switch (data.server_action.action_id) {
                         case 'first':
-                            expect(meta.current_app.app_info).to.deep.equal(APP_INFO);
-                            expect(meta.current_app.state).to.deep.equal(state);
+                            expect(current_app.app_info).to.deep.equal(APP_INFO);
+                            expect(current_app.state).to.deep.equal(state);
                             done();
                             break;
                         default:

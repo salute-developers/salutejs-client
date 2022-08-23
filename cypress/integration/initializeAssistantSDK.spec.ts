@@ -49,12 +49,12 @@ describe('Проверяем', () => {
                 }
 
                 if (action && context && !doneCalled) {
-                    const data = JSON.parse(context.systemMessage?.data);
+                    const current_app = JSON.parse(context.meta.current_app);
                     doneCalled = true;
 
                     expect(action.messageId, 'Ожидаем одинаковый messageId').to.be.eq(context.messageId);
                     expect(action.last === context.last * -1, 'Один из мессаджей должен быть last = 1').to.be.true;
-                    expect(data.meta?.current_app?.state, 'Стейты совпадают').to.deep.eq(state);
+                    expect(current_app?.state, 'Стейты совпадают').to.deep.eq(state);
                     done();
                 }
             });
