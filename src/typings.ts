@@ -228,9 +228,9 @@ export interface AssistantSystemCommand {
     system: { command: string; [key: string]: unknown };
 }
 
-export interface TtsState {
-    status: 'tts_start' | 'tts_stop';
-    message_id: number;
+export interface AssistantTtsStateUpdate {
+    type: 'tts_state_update';
+    state: 'start' | 'stop';
     owner: boolean;
 }
 
@@ -242,13 +242,13 @@ export type AssistantClientCustomizedCommand<T extends AssistantSmartAppData> =
     | AssistantVisibilityCommand
     | AssistantInsetsCommand
     | AssistantSmartAppError
+    | AssistantTtsStateUpdate
     | T;
 
 export type AssistantClientCommand = AssistantClientCustomizedCommand<AssistantSmartAppCommand>;
 
 export interface AssistantClient {
     onStart?: () => void;
-    onTtsStateChanged?: (state: TtsState) => void;
     onRequestState?: () => Record<string, unknown>;
     onRequestRecoveryState?: () => unknown;
     onData?: (command: AssistantClientCommand) => void;
