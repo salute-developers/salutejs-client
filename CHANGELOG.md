@@ -1,3 +1,16 @@
+# v1.6.0 (Fri Aug 26 2022)
+
+#### 🚀 Enhancement
+
+- Подписка на события озвучки [#31](https://github.com/salute-developers/salutejs-client/pull/31) ([@sasha-tlt](https://github.com/sasha-tlt))
+- Отправка меты вне SystemMessage [#30](https://github.com/salute-developers/salutejs-client/pull/30) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.5.1 (Fri Aug 19 2022)
 
 #### 🐛 Bug Fix
