@@ -16,9 +16,16 @@ export type SystemMessage = SystemMessageDataType & {
     messageName: OriginalMessageType[];
 };
 
+function convertFieldValuesToString(object: Record<string, unknown>): Record<string, string> {
+    return Object.keys(object).reduce((acc: Record<string, string>, key: string) => {
+        acc[key] = JSON.stringify(object[key]);
+        return acc;
+    }, {});
+}
+
 export const createClient = (
     protocol: ReturnType<typeof createProtocol>,
-    provideMeta: (() => Promise<Partial<Pick<SystemMessageDataType, 'app_info' | 'meta'>>>) | undefined = undefined,
+    provideMeta: (() => Promise<SystemMessageDataType['meta']>) | undefined = undefined,
 ) => {
     const { on, emit } = createNanoEvents<ClientEvents>();
 
@@ -38,7 +45,11 @@ export const createClient = (
         });
 
     /** отправляет произвольный systemMessage, не подкладывает мету */
-    const sendData = (data: Record<string, unknown>, messageName = ''): number | Long => {
+    const sendData = (
+        data: Record<string, unknown>,
+        messageName = '',
+        meta?: Record<string, unknown>,
+    ): number | Long => {
         const messageId = protocol.getMessageId();
 
         protocol.sendSystemMessage(
@@ -48,6 +59,7 @@ export const createClient = (
             },
             true,
             messageId,
+            { meta: convertFieldValuesToString(meta || {}) },
         );
 
         return messageId;
@@ -66,22 +78,41 @@ export const createClient = (
         const data = isFirstSession ? { is_first_session: true } : {};
         const meta = provideMeta ? await provideMeta() : {};
 
-        return waitForAnswer(sendData({ ...meta, ...data }, 'OPEN_ASSISTANT'));
+        return waitForAnswer(sendData(data, 'OPEN_ASSISTANT', meta));
     };
 
     /** вызывает sendSystemMessage, куда подкладывает мету */
     const sendMeta = async (
-        sendSystemMessage: (data: { data: Record<string, unknown>; messageName?: string }, last: boolean) => void,
+        sendSystemMessage: (
+            data: { data: Record<string, unknown>; messageName?: string },
+            last: boolean,
+            params?: { meta?: Record<string, string> },
+        ) => void,
+        legacyMeta = false,
     ) => {
-        const meta = provideMeta ? await provideMeta() : {};
+        const meta = provideMeta ? await provideMeta() : undefined;
 
-        if (Object.keys(meta).length) {
+        if (typeof meta !== 'undefined') {
+            if (legacyMeta) {
+                sendSystemMessage(
+                    {
+                        data: { meta },
+                        messageName: '',
+                    },
+                    false,
+                );
+
+                return;
+            }
+
             sendSystemMessage(
                 {
-                    data: meta,
+                    // eslint-disable-next-line @typescript-eslint/camelcase
+                    data: { app_info: meta.current_app.app_info },
                     messageName: '',
                 },
                 false,
+                { meta: convertFieldValuesToString(meta || {}) },
             );
         }
     };
@@ -95,7 +126,7 @@ export const createClient = (
         const messageId = protocol.getMessageId();
 
         // мету и server_action отправляем в одном systemMessage
-        await sendMeta(({ data }) => {
+        await sendMeta((data, _, params) => {
             protocol.sendSystemMessage(
                 {
                     // eslint-disable-next-line @typescript-eslint/camelcase
@@ -104,6 +135,7 @@ export const createClient = (
                 },
                 true,
                 messageId,
+                params,
             );
         });
 
@@ -159,7 +191,7 @@ export const createClient = (
                 onMessage: (cb: (message: OriginalMessageType) => void) => protocol.on('incoming', cb),
             });
 
-            sendMeta(sendSystemMessage);
+            sendMeta(sendSystemMessage, true);
         });
 
     const off = protocol.on('incoming', (message: OriginalMessageType) => {

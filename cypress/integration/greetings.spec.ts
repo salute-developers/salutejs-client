@@ -57,12 +57,13 @@ describe('Проверяем приветствие', () => {
         checkStartAssistant(
             server,
             [{ disableGreetings: false, isFirstSession: true }],
-            ({ messageName, systemMessage }) => {
+            ({ messageName, systemMessage, meta }) => {
                 if (messageName === 'OPEN_ASSISTANT') {
                     const data = JSON.parse(systemMessage.data);
+                    const current_app = JSON.parse(meta.current_app);
 
                     expect(data.is_first_session, 'Отправлен "is_first_session"').be.true;
-                    expect(data.meta.current_app.app_info.systemName, 'Отправлен current_app assistant').be.eq(
+                    expect(current_app.app_info.systemName, 'Отправлен current_app "assistant"').be.eq(
                         'assistant',
                     );
 
@@ -76,12 +77,13 @@ describe('Проверяем приветствие', () => {
         checkStartAssistant(
             server,
             [{ disableGreetings: false, isFirstSession: false }],
-            ({ messageName, systemMessage }) => {
+            ({ messageName, systemMessage, meta }) => {
                 if (messageName === 'OPEN_ASSISTANT') {
                     const data = JSON.parse(systemMessage.data);
+                    const current_app = JSON.parse(meta.current_app);
 
                     expect(data.is_first_session, 'Не отправлен "is_first_session"').be.eq(undefined);
-                    expect(data.meta.current_app.app_info.systemName, 'Отправлен current_app assistant').be.eq(
+                    expect(current_app.app_info.systemName, 'Отправлен current_app "assistant"').be.eq(
                         'assistant',
                     );
                     assert.isOk('Отправлен "OPEN_ASSISTANT"');

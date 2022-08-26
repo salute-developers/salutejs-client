@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { AppInfo, Meta, PermissionStatus, PermissionType, SystemMessageDataType } from '../typings';
 
-interface CommandResponse extends SystemMessageDataType {
-    app_info: AppInfo;
-    meta: Meta;
+export type Permission = Record<PermissionType, PermissionStatus>;
+
+export type CommandResponse = Required<Pick<SystemMessageDataType, 'app_info'>> & {
+    meta: {
+        time: Meta['time'];
+        permissions: Meta['permissions'];
+        location?: Meta['location'];
+    };
     server_action: {
         action_id: 'command_response';
         request_message_id: number | Long;
@@ -16,23 +21,21 @@ interface CommandResponse extends SystemMessageDataType {
             };
         };
     };
-}
+};
 
-type Permission = Record<PermissionType, PermissionStatus>;
-
-const getMetaPermissons = (permission: Permission): Meta['permissions'] =>
+const convertToMetaPermissions = (permission: Permission): Meta['permissions'] =>
     Object.keys(permission).map((key: string) => ({
         type: key as PermissionType,
         status: permission[key as PermissionType],
     }));
 
-export const getCurrentLocation = async (): Promise<Meta['location']> =>
+const getLocation = async (): Promise<Meta['location']> =>
     new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(
             ({ coords, timestamp }) => {
                 resolve({
-                    lat: coords.latitude.toString(),
-                    lon: coords.longitude.toString(),
+                    lat: coords.latitude,
+                    lon: coords.longitude,
                     accuracy: coords.accuracy,
                     timestamp,
                 });
@@ -54,7 +57,7 @@ export const getAnswerForRequestPermissions = async (
     requestMessageId: number | Long,
     appInfo: AppInfo,
     items: PermissionType[],
-): Promise<SystemMessageDataType> => {
+): Promise<CommandResponse> => {
     const permissions: Permission = {
         record_audio: 'denied_once',
         geo: 'denied_once',
@@ -63,7 +66,6 @@ export const getAnswerForRequestPermissions = async (
     };
 
     const response: CommandResponse = {
-        auto_listening: false,
         app_info: appInfo,
         meta: {
             time: getTime(),
@@ -85,7 +87,7 @@ export const getAnswerForRequestPermissions = async (
             switch (permission) {
                 case 'geo':
                     try {
-                        const location = await getCurrentLocation();
+                        const location = await getLocation();
                         permissions.geo = 'granted';
                         response.meta.location = location;
                         response.server_action.command_response.request_permissions?.permissions.push({
@@ -102,12 +104,16 @@ export const getAnswerForRequestPermissions = async (
 
                     break;
                 default:
-                    // eslint-disable-next-line no-console
-                    console.warn('Unsupported permission request:', permission);
+                    // остальные доступы не поддерживаем
+                    response.server_action.command_response.request_permissions?.permissions.push({
+                        type: permission,
+                        status: 'denied_permanently',
+                    });
+                    break;
             }
         }),
     ).then(() => {
-        response.meta.permissions = getMetaPermissons(permissions);
+        response.meta.permissions = convertToMetaPermissions(permissions);
         return response;
     });
 };
