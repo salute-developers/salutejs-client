@@ -34,7 +34,7 @@ export const createTrackStream = (
         onPlay?: () => void;
         onEnd?: () => void;
         trackStatus?: 'stop' | 'play' | 'end';
-    },
+    } = {},
 ) => {
     // очередь загруженных чанков (кусочков) трека
     const queue = createChunkQueue<AudioBufferSourceNode>();
