@@ -1,3 +1,15 @@
+# v1.6.1 (Fri Sep 09 2022)
+
+#### 🐛 Bug Fix
+
+- Зависание озвучки [#33](https://github.com/salute-developers/salutejs-client/pull/33) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.6.0 (Fri Aug 26 2022)
 
 #### 🚀 Enhancement
