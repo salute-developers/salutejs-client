@@ -219,8 +219,8 @@ export const createVoice = (
                     // очистка сохраненных appInfo и messageId
                     let idx = 0;
                     do {
-                        delete appInfoDict[mesId];
-                    } while (mesIdQueue[idx++] !== mesId);
+                        delete appInfoDict[mesIdQueue[0]];
+                    } while (mesIdQueue[idx++] !== mesId && mesIdQueue.length > idx);
 
                     mesIdQueue.splice(0, idx);
                 }),
