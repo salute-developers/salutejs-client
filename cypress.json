@@ -1,4 +1,5 @@
 {
-    "projectId": "ac6epj",
+    "integrationFolder": "./",
+    "testFiles": "{cypress/integration,src}/**/*.spec.ts",
     "video": false
 }

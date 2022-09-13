@@ -22,5 +22,5 @@
         "allowJs": true
     },
     "include": ["src", "global.d.ts"],
-    "exclude": ["**/tests/**/*", "**/dist/**/*"]
+    "exclude": ["**/tests/**/*", "**/dist/**/*", "./**/*.spec.ts"]
 }

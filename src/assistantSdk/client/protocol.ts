@@ -3,7 +3,7 @@ import { IDevice, IInitialSettings, ILegacyDevice, IMessage, IChatHistoryRequest
 import { VpsConfiguration, OriginalMessageType, VpsVersion, GetHistoryRequestClient } from '../../typings';
 
 import { createClientMethods } from './methods';
-import { createTransport } from './transport';
+import { Transport } from './types';
 
 const safeJSONParse = <T>(str: string, defaultValue: T): T => {
     try {
@@ -79,10 +79,7 @@ export interface ProtocolEvents {
     error: (error: ProtocolError) => void;
 }
 
-export const createProtocol = (
-    transport: ReturnType<typeof createTransport>,
-    { logger, getToken, ...params }: VpsConfiguration,
-) => {
+export const createProtocol = (transport: Transport, { logger, getToken, ...params }: VpsConfiguration) => {
     const configuration = { ...params, token: '' };
     const {
         url,
@@ -129,15 +126,26 @@ export const createProtocol = (
     };
 
     const sendMessage = (message: IMessage) => {
+        if (transport.status === 'closing') {
+            transport.open(url);
+
+            messageQueue.push(message);
+
+            return;
+        }
+
         // отправляем инициализационные сообщения или все, когда сессия = ready
         if (status === 'ready' || (typeof initMessageId !== undefined && message.messageId === initMessageId)) {
             send(message);
-        } else {
-            // накапливаем сообщения, отправим после успешного коннекта
-            messageQueue.push(message);
-            if (status === 'closed' && !destroyed) {
-                transport.open(url);
-            }
+
+            return;
+        }
+
+        // накапливаем сообщения, отправим после успешного коннекта
+        messageQueue.push(message);
+
+        if (status === 'closed' && !destroyed) {
+            transport.open(url);
         }
     };
 
@@ -239,7 +247,7 @@ export const createProtocol = (
         }),
     );
     subscriptions.push(
-        transport.on('ready', async () => {
+        transport.on('open', async () => {
             try {
                 Object.assign(basePayload, { token: await getToken() });
             } catch (e) {
@@ -285,14 +293,14 @@ export const createProtocol = (
                     return;
                 }
 
-                status = 'ready';
-
                 while (messageQueue.length > 0) {
                     const message = messageQueue.shift();
                     if (message) {
                         send(message);
                     }
                 }
+
+                status = 'ready';
 
                 emit('ready');
             }, 500);
