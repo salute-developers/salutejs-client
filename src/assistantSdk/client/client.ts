@@ -173,25 +173,23 @@ export const createClient = (
         });
     };
 
-    /** инициализирует исходящий голосовой поток, факт. передает в callback параметры для отправки голоса,
-     * отправляет мету */
-    const createVoiceStream = (
-        callback: ({
-            messageId,
-            sendVoice,
-            onMessage,
-        }: Pick<BatchableMethods, 'messageId' | 'sendVoice'> & {
+    /** инициализирует исходящий голосовой поток, факт. возвращает методы для работы с созданным потоком
+     * (в том числе и метод для отправки голоса)
+     */
+    const resolveVoiceStream = (): Promise<
+        Pick<BatchableMethods, 'messageId' | 'sendVoice' | 'sendSystemMessage'> & {
             onMessage: (cb: (message: OriginalMessageType) => void) => () => void;
-        }) => Promise<void>,
-    ): Promise<void> =>
-        protocol.batch(async ({ sendSystemMessage, sendVoice, messageId }) => {
-            await callback({
-                sendVoice,
-                messageId,
-                onMessage: (cb: (message: OriginalMessageType) => void) => protocol.on('incoming', cb),
+        }
+    > =>
+        new Promise((resolve) => {
+            protocol.batch(async ({ sendSystemMessage, sendVoice, messageId }) => {
+                resolve({
+                    sendVoice,
+                    messageId,
+                    onMessage: (cb: (message: OriginalMessageType) => void) => protocol.on('incoming', cb),
+                    sendSystemMessage,
+                });
             });
-
-            sendMeta(sendSystemMessage, true);
         });
 
     const off = protocol.on('incoming', (message: OriginalMessageType) => {
@@ -222,7 +220,7 @@ export const createClient = (
         destroy: () => {
             off();
         },
-        createVoiceStream,
+        resolveVoiceStream,
         sendData,
         sendMeta,
         sendOpenAssistant,

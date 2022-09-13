@@ -1,23 +1,26 @@
 import { createNanoEvents } from '../../../nanoevents';
 import { MessageNames, OriginalMessageType } from '../../../typings';
-import { createVoiceListener, VoiceHandler } from '../listener/voiceListener';
+import { createVoiceListener, VoiceHandler, VoiceListenerStatus } from '../listener/voiceListener';
 
 import { PacketWrapperFromServer } from './asr';
 
-type speechRecognizerEvents = {
+type SpeechRecognizerEvents = {
+    status: (status: VoiceListenerStatus) => void;
     hypotesis: (text: string, last: boolean, mid: OriginalMessageType['messageId']) => void;
 };
 
-export const createSpeechRecognizer = (voiceListener: ReturnType<typeof createVoiceListener>) => {
-    const { emit, on } = createNanoEvents<speechRecognizerEvents>();
+export const createSpeechRecognizer = () => {
+    const { emit, on } = createNanoEvents<SpeechRecognizerEvents>();
+    const listener = createVoiceListener();
     let off: () => void;
-    let status: 'active' | 'inactive' = 'inactive';
+    let status: VoiceListenerStatus = 'stopped';
     let currentMessageId: number;
 
     const stop = () => {
-        if (voiceListener.status !== 'stopped') {
-            status = 'inactive';
-            voiceListener.stop();
+        if (status !== 'stopped') {
+            status = 'stopped';
+            listener.stop();
+            emit('status', 'stopped');
         }
     };
 
@@ -29,10 +32,22 @@ export const createSpeechRecognizer = (voiceListener: ReturnType<typeof createVo
         sendVoice: VoiceHandler;
         messageId: number;
         onMessage: (cb: (message: OriginalMessageType) => void) => () => void;
-    }) =>
-        voiceListener.listen(sendVoice).then(() => {
-            status = 'active';
-            currentMessageId = messageId;
+    }) => {
+        currentMessageId = messageId;
+
+        const provider = listener.listen(sendVoice);
+
+        status = 'started';
+        emit('status', 'started');
+
+        return provider.then(() => {
+            if (listener.status === 'stopped') {
+                return;
+            }
+
+            status = 'listen';
+            emit('status', 'listen');
+
             off = onMessage((message: OriginalMessageType) => {
                 if (message.status && message.status.code != null && message.status.code < 0) {
                     off();
@@ -67,6 +82,7 @@ export const createSpeechRecognizer = (voiceListener: ReturnType<typeof createVo
                 }
             });
         });
+    };
 
     return {
         start,

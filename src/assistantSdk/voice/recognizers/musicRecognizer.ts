@@ -3,15 +3,14 @@ import { createVoiceListener } from '../listener/voiceListener';
 
 import { Music2TrackProtocol } from './mtt';
 
-export const createMusicRecognizer = (voiceListener: ReturnType<typeof createVoiceListener>) => {
+export const createMusicRecognizer = () => {
+    const listener = createVoiceListener();
     let off: () => void;
-    let status: 'active' | 'inactive' = 'inactive';
     let currentMessageId: number;
 
     const stop = () => {
-        if (voiceListener.status !== 'stopped') {
-            status = 'inactive';
-            voiceListener.stop();
+        if (listener.status !== 'stopped') {
+            listener.stop();
         }
     };
 
@@ -23,12 +22,12 @@ export const createMusicRecognizer = (voiceListener: ReturnType<typeof createVoi
         sendVoice: (data: Uint8Array, last: boolean, messageName?: string) => void;
         messageId: number;
         onMessage: (cb: (message: OriginalMessageType) => void) => () => void;
-    }) =>
-        voiceListener
-            .listen((data: Uint8Array, last: boolean) => !last && sendVoice(data, last, MessageNames.MUSIC_RECOGNITION))
+    }) => {
+        currentMessageId = messageId;
+
+        return listener
+            .listen((data: Uint8Array, last: boolean) => sendVoice(data, last, MessageNames.MUSIC_RECOGNITION))
             .then(() => {
-                status = 'active';
-                currentMessageId = messageId;
                 off = onMessage((message: OriginalMessageType) => {
                     if (message.status && message.status.code != null && message.status.code < 0) {
                         off();
@@ -53,12 +52,14 @@ export const createMusicRecognizer = (voiceListener: ReturnType<typeof createVoi
                     }
                 });
             });
+    };
 
     return {
         start,
         stop,
+        on: listener.on,
         get status() {
-            return status;
+            return listener.status;
         },
         get messageId() {
             return currentMessageId;

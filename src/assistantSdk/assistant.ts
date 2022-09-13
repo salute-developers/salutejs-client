@@ -23,7 +23,9 @@ import { createClient } from './client/client';
 import { createProtocol, ProtocolError } from './client/protocol';
 import { createTransport } from './client/transport';
 import { getAnswerForRequestPermissions, getTime } from './meta';
+import { createMutexedObject } from './mutexedObject';
 import { createVoice, TtsEvent } from './voice/voice';
+import { VoiceListenerStatus } from './voice/listener/voiceListener';
 
 const STATE_UPDATE_TIMEOUT = 200;
 
@@ -64,15 +66,6 @@ export interface SdkMeta {
     [key: string]: unknown;
 }
 
-export interface AssistantSettings {
-    /** Отключение фичи воспроизведения голоса */
-    disableDubbing: boolean;
-    /** Отключение фичи слушания речи */
-    disableListening: boolean;
-    /** Отправка текстовых сообщений с type: application/ssml */
-    sendTextAsSsml: boolean;
-}
-
 export type AppEvent =
     | { type: 'run'; app: AppInfo }
     | { type: 'close'; app: AppInfo }
@@ -82,6 +75,7 @@ export type AssistantEvent = {
     asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
     character?: CharacterId;
     emotion?: EmotionId;
+    listener?: { status: VoiceListenerStatus };
 };
 
 export type VpsEvent =
@@ -113,29 +107,86 @@ export interface CreateAssistantDevOptions {
     getMeta?: () => Record<string, unknown>;
 }
 
+export type AssistantSettings = {
+    /** Отключение фичи воспроизведения голоса */
+    disableDubbing: boolean;
+    /** Отключение фичи слушания речи */
+    disableListening: boolean;
+    /** Отправка текстовых сообщений с type: application/ssml */
+    sendTextAsSsml: boolean;
+};
+
 type BackgroundAppOnCommand<T> = (command: AssistantSmartAppData & { smart_app_data: T }, messageId: string) => void;
+
+type AssistantSettingsEvents = {
+    listener: (action: VoiceListenerStatus) => void;
+    voicePlayer: (action: 'start' | 'stop') => void;
+};
+
+export const createSettingsReducer = (initialSettings: AssistantSettings) => {
+    const { on, lock, release, change, get } = createMutexedObject(initialSettings);
+    const { on: onReducer, emit } = createNanoEvents<AssistantSettingsEvents>();
+
+    let isListenerStopped = true;
+    let isVoicePlayerEnded = true;
+
+    const changeMode = () => {
+        if (isListenerStopped && isVoicePlayerEnded) {
+            release();
+        } else {
+            lock();
+        }
+    };
+
+    onReducer('listener', (action) => {
+        isListenerStopped = action === 'stopped';
+        changeMode();
+    });
+
+    onReducer('voicePlayer', (action) => {
+        isVoicePlayerEnded = action === 'stop';
+        changeMode();
+    });
+
+    return {
+        emit,
+        settings: {
+            on,
+            change,
+            get disableDubbing() {
+                return get().disableDubbing;
+            },
+            get disableListening() {
+                return get().disableListening;
+            },
+            get sendTextAsSsml() {
+                return get().sendTextAsSsml;
+            },
+        },
+    };
+};
 
 export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration & CreateAssistantDevOptions) => {
     const { on, emit } = createNanoEvents<AssistantEvents>();
 
-    const subscriptions: Array<() => void> = [];
-
     // хеш [messageId]: requestId, где requestId - пользовательский ид экшена
     const requestIdMap: Record<string, string> = {};
+
+    const subscriptions: Array<() => void> = [];
+    const backgroundApps: { [key: string]: AssistantBackgroundApp & { commandsSubscribers: unknown[] } } = {};
+    const { settings, emit: emitSettingsReducer } = createSettingsReducer({
+        disableDubbing: configuration.settings.dubbing === -1,
+        disableListening: false,
+        sendTextAsSsml: false,
+    });
 
     // готов/не готов воспроизводить озвучку
     let voiceReady = false;
 
     // текущий апп
     let app: { info: AppInfo; getState?: () => Promise<AssistantAppState> } = { info: DEFAULT_APP };
-    let sdkMeta: SdkMeta = { theme: 'dark' };
-    let settings: AssistantSettings = {
-        disableDubbing: configuration.settings.dubbing === -1,
-        disableListening: false,
-        sendTextAsSsml: false,
-    };
 
-    const backgroundApps: { [key: string]: AssistantBackgroundApp & { commandsSubscribers: unknown[] } } = {};
+    let sdkMeta: SdkMeta = { theme: 'dark' };
 
     const metaProvider = async (): Promise<Required<SystemMessageDataType>['meta']> => {
         // Стейт нужен только для канваса
@@ -198,15 +249,23 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
     const protocol = createProtocol(transport, {
         ...configuration,
         // пока голос не готов, выключаем озвучку
-        settings: { ...configuration.settings, dubbing: !voiceReady ? -1 : configuration.settings.dubbing },
+        settings: { ...configuration.settings, dubbing: -1 },
     });
     const client = createClient(protocol, metaProvider);
     const voice = createVoice(
         client,
+        settings,
         (event) => {
             if (typeof event.tts !== 'undefined') {
                 emit('tts', event.tts);
+
+                emitSettingsReducer('voicePlayer', event.tts.status);
+
                 return;
+            }
+
+            if (typeof event.listener !== 'undefined') {
+                emitSettingsReducer('listener', event.listener.status);
             }
 
             emit('assistant', event);
@@ -214,11 +273,8 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         () => {
             voiceReady = true;
 
-            // когда голос готов, обновляем настройки, если они отличаются от текущих
-            const currentDubbing = settings.disableDubbing === false ? 1 : -1;
-
-            if (protocol.configuration.settings.dubbing !== currentDubbing) {
-                protocol.changeSettings({ dubbing: currentDubbing });
+            if (!settings.disableDubbing) {
+                protocol.changeSettings({ dubbing: 1 });
             }
         },
     );
@@ -275,6 +331,15 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
     };
 
     subscriptions.push(protocol.on('ready', () => emit('vps', { type: 'ready' })));
+
+    // пока voicePlayer не доступен, включение озвучки не будет отправлено
+    subscriptions.push(
+        settings.on('change', (nextSettings, prevSettings) => {
+            if (nextSettings.disableDubbing !== prevSettings.disableDubbing) {
+                voiceReady && protocol.changeSettings({ dubbing: nextSettings.disableDubbing ? -1 : 1 });
+            }
+        }),
+    );
 
     // при неудачном переподключении к сокету
     subscriptions.push(
@@ -440,7 +505,11 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
             return !isDefaultApp(app.info) ? app.info : null;
         },
         get settings() {
-            return settings;
+            return {
+                disableDubbing: settings.disableDubbing,
+                disableListening: settings.disableListening,
+                sendTextAsSsml: settings.sendTextAsSsml,
+            };
         },
         destroy,
         closeApp,
@@ -459,23 +528,12 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         emit,
         on,
         changeConfiguration: protocol.changeConfiguration,
+        changeSettings: settings.change,
         changeSdkMeta: (nextSdkMeta: Partial<SdkMeta>) => {
             sdkMeta = {
                 ...sdkMeta,
                 ...nextSdkMeta,
             };
-        },
-        changeSettings: (newSettings: Partial<AssistantSettings>) => {
-            const dubbingChanged = settings.disableDubbing !== !!newSettings.disableDubbing;
-            settings = { ...settings, ...newSettings };
-
-            voice.change({ disableDubbing: settings.disableDubbing, disableListening: settings.disableListening });
-
-            if (!dubbingChanged) {
-                return;
-            }
-
-            protocol.changeSettings({ dubbing: settings.disableDubbing || !voiceReady ? -1 : 1 });
         },
         reconnect: protocol.reconnect,
         get protocol() {

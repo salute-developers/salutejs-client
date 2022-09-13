@@ -1,79 +1,11 @@
+import { createSettingsReducer } from '../assistant';
 import { createClient } from '../client/client';
 import { AppInfo, EmotionId, OriginalMessageType, SystemMessageDataType } from '../../typings';
 
-import { createMusicRecognizer } from './recognizers/musicRecognizer';
-import { createSpeechRecognizer } from './recognizers/speechRecognizer';
-import { createVoiceListener } from './listener/voiceListener';
+import { VoiceListenerStatus } from './listener/voiceListener';
 import { createVoicePlayer } from './player/voicePlayer';
 import { resolveAudioContext, isAudioSupported } from './audioContext';
-
-const createVoiceSettings = (listener: ReturnType<typeof createVoiceListener>) => {
-    let settings = { disableDubbing: false, disableListening: false };
-    let nextSettings: Partial<typeof settings> = {};
-    let isVoicePlayerEnded = true;
-
-    const tryApply = () => {
-        if (listener.status === 'stopped' && isVoicePlayerEnded) {
-            settings = {
-                ...settings,
-                ...nextSettings,
-            };
-        }
-    };
-
-    const change = (setts: Partial<typeof settings>) => {
-        nextSettings = {
-            ...nextSettings,
-            ...setts,
-        };
-
-        tryApply();
-    };
-
-    /**
-     * Пытается применить настройки в момент завершения озвучки
-     * (или при прекращении слушания, если озвучка отключена).
-     */
-    const startAutoApplying = (voicePlayer?: ReturnType<typeof createVoicePlayer>) => {
-        const subscribers: Array<() => void> = [];
-
-        subscribers.push(
-            listener.on('status', (status) => {
-                if (status === 'stopped') {
-                    tryApply();
-                }
-            }),
-        );
-
-        if (voicePlayer) {
-            subscribers.push(
-                voicePlayer.on('play', () => {
-                    isVoicePlayerEnded = false;
-                }),
-            );
-
-            subscribers.push(
-                voicePlayer.on('end', () => {
-                    isVoicePlayerEnded = true;
-                    tryApply();
-                }),
-            );
-        }
-
-        return () => subscribers.forEach((unsubscribe) => unsubscribe());
-    };
-
-    return {
-        change,
-        startAutoApplying,
-        get disableDubbing() {
-            return settings.disableDubbing;
-        },
-        get disableListening() {
-            return settings.disableListening;
-        },
-    };
-};
+import { createRecognizers } from './recognizers/createRecognizers';
 
 export interface TtsEvent {
     status: 'start' | 'stop';
@@ -83,45 +15,46 @@ export interface TtsEvent {
 
 export const createVoice = (
     client: ReturnType<typeof createClient>,
+    settings: ReturnType<typeof createSettingsReducer>['settings'],
     emit: (event: {
         asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // lasr и mid нужен для отправки исх бабла в чат
         emotion?: EmotionId;
         tts?: TtsEvent;
+        listener?: { status: VoiceListenerStatus };
     }) => void,
     /// пока onReady не вызван, треки не воспроизводятся
     /// когда случится onReady, очередь треков начнет проигрываться
     onReady?: () => void,
 ) => {
-    let voicePlayer: ReturnType<typeof createVoicePlayer>;
-    const listener = createVoiceListener();
-    const musicRecognizer = createMusicRecognizer(listener);
-    const speechRecognizer = createSpeechRecognizer(listener);
+    const { speechRecognizer, musicRecognizer, on: onRecognizers, destroy: destroyRecognizers } = createRecognizers();
     const subscriptions: Array<() => void> = [];
-    const settings = createVoiceSettings(listener);
     const appInfoDict: Record<string, AppInfo> = {};
     const mesIdQueue: Array<string> = [];
 
+    let voicePlayer: ReturnType<typeof createVoicePlayer>;
     let isPlaying = false; // проигрывается/не проигрывается озвучка
     let autolistenMesId: string | null = null; // id сообщения, после проигрывания которого, нужно активировать слушание
 
     /** останавливает слушание голоса, возвращает true - если слушание было активно */
     const stopListening = (): boolean => {
-        const result = speechRecognizer.status === 'active' || musicRecognizer.status === 'active';
-
         autolistenMesId = null;
-        if (speechRecognizer.status === 'active') {
-            speechRecognizer.stop();
-            client.sendCancel(speechRecognizer.messageId);
-            return true;
-        }
 
-        if (musicRecognizer.status === 'active') {
-            musicRecognizer.stop();
-            client.sendCancel(musicRecognizer.messageId);
-            return true;
-        }
+        return [speechRecognizer, musicRecognizer].reduce((result, recognizer) => {
+            const isListenStarted = recognizer.status === 'listen';
+            const isActive = recognizer.status !== 'stopped';
 
-        return result;
+            if (isActive) {
+                recognizer.stop();
+
+                if (isListenStarted) {
+                    client.sendCancel(recognizer.messageId);
+                }
+
+                return true;
+            }
+
+            return result;
+        }, false);
     };
 
     /** Останавливает слушание и воспроизведение */
@@ -131,10 +64,10 @@ export const createVoice = (
         voicePlayer?.stop();
     };
 
-    /** Активирует слушание голоса
-     * если было активно слушание или проигрывание - останавливает, слушание в этом случае не активируется
-     */
-    const listen = async ({ begin }: { begin?: ArrayBuffer[] } = {}): Promise<void> => {
+    const record = async (
+        recognizer: typeof speechRecognizer | typeof musicRecognizer,
+        bufferBegin?: ArrayBuffer[],
+    ) => {
         if (stopListening()) {
             return;
         }
@@ -149,45 +82,41 @@ export const createVoice = (
         }
 
         // повторные вызовы не пройдут, пока пользователь не разрешит/запретит аудио
-        if (listener.status === 'stopped') {
-            return client.createVoiceStream(({ sendVoice, messageId, onMessage }) => {
-                begin?.forEach((chunk) => sendVoice(new Uint8Array(chunk), false));
+        if (recognizer.status === 'stopped') {
+            const { sendVoice, messageId, onMessage, sendSystemMessage } = await client.resolveVoiceStream();
 
-                return speechRecognizer.start({
-                    sendVoice,
-                    messageId,
-                    onMessage,
-                });
+            await recognizer.start({
+                messageId,
+                onMessage,
+                sendVoice: (...args) => {
+                    // При первом вызове подкладываем начальные чанки
+                    bufferBegin?.forEach((chunk) => sendVoice(new Uint8Array(chunk), false));
+                    bufferBegin = undefined;
+
+                    sendVoice(...args);
+                },
             });
+
+            if (recognizer.status === 'stopped') {
+                return;
+            }
+
+            client.sendMeta(sendSystemMessage, true);
         }
+    };
+
+    /** Активирует слушание голоса
+     * если было активно слушание или проигрывание - останавливает, слушание в этом случае не активируется
+     */
+    const listen = ({ begin }: { begin?: ArrayBuffer[] } = {}): Promise<void> => {
+        return record(speechRecognizer, begin);
     };
 
     /** Активирует распознавание музыки
      * если было активно слушание или проигрывание - останавливает, распознование музыки в этом случае не активируется
      */
-    const shazam = () => {
-        if (stopListening()) {
-            return;
-        }
-
-        if (isPlaying) {
-            voicePlayer?.stop();
-        }
-
-        if (settings.disableListening) {
-            return;
-        }
-
-        // повторные вызовы не пройдут, пока пользователь не разрешит/запретит аудио
-        if (listener.status === 'stopped') {
-            client.createVoiceStream(({ sendVoice, messageId, onMessage }) =>
-                musicRecognizer.start({
-                    sendVoice,
-                    messageId,
-                    onMessage,
-                }),
-            );
-        }
+    const shazam = (): Promise<void> => {
+        return record(musicRecognizer);
     };
 
     if (isAudioSupported) {
@@ -226,15 +155,9 @@ export const createVoice = (
                 }),
             );
 
-            // запуск автоматического применения настроек
-            subscriptions.push(settings.startAutoApplying(voicePlayer));
-
             // оповещаем о готовности к воспроизведению звука
             onReady && onReady();
         });
-    } else {
-        // запуск автоматического применения настроек (в случае, если озвучка не доступна)
-        subscriptions.push(settings.startAutoApplying());
     }
 
     // обработка входящей озвучки
@@ -253,7 +176,7 @@ export const createVoice = (
         speechRecognizer.on('hypotesis', (text: string, isLast: boolean, mid: number | Long) => {
             emit({
                 asr: {
-                    text: listener.status === 'listen' && !settings.disableListening ? text : '',
+                    text: speechRecognizer.status === 'listen' && !settings.disableListening ? text : '',
                     last: isLast,
                     mid,
                 },
@@ -263,7 +186,9 @@ export const createVoice = (
 
     // статусы слушания речи
     subscriptions.push(
-        listener.on('status', (status: 'listen' | 'started' | 'stopped') => {
+        onRecognizers('status', (status) => {
+            emit({ listener: { status } });
+
             if (status === 'listen') {
                 voicePlayer?.setActive(false);
                 emit({ emotion: 'listen' });
@@ -298,13 +223,8 @@ export const createVoice = (
         }),
     );
 
-    return {
-        destroy: () => {
-            stopListening();
-            voicePlayer?.setActive(false);
-            subscriptions.splice(0, subscriptions.length).map((unsubscribe) => unsubscribe());
-        },
-        change: (nextSettings: Partial<Pick<typeof settings, 'disableDubbing' | 'disableListening'>>) => {
+    subscriptions.push(
+        settings.on('change-request', (nextSettings) => {
             const { disableDubbing, disableListening } = nextSettings;
 
             /// Важен порядок обработки флагов слушания и озвучки.
@@ -312,8 +232,15 @@ export const createVoice = (
             disableListening && stopListening();
             // Такой вызов необходим, чтобы включая озвучку она тут же проигралась (при её наличии), и наоборот
             settings.disableDubbing !== disableDubbing && voicePlayer?.setActive(!disableDubbing);
+        }),
+    );
 
-            settings.change(nextSettings);
+    return {
+        destroy: () => {
+            stopListening();
+            voicePlayer?.setActive(false);
+            subscriptions.splice(0, subscriptions.length).map((unsubscribe) => unsubscribe());
+            destroyRecognizers();
         },
         listen,
         shazam,

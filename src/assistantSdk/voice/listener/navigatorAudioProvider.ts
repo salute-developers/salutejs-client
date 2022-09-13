@@ -100,8 +100,8 @@ const createAudioRecorder = (
                 }
             };
 
-            processor.addEventListener('audioprocess', listener);
             processor.addEventListener('audioprocess', () => resolve(stop), { once: true });
+            processor.addEventListener('audioprocess', listener);
 
             input.connect(processor);
             processor.connect(context.destination);
