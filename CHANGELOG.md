@@ -1,3 +1,15 @@
+# v1.6.2 (Thu Sep 15 2022)
+
+#### 🐛 Bug Fix
+
+- fix: Исправлено бесконечное слушание в оффлайн-режиме [#37](https://github.com/salute-developers/salutejs-client/pull/37) ([@ivan-ushatsky](https://github.com/ivan-ushatsky))
+
+#### Authors: 1
+
+- Ivan Ushatsky ([@ivan-ushatsky](https://github.com/ivan-ushatsky))
+
+---
+
 # v1.6.1 (Fri Sep 09 2022)
 
 #### 🐛 Bug Fix
