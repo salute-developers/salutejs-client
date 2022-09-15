@@ -1,90 +1,85 @@
 import { createNanoEvents } from '../../nanoevents';
 import { WSCreator } from '../../typings';
 
-export interface TransportEvents {
-    connecting: () => void;
-    ready: () => void;
-    close: () => void;
-    error: (error?: Event) => void;
-    message: (data: Uint8Array) => void;
-}
+import { Transport, TransportEvents, TransportStatus } from './types';
 
 const defaultWSCreator: WSCreator = (url: string) => new WebSocket(url);
 
-export const createTransport = (createWS: WSCreator = defaultWSCreator) => {
+export const createTransport = (createWS: WSCreator = defaultWSCreator): Transport => {
     const { on, emit } = createNanoEvents<TransportEvents>();
 
-    let status: 'connecting' | 'ready' | 'closed' = 'closed';
-    let stopped = false;
-    let ws: WebSocket;
-    let timeOut: number | undefined; // ид таймера автореконнекта
-    let retries = 0; // количество попыток коннекта при ошибке
+    let timeoutId: number | undefined;
+    let retries = 0;
+    let status: TransportStatus = 'closed';
+    let webSocket: WebSocket;
 
     const close = () => {
-        stopped = true;
-        ws && ws.close(); // статус изменится по подписке
-        clearTimeout(timeOut);
-        timeOut = undefined;
-    };
+        status = 'closing';
 
-    const send = (data: Uint8Array) => {
-        if (!navigator.onLine) {
-            close();
-            emit('error');
-            return;
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+
+            timeoutId = undefined;
         }
 
-        ws.send(data);
+        webSocket?.close();
     };
 
     const open = (url: string) => {
-        if (status !== 'closed') {
+        if (status === 'connecting' || status === 'open') {
             return;
         }
 
         status = 'connecting';
+
         emit('connecting');
-        // TODO: нужен таймаут для подключения
-        ws = createWS(url);
 
-        ws.binaryType = 'arraybuffer';
-        ws.addEventListener('open', () => {
-            if (ws.readyState === 1) {
-                retries = 0; // сбрасываем количество попыток реконнекта
-                status = 'ready';
-                emit('ready');
+        retries++;
+
+        webSocket = createWS(url);
+
+        webSocket.binaryType = 'arraybuffer';
+
+        webSocket.addEventListener('open', () => {
+            if (webSocket.readyState !== 1) {
+                return;
             }
+
+            retries = 0;
+
+            status = 'open';
+
+            emit('open');
         });
 
-        ws.addEventListener('close', () => {
+        webSocket.addEventListener('close', () => {
+            if (status === 'closing') {
+                status = 'closed';
+
+                emit('close');
+
+                return;
+            }
+
             status = 'closed';
+
             emit('close');
-        });
 
-        ws.addEventListener('error', (e) => {
-            if (status !== 'connecting') {
-                throw e;
+            if (retries < 3) {
+                timeoutId = window.setTimeout(() => {
+                    open(url);
+                }, 300 * retries);
+
+                return;
             }
 
-            // пробуем переподключаться, если возникла ошибка при коннекте
-            if (!ws || (ws.readyState === 3 && !stopped)) {
-                if (timeOut) {
-                    clearTimeout(timeOut);
-                }
-                if (retries < 3) {
-                    timeOut = window.setTimeout(() => {
-                        open(url);
-                        retries++;
-                    }, 300 * retries);
-                } else {
-                    retries = 0;
-                    emit('error', e);
-                }
-            }
+            retries = 0;
+
+            emit('error');
         });
 
-        ws.addEventListener('message', (e) => {
-            emit('message', e.data);
+        webSocket.addEventListener('message', ({ data }) => {
+            emit('message', data);
         });
     };
 
@@ -98,11 +93,24 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator) => {
         setTimeout(() => reconnect(url));
     };
 
+    const send = (data: Uint8Array) => {
+        webSocket.send(data);
+    };
+
     return {
-        send,
-        open,
         close,
-        reconnect,
         on,
+        open,
+        reconnect,
+        send,
+        get status() {
+            if (window.navigator.onLine) {
+                return status;
+            }
+
+            close();
+
+            return status; // 'closing'
+        },
     };
 };

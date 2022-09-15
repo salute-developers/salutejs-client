@@ -271,6 +271,8 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
     // при неудачном переподключении к сокету
     subscriptions.push(
         transport.on('error', (error: Event | undefined) => {
+            voice.stop();
+
             emit('vps', { type: 'error', error });
         }),
     );
