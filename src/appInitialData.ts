@@ -33,12 +33,13 @@ const isDeepEqual = (a: AnyObject | unknown, b: AnyObject | unknown): boolean =>
 };
 
 const findCommandIndex = (arr: AssistantClientCommand[], command: AssistantClientCommand) => {
+    const insets = ['insets', 'minimum_static_insets', 'maximum_static_insets', 'dynamic_insets'];
     let index = -1;
 
     if (command.type === 'character') {
         index = arr.findIndex((c) => c.type === 'character' && c.character.id === command.character.id);
-    } else if (command.type === 'insets') {
-        index = arr.findIndex((c) => c.type === 'insets');
+    } else if (insets.includes(command.type)) {
+        index = arr.findIndex((c) => c.type === command.type);
     } else if (command.type === 'app_context') {
         index = arr.findIndex((c) => c.type === 'app_context');
     } else {

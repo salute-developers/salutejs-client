@@ -18,7 +18,6 @@ import {
     ISettings,
     IGetHistoryRequest,
     IHistoryMessages,
-    IApp,
     IOffset,
     Message,
 } from './proto';
@@ -144,7 +143,7 @@ export interface Insets {
 }
 
 export interface AssistantInsetsCommand {
-    type: 'insets';
+    type: 'insets' | 'dynamic_insets' | 'minimum_static_insets' | 'maximum_static_insets';
     insets: Insets;
     sdk_meta: SdkMeta;
 }
