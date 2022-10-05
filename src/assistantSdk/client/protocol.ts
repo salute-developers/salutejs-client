@@ -315,6 +315,10 @@ export const createProtocol = (transport: Transport, { logger, getToken, ...para
             logger?.({ type: 'incoming', message: decodedMessage });
 
             emit('incoming', decodedMessage);
+
+            if (decodedMessage.status) {
+                transport.close();
+            }
         }),
     );
 
