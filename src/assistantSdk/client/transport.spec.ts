@@ -52,7 +52,7 @@ describe('Подключение', () => {
             });
     });
 
-    it('Сервер отключен, три попытки подключения, одна ошибка', () => {
+    it('Сервер отключен, две попытки подключения, три попытки реконнекта, одна ошибка', () => {
         const transport = createTransport();
 
         const onClose = cy.stub();
@@ -66,6 +66,10 @@ describe('Подключение', () => {
         cy.then(() => {
             transport.open(SERVER_URL);
         })
+            .wait(100)
+            .then(() => {
+                transport.open(SERVER_URL);
+            })
             .wait(1000)
             .then(() => {
                 expect(onClose).to.be.calledThrice;

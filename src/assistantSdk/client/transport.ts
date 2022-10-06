@@ -25,15 +25,7 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
         webSocket?.close();
     };
 
-    const open = (url: string) => {
-        if (status === 'connecting' || status === 'open') {
-            return;
-        }
-
-        status = 'connecting';
-
-        emit('connecting');
-
+    const connect = (url: string) => {
         retries++;
 
         webSocket = createWS(url);
@@ -61,13 +53,11 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
                 return;
             }
 
-            status = 'closed';
-
             emit('close');
 
             if (retries < 3) {
                 timeoutId = window.setTimeout(() => {
-                    open(url);
+                    connect(url);
                 }, 300 * retries);
 
                 return;
@@ -75,12 +65,26 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
 
             retries = 0;
 
+            status = 'closed';
+
             emit('error');
         });
 
         webSocket.addEventListener('message', ({ data }) => {
             emit('message', data);
         });
+    };
+
+    const open = (url: string) => {
+        if (status === 'connecting' || status === 'open') {
+            return;
+        }
+
+        status = 'connecting';
+
+        emit('connecting');
+
+        connect(url);
     };
 
     const reconnect = (url: string) => {
