@@ -1,3 +1,15 @@
+# v1.6.3 (Thu Oct 06 2022)
+
+#### 🐛 Bug Fix
+
+- Исправлен бесконечный реконнект при невалидном токене [#40](https://github.com/salute-developers/salutejs-client/pull/40) ([@ivan-ushatsky](https://github.com/ivan-ushatsky))
+
+#### Authors: 1
+
+- Ivan Ushatsky ([@ivan-ushatsky](https://github.com/ivan-ushatsky))
+
+---
+
 # v1.6.2 (Thu Sep 15 2022)
 
 #### 🐛 Bug Fix
