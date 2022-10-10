@@ -1,3 +1,15 @@
+# v1.7.0 (Mon Oct 10 2022)
+
+#### 🚀 Enhancement
+
+- feat: Добавлена поддержка static insets [#38](https://github.com/salute-developers/salutejs-client/pull/38) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.6.3 (Thu Oct 06 2022)
 
 #### 🐛 Bug Fix
