@@ -406,23 +406,28 @@ interface AssistantNavigationCommand {
 
 ### `AssistantInsetsCommand`
 
-Объект `AssistantInsetsCommand` — команда, которая сообщает смартапу о том, что поверх него будет отображен нативный UI и его размеры. В `insets` передаются отступы от краев экрана. Их нужно соблюдать, чтобы не было наложения нативных UI элементов и контента смартапа.
+Объект `AssistantInsetsCommand` — команда, которая сообщает смартапу о том, что поверх него будет отображен нативный UI и его размеры (например, высота шторки с КПСС, саджесты, или клавиатура). Размеры нужно соблюдать, чтобы не было наложения нативных UI элементов и контента смартапа.
+
+- `insets` — отступы от краев экрана;
+- `dynamic_insets` — размеры нативного UI;
+- `minimum_static_insets` — минимальные значения размеров нативного UI;
+- `maximum_static_insets` — максимальные значения размеров нативного UI.
 
 ```typescript
 interface AssistantInsetsCommand {
-  type: 'insets';
+  type: 'insets' | 'dynamic_insets' | 'minimum_static_insets' | 'maximum_static_insets';
   insets: {
-    left: number;    //px
-    top: number;     //px
-    right: number;   //px
-    bottom: number;  //px
+    left: number;    // px
+    top: number;     // px
+    right: number;   // px
+    bottom: number;  // px
   };
 }
 ```
 
 ### `AssistantThemeCommand`
 
-Объект `AssistantInsetsCommand` - команда, которая сообщает смартапу текущую тему платформы — тёмная или светлая. По умолчанию нужно использовать тёмную тему.
+Объект `AssistantThemeCommand` - команда, которая сообщает смартапу текущую тему платформы — тёмная или светлая. По умолчанию нужно использовать тёмную тему.
 
 ```typescript
 interface AssistantThemeCommand {
