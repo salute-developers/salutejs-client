@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
-import { AssistantSettings, AssistantSmartAppData } from './typings';
+import { AssistantSettings, AssistantSmartAppData, Surface } from './typings';
 import { initializeAssistantSDK, InitializeAssistantSDKParams } from './dev';
 import { createAssistant, CreateAssistantParams } from './createAssistant';
 
-export type Surface = 'SBERBOX' | 'STARGATE' | 'SATELLITE' | 'COMPANION' | 'SBOL' | 'TV' | 'TV_HUAWEI' | 'TIME';
 export type Channel = 'B2C' | 'COMPANION_B2C' | 'SBOL';
 
 // eslint-disable-next-line no-useless-concat

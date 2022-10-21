@@ -42,6 +42,8 @@ export {
     Hints,
 } from '@salutejs/scenario';
 
+export type Surface = 'SBERBOX' | 'STARGATE' | 'SATELLITE' | 'COMPANION' | 'SBOL' | 'TV' | 'TV_HUAWEI' | 'TIME';
+
 export type ThemeColorName = 'dark' | 'light';
 
 export type Theme = {
@@ -201,8 +203,14 @@ export interface AssistantStartSmartSearch {
 export interface AppContext {
     app_info: AppInfo;
     device_id: string;
+    user_id: string;
     platform: string;
     sdk_version: string;
+    surface: Surface | string;
+    surface_version: string;
+    stand: string;
+    locale: 'ru_RU' | string;
+    features: { [key: string]: unknown };
 }
 
 export interface AssistantAppContext {
