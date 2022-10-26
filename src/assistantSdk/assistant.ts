@@ -16,6 +16,7 @@ import {
     AssistantBackgroundApp,
     AssistantCommand,
     HistoryMessages,
+    ThemeColorName,
 } from '../typings';
 
 import { createClient } from './client/client';
@@ -57,6 +58,11 @@ const promiseTimeout = <T>(promise: Promise<T>, timeout: number): Promise<T> => 
         }),
     ]);
 };
+
+export interface SdkMeta {
+    theme: ThemeColorName;
+    [key: string]: unknown;
+}
 
 export interface AssistantSettings {
     /** Отключение фичи воспроизведения голоса */
@@ -122,6 +128,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
 
     // текущий апп
     let app: { info: AppInfo; getState?: () => Promise<AssistantAppState> } = { info: DEFAULT_APP };
+    let sdkMeta: SdkMeta = { theme: 'dark' };
     let settings: AssistantSettings = {
         disableDubbing: configuration.settings.dubbing === -1,
         disableListening: false,
@@ -179,6 +186,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         const background_apps = await getBackgroundAppsMeta();
 
         return {
+            ...sdkMeta,
             time: getTime(),
             current_app,
             background_apps,
@@ -451,6 +459,12 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         emit,
         on,
         changeConfiguration: protocol.changeConfiguration,
+        changeSdkMeta: (nextSdkMeta: Partial<SdkMeta>) => {
+            sdkMeta = {
+                ...sdkMeta,
+                ...nextSdkMeta,
+            };
+        },
         changeSettings: (newSettings: Partial<AssistantSettings>) => {
             const dubbingChanged = settings.disableDubbing !== !!newSettings.disableDubbing;
             settings = { ...settings, ...newSettings };
