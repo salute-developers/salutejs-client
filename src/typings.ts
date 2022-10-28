@@ -383,6 +383,7 @@ export type SystemMessageDataType = {
     };
     server_action?: AssistantServerAction;
     meta?: {
+        theme: ThemeColorName;
         current_app: {
             app_info: AppInfo;
             state: AssistantAppState;
