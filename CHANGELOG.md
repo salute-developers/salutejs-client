@@ -1,3 +1,15 @@
+# v1.8.0 (Fri Oct 28 2022)
+
+#### 🚀 Enhancement
+
+- feat: Добавлено хранилище sdkMeta. Добавлена отправка текущей темы в VPS [#50](https://github.com/salute-developers/salutejs-client/pull/50) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.7.1 (Fri Oct 21 2022)
 
 #### 🐛 Bug Fix
