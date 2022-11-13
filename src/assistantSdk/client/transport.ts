@@ -14,6 +14,10 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
     let webSocket: WebSocket;
 
     const close = () => {
+        if (status === 'closed') {
+            return;
+        }
+
         status = 'closing';
 
         if (timeoutId) {
@@ -53,8 +57,6 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
                 return;
             }
 
-            emit('close');
-
             if (retries < 3) {
                 timeoutId = window.setTimeout(() => {
                     connect(url);
@@ -68,6 +70,8 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
             status = 'closed';
 
             emit('error');
+
+            emit('close');
         });
 
         webSocket.addEventListener('message', ({ data }) => {
@@ -108,13 +112,11 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
         reconnect,
         send,
         get status() {
-            if (window.navigator.onLine) {
-                return status;
+            if (!window.navigator.onLine) {
+                close();
             }
 
-            close();
-
-            return status; // 'closing'
+            return status;
         },
     };
 };
