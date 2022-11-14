@@ -3,12 +3,16 @@ import { WSCreator } from '../../typings';
 
 import { Transport, TransportEvents, TransportStatus } from './types';
 
+const CONNECTION_TIMEOUT = 5000; // ms (Slow 3G)
+const CONNECT_INTERVAL = 300; // ms
+
 const defaultWSCreator: WSCreator = (url: string) => new WebSocket(url);
 
 export const createTransport = (createWS: WSCreator = defaultWSCreator): Transport => {
     const { on, emit } = createNanoEvents<TransportEvents>();
 
-    let timeoutId: number | undefined;
+    let connectionTimeoutId: number | undefined;
+    let connectTimeoutId: number | undefined;
     let retries = 0;
     let status: TransportStatus = 'closed';
     let webSocket: WebSocket;
@@ -20,10 +24,9 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
 
         status = 'closing';
 
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-
-            timeoutId = undefined;
+        if (connectTimeoutId) {
+            clearTimeout(connectTimeoutId);
+            connectTimeoutId = undefined;
         }
 
         webSocket?.close();
@@ -34,12 +37,19 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
 
         webSocket = createWS(url);
 
+        connectionTimeoutId = window.setTimeout(() => {
+            webSocket.close();
+        }, CONNECTION_TIMEOUT);
+
         webSocket.binaryType = 'arraybuffer';
 
         webSocket.addEventListener('open', () => {
             if (webSocket.readyState !== 1) {
                 return;
             }
+
+            clearTimeout(connectionTimeoutId);
+            connectionTimeoutId = undefined;
 
             retries = 0;
 
@@ -58,9 +68,9 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
             }
 
             if (retries < 3) {
-                timeoutId = window.setTimeout(() => {
+                connectTimeoutId = window.setTimeout(() => {
                     connect(url);
-                }, 300 * retries);
+                }, CONNECT_INTERVAL * retries);
 
                 return;
             }
