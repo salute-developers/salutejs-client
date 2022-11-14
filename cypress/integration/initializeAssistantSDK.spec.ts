@@ -10,6 +10,7 @@ const INIT_PHRASE = 'Integration test';
 const USER_CHANNEL = 'TEST_CHANNEL';
 const SURFACE = 'TEST_SURFACE';
 const SOCKET_URL = 'ws://test.com';
+
 describe('Проверяем', () => {
     let server: undefined | Server;
 
@@ -40,15 +41,17 @@ describe('Проверяем', () => {
 
             socket.on('message', (mes) => {
                 const message = Message.decode((mes as Uint8Array).slice(4));
+
                 if (message.text && message.text.data === actionText) {
                     action = message;
                 }
 
-                if (message.systemMessage && message.systemMessage.data !== '{}') {
+                if (message.systemMessage) {
                     context = message;
                 }
 
                 if (action && context && !doneCalled) {
+                    // eslint-disable-next-line @typescript-eslint/camelcase
                     const current_app = JSON.parse(context.meta.current_app);
                     doneCalled = true;
 

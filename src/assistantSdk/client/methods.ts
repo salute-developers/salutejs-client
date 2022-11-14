@@ -16,7 +16,7 @@ import {
     IChatHistoryRequest,
     ChatHistoryRequest,
 } from '../../proto';
-import { VpsVersion, GetHistoryRequestClient, GetHistoryRequestProto } from '../../typings';
+import { Meta, VpsVersion, GetHistoryRequestClient, GetHistoryRequestProto } from '../../typings';
 
 export type BatchableMethods = {
     sendText: (
@@ -30,7 +30,7 @@ export type BatchableMethods = {
             token?: string;
             userChannel?: string;
             version?: VpsVersion;
-            meta?: { [k: string]: string };
+            meta?: MetaStringified;
         },
         type?: string,
         messageId?: number,
@@ -39,7 +39,7 @@ export type BatchableMethods = {
         data: { data: Record<string, unknown>; messageName?: string },
         last: boolean,
         params?: {
-            meta?: { [k: string]: string };
+            meta?: MetaStringified;
         },
     ) => void;
     sendVoice: (
@@ -47,12 +47,19 @@ export type BatchableMethods = {
         last: boolean,
         messageName?: string,
         params?: {
-            meta?: { [k: string]: string };
+            meta?: MetaStringified;
         },
     ) => void;
     sendSettings: (data: ISettings, last?: boolean, messageId?: number) => void;
     messageId: number;
 };
+
+export type SendSystemMessageData = {
+    data: Record<string, unknown>;
+    messageName?: string;
+};
+
+export type MetaStringified = { [key in keyof Meta]: string };
 
 export const createClientMethods = ({
     getMessageId,
@@ -79,7 +86,7 @@ export const createClientMethods = ({
         ) & {
             last: 1 | -1;
             messageName?: string;
-            meta?: { [k: string]: string };
+            meta?: MetaStringified;
         };
         messageId: number;
     }) => {
@@ -105,7 +112,7 @@ export const createClientMethods = ({
         data: IInitialSettings,
         last = true,
         messageId = getMessageId(),
-        params: { meta?: { [k: string]: string } } = {},
+        params: { meta?: MetaStringified } = {},
     ) => {
         return send({
             payload: {
@@ -195,7 +202,7 @@ export const createClientMethods = ({
             token?: string;
             userChannel?: string;
             version?: VpsVersion;
-            meta?: { [k: string]: string };
+            meta?: MetaStringified;
         } = {},
         type = '',
         messageId = getMessageId(),
@@ -216,7 +223,7 @@ export const createClientMethods = ({
         last = true,
         messageId = getMessageId(),
         params: {
-            meta?: { [k: string]: string };
+            meta?: MetaStringified;
         } = {},
     ) => {
         send({
@@ -238,7 +245,7 @@ export const createClientMethods = ({
         messageId = getMessageId(),
         mesName?: string,
         params: {
-            meta?: { [k: string]: string };
+            meta?: MetaStringified;
         } = {},
     ) => {
         return send({
@@ -278,7 +285,7 @@ export const createClientMethods = ({
             data: { data: Record<string, unknown>; messageName?: string },
             last: boolean,
             params?: {
-                meta?: { [k: string]: string };
+                meta?: MetaStringified;
             },
         ) => ReturnType<typeof sendSystemMessage> = (data, last, params) => {
             checkLastMessageStatus(last);
@@ -290,7 +297,7 @@ export const createClientMethods = ({
             last: boolean,
             messageName?: string,
             params?: {
-                meta?: { [k: string]: string };
+                meta?: MetaStringified;
             },
         ) => ReturnType<typeof sendVoice> = (data, last, mesName, params) => {
             checkLastMessageStatus(last);
