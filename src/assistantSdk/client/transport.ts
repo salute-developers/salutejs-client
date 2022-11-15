@@ -1,9 +1,9 @@
 import { createNanoEvents } from '../../nanoevents';
 import { WSCreator } from '../../typings';
 
-import { Transport, TransportEvents, TransportStatus } from './types';
+import { Transport, TransportEvents } from './types';
 
-const CONNECTION_TIMEOUT = 5000; // ms (Slow 3G)
+const CONNECTION_TIMEOUT = 2100; // ms (Slow 3G)
 const CONNECT_INTERVAL = 300; // ms
 
 const defaultWSCreator: WSCreator = (url: string) => new WebSocket(url);
@@ -11,28 +11,29 @@ const defaultWSCreator: WSCreator = (url: string) => new WebSocket(url);
 export const createTransport = (createWS: WSCreator = defaultWSCreator): Transport => {
     const { on, emit } = createNanoEvents<TransportEvents>();
 
-    let connectionTimeoutId: number | undefined;
-    let connectTimeoutId: number | undefined;
+    let connectionTimeoutId = -1;
+    let connectTimeoutId = -1;
     let retries = 0;
-    let status: TransportStatus = 'closed';
+    let status: 'closed' | 'closing' | 'connecting' | 'open' = 'closed';
     let webSocket: WebSocket;
 
     const close = () => {
-        if (status === 'closed') {
+        if (status === 'closing' || status === 'closed') {
             return;
         }
 
         status = 'closing';
 
-        if (connectTimeoutId) {
-            clearTimeout(connectTimeoutId);
-            connectTimeoutId = undefined;
-        }
+        clearTimeout(connectTimeoutId);
 
         webSocket?.close();
     };
 
     const connect = (url: string) => {
+        status = 'connecting';
+
+        emit('connecting');
+
         retries++;
 
         webSocket = createWS(url);
@@ -49,7 +50,6 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
             }
 
             clearTimeout(connectionTimeoutId);
-            connectionTimeoutId = undefined;
 
             retries = 0;
 
@@ -68,9 +68,7 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
             }
 
             if (retries < 3) {
-                connectTimeoutId = window.setTimeout(() => {
-                    connect(url);
-                }, CONNECT_INTERVAL * retries);
+                connectTimeoutId = window.setTimeout(connect, CONNECT_INTERVAL * retries, url);
 
                 return;
             }
@@ -94,10 +92,6 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
             return;
         }
 
-        status = 'connecting';
-
-        emit('connecting');
-
         connect(url);
     };
 
@@ -117,16 +111,12 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
 
     return {
         close,
+        get isOnline() {
+            return window.navigator.onLine;
+        },
         on,
         open,
         reconnect,
         send,
-        get status() {
-            if (!window.navigator.onLine) {
-                close();
-            }
-
-            return status;
-        },
     };
 };
