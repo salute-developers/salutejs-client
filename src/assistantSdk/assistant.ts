@@ -280,6 +280,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
     subscriptions.push(
         transport.on('error', (error: Event | undefined) => {
             voice.stop();
+            protocol.clearQueue();
 
             emit('vps', { type: 'error', error });
         }),

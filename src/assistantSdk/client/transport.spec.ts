@@ -52,7 +52,7 @@ describe('Подключение', () => {
             });
     });
 
-    it('Сервер отключен, три попытки подключения, одна ошибка', () => {
+    it('Сервер отключен, две попытки подключения, три попытки реконнекта, одна ошибка', () => {
         const transport = createTransport();
 
         const onClose = cy.stub();
@@ -66,9 +66,19 @@ describe('Подключение', () => {
         cy.then(() => {
             transport.open(SERVER_URL);
         })
-            .wait(1000)
+            .wait(100)
             .then(() => {
-                expect(onClose).to.be.calledThrice;
+                transport.open(SERVER_URL);
+            })
+            .wait(800)
+            .then(() => {
+                expect(onClose).not.to.be.called;
+                expect(onError).not.to.be.called;
+                expect(onOpen).not.to.be.called;
+            })
+            .wait(100)
+            .then(() => {
+                expect(onClose).to.be.calledOnce;
                 expect(onError).to.be.calledOnce;
                 expect(onOpen).not.to.be.called;
             });
@@ -99,14 +109,15 @@ describe('Подключение', () => {
             .then(() => {
                 server?.close();
             })
+            .wait(900)
             .then(() => {
-                expect(onClose).to.be.calledOnce;
+                expect(onClose).not.to.be.called;
                 expect(onError).not.to.be.called;
                 expect(onOpen).to.be.calledOnce;
             })
-            .wait(1000)
+            .wait(100)
             .then(() => {
-                expect(onClose).to.be.callCount(4);
+                expect(onClose).to.be.calledOnce;
                 expect(onError).to.be.calledOnce;
                 expect(onOpen).to.be.calledOnce;
             });
@@ -137,14 +148,9 @@ describe('Подключение', () => {
             .then(() => {
                 server?.close();
             })
-            .then(() => {
-                expect(onClose).to.be.calledOnce;
-                expect(onError).not.to.be.called;
-                expect(onOpen).to.be.calledOnce;
-            })
             .wait(900)
             .then(() => {
-                expect(onClose).to.be.calledThrice;
+                expect(onClose).not.to.be.called;
                 expect(onError).not.to.be.called;
                 expect(onOpen).to.be.calledOnce;
             })
@@ -153,7 +159,7 @@ describe('Подключение', () => {
             })
             .wait(100)
             .then(() => {
-                expect(onClose).to.be.calledThrice;
+                expect(onClose).not.to.be.called;
                 expect(onError).not.to.be.called;
                 expect(onOpen).to.be.calledTwice;
             });

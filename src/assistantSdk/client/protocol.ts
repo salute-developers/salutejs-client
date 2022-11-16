@@ -126,10 +126,12 @@ export const createProtocol = (transport: Transport, { logger, getToken, ...para
     };
 
     const sendMessage = (message: IMessage) => {
-        if (transport.status === 'closing') {
-            transport.open(url);
-
+        if (status === 'ready' && !transport.isOnline) {
             messageQueue.push(message);
+
+            transport.close();
+
+            transport.open(url);
 
             return;
         }

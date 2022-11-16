@@ -6,13 +6,11 @@ export interface TransportEvents {
     open: () => void;
 }
 
-export type TransportStatus = 'closed' | 'closing' | 'connecting' | 'open';
-
 export interface Transport {
     close: () => void;
+    isOnline: boolean;
     on: <K extends keyof TransportEvents>(event: K, callback: TransportEvents[K]) => () => void;
     open: (url: string) => void;
     reconnect: (url: string) => void;
     send: (data: Uint8Array) => void;
-    status: TransportStatus;
 }
