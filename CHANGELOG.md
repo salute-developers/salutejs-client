@@ -1,3 +1,15 @@
+# v1.8.1 (Wed Nov 16 2022)
+
+#### 🐛 Bug Fix
+
+- fix: Исправлен множественный вызов transport.open() [#42](https://github.com/salute-developers/salutejs-client/pull/42) ([@ivan-ushatsky](https://github.com/ivan-ushatsky))
+
+#### Authors: 1
+
+- Ivan Ushatsky ([@ivan-ushatsky](https://github.com/ivan-ushatsky))
+
+---
+
 # v1.8.0 (Fri Oct 28 2022)
 
 #### 🚀 Enhancement
