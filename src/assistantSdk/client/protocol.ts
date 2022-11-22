@@ -126,16 +126,6 @@ export const createProtocol = (transport: Transport, { logger, getToken, ...para
     };
 
     const sendMessage = (message: IMessage) => {
-        if (status === 'ready' && !transport.isOnline) {
-            messageQueue.push(message);
-
-            transport.close();
-
-            transport.open(url);
-
-            return;
-        }
-
         // отправляем инициализационные сообщения или все, когда сессия = ready
         if (status === 'ready' || (typeof initMessageId !== undefined && message.messageId === initMessageId)) {
             send(message);
@@ -351,6 +341,26 @@ export const createProtocol = (transport: Transport, { logger, getToken, ...para
             } else {
                 transport.open(url);
             }
+        },
+        init: () => {
+            // в отличии от reconnect не обрывает коннект если он в порядке
+            if (status === 'ready' && window.navigator.onLine) {
+                return Promise.resolve();
+            }
+
+            return new Promise<void>((resolve, reject) => {
+                const subs: Array<() => void> = [];
+                subs.push(transport.on('open', () => {
+                    subs.map(sub => sub());
+                    resolve();
+                }));
+                subs.push(transport.on('error', () => {
+                    subs.map(sub => sub());
+                    reject('Network error');
+                }));
+
+                transport.reconnect(url);
+            });
         },
         get currentMessageId() {
             return currentMessageId;
