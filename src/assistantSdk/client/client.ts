@@ -185,13 +185,13 @@ export const createClient = (
         }) => Promise<void>,
     ): Promise<void> =>
         protocol.batch(async ({ sendSystemMessage, sendVoice, messageId }) => {
+            await sendMeta(sendSystemMessage, true);
+
             await callback({
                 sendVoice,
                 messageId,
                 onMessage: (cb: (message: OriginalMessageType) => void) => protocol.on('incoming', cb),
             });
-
-            sendMeta(sendSystemMessage, true);
         });
 
     const off = protocol.on('incoming', (message: OriginalMessageType) => {
@@ -222,6 +222,7 @@ export const createClient = (
         destroy: () => {
             off();
         },
+        init: protocol.init,
         createVoiceStream,
         sendData,
         sendMeta,

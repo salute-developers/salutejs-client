@@ -150,15 +150,17 @@ export const createVoice = (
 
         // повторные вызовы не пройдут, пока пользователь не разрешит/запретит аудио
         if (listener.status === 'stopped') {
-            return client.createVoiceStream(({ sendVoice, messageId, onMessage }) => {
-                begin?.forEach((chunk) => sendVoice(new Uint8Array(chunk), false));
+            return client.init().then(() =>
+                client.createVoiceStream(({ sendVoice, messageId, onMessage }) => {
+                    begin?.forEach((chunk) => sendVoice(new Uint8Array(chunk), false));
 
-                return speechRecognizer.start({
-                    sendVoice,
-                    messageId,
-                    onMessage,
-                });
-            });
+                    return speechRecognizer.start({
+                        sendVoice,
+                        messageId,
+                        onMessage,
+                    });
+                }),
+            );
         }
     };
 
