@@ -22,6 +22,7 @@ Assistant Client — это инструмент для локального т�
      * [AssistantNavigationCommand](#AssistantNavigationCommand)
      * [AssistantInsetsCommand](#AssistantInsetsCommand)
      * [AssistantThemeCommand](#AssistantThemeCommand)
+     * [AssistantVisibilityCommand](#AssistantVisibilityCommand)
      * [AssistantSmartAppError](#AssistantSmartAppError)
      * [AssistantSmartAppCommand](#AssistantSmartAppCommand)
    * [Пульт](#пульт)
@@ -435,6 +436,17 @@ interface AssistantThemeCommand {
    theme: {
       name: 'dark' | 'light'
    }
+}
+```
+
+### `AssistantVisibilityCommand`
+
+Объект `AssistantVisibilityCommand` — команда, которая сообщает о состоянии приложения: развернуто оно или нет. Параметр `hidden` указывает, что разработчику навыка необходимо остановить звук и/или видео. Параметр `visible` указывает, что воспроизведение звука и/или видео можно продолжить.
+
+```typescript
+interface AssistantVisibilityCommand {
+    type: 'visibility';
+    visibility: 'visible' | 'hidden';
 }
 ```
 
