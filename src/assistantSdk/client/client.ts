@@ -97,7 +97,6 @@ export const createClient = (
                 sendSystemMessage(
                     {
                         data: { meta },
-                        messageName: '',
                     },
                     false,
                 );
@@ -109,7 +108,6 @@ export const createClient = (
                 {
                     // eslint-disable-next-line @typescript-eslint/camelcase
                     data: { app_info: meta.current_app.app_info },
-                    messageName: '',
                 },
                 false,
                 { meta: convertFieldValuesToString(meta || {}) },
