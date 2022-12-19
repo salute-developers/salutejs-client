@@ -1,3 +1,20 @@
+# v1.9.0 (Mon Dec 19 2022)
+
+#### 🚀 Enhancement
+
+- feat: добавил setHeaderButtons в AssistantHost [#55](https://github.com/salute-developers/salutejs-client/pull/55) ([@soulko](https://github.com/soulko))
+
+#### 🐛 Bug Fix
+
+- docs: добавлено описание AssistantVisibilityCommand [#57](https://github.com/salute-developers/salutejs-client/pull/57) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 2
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+- Anton Kostenko ([@soulko](https://github.com/soulko))
+
+---
+
 # v1.8.2 (Mon Nov 28 2022)
 
 #### 🐛 Bug Fix
