@@ -9,6 +9,7 @@ import {
     Character,
     UUID,
     Meta,
+    SystemMessagePayload,
 } from '@salutejs/scenario';
 
 import {
@@ -270,6 +271,7 @@ export interface AssistantHost {
     sendText: (message: string) => void;
     setSuggests: (suggest: string) => void;
     setHints: (hints: string) => void;
+    setHeaderButtons: (headerButtons: string) => void;
 }
 
 export interface AssistantWindow {
@@ -370,6 +372,8 @@ export type EmotionId =
     | 'zadumalsa'
     | 'zhdu_otvet';
 
+export type SystemMessageHeaderByttonsType = SystemMessagePayload['header_buttons'];
+
 export type SystemMessageDataType = {
     activate_app_info?: boolean;
     app_info?: AppInfo;
@@ -394,6 +398,7 @@ export type SystemMessageDataType = {
         }[];
     } & Meta;
     sdk_meta?: SdkMeta;
+    header_buttons?: SystemMessageHeaderByttonsType;
 };
 
 export interface OriginalMessageType {
@@ -556,6 +561,10 @@ export type AssistantPostMessage =
       }
     | {
           type: 'onBack';
+      }
+    | {
+          type: 'setHeaderButtons';
+          payload: string;
       };
 
 export type GetHistoryRequestProto = IGetHistoryRequest;

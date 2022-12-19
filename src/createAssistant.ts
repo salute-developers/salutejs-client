@@ -12,6 +12,7 @@ import {
     Hints,
     Suggestions,
     AssistantTtsStateUpdate,
+    SystemMessageHeaderByttonsType,
 } from './typings';
 import { createNanoEvents } from './nanoevents';
 import { createNanoObservable, ObserverFunc } from './nanoobservable';
@@ -85,6 +86,9 @@ if (typeof window !== 'undefined' && inIframe()) {
         },
         sendText(message: string) {
             postMessage({ type: 'sendText', payload: message });
+        },
+        setHeaderButtons(headerButtons: string) {
+            postMessage({ type: 'setHeaderButtons', payload: headerButtons });
         },
     };
 
@@ -369,6 +373,13 @@ export const createAssistant = <A extends AssistantSmartAppData>({
             window.AssistantHost?.setHints(JSON.stringify({ hints }));
         },
         sendText: (message: string) => window.AssistantHost?.sendText(message),
+        setHeaderButtons: (headerButtons: SystemMessageHeaderByttonsType) => {
+            if (!window.AssistantHost?.setHeaderButtons) {
+                throw new Error('setHeaderButtons не поддерживается в данной версии клиента');
+            }
+
+            window.AssistantHost?.setHeaderButtons(JSON.stringify(headerButtons));
+        },
         ready: readyFn,
     };
 };
