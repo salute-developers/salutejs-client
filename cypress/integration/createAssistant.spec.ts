@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { createAssistant } from '../../src/index';
+import { createAssistant, SystemMessageHeaderByttonsType } from '../../src/index';
 import { Hints, Suggestions } from '@salutejs/scenario';
 
 /* eslint-disable @typescript-eslint/camelcase */
@@ -13,6 +13,7 @@ describe('Проверяем createAssistant', () => {
             ready: () => window.AssistantClient?.onStart(),
             setSuggests: cy.stub(),
             setHints: cy.stub(),
+            setHeaderButtons: cy.stub(),
         };
     });
 
@@ -193,6 +194,27 @@ describe('Проверяем createAssistant', () => {
         const assistant = initAssistant();
         assistant.setHints(hints);
         expect(window.AssistantHost.setHints).to.calledWith(JSON.stringify({ hints }));
+    });
+
+    it('Проверяем проксирование и преобразование данных в setHeaderButtons', () => {
+        const headerButtons: SystemMessageHeaderByttonsType = [
+            {
+                icon_address: {
+                    type: 'url',
+                    hash: '1add19855fcd158ece0fd52c7fb13750',
+                    url: 'https://cdn.sberdevices.ru/VA/images/prime/okko.png',
+                },
+                actions: [
+                    {
+                        type: 'deep_link',
+                        deep_link: 'https://ru.wikipedia.org/wiki/Ривз,_Киану',
+                    },
+                ],
+            },
+        ];
+        const assistant = initAssistant();
+        assistant.setHeaderButtons(headerButtons);
+        expect(window.AssistantHost.setHeaderButtons).to.calledWith(JSON.stringify(headerButtons));
     });
 
     it("Проверяем фильтрацию system.command = 'back' - не должна попадать в onData", () => {

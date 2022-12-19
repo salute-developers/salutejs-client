@@ -256,6 +256,7 @@ export const initializeAssistantSDK = ({
         setSuggests() {},
         setHints() {},
         sendText,
+        setHeaderButtons() {},
     };
 
     const subscribeToListenerStatus = (cb: (event: 'listen' | 'stopped') => void): (() => void) =>
