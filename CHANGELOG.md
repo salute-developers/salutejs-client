@@ -1,3 +1,15 @@
+# v1.9.1 (Fri Dec 30 2022)
+
+#### 🐛 Bug Fix
+
+- fix: Актуализация @salutejs/scenario [#59](https://github.com/salute-developers/salutejs-client/pull/59) ([@ivan-ushatsky](https://github.com/ivan-ushatsky))
+
+#### Authors: 1
+
+- Ivan Ushatsky ([@ivan-ushatsky](https://github.com/ivan-ushatsky))
+
+---
+
 # v1.9.0 (Mon Dec 19 2022)
 
 #### 🚀 Enhancement
