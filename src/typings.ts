@@ -94,7 +94,7 @@ export interface AssistantViewItemBase<T> {
     aliases?: string[];
     /* Сервер экшен, проксирует action обратно на бекэнд. */
     server_action?: AssistantServerAction;
-    /* Экшен, который вернется в AssistantSmartAppData */
+    /* Экшен, который вернётся в AssistantSmartAppData */
     action?: T;
     /* Дополнительные данные для бэкенда */
     [key: string]: unknown;
