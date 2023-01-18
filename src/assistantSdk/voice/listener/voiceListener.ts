@@ -2,12 +2,14 @@ import { createNanoEvents } from '../../../nanoevents';
 
 import { createNavigatorAudioProvider } from './navigatorAudioProvider';
 
-type VoiceStreamEvents = {
-    status: (status: 'listen' | 'started' | 'stopped') => void;
-    hypotesis: (text: string, last: boolean) => void;
-};
+export type VoiceListenerStatus = 'listen' | 'started' | 'stopped';
 
 export type VoiceHandler = (data: Uint8Array, last: boolean) => void;
+
+type VoiceStreamEvents = {
+    status: (status: VoiceListenerStatus) => void;
+    hypotesis: (text: string, last: boolean) => void;
+};
 
 /**
  * Возвращает объект, позволяющий получать запись голоса пользователя и управлять ею.
@@ -21,7 +23,7 @@ export const createVoiceListener = (
 ) => {
     const { emit, on } = createNanoEvents<VoiceStreamEvents>();
     let stopRecord: () => void;
-    let status: 'listen' | 'started' | 'stopped' = 'stopped';
+    let status: VoiceListenerStatus = 'stopped';
 
     const stop = () => {
         status = 'stopped';

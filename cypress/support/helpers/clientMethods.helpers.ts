@@ -1,24 +1,29 @@
 import { Server } from 'mock-socket';
 
 import { appendHeader } from '../../../src/assistantSdk/client/protocol';
-import { Message } from '../../../src/proto';
+import { Message, IText } from '../../../src/proto';
 import { MessageNames } from '../../../src/typings';
 
 export const createAnswerBuffer = ({
     messageId = 1,
     last = 1,
     systemMessageData,
+    messageName,
+    text,
 }: {
     messageId?: number | Long;
     last?: number;
     systemMessageData?: string;
+    messageName?: string;
+    text?: IText;
 }) => {
     const encodedAsNodeBuffer = appendHeader(
         Message.encode({
             messageId,
             last: last ?? 1,
             systemMessage: systemMessageData ? { data: systemMessageData } : { data: messageId.toString() },
-            messageName: MessageNames.ANSWER_TO_USER,
+            messageName: messageName || MessageNames.ANSWER_TO_USER,
+            text,
         }).finish(),
     );
     const newBuffer = new ArrayBuffer(encodedAsNodeBuffer.byteLength);
