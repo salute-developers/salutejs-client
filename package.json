@@ -30,10 +30,10 @@
         "smartapp"
     ],
     "dependencies": {
-        "@salutejs/scenario": "0.29.0",
+        "@salutejs/scenario": "0.30.0",
         "axios": "0.21.1",
         "lodash.clonedeep": "^4.5.0",
-        "protobufjs": "6.10.2",
+        "protobufjs": "6.10.3",
         "uuid": "8.0.0"
     },
     "browserslist": [
