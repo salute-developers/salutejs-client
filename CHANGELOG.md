@@ -1,3 +1,15 @@
+# v1.9.3 (Thu Jan 26 2023)
+
+#### 🐛 Bug Fix
+
+- обновлен хост платформы [#62](https://github.com/salute-developers/salutejs-client/pull/62) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.9.2 (Wed Jan 18 2023)
 
 #### 🐛 Bug Fix
