@@ -8,7 +8,7 @@ import {
     AppInfo,
     Character,
     UUID,
-    Meta,
+    Meta as ScenarioMeta,
     SystemMessagePayload,
 } from '@salutejs/scenario';
 
@@ -35,7 +35,6 @@ export {
     UUID,
     Bubble,
     Card,
-    Meta,
     PermissionType,
     PermissionStatus,
     Character,
@@ -372,6 +371,21 @@ export type EmotionId =
     | 'zadumalsa'
     | 'zhdu_otvet';
 
+export interface AssistantMeta {
+    theme: ThemeColorName;
+    [key: string]: unknown;
+}
+
+export interface AssistantBackgroundAppInfo {
+    app_info: AppInfo;
+    state: Record<string, unknown>;
+}
+
+export interface Meta extends ScenarioMeta, AssistantMeta {
+    background_apps: AssistantBackgroundAppInfo[];
+    [key: string]: unknown;
+}
+
 export type SystemMessageHeaderByttonsType = SystemMessagePayload['header_buttons'];
 
 export type SystemMessageDataType = {
@@ -386,17 +400,6 @@ export type SystemMessageDataType = {
         emotionId: EmotionId;
     };
     server_action?: AssistantServerAction;
-    meta?: {
-        theme: ThemeColorName;
-        current_app: {
-            app_info: AppInfo;
-            state: AssistantAppState;
-        };
-        background_apps: {
-            app_info: AppInfo;
-            state: AssistantAppState;
-        }[];
-    } & Meta;
     sdk_meta?: SdkMeta;
     header_buttons?: SystemMessageHeaderByttonsType;
 };

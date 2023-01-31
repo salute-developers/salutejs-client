@@ -14,9 +14,11 @@ import {
     SystemMessageDataType,
     CharacterId,
     AssistantBackgroundApp,
+    AssistantBackgroundAppInfo,
+    AssistantMeta,
     AssistantCommand,
     HistoryMessages,
-    ThemeColorName,
+    Meta,
 } from '../typings';
 
 import { createClient } from './client/client';
@@ -58,11 +60,6 @@ const promiseTimeout = <T>(promise: Promise<T>, timeout: number): Promise<T> => 
         }),
     ]);
 };
-
-export interface SdkMeta {
-    theme: ThemeColorName;
-    [key: string]: unknown;
-}
 
 export interface AssistantSettings {
     /** Отключение фичи воспроизведения голоса */
@@ -128,7 +125,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
 
     // текущий апп
     let app: { info: AppInfo; getState?: () => Promise<AssistantAppState> } = { info: DEFAULT_APP };
-    let sdkMeta: SdkMeta = { theme: 'dark' };
+    let sdkMeta: AssistantMeta = { theme: 'dark' };
     let settings: AssistantSettings = {
         disableDubbing: configuration.settings.dubbing === -1,
         disableListening: false,
@@ -137,7 +134,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
 
     const backgroundApps: { [key: string]: AssistantBackgroundApp & { commandsSubscribers: unknown[] } } = {};
 
-    const metaProvider = async (): Promise<Required<SystemMessageDataType>['meta']> => {
+    const metaProvider = async (): Promise<Meta> => {
         // Стейт нужен только для канваса
         const appState =
             app !== null && app.info.frontendType === 'WEB_APP' && app.getState
@@ -156,7 +153,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         const getBackgroundAppsMeta = async () => {
             const apps = { ...backgroundApps };
             const backgroundAppsIds = Object.keys(apps);
-            const backgroundAppsMeta: { app_info: AppInfo; state: Record<string, unknown> }[] = [];
+            const backgroundAppsMeta: AssistantBackgroundAppInfo[] = [];
 
             await Promise.all(
                 backgroundAppsIds.map(async (applicationId) => {
@@ -271,7 +268,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         } = await getAnswerForRequestPermissions(requestMessageId, appInfo, items);
         const meta = await metaProvider();
 
-        client.sendData(data, 'SERVER_ACTION', { ...meta, ...props });
+        client.sendData({ ...data }, 'SERVER_ACTION', { ...meta, ...props });
     };
 
     subscriptions.push(protocol.on('ready', () => emit('vps', { type: 'ready' })));
@@ -460,7 +457,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         emit,
         on,
         changeConfiguration: protocol.changeConfiguration,
-        changeSdkMeta: (nextSdkMeta: Partial<SdkMeta>) => {
+        changeSdkMeta: (nextSdkMeta: Partial<AssistantMeta>) => {
             sdkMeta = {
                 ...sdkMeta,
                 ...nextSdkMeta,
