@@ -1,3 +1,15 @@
+# v1.10.0 (Tue Jan 31 2023)
+
+#### 🚀 Enhancement
+
+- feat: Убрана отправка меты в легаси-формате [#52](https://github.com/salute-developers/salutejs-client/pull/52) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.9.3 (Thu Jan 26 2023)
 
 #### 🐛 Bug Fix
