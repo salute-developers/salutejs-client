@@ -136,9 +136,9 @@ const handleOnRefreshClick = () => {
 ### Альтернативное подключение
 
 Assitant Client доступен для подключения через `<script>`.
-Версию assistant сlient можно поменять в src. Доступ к API осуществляется через глобальную переменную `assistant`.
+Версию Assistant Client можно поменять в src. Доступ к API осуществляется через глобальную переменную `assistant`.
 
-Пример, для разработки и отладки в браузере (в этом случае обязательно подключение react):
+Для разработки и отдалдки в браузере требуется подключение React:
 ```html
 <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>

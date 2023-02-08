@@ -5,12 +5,15 @@ module.exports = {
         'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:cypress/recommended',
-        'prettier/react',
     ],
     parser: '@typescript-eslint/parser',
     plugins: ['react', 'import', 'prettier', 'cypress'],
     rules: {
         '@typescript-eslint/no-empty-function': 'off',
+        'react/require-default-props': 'off',
+        'react/function-component-definition': 'off',
+        'react/jsx-no-useless-fragment': 'off',
+        'default-param-last': 'off',
         'no-restricted-syntax': 'off', // В for...of циклах ничего плохого нет
         'spaced-comment': ['error', 'always', { markers: ['/'] }], /// разрешаем ts-require directive
         'comma-dangle': ['error', 'always-multiline'],
@@ -107,7 +110,7 @@ module.exports = {
             env: {
                 browser: true,
                 mocha: true,
-                'jest/globals': true,
+                jest: true,
             },
         },
     ],

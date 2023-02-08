@@ -109,7 +109,9 @@ export const createAssistantHostMock = ({ context = window }: { context?: Window
         }
 
         context.AssistantClient.onData(command as AssistantClientCommand);
-        return new Promise((resolve) => setTimeout(resolve));
+        return new Promise((resolve) => {
+            setTimeout(resolve);
+        });
     };
 
     /** Дождаться и вернуть клиентский экшен и его контекст */

@@ -18,6 +18,8 @@ import {
 } from '../../proto';
 import { Meta, VpsVersion, GetHistoryRequestClient, GetHistoryRequestProto } from '../../typings';
 
+export type MetaStringified = { [key in keyof Meta]: string };
+
 export type BatchableMethods = {
     sendText: (
         data: string,
@@ -58,8 +60,6 @@ export type SendSystemMessageData = {
     data: Record<string, unknown>;
     messageName?: string;
 };
-
-export type MetaStringified = { [key in keyof Meta]: string };
 
 export const createClientMethods = ({
     getMessageId,

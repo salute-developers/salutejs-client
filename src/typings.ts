@@ -70,6 +70,24 @@ export interface DPMessage extends IMessage {
     uuid: UUID;
 }
 
+export interface AssistantViewItemBase<T> {
+    /* Порядковый номер элемента, назначается смартаппом, уникален в рамках items */
+    number?: number;
+    /* Уникальный id элемента */
+    id?: string;
+    /* Ключевая фраза, которая должна приводить к данному действию */
+    title?: string;
+    /* Фразы-синонимы, которые должны быть расценены как данное действие */
+    aliases?: string[];
+    /* Сервер экшен, проксирует action обратно на бекэнд. */
+    // eslint-disable-next-line no-use-before-define
+    server_action?: AssistantServerAction;
+    /* Экшен, который вернётся в AssistantSmartAppData */
+    action?: T;
+    /* Дополнительные данные для бэкенда */
+    [key: string]: unknown;
+}
+
 export interface AssistantAppStateBase<T> {
     /* Любые данные, которые могут потребоваться Backend'у для принятия решений */
     [key: string]: unknown;
@@ -82,23 +100,6 @@ export interface AssistantAppStateBase<T> {
 
 export type AssistantAppState = AssistantAppStateBase<Action>;
 
-export interface AssistantViewItemBase<T> {
-    /* Порядковый номер элемента, назначается смартаппом, уникален в рамках items */
-    number?: number;
-    /* Уникальный id элемента */
-    id?: string;
-    /* Ключевая фраза, которая должна приводить к данному действию */
-    title?: string;
-    /* Фразы-синонимы, которые должны быть расценены как данное действие */
-    aliases?: string[];
-    /* Сервер экшен, проксирует action обратно на бекэнд. */
-    server_action?: AssistantServerAction;
-    /* Экшен, который вернётся в AssistantSmartAppData */
-    action?: T;
-    /* Дополнительные данные для бэкенда */
-    [key: string]: unknown;
-}
-
 export type AssistantViewItem = AssistantViewItemBase<Action>;
 
 export interface AssistantServerActionAppInfo {
@@ -108,17 +109,6 @@ export interface AssistantServerActionAppInfo {
 }
 
 export type AssistantServerAction = { action_id: string; parameters?: any } | { type: string; payload?: any };
-
-export type AssistantCommands =
-    | ActionCommand
-    | AssistantThemeCommand
-    | AssistantCharacterCommand
-    | AssistantCloseAppCommand
-    | AssistantNavigationCommand
-    | AssistantSmartAppCommand
-    | AssistantVisibilityCommand
-    | AssistantPlayerCommand
-    | AssistantSystemCommand;
 
 export interface SdkMeta {
     mid?: string;
@@ -241,6 +231,17 @@ export interface AssistantTtsStateUpdate {
     owner: boolean;
 }
 
+export type AssistantCommands =
+    | ActionCommand
+    | AssistantThemeCommand
+    | AssistantCharacterCommand
+    | AssistantCloseAppCommand
+    | AssistantNavigationCommand
+    | AssistantSmartAppCommand
+    | AssistantVisibilityCommand
+    | AssistantPlayerCommand
+    | AssistantSystemCommand;
+
 export type AssistantClientCustomizedCommand<T extends AssistantSmartAppData> =
     | AssistantAppContext
     | AssistantThemeCommand
@@ -279,6 +280,7 @@ export interface AssistantWindow {
     appInitialData: Array<AssistantClientCommand>;
     appRecoveryState: unknown;
 
+    // eslint-disable-next-line @typescript-eslint/ban-types
     __dangerouslySendDataMessage?: (data: {}, name: string) => void;
     __dangerouslySendVoiceMessage?: (message: string) => void;
     __dangerouslyGetAssistantAppState?: () => AssistantAppState;
@@ -325,22 +327,6 @@ export interface Settings {
     surface?: string | null;
 }
 
-export type EventsType = {
-    connecting: () => void;
-    ready: () => void;
-    close: () => void;
-    message: (message: OriginalMessageType) => void;
-    systemMessage: (systemMessageData: SystemMessageDataType, originalMessage: OriginalMessageType) => void;
-    outcoming: (message: OriginalMessageType) => void;
-    connectionError: (error: Event) => void;
-};
-
-export type ItemType = Partial<BubbleCommand> &
-    Partial<CardCommand> &
-    Partial<ActionCommand> & {
-        command?: AssistantCommand;
-    };
-
 export type AssistantCommand =
     | Omit<AssistantSmartAppData, 'sdk_meta'>
     | Omit<AssistantStartSmartSearch, 'sdk_meta'>
@@ -350,6 +336,12 @@ export type AssistantCommand =
           type: string;
           [k: string]: unknown;
       };
+
+export type ItemType = Partial<BubbleCommand> &
+    Partial<CardCommand> &
+    Partial<ActionCommand> & {
+        command?: AssistantCommand;
+    };
 
 export type EmotionId =
     | 'bespokoistvo'
@@ -433,6 +425,7 @@ export interface OriginalMessageType {
         settings?: Settings | null;
         locale?: string | null;
     } | null;
+    // eslint-disable-next-line @typescript-eslint/ban-types
     cancel?: {} | null;
     device?: Device | null;
     legacyDevice?: LegacyDevice | null;
@@ -443,6 +436,16 @@ export interface OriginalMessageType {
     timestamp?: number | Long | null;
     meta?: { [k: string]: string } | null;
 }
+
+export type EventsType = {
+    connecting: () => void;
+    ready: () => void;
+    close: () => void;
+    message: (message: OriginalMessageType) => void;
+    systemMessage: (systemMessageData: SystemMessageDataType, originalMessage: OriginalMessageType) => void;
+    outcoming: (message: OriginalMessageType) => void;
+    connectionError: (error: Event) => void;
+};
 
 export interface WSCreator {
     (url: string): WebSocket;
@@ -465,6 +468,7 @@ export type VpsConfiguration = {
     messageName?: string;
     vpsToken?: string;
     meta?: { [k: string]: string };
+    // eslint-disable-next-line no-use-before-define
     logger?: ClientLogger;
     getToken: () => Promise<string>;
 };

@@ -1,5 +1,5 @@
 /** Создает коллекцию треков  */
-export const createTrackCollection = <T extends unknown>() => {
+export const createTrackCollection = <T>() => {
     let trackIds: Array<string>;
     let trackMap: Map<string, T>;
 

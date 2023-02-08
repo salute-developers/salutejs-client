@@ -81,7 +81,6 @@ export const createClient = (
     const sendOpenAssistant = async (
         { isFirstSession }: { isFirstSession: boolean } = { isFirstSession: false },
     ): Promise<SystemMessageDataType> => {
-        // eslint-disable-next-line @typescript-eslint/camelcase
         const data = isFirstSession ? { is_first_session: true } : {};
         const meta = provideMeta ? await provideMeta() : undefined;
 
@@ -122,7 +121,6 @@ export const createClient = (
 
             protocol.sendSystemMessage(
                 {
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     data: { ...systemData, app_info: appInfo, server_action: serverAction },
                     messageName: messageName || 'SERVER_ACTION',
                 },

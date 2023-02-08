@@ -65,7 +65,7 @@ export const createTransport = (createWS: WSCreator = defaultWSCreator): Transpo
 
                 if (retries < 2) {
                     retryTimeoutId = window.setTimeout(() => {
-                        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+                        // eslint-disable-next-line no-use-before-define
                         open(url);
                         retries++;
                     }, RETRY_INTERVAL * retries);

@@ -6,22 +6,25 @@ export interface RecorderUpdater<R extends object> {
 export interface RecorderHandlerPreparer {
     (handler: ClientLogger): ClientLogger;
 }
-export interface Recorder<R extends object = {}> {
+export interface Recorder<R extends Record<string, unknown>> {
     stop: () => void;
     start: () => void;
     handler: ClientLogger;
     getRecord: () => R;
 }
-export interface BaseRecorder<R extends object> extends Recorder<R> {
+export interface BaseRecorder<R extends Record<string, unknown>> extends Recorder<R> {
     prepareHandler: RecorderHandlerPreparer;
     updateRecord: RecorderUpdater<R>;
 }
 
-export interface BaseRecorderCreator<R extends object = {}> {
+export interface BaseRecorderCreator<R extends Record<string, unknown>> {
     (defaultActive?: boolean): Recorder<R>;
 }
 
-export const createBaseRecorder = <R extends object>(isActive = true, getDefaultRecord: () => R): BaseRecorder<R> => {
+export const createBaseRecorder = <R extends Record<string, unknown>>(
+    isActive = true,
+    getDefaultRecord: () => R,
+): BaseRecorder<R> => {
     let record = getDefaultRecord();
 
     const start = () => {

@@ -2,19 +2,21 @@ import { createNanoEvents } from './nanoevents';
 
 export type ObserverFunc<T> = (data: T) => void;
 
-interface Events<T extends {}> {
+interface Events<T extends Record<string, unknown>> {
     next: ObserverFunc<T>;
 }
 
-export interface Observer<T extends {}> {
+export interface Observer<T extends Record<string, unknown>> {
     next: ObserverFunc<T>;
 }
 
-export interface Observable<T extends {}> {
+export interface Observable<T extends Record<string, unknown>> {
     subscribe: (observer: Observer<T>) => { unsubscribe: () => void };
 }
 
-export const createNanoObservable = <T extends {}>(observerFunc: (observer: Observer<T>) => void): Observable<T> => {
+export const createNanoObservable = <T extends Record<string, unknown>>(
+    observerFunc: (observer: Observer<T>) => void,
+): Observable<T> => {
     const { on, emit } = createNanoEvents<Events<T>>();
 
     const subscribe = ({ next }: Observer<T>) => {

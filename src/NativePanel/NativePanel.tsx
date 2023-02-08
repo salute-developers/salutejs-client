@@ -13,25 +13,24 @@ import { TextInput } from './components/TextInput';
 import { Suggests } from './components/Suggests';
 import { styles } from './styles';
 
-export interface NativePanelParams {
+export type NativePanelProps = {
+    className?: string;
+    bubbleText: string;
     defaultText?: string;
-    render?: (props: NativePanelProps) => void;
+    suggestions: Suggestions['buttons'];
     tabIndex?: number;
     screenshotMode?: boolean;
-}
-
-export interface NativePanelProps extends NativePanelParams {
-    defaultText?: string;
     sendServerAction: (action: Record<string, unknown>) => void;
     sendText: (text: string) => void;
-    className?: string;
-    tabIndex?: number;
-    suggestions: Suggestions['buttons'];
-    bubbleText: string;
     onListen: () => void;
     onSubscribeListenStatus: (cb: (type: 'listen' | 'stopped') => void) => () => void;
     onSubscribeHypotesis: (cb: (hypotesis: string, last: boolean) => void) => () => void;
-}
+};
+
+export type NativePanelParams = {
+    hideNativePanel?: boolean;
+    render?: (props: NativePanelProps) => void;
+} & Pick<NativePanelProps, 'defaultText' | 'tabIndex' | 'screenshotMode'>;
 
 export const NativePanel: React.FC<NativePanelProps> = ({
     defaultText = 'Покажи что-нибудь',
@@ -160,7 +159,7 @@ export const NativePanel: React.FC<NativePanelProps> = ({
 
 let div: HTMLDivElement | void;
 
-export const renderNativePanel = (props: NativePanelProps) => {
+export const renderNativePanel = (props: NativePanelProps & NativePanelParams) => {
     if (!div) {
         div = document.createElement('div');
         document.body.appendChild(div);

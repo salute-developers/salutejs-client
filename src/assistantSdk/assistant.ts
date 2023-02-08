@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable camelcase */
 import { ActionCommand } from '@salutejs/scenario';
 
 import { createNanoEvents } from '../nanoevents';

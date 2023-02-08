@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase, no-underscore-dangle */
-
 import { AppEvent, createAssistant, CreateAssistantDevOptions, VpsEvent } from './assistantSdk/assistant';
 import { renderNativePanel, NativePanelParams } from './NativePanel/NativePanel';
 import {
@@ -352,6 +350,7 @@ export const initializeAssistantSDK = ({
     updateDevUI();
     enableRecord && renderAssistantRecordPanel(recorder, saver);
 
+    // eslint-disable-next-line no-underscore-dangle
     window.__dangerouslySendTextMessage = sendText;
 
     return {
