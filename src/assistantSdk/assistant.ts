@@ -26,6 +26,8 @@ import { createProtocol, ProtocolError } from './client/protocol';
 import { createTransport } from './client/transport';
 import { getAnswerForRequestPermissions, getTime } from './meta';
 import { createVoice, TtsEvent } from './voice/voice';
+import { createMutexedObject } from './mutexedObject';
+import { createMutexSwitcher } from './mutexSwitcher';
 
 const STATE_UPDATE_TIMEOUT = 200;
 
@@ -49,7 +51,7 @@ const promiseTimeout = <T>(promise: Promise<T>, timeout: number): Promise<T> => 
     return Promise.race([
         promise.then((v) => {
             if (timeoutId) {
-                clearTimeout(timeoutId);
+                window.clearTimeout(timeoutId);
             }
             return v;
         }),
@@ -60,15 +62,6 @@ const promiseTimeout = <T>(promise: Promise<T>, timeout: number): Promise<T> => 
         }),
     ]);
 };
-
-export interface AssistantSettings {
-    /** Отключение фичи воспроизведения голоса */
-    disableDubbing: boolean;
-    /** Отключение фичи слушания речи */
-    disableListening: boolean;
-    /** Отправка текстовых сообщений с type: application/ssml */
-    sendTextAsSsml: boolean;
-}
 
 export type AppEvent =
     | { type: 'run'; app: AppInfo }
@@ -112,27 +105,37 @@ export interface CreateAssistantDevOptions {
 
 type BackgroundAppOnCommand<T> = (command: AssistantSmartAppData & { smart_app_data: T }, messageId: string) => void;
 
+export type AssistantSettings = {
+    /** Отключение фичи воспроизведения голоса */
+    disableDubbing: boolean;
+    /** Отключение фичи слушания речи */
+    disableListening: boolean;
+    /** Отправка текстовых сообщений с type: application/ssml */
+    sendTextAsSsml: boolean;
+};
+
 export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration & CreateAssistantDevOptions) => {
     const { on, emit } = createNanoEvents<AssistantEvents>();
 
-    const subscriptions: Array<() => void> = [];
-
     // хеш [messageId]: requestId, где requestId - пользовательский ид экшена
     const requestIdMap: Record<string, string> = {};
+
+    const subscriptions: Array<() => void> = [];
+    const backgroundApps: { [key: string]: AssistantBackgroundApp & { commandsSubscribers: unknown[] } } = {};
+    const settings = createMutexedObject({
+        disableDubbing: configuration.settings.dubbing === -1,
+        disableListening: false,
+        sendTextAsSsml: false,
+    });
+    const settingsSwitcher = createMutexSwitcher(settings, { isListenerStopped: true, isVoicePlayerEnded: true });
 
     // готов/не готов воспроизводить озвучку
     let voiceReady = false;
 
     // текущий апп
     let app: { info: AppInfo; getState?: () => Promise<AssistantAppState> } = { info: DEFAULT_APP };
-    let sdkMeta: AssistantMeta = { theme: 'dark' };
-    let settings: AssistantSettings = {
-        disableDubbing: configuration.settings.dubbing === -1,
-        disableListening: false,
-        sendTextAsSsml: false,
-    };
 
-    const backgroundApps: { [key: string]: AssistantBackgroundApp & { commandsSubscribers: unknown[] } } = {};
+    let sdkMeta: AssistantMeta = { theme: 'dark' };
 
     const metaProvider = async (): Promise<Meta> => {
         // Стейт нужен только для канваса
@@ -195,7 +198,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
     const protocol = createProtocol(transport, {
         ...configuration,
         // пока голос не готов, выключаем озвучку
-        settings: { ...configuration.settings, dubbing: !voiceReady ? -1 : configuration.settings.dubbing },
+        settings: { ...configuration.settings, dubbing: -1 },
     });
     const client = createClient(protocol, metaProvider);
     const voice = createVoice(
@@ -203,7 +206,13 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         (event) => {
             if (typeof event.tts !== 'undefined') {
                 emit('tts', event.tts);
+                settingsSwitcher.change({ isVoicePlayerEnded: event.tts.status === 'stop' });
+
                 return;
+            }
+
+            if (typeof event.listener !== 'undefined') {
+                settingsSwitcher.change({ isListenerStopped: event.listener.status === 'stopped' });
             }
 
             emit('assistant', event);
@@ -211,11 +220,8 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         () => {
             voiceReady = true;
 
-            // когда голос готов, обновляем настройки, если они отличаются от текущих
-            const currentDubbing = settings.disableDubbing === false ? 1 : -1;
-
-            if (protocol.configuration.settings.dubbing !== currentDubbing) {
-                protocol.changeSettings({ dubbing: currentDubbing });
+            if (!settings.current.disableDubbing) {
+                protocol.changeSettings({ dubbing: 1 });
             }
         },
     );
@@ -237,7 +243,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
     const sendText = (text: string, shouldSendDisableDubbing = false) => {
         voice.stop();
 
-        client.sendText(text, settings.sendTextAsSsml, shouldSendDisableDubbing);
+        client.sendText(text, settings.current.sendTextAsSsml, shouldSendDisableDubbing);
     };
 
     /** отправляет server_action */
@@ -272,6 +278,15 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
     };
 
     subscriptions.push(protocol.on('ready', () => emit('vps', { type: 'ready' })));
+
+    // пока voicePlayer не доступен, включение озвучки не будет отправлено
+    subscriptions.push(
+        settings.on('changed', (nextSettings, prevSettings) => {
+            if (nextSettings.disableDubbing !== prevSettings.disableDubbing) {
+                voiceReady && protocol.changeSettings({ dubbing: nextSettings.disableDubbing ? -1 : 1 });
+            }
+        }),
+    );
 
     // при неудачном переподключении к сокету
     subscriptions.push(
@@ -438,7 +453,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
             return !isDefaultApp(app.info) ? app.info : null;
         },
         get settings() {
-            return settings;
+            return { ...settings.current };
         },
         destroy,
         closeApp,
@@ -457,23 +472,12 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         emit,
         on,
         changeConfiguration: protocol.changeConfiguration,
+        changeSettings: settings.change,
         changeSdkMeta: (nextSdkMeta: Partial<AssistantMeta>) => {
             sdkMeta = {
                 ...sdkMeta,
                 ...nextSdkMeta,
             };
-        },
-        changeSettings: (newSettings: Partial<AssistantSettings>) => {
-            const dubbingChanged = settings.disableDubbing !== !!newSettings.disableDubbing;
-            settings = { ...settings, ...newSettings };
-
-            voice.change({ disableDubbing: settings.disableDubbing, disableListening: settings.disableListening });
-
-            if (!dubbingChanged) {
-                return;
-            }
-
-            protocol.changeSettings({ dubbing: settings.disableDubbing || !voiceReady ? -1 : 1 });
         },
         reconnect: protocol.reconnect,
         get protocol() {

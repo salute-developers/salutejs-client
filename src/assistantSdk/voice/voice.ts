@@ -3,7 +3,7 @@ import { AppInfo, EmotionId, OriginalMessageType, SystemMessageDataType } from '
 
 import { createMusicRecognizer } from './recognizers/musicRecognizer';
 import { createSpeechRecognizer } from './recognizers/speechRecognizer';
-import { createVoiceListener } from './listener/voiceListener';
+import { createVoiceListener, VoiceListenerStatus } from './listener/voiceListener';
 import { createVoicePlayer } from './player/voicePlayer';
 import { resolveAudioContext, isAudioSupported } from './audioContext';
 
@@ -87,6 +87,7 @@ export const createVoice = (
         asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // lasr и mid нужен для отправки исх бабла в чат
         emotion?: EmotionId;
         tts?: TtsEvent;
+        listener?: { status: VoiceListenerStatus };
     }) => void,
     /// пока onReady не вызван, треки не воспроизводятся
     /// когда случится onReady, очередь треков начнет проигрываться
@@ -265,7 +266,9 @@ export const createVoice = (
 
     // статусы слушания речи
     subscriptions.push(
-        listener.on('status', (status: 'listen' | 'started' | 'stopped') => {
+        listener.on('status', (status: VoiceListenerStatus) => {
+            emit({ listener: { status } });
+
             if (status === 'listen') {
                 voicePlayer?.setActive(false);
                 emit({ emotion: 'listen' });
