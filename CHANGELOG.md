@@ -1,3 +1,15 @@
+# v1.11.0 (Tue Feb 14 2023)
+
+#### 🚀 Enhancement
+
+- feat: Добавлен интерфейс для assistant.settings [#61](https://github.com/salute-developers/salutejs-client/pull/61) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.10.0 (Tue Jan 31 2023)
 
 #### 🚀 Enhancement
