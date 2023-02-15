@@ -77,7 +77,6 @@
         "pretty-quick": "3.1.0",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
-        "react-scripts": "3.4.3",
         "rollup": "^2.33.2",
         "rollup-plugin-copy": "^3.4.0",
         "rollup-plugin-replace": "^2.2.0",
@@ -86,10 +85,6 @@
         "tslib": "^2.0.3",
         "typescript": "3.9.2",
         "webpack": "4.44.2"
-    },
-    "peerDependencies": {
-        "react": ">=16.8.0",
-        "react-dom": ">=16.8.0"
     },
     "files": [
         "dist",
