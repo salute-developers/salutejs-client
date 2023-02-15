@@ -18,6 +18,12 @@ import { createNanoEvents } from './nanoevents';
 import { createNanoObservable, ObserverFunc } from './nanoobservable';
 import { appInitialData } from './appInitialData';
 
+export interface CreateAssistantParams {
+    getState: () => AssistantAppState;
+    getRecoveryState?: () => unknown;
+    ready?: boolean;
+}
+
 export interface AssistantEvents<A extends AssistantSmartAppData> {
     start: () => void;
     data: (command: AssistantClientCustomizedCommand<A>) => void;
@@ -35,6 +41,10 @@ export interface SendDataParams {
     name?: string;
     requestId?: string;
 }
+
+export type AssistantClientCommandEvents<C extends AssistantClientCommand = AssistantClientCommand> = {
+    [event in C['type']]: (command: C) => void;
+};
 
 const excludeTags = ['A', 'AUDIO', 'BUTTON', 'INPUT', 'OPTION', 'SELECT', 'TEXTAREA', 'VIDEO'];
 
@@ -147,12 +157,6 @@ if (typeof window !== 'undefined' && inIframe()) {
     });
 }
 
-export interface CreateAssistantParams {
-    getState: () => AssistantAppState;
-    getRecoveryState?: () => unknown;
-    ready?: boolean;
-}
-
 export const createAssistant = <A extends AssistantSmartAppData>({
     getState,
     getRecoveryState,
@@ -162,6 +166,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     let currentGetRecoveryState = getRecoveryState;
     let isInitialCommandsEmitted = false;
     const { on, emit: emitOriginal } = createNanoEvents<AssistantEvents<A>>();
+    const { on: subscribeToCommand, emit: emitAllCommands } = createNanoEvents<AssistantClientCommandEvents>();
     const observables = new Map<string, { next: ObserverFunc<A | AssistantSmartAppError>; requestId?: string }>();
 
     const emitCommand = (command: AssistantClientCustomizedCommand<A>) => {
@@ -203,6 +208,8 @@ export const createAssistant = <A extends AssistantSmartAppData>({
             if (appInitialData.isCommitted(command)) {
                 return;
             }
+
+            emitAllCommands(command.type, command);
 
             if (command.type === 'smart_app_data' && (command.sdk_meta?.mid || '-1') !== '-1') {
                 saveFirstSmartAppDataMid(command.sdk_meta?.mid!);
@@ -333,6 +340,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
         findInInitialData: appInitialData.find,
         getRecoveryState: () => window.appRecoveryState,
         on,
+        subscribeToCommand,
         sendAction: <
             D extends AssistantSmartAppCommand['smart_app_data'] = AssistantSmartAppCommand['smart_app_data'],
             E extends AssistantSmartAppError['smart_app_error'] = AssistantSmartAppError['smart_app_error']

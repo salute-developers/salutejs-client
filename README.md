@@ -234,6 +234,10 @@ ____
 
 Возвращает состояние, сохраненное при закрытии смартапа. Устройство запоминает последнее состояние, которое возвращает функция `getRecoveryState` при инициализации Assistant Client.
 
+#### subscribeToCommand(commandType: AssistantClientCommandType, cb: (command: AssistantClientCommand) => void): () => void
+
+Позволяет подписаться на любой тип команд, приходящих в смартап. Возвращает метод отписки.
+
 #### on('start', cb: () => void): void
 
 Осуществляет подписку на событие готовности ассистента к работе.

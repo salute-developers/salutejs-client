@@ -65,6 +65,7 @@ export const appInitialData = (() => {
         pull: () => {
             isPulled = true;
             pulled = [...(window.appInitialData || [])];
+
             return [...pulled];
         },
         /**
@@ -97,6 +98,7 @@ export const appInitialData = (() => {
         isCommitted: (command: AssistantClientCommand) => {
             const commandIndex = findCommandIndex(committed, command);
             const isCommitted = commandIndex >= 0;
+
             if (isCommitted) {
                 committed.splice(commandIndex, 1);
             }
@@ -115,18 +117,23 @@ export const appInitialData = (() => {
                 if (!command && type && type === initialCommand.type) {
                     return true;
                 }
+
                 const isCommandInSmartAppData = command && 'smart_app_data' in initialCommand;
+
                 if (!isCommandInSmartAppData) {
                     return;
                 }
+
                 if (
                     command === ((initialCommand.smart_app_data as unknown) as { command: string }).command ||
                     command === (initialCommand.smart_app_data as AssistantSmartAppCommand['smart_app_data']).type
                 ) {
                     return true;
                 }
+
                 return false;
             }) as AssistantClientCustomizedCommand<AssistantSmartAppCommand>;
+
             return ((result && 'smart_app_data' in result ? result.smart_app_data : result) as unknown) as T;
         },
     };
