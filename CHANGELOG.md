@@ -1,3 +1,15 @@
+# v1.13.0 (Wed Feb 15 2023)
+
+#### 🚀 Enhancement
+
+- feat: Добавлена возможность подписаться на конкретную команду [#66](https://github.com/salute-developers/salutejs-client/pull/66) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.12.0 (Wed Feb 15 2023)
 
 #### 🚀 Enhancement
