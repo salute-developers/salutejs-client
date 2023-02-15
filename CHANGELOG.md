@@ -1,3 +1,15 @@
+# v1.12.0 (Wed Feb 15 2023)
+
+#### 🚀 Enhancement
+
+- fix: Добавлено прокидывание ответов sendAction в emitCommand [#65](https://github.com/salute-developers/salutejs-client/pull/65) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.11.0 (Tue Feb 14 2023)
 
 #### 🚀 Enhancement
