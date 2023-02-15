@@ -240,7 +240,7 @@ ____
 
 #### on('data', cb: (data: [AssistantCharacterCommand](#AssistantCharacterCommand) | [AssistantNavigationCommand](#AssistantNavigationCommand) | [AssistantInsetsCommand](#AssistantInsetsCommand) | [AssistantThemeCommand](#AssistantThemeCommand) | [AssistantSmartAppError](#AssistantSmartAppError) | [AssistantSmartAppCommand](#AssistantSmartAppCommand)) => {}): void
 
-Осуществляет подписку на событие получения данных с бэкенда. Получает команды из `appInitialData`, если при запуске смартапа не была вызвана команда `getInitialData()`.
+Осуществляет подписку на событие получения данных с бэкенда. Если при запуске смартапа не была вызвана команда `getInitialData()`, то получает команды из `appInitialData`.
 
 #### on('tts', cb: ({ state: 'start' | 'stop', owner: boolean }) => void).
 

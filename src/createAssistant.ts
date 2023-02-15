@@ -161,18 +161,19 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     let currentGetState = getState;
     let currentGetRecoveryState = getRecoveryState;
     let isInitialCommandsEmitted = false;
-    const { on, emit } = createNanoEvents<AssistantEvents<A>>();
+    const { on, emit: emitOriginal } = createNanoEvents<AssistantEvents<A>>();
     const observables = new Map<string, { next: ObserverFunc<A | AssistantSmartAppError>; requestId?: string }>();
+
     const emitCommand = (command: AssistantClientCustomizedCommand<A>) => {
         if (command.type === 'smart_app_data') {
-            emit('command', command.smart_app_data as AssistantSmartAppCommand['smart_app_data']);
+            emitOriginal('command', command.smart_app_data as AssistantSmartAppCommand['smart_app_data']);
         }
 
         if (command.type === 'smart_app_error') {
-            emit('error', command.smart_app_error);
+            emitOriginal('error', command.smart_app_error);
         }
 
-        return emit('data', command as A);
+        return emitOriginal('data', command as A);
     };
 
     const cancelTts =
@@ -216,7 +217,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
             }
 
             if (command.type === 'tts_state_update') {
-                emit('tts', {
+                emitOriginal('tts', {
                     state: command.state,
                     owner: command.owner,
                 });
@@ -234,15 +235,14 @@ export const createAssistant = <A extends AssistantSmartAppData>({
                 if (Object.keys(meta).length > 0 || requestId) {
                     // eslint-disable-next-line @typescript-eslint/camelcase
                     command.sdk_meta = { ...meta };
+
                     if (requestId) {
                         // eslint-disable-next-line @typescript-eslint/camelcase
                         command.sdk_meta = { requestId };
                     }
                 }
-                if (next) {
-                    next(command.type === 'smart_app_data' ? ((command as unknown) as A) : command);
-                }
-                return;
+
+                next?.(command.type === 'smart_app_data' ? ((command as unknown) as A) : command);
             }
 
             emitCommand(command as AssistantClientCustomizedCommand<A>);
@@ -258,7 +258,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
             return undefined;
         },
         onStart: () => {
-            emit('start');
+            emitOriginal('start');
             emitAppInitialData();
         },
     };
@@ -278,7 +278,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     };
 
     if (ready) {
-        setTimeout(readyFn); // таймаут для подписки на start
+        window.setTimeout(readyFn); // таймаут для подписки на start
     }
 
     const sendData = (
@@ -346,17 +346,13 @@ export const createAssistant = <A extends AssistantSmartAppData>({
             { name, requestId }: Pick<SendDataParams, 'name' | 'requestId'> = {},
         ) => {
             return sendData({ action, name, requestId }, (data: A | AssistantSmartAppError) => {
-                if (data.type === 'smart_app_data' && onData) {
-                    onData(data.smart_app_data as D);
-                    return;
+                if (data.type === 'smart_app_data') {
+                    onData?.(data.smart_app_data as D);
                 }
 
-                if (data.type === 'smart_app_error' && onError) {
-                    onError(data.smart_app_error as E);
-                    return;
+                if (data.type === 'smart_app_error') {
+                    onError?.(data.smart_app_error as E);
                 }
-
-                emitCommand(data as AssistantClientCustomizedCommand<A>);
             });
         },
         sendData,

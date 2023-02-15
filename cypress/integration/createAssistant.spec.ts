@@ -29,6 +29,20 @@ describe('Проверяем createAssistant', () => {
     const getState = () => state;
     const getRecoveryState = () => recoveryState;
     const initAssistant = (params = {}) => createAssistant({ getState, getRecoveryState, ...params });
+    const commandsTypes = [
+        'smart_app_data', 
+        'smart_app_error', 
+        'app_context', 
+        'theme', 
+        'character', 
+        'navigation', 
+        'visibility', 
+        'insets', 
+        'dynamic_insets', 
+        'minimum_static_insets', 
+        'maximum_static_insets', 
+        'tts_state_update',
+    ];
     const initialData = [
         { type: 'character', character: { id: 'sber' }, sdk_meta: { mid: '-1' } },
         { type: 'insets', insets: { left: 0, top: 0, right: 0, bottom: 144 }, sdk_meta: { mid: '-1' } },
@@ -219,8 +233,8 @@ describe('Проверяем createAssistant', () => {
 
     it("Проверяем фильтрацию system.command = 'back' - не должна попадать в onData", () => {
         const onData = cy.stub();
-        const assistant = initAssistant();
 
+        initAssistant();
         window.AssistantClient.onStart();
         window.AssistantClient.onData({ type: 'system', system: { command: 'BACK' } });
 
@@ -302,6 +316,84 @@ describe('Проверяем createAssistant', () => {
         window.AssistantClient.onData(userCommand1);
         window.AssistantClient.onData(userCommand2);
         expect(stubOnCommand).to.be.calledOnceWith(userCommand2.smart_app_data.command);
+    });
+
+    it("Ответные команды на sendAction приходят и в коллбэк и в assistant.on('command')", (done) => {
+        const assistant = initAssistant();
+        const testResponse = {
+            type: 'TEST_RESPONSE',
+            payload: {
+                data: 'test',
+            },
+        };
+
+        let callbackHadCommand = false;
+
+        window.AssistantHost.sendDataContainer = (data) => {
+            const { requestId } = JSON.parse(data);
+
+            window.setTimeout(() => {
+                window.AssistantClient.onData({
+                    type: 'smart_app_data',
+                    sdk_meta: { requestId },
+                    smart_app_data: testResponse,
+                });
+            });
+        };
+
+        assistant.on('command', (command) => {
+            expect(command).eql(testResponse);
+
+            if (callbackHadCommand) {
+                done();
+            }
+        });
+
+        assistant.sendAction({ type: 'TEST_REQUEST' }, (command) => {
+            expect(command).eql(testResponse);
+
+            callbackHadCommand = true;
+        });
+    });
+
+    it("В assistant.on('data') попадает любая дата", () => {
+        const assistant = initAssistant();
+        const stubOnData = cy.stub();
+        const commands = commandsTypes.map((commandType) => ({
+            type: commandType,
+            [commandType]: {
+                testData: 'test',
+            },
+        }));
+
+        assistant.on('data', stubOnData);
+
+        commands.forEach(window.AssistantClient.onData);
+
+        commands.forEach((command) => expect(stubOnData).calledWith(command));
+    });
+
+    it("В assistant.on('error') smart_app_error приходит", () => {
+        const assistant = initAssistant();
+        const stubOnError = cy.stub();
+        const commands = commandsTypes.map((commandType, index) => ({
+            type: commandType,
+            [commandType]: {
+                text: `test ${index}`,
+            },
+        }));
+
+        assistant.on('error', stubOnError);
+
+        commands.forEach(window.AssistantClient.onData);
+
+        expect(stubOnError).calledOnce;
+
+        commands
+            .filter(({ type }) => type === 'smart_app_error')
+            .forEach(({ smart_app_error }) => {
+                expect(stubOnError).calledWith(smart_app_error);
+            });
     });
 
     describe('window.__ASSISTANT_CLIENT__', () => {
