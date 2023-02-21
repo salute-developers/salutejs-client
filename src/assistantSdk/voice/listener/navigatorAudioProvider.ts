@@ -37,6 +37,7 @@ const downsampleBuffer = (buffer: Float32Array, inSampleRate: number, outSampleR
 
 const TARGET_SAMPLE_RATE = 16000;
 const IS_FIREFOX = typeof window !== 'undefined' && navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+const IS_SAFARI = typeof window !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 let context: AudioContext;
 let processor: ScriptProcessorNode;
@@ -93,7 +94,13 @@ const createAudioRecorder = (
                 const data = downsampleBuffer(buffer, context.sampleRate, TARGET_SAMPLE_RATE);
 
                 const last = state === 'inactive';
-                cb(data, last);
+                // отсылаем только чанки где есть звук voiceData > 0, т.к.
+                // в safari первые несколько чанков со звуком пустые
+                const dataWithVoice = new Uint8Array(data).some((voiceData) => voiceData > 0);
+
+                if (!IS_SAFARI || dataWithVoice) {
+                    cb(data, last);
+                }
 
                 if (last) {
                     processor.removeEventListener('audioprocess', listener);
