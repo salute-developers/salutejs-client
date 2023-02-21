@@ -1,3 +1,15 @@
+# v1.13.1 (Tue Feb 21 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Отправлять звук при слушании только при наличии данных внутри ча… [#74](https://github.com/salute-developers/salutejs-client/pull/74) ([@soulko](https://github.com/soulko))
+
+#### Authors: 1
+
+- Anton Kostenko ([@soulko](https://github.com/soulko))
+
+---
+
 # v1.13.0 (Wed Feb 15 2023)
 
 #### 🚀 Enhancement
