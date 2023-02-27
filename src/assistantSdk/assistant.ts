@@ -337,7 +337,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
                 }
 
                 // по-умолчанию activate_app_info: true
-                if (mesAppInfo && activate_app_info !== false) {
+                if (activate_app_info !== false && mesAppInfo && mesAppInfo.applicationId !== app.info.applicationId) {
                     emit('app', { type: 'run', app: mesAppInfo });
                 }
 
