@@ -1,3 +1,15 @@
+# v1.13.2 (Mon Feb 27 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Исправлен перезапуск канваса при получении команды навигации [#72](https://github.com/salute-developers/salutejs-client/pull/72) ([@ivan-ushatsky](https://github.com/ivan-ushatsky))
+
+#### Authors: 1
+
+- Ivan Ushatsky ([@ivan-ushatsky](https://github.com/ivan-ushatsky))
+
+---
+
 # v1.13.1 (Tue Feb 21 2023)
 
 #### 🐛 Bug Fix
