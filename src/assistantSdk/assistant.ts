@@ -203,6 +203,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
     const client = createClient(protocol, metaProvider);
     const voice = createVoice(
         client,
+        settings,
         (event) => {
             if (typeof event.tts !== 'undefined') {
                 emit('tts', event.tts);

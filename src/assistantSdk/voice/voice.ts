@@ -1,79 +1,13 @@
 import { createClient } from '../client/client';
 import { AppInfo, EmotionId, OriginalMessageType, SystemMessageDataType } from '../../typings';
+import { AssistantSettings } from '../assistant';
+import { MutexedObject } from '../mutexedObject';
 
 import { createMusicRecognizer } from './recognizers/musicRecognizer';
 import { createSpeechRecognizer } from './recognizers/speechRecognizer';
 import { createVoiceListener, VoiceListenerStatus } from './listener/voiceListener';
 import { createVoicePlayer } from './player/voicePlayer';
 import { resolveAudioContext, isAudioSupported } from './audioContext';
-
-const createVoiceSettings = (listener: ReturnType<typeof createVoiceListener>) => {
-    let settings = { disableDubbing: false, disableListening: false };
-    let nextSettings: Partial<typeof settings> = {};
-    let isVoicePlayerEnded = true;
-
-    const tryApply = () => {
-        if (listener.status === 'stopped' && isVoicePlayerEnded) {
-            settings = {
-                ...settings,
-                ...nextSettings,
-            };
-        }
-    };
-
-    const change = (setts: Partial<typeof settings>) => {
-        nextSettings = {
-            ...nextSettings,
-            ...setts,
-        };
-
-        tryApply();
-    };
-
-    /**
-     * Пытается применить настройки в момент завершения озвучки
-     * (или при прекращении слушания, если озвучка отключена).
-     */
-    const startAutoApplying = (voicePlayer?: ReturnType<typeof createVoicePlayer>) => {
-        const subscribers: Array<() => void> = [];
-
-        subscribers.push(
-            listener.on('status', (status) => {
-                if (status === 'stopped') {
-                    tryApply();
-                }
-            }),
-        );
-
-        if (voicePlayer) {
-            subscribers.push(
-                voicePlayer.on('play', () => {
-                    isVoicePlayerEnded = false;
-                }),
-            );
-
-            subscribers.push(
-                voicePlayer.on('end', () => {
-                    isVoicePlayerEnded = true;
-                    tryApply();
-                }),
-            );
-        }
-
-        return () => subscribers.forEach((unsubscribe) => unsubscribe());
-    };
-
-    return {
-        change,
-        startAutoApplying,
-        get disableDubbing() {
-            return settings.disableDubbing;
-        },
-        get disableListening() {
-            return settings.disableListening;
-        },
-    };
-};
 
 export interface TtsEvent {
     status: 'start' | 'stop';
@@ -83,6 +17,7 @@ export interface TtsEvent {
 
 export const createVoice = (
     client: ReturnType<typeof createClient>,
+    settings: MutexedObject<AssistantSettings>,
     emit: (event: {
         asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // lasr и mid нужен для отправки исх бабла в чат
         emotion?: EmotionId;
@@ -98,7 +33,6 @@ export const createVoice = (
     const musicRecognizer = createMusicRecognizer(listener);
     const speechRecognizer = createSpeechRecognizer(listener);
     const subscriptions: Array<() => void> = [];
-    const settings = createVoiceSettings(listener);
     const appInfoDict: Record<string, AppInfo> = {};
     const mesIdQueue: Array<string> = [];
 
@@ -145,7 +79,7 @@ export const createVoice = (
             return;
         }
 
-        if (settings.disableListening) {
+        if (settings.current.disableListening) {
             return;
         }
 
@@ -177,7 +111,7 @@ export const createVoice = (
             voicePlayer?.stop();
         }
 
-        if (settings.disableListening) {
+        if (settings.current.disableListening) {
             return;
         }
 
@@ -229,21 +163,15 @@ export const createVoice = (
                 }),
             );
 
-            // запуск автоматического применения настроек
-            subscriptions.push(settings.startAutoApplying(voicePlayer));
-
             // оповещаем о готовности к воспроизведению звука
             onReady && onReady();
         });
-    } else {
-        // запуск автоматического применения настроек (в случае, если озвучка не доступна)
-        subscriptions.push(settings.startAutoApplying());
     }
 
     // обработка входящей озвучки
     subscriptions.push(
         client.on('voice', (data, message) => {
-            if (settings.disableDubbing) {
+            if (settings.current.disableDubbing) {
                 return;
             }
 
@@ -256,7 +184,7 @@ export const createVoice = (
         speechRecognizer.on('hypotesis', (text: string, isLast: boolean, mid: number | Long) => {
             emit({
                 asr: {
-                    text: listener.status === 'listen' && !settings.disableListening ? text : '',
+                    text: listener.status === 'listen' && !settings.current.disableListening ? text : '',
                     last: isLast,
                     mid,
                 },
@@ -273,7 +201,7 @@ export const createVoice = (
                 voicePlayer?.setActive(false);
                 emit({ emotion: 'listen' });
             } else if (status === 'stopped') {
-                voicePlayer?.setActive(!settings.disableDubbing);
+                voicePlayer?.setActive(!settings.current.disableDubbing);
                 emit({ asr: { text: '' }, emotion: 'idle' });
             }
         }),
@@ -294,7 +222,7 @@ export const createVoice = (
                 /// если озвучка включена - сохраняем mesId чтобы включить слушание после озвучки
                 /// если озвучка выключена - включаем слушание сразу
 
-                if (!settings.disableDubbing) {
+                if (settings.current.disableDubbing === false) {
                     autolistenMesId = messageId;
                 } else {
                     listen();
@@ -303,22 +231,23 @@ export const createVoice = (
         }),
     );
 
-    return {
-        destroy: () => {
-            stopListening();
-            voicePlayer?.setActive(false);
-            subscriptions.splice(0, subscriptions.length).map((unsubscribe) => unsubscribe());
-        },
-        change: (nextSettings: Partial<Pick<typeof settings, 'disableDubbing' | 'disableListening'>>) => {
+    subscriptions.push(
+        settings.on('change-request', (nextSettings) => {
             const { disableDubbing, disableListening } = nextSettings;
 
             /// Важен порядок обработки флагов слушания и озвучки.
             /// Сначала слушание, потом озвучка
             disableListening && stopListening();
             // Такой вызов необходим, чтобы включая озвучку она тут же проигралась (при её наличии), и наоборот
-            settings.disableDubbing !== disableDubbing && voicePlayer?.setActive(!disableDubbing);
+            settings.current.disableDubbing !== disableDubbing && voicePlayer?.setActive(!disableDubbing);
+        }),
+    );
 
-            settings.change(nextSettings);
+    return {
+        destroy: () => {
+            stopListening();
+            voicePlayer?.setActive(false);
+            subscriptions.splice(0, subscriptions.length).map((unsubscribe) => unsubscribe());
         },
         listen,
         shazam,

@@ -10,7 +10,7 @@ import {
     AssistantSmartAppCommand,
     SystemMessageDataType,
 } from '../../src/typings';
-import { createAnswerBuffer } from '../support/helpers/clientMethods.helpers';
+import { createMessage } from '../support/helpers/clientMethods.helpers';
 
 /* eslint-disable @typescript-eslint/camelcase */
 
@@ -252,12 +252,12 @@ describe('Проверяем createAssistantDev', () => {
                     }
 
                     socket.send(
-                        createAnswerBuffer({
+                        createMessage({
                             messageId: message.messageId,
-                            systemMessageData: JSON.stringify({
+                            systemMessage: {
                                 items: [{ command: { type: 'smart_app_data', smart_app_data: smartAppData } }],
                                 app_info: APP_INFO,
-                            }),
+                            },
                             last: message.last,
                         }),
                     );
@@ -295,11 +295,11 @@ describe('Проверяем createAssistantDev', () => {
 
             handleStart = () => {
                 socket.send(
-                    createAnswerBuffer({
-                        systemMessageData: JSON.stringify({
+                    createMessage({
+                        systemMessage: {
                             app_info: APP_INFO,
                             items: [{ command: data }, { command: navigation }],
-                        }),
+                        },
                     }),
                 );
             };
@@ -351,10 +351,10 @@ describe('Проверяем createAssistantDev', () => {
 
             handleStart = () =>
                 socket.send(
-                    createAnswerBuffer({
-                        systemMessageData: JSON.stringify({
+                    createMessage({
+                        systemMessage: {
                             character: { id: characterId },
-                        }),
+                        },
                     }),
                 );
         });
@@ -424,10 +424,10 @@ describe('Проверяем createAssistantDev', () => {
             socket.binaryType = 'arraybuffer';
             setTimeout(() =>
                 socket.send(
-                    createAnswerBuffer({
-                        systemMessageData: JSON.stringify({
+                    createMessage({
+                        systemMessage: {
                             items: [{ command: { type: 'system', system: { command: 'BACK' } } }],
-                        }),
+                        },
                     }),
                 ),
             );

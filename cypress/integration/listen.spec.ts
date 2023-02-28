@@ -5,7 +5,7 @@ import { Server } from 'mock-socket';
 import { createAssistantClient } from '../../src';
 import { MessageNames } from '../../src/typings';
 import { Message } from '../../src/proto';
-import { createAnswerBuffer } from '../support/helpers/clientMethods.helpers';
+import { createMessage } from '../support/helpers/clientMethods.helpers';
 
 describe('Проверяем изменение настроек озвучки', () => {
     const defaultDubbing = -1;
@@ -67,7 +67,7 @@ describe('Проверяем изменение настроек озвучки'
 
                 if (message.voice) {
                     socket.send(
-                        createAnswerBuffer({
+                        createMessage({
                             messageId: message.messageId,
                             messageName: MessageNames.STT,
                             text: {
