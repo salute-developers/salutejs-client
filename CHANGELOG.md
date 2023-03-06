@@ -1,3 +1,17 @@
+# v1.13.3 (Mon Mar 06 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Обновлён код voice в репе npmjs [#76](https://github.com/salute-developers/salutejs-client/pull/76) ([@evgeniysemin](https://github.com/evgeniysemin))
+- test: Добавлены тесты переподключения к сокету [#75](https://github.com/salute-developers/salutejs-client/pull/75) ([@evgeniysemin](https://github.com/evgeniysemin))
+- fix: Добавлены тесты автослушания [#73](https://github.com/salute-developers/salutejs-client/pull/73) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.13.2 (Mon Feb 27 2023)
 
 #### 🐛 Bug Fix
