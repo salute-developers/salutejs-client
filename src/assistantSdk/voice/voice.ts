@@ -235,8 +235,8 @@ export const createVoice = (
         settings.on('change-request', (nextSettings) => {
             const { disableDubbing, disableListening } = nextSettings;
 
-            /// Важен порядок обработки флагов слушания и озвучки.
-            /// Сначала слушание, потом озвучка
+            /// Важен порядок обработки флагов слушания и озвучки —
+            /// сначала слушание, потом озвучка
             disableListening && stopListening();
             // Такой вызов необходим, чтобы включая озвучку она тут же проигралась (при её наличии), и наоборот
             settings.current.disableDubbing !== disableDubbing && voicePlayer?.setActive(!disableDubbing);
