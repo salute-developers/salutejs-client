@@ -4,20 +4,12 @@ import { Server } from 'mock-socket';
 
 import { createAssistantClient } from '../../src';
 import { Message } from '../../src/proto';
+import { initAssistantClient, initServer } from '../support/helpers/init';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ArgumentsType<T> = T extends (...args: infer U) => any ? U : never;
 
 describe('Проверяем приветствие', () => {
-    const configuration = {
-        settings: {},
-        getToken: () => Promise.resolve(''),
-        url: 'ws://path',
-        userChannel: '',
-        userId: '',
-        version: 5,
-    };
-
     const checkStartAssistant = (
         server: Server,
         args: ArgumentsType<ReturnType<typeof createAssistantClient>['start']>,
@@ -32,7 +24,7 @@ describe('Проверяем приветствие', () => {
             });
         });
 
-        const assistantClient = createAssistantClient(configuration);
+        const assistantClient = initAssistantClient({ settings: {} });
 
         beforeStart && beforeStart(assistantClient);
 
@@ -44,13 +36,11 @@ describe('Проверяем приветствие', () => {
     let server: Server;
 
     beforeEach(() => {
-        server = new Server(configuration.url);
+        server = initServer();
     });
 
     afterEach(() => {
-        if (server) {
-            server.stop();
-        }
+        server?.stop();
     });
 
     it('Приветствие включено, первая сессия', (done) => {

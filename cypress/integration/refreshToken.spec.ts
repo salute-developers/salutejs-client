@@ -5,32 +5,28 @@ import { Server } from 'mock-socket';
 import { createAssistantClient } from '../../src';
 import { Message } from '../../src/proto';
 import { sendMessage } from '../support/helpers/socket.helpers';
+import { initServer, initAssistantClient } from '../support/helpers/init';
 
 describe('Проверяем обновление токена', () => {
     const token1 = 'token1';
     const token2 = 'token2';
     let currentToken = token1;
 
-    const configuration = {
-        settings: {},
-        getToken: () => Promise.resolve(currentToken),
-        url: 'ws://path',
-        userChannel: '',
-        userId: '',
-        version: 5,
-    };
-
     let server: Server;
     let assistantClient: ReturnType<typeof createAssistantClient>;
 
     beforeEach(() => {
-        server = new Server(configuration.url);
-
         currentToken = token1;
-        assistantClient = createAssistantClient(configuration);
+
+        server = initServer();
+        assistantClient = initAssistantClient({
+            settings: {},
+            getToken: () => Promise.resolve(currentToken)
+        });
+
         assistantClient.on('status', (status) => {
             // код ошибки валидации токена = -45
-            if (status.code === -45) {
+            if (status?.code === -45) {
                 currentToken = token2;
                 assistantClient.reconnect();
             }
@@ -38,9 +34,7 @@ describe('Проверяем обновление токена', () => {
     });
 
     afterEach(() => {
-        if (server) {
-            server.stop();
-        }
+        server?.stop();
     });
 
     it('Старт с невалидным токеном', (done) => {
@@ -140,8 +134,8 @@ describe('Проверяем обновление токена', () => {
 
     it('getToken возвращает исключение', (done) => {
         let phase: 1 | 2 = 1;
-        assistantClient = createAssistantClient({
-            ...configuration,
+        assistantClient = initAssistantClient({
+            settings: {},
             getToken: () => {
                 if (phase === 1) {
                     throw new Error('unknown error');

@@ -4,18 +4,11 @@ import { Server } from 'mock-socket';
 
 import { createAssistantClient } from '../../src';
 import { Message } from '../../src/proto';
+import { initServer, initAssistantClient } from '../support/helpers/init';
 
 describe('Проверяем изменение настроек озвучки', () => {
     const defaultAddEventListener = document.addEventListener;
     const defaultDubbing = -1;
-    const configuration = {
-        settings: { dubbing: defaultDubbing },
-        getToken: () => Promise.resolve(''),
-        url: 'ws://path',
-        userChannel: '',
-        userId: '',
-        version: 5,
-    };
 
     let server: Server;
     let assistantClient: ReturnType<typeof createAssistantClient>;
@@ -40,8 +33,8 @@ describe('Проверяем изменение настроек озвучки'
     });
 
     beforeEach(() => {
-        server = new Server(configuration.url);
-        assistantClient = createAssistantClient(configuration);
+        server = initServer();
+        assistantClient = initAssistantClient({ settings: { dubbing: defaultDubbing } });
     });
 
     afterEach(() => {
