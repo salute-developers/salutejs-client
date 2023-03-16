@@ -1,19 +1,11 @@
 /// <reference types="cypress" />
 
 import { Server } from 'mock-socket';
-import { AppInfo, createAssistantClient, Message, PermissionType, PermissionStatus } from '../../src';
+import { AppInfo, Message, PermissionType, PermissionStatus } from '../../src';
 import { sendMessage } from '../support/helpers/socket.helpers';
+import { initServer, initAssistantClient } from '../support/helpers/init';
 
 describe('Проверяем запросы доступов', () => {
-    const configuration = {
-        settings: {},
-        getToken: () => Promise.resolve(''),
-        url: 'ws://path',
-        userChannel: '',
-        userId: '',
-        version: 5,
-    };
-
     const appInfo: AppInfo = {
         projectId: 'test_projectId',
         applicationId: 'test_applicationId',
@@ -37,16 +29,14 @@ describe('Проверяем запросы доступов', () => {
     });
 
     beforeEach(() => {
-        server = new Server(configuration.url);
+        server = initServer();
         cy.stub(window.navigator.geolocation, 'getCurrentPosition').callsFake((resolve, reject) => {
             return getCurrentPosition(resolve, reject);
           });
     });
 
     afterEach(() => {
-        if (server) {
-            server.stop();
-        }
+        server?.stop();
     });
     
     it('geo', (done) => {
@@ -107,7 +97,7 @@ describe('Проверяем запросы доступов', () => {
             } });
         })
 
-        const assistantClient = createAssistantClient(configuration);
+        const assistantClient = initAssistantClient({ settings: {} });
         assistantClient.reconnect();
     });
 
@@ -140,7 +130,7 @@ describe('Проверяем запросы доступов', () => {
                 } });
             });
 
-            const assistantClient = createAssistantClient(configuration);
+            const assistantClient = initAssistantClient({ settings: {} });
             assistantClient.reconnect();
         });
     });

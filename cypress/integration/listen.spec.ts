@@ -6,30 +6,19 @@ import { createAssistantClient } from '../../src';
 import { MessageNames } from '../../src/typings';
 import { Message } from '../../src/proto';
 import { createMessage } from '../support/helpers/clientMethods.helpers';
+import { initServer, initAssistantClient } from '../support/helpers/init';
 
 describe('Проверяем изменение настроек озвучки', () => {
-    const defaultDubbing = -1;
-    const configuration = {
-        settings: { dubbing: defaultDubbing },
-        getToken: () => Promise.resolve(''),
-        url: 'ws://path',
-        userChannel: '',
-        userId: '',
-        version: 5,
-    };
-
     let server: Server;
     let assistantClient: ReturnType<typeof createAssistantClient>;
 
     beforeEach(() => {
-        server = new Server(configuration.url);
-        assistantClient = createAssistantClient(configuration);
+        server = initServer();
+        assistantClient = initAssistantClient();
     });
 
     afterEach(() => {
-        if (server) {
-            server.stop();
-        }
+        server?.stop();
     });
 
     it('assistant.stopVoice() останавливает начавшееся слушание и отправляет Cancel', (done) => {

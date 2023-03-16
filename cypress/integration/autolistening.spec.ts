@@ -5,23 +5,15 @@ import { Server } from 'mock-socket';
 import { Message } from '../../src/proto';
 import { createAssistantClient, MessageNames, EmotionId } from '../../src';
 import { createMessage, createVoiceMessage } from '../support/helpers/clientMethods.helpers';
+import { initServer, initAssistantClient } from '../support/helpers/init';
 
 describe('Автослушание', () => {
-    const configuration = {
-        settings: { dubbing: -1 },
-        getToken: () => Promise.resolve(''),
-        url: 'ws://path',
-        userChannel: '',
-        userId: '',
-        version: 5,
-    };
-
     let server: Server;
     let assistantClient: ReturnType<typeof createAssistantClient>;
 
     beforeEach(() => {
-        server = new Server(configuration.url);
-        assistantClient = createAssistantClient(configuration);
+        server = initServer();
+        assistantClient = initAssistantClient();
     });
 
     afterEach(() => {

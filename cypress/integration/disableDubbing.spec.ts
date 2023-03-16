@@ -4,31 +4,21 @@ import { Server } from 'mock-socket';
 
 import { createAssistantClient } from '../../src';
 import { Message } from '../../src/proto';
+import { initServer, initAssistantClient } from '../support/helpers/init';
 
 describe('Проверяем изменение настроек озвучки', () => {
     const defaultDubbing = -1;
-    const configuration = {
-        settings: { dubbing: defaultDubbing },
-        getToken: () => Promise.resolve(''),
-        url: 'ws://path',
-        userChannel: '',
-        userId: '',
-        version: 5,
-    };
 
     let server: Server;
     let assistantClient: ReturnType<typeof createAssistantClient>;
 
     beforeEach(() => {
-        server = new Server(configuration.url);
-
-        assistantClient = createAssistantClient(configuration);
+        server = initServer();
+        assistantClient = initAssistantClient({ settings: { dubbing: defaultDubbing } });
     });
 
     afterEach(() => {
-        if (server) {
-            server.stop();
-        }
+        server?.stop();
     });
 
     it('Вызов changeSettings должен отправлять Settings - если соединение активно', (done) => {
@@ -38,7 +28,7 @@ describe('Проверяем изменение настроек озвучки'
             socket.on('message', (data) => {
                 const message = Message.decode((data as Uint8Array).slice(4));
                 if (phase === 1 && message.initialSettings) {
-                    expect(message.initialSettings.settings.dubbing, 'dubbing при старте получен').to.equal(
+                    expect(message.initialSettings.settings?.dubbing, 'dubbing при старте получен').to.equal(
                         defaultDubbing,
                     );
                     assistantClient.changeSettings({ disableDubbing: defaultDubbing !== -1 });
@@ -59,7 +49,7 @@ describe('Проверяем изменение настроек озвучки'
             socket.on('message', (data) => {
                 const message = Message.decode((data as Uint8Array).slice(4));
                 if (message.initialSettings) {
-                    expect(message.initialSettings.settings.dubbing, 'dubbing при старте получен').to.equal(
+                    expect(message.initialSettings.settings?.dubbing, 'dubbing при старте получен').to.equal(
                         defaultDubbing,
                     );
                     assistantClient.changeSettings({ disableDubbing: defaultDubbing === -1 });
@@ -87,7 +77,7 @@ describe('Проверяем изменение настроек озвучки'
                 const message = Message.decode((data as Uint8Array).slice(4));
                 if (message.initialSettings) {
                     if (phase === 1) {
-                        expect(message.initialSettings.settings.dubbing, 'dubbing при старте получен').to.equal(
+                        expect(message.initialSettings.settings?.dubbing, 'dubbing при старте получен').to.equal(
                             defaultDubbing,
                         );
                         server.clients()[0].close();
@@ -96,7 +86,7 @@ describe('Проверяем изменение настроек озвучки'
                         return;
                     }
 
-                    expect(message.initialSettings.settings.dubbing, 'dubbing при рестарте получен').to.equal(
+                    expect(message.initialSettings.settings?.dubbing, 'dubbing при рестарте получен').to.equal(
                         defaultDubbing * -1,
                     );
                     done();

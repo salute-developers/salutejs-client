@@ -2,6 +2,7 @@
 
 import { createAssistantClient } from '../../src';
 import { Message } from '../../src/proto';
+import { initAssistantClient } from '../support/helpers/init';
 
 describe('Подключение к сокету', () => {
 	const serverWs = {
@@ -72,28 +73,18 @@ describe('Подключение к сокету', () => {
 		} as WebSocket;
 	};
 
-	const url = '';
-    const defaultDubbing = -1;
-    const configuration = {
-        getToken: () => Promise.resolve(''),
-        url,
-        userChannel: '',
-        userId: '',
-        version: 5,
-		fakeVps: {
-			createFakeWS: () => {
-				clientWs = createClientWs();
-
-				return clientWs;
-			},
-		},
-        settings: { dubbing: defaultDubbing },
-    };
-
 	let assistantClient: ReturnType<typeof createAssistantClient>;
 
     beforeEach(() => {
-        assistantClient = createAssistantClient(configuration);
+        assistantClient = initAssistantClient({
+			fakeVps: {
+				createFakeWS: () => {
+					clientWs = createClientWs();
+
+					return clientWs;
+				},
+			},
+		});
     });
 
     it('Переподключение к сокету при разрыве соединения работает', (done) => {
