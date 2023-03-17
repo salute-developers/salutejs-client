@@ -78,8 +78,9 @@ describe('Подключение к сокету', () => {
 
     let assistantClient: ReturnType<typeof createAssistantClient>;
 
-    beforeEach(() => {
-        assistantClient = initAssistantClient({
+    const init = (checkCertUrl?: string) => {
+        return initAssistantClient({
+            checkCertUrl,
             fakeVps: {
                 createFakeWS: () => {
                     clientWs = createClientWs();
@@ -88,6 +89,10 @@ describe('Подключение к сокету', () => {
                 },
             },
         });
+    };
+
+    beforeEach(() => {
+        assistantClient = init();
     });
 
     it('Переподключение к сокету при разрыве соединения работает', (done) => {
@@ -128,11 +133,13 @@ describe('Подключение к сокету', () => {
             if (messageName === 'OPEN_ASSISTANT') {
                 cy.clock();
                 expect(assistantClient.status).to.be.equal('connected');
-                cy.tick(500).then(() => {
-                    expect(assistantClient.status).to.be.equal('ready');
-                }).then(() => {
-                    clientWs.close();
-                });
+                cy.tick(500)
+                    .then(() => {
+                        expect(assistantClient.status).to.be.equal('ready');
+                    })
+                    .then(() => {
+                        clientWs.close();
+                    });
             }
         };
 
@@ -144,6 +151,50 @@ describe('Подключение к сокету', () => {
         };
 
         expect(assistantClient.status).to.be.equal('closed');
+
+        assistantClient.start();
+    });
+
+    it('При невалидном SSL-сертификате приходит ошибка', (done) => {
+        const checkCertUrl = 'https://check-cert.ru';
+
+        let errorReceived = false;
+
+        cy.intercept(checkCertUrl, (request) => {
+            if (!errorReceived) {
+                request.destroy();
+
+                return;
+            }
+
+            request.reply('Ok');
+        });
+
+        assistantClient = init(checkCertUrl);
+
+        serverWs.onmessage = (messageOriginal) => {
+            const { messageName, text } = Message.decode(messageOriginal.slice(4));
+
+            if (messageName === 'OPEN_ASSISTANT') {
+                throw new Error('OPEN_ASSISTANT не должен прийти');
+            }
+
+            if (text?.data === 'Connection is ok') {
+                done();
+            }
+        };
+
+        assistantClient.on('vps', (event) => {
+            if (event.type === 'error' && event.error?.message === 'Cert authority invalid') {
+                if (errorReceived) {
+                    throw new Error('Ошибка не должна приходить дважды');
+                }
+
+                errorReceived = true;
+
+                assistantClient.sendText('Connection is ok');
+            }
+        });
 
         assistantClient.start();
     });
