@@ -45,8 +45,8 @@ export const createVoice = (
 
         autolistenMesId = null;
         if (speechRecognizer.status === 'active') {
-            speechRecognizer.stop();
             client.sendCancel(speechRecognizer.messageId);
+            speechRecognizer.stop();
             return true;
         }
 

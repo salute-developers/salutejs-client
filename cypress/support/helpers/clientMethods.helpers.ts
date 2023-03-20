@@ -28,9 +28,11 @@ export const createMessage = ({
             systemMessage: {
                 data: systemMessage ? JSON.stringify(systemMessage) : messageId.toString(),
             },
-            voice: !appendVoice ? undefined : {
-                data: Uint8Array.from({ length: 100 }, () => Math.floor(Math.random() * 5)),
-            },
+            voice: !appendVoice
+                ? undefined
+                : {
+                      data: Uint8Array.from({ length: 100 }, () => Math.floor(Math.random() * 5)),
+                  },
             text,
             last,
         }).finish(),
@@ -49,6 +51,23 @@ export const createVoiceMessage = (params: Omit<CreateAnswerBuffer1Params, 'appe
         ...params,
         appendVoice: true,
     });
+};
+
+export const createVoiceAnswer = ({ last = 1 }: { last?: number }) => {
+    const encodedAsNodeBuffer = appendHeader(
+        Message.encode({
+            messageId: 1,
+            last: last ?? 1,
+            messageName: 'TTS',
+            voice: {
+                data: Uint8Array.from({ length: 100 }, () => Math.floor(Math.random() * 5)),
+            },
+        }).finish(),
+    );
+    const newBuffer = new ArrayBuffer(encodedAsNodeBuffer.byteLength);
+    const newBufferView = new Uint8Array(newBuffer);
+    newBufferView.set(encodedAsNodeBuffer, 0);
+    return newBuffer;
 };
 
 export const createServerPong = (server: Server) => {
