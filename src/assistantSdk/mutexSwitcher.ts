@@ -8,7 +8,7 @@ export const createMutexSwitcher = <Deps extends Record<string, boolean>>(
 
     return {
         change: (nextDeps: Partial<{ [key in keyof Deps]: boolean }>) => {
-            deps = { ...deps, nextDeps };
+            deps = { ...deps, ...nextDeps };
 
             if (Object.values(deps).every((dep) => dep)) {
                 release();

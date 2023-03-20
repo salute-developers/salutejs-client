@@ -454,7 +454,10 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
             return !isDefaultApp(app.info) ? app.info : null;
         },
         get settings() {
-            return { ...settings.current };
+            return Object.create(
+                Object.getPrototypeOf(settings.current),
+                Object.getOwnPropertyDescriptors(settings.current),
+            );
         },
         destroy,
         closeApp,
