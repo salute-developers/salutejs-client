@@ -1,3 +1,17 @@
+# v1.13.4 (Mon Mar 20 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Добавлены тесты для методов sendText changeSettings stopVoice [#69](https://github.com/salute-developers/salutejs-client/pull/69) ([@soulko](https://github.com/soulko))
+- test: Добавлены тесты для backgroundApps [#77](https://github.com/salute-developers/salutejs-client/pull/77) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- Anton Kostenko ([@soulko](https://github.com/soulko))
+
+---
+
 # v1.13.3 (Mon Mar 06 2023)
 
 #### 🐛 Bug Fix
