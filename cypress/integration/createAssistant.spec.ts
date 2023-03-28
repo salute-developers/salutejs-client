@@ -396,6 +396,53 @@ describe('Проверяем createAssistant', () => {
             });
     });
 
+    it('ready выбрасывает ошибку, если window.AssistantHost.ready не функция', (done) => {
+        const readyBefore = window.AssistantHost.ready;
+        const assistant = initAssistant({ ready: false });
+        const errorMessage = 'window.AssistantHost is not ready.';
+
+        window.AssistantHost.ready = null;
+
+        assistant.ready().catch((err) => {
+            window.AssistantHost.ready = readyBefore;
+
+            expect(err.message.startsWith(errorMessage), `Получили ${errorMessage}`).to.be.true;
+            done();
+        });
+    });
+
+    it('ready выбрасывает ошибку, если window.AssistantHost === undefined', (done) => {
+        const assistantHostBefore = window.AssistantHost;
+        const assistant = initAssistant({ ready: false });
+        const errorMessage = 'window.AssistantHost is not ready.';
+
+        window.AssistantHost = undefined;
+
+        assistant.ready().catch((err) => {
+            window.AssistantHost = assistantHostBefore;
+
+            expect(err.message.startsWith(errorMessage), `Получили ${errorMessage}`).to.be.true;
+            done();
+        });
+    });
+
+    it('ready делает несколько попыток вызова window.AssistantHost.ready', (done) => {
+        const readyBefore = window.AssistantHost.ready;
+        const assistant = initAssistant({ ready: false });
+
+        window.AssistantHost.ready = null;
+
+        assistant.ready();
+
+        (async () => {
+            window.AssistantHost.ready = () => {
+                window.AssistantHost.ready = readyBefore;
+    
+                done();
+            };
+        })();
+    });
+
     describe('window.__ASSISTANT_CLIENT__', () => {
         it('Mid smartAppData из window.appInitialData сохраняется и не изменяется. Mid другой команды не берётся', () => {
             const assistant = initAssistant({ ready: false });

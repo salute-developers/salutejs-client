@@ -162,12 +162,14 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     getRecoveryState,
     ready = true,
 }: CreateAssistantParams) => {
-    let currentGetState = getState;
-    let currentGetRecoveryState = getRecoveryState;
-    let isInitialCommandsEmitted = false;
     const { on, emit: emitOriginal } = createNanoEvents<AssistantEvents<A>>();
     const { on: subscribeToCommand, emit: emitAllCommands } = createNanoEvents<AssistantClientCommandEvents>();
     const observables = new Map<string, { next: ObserverFunc<A | AssistantSmartAppError>; requestId?: string }>();
+
+    let currentGetState = getState;
+    let currentGetRecoveryState = getRecoveryState;
+    let isInitialCommandsEmitted = false;
+    let readyRetries = 0;
 
     const emitCommand = (command: AssistantClientCustomizedCommand<A>) => {
         if (command.type === 'smart_app_data') {
@@ -269,7 +271,24 @@ export const createAssistant = <A extends AssistantSmartAppData>({
         },
     };
 
-    const readyFn = () => {
+    const readyFn = async () => {
+        readyRetries += 1;
+
+        if (typeof window.AssistantHost?.ready !== 'function') {
+            return new Promise<void>((resolve, reject) => {
+                if (readyRetries > 3) {
+                    throw new Error(
+                        `window.AssistantHost is not ready. The ready method has the type "${typeof window.AssistantHost
+                            ?.ready}"`,
+                    );
+                }
+
+                window.setTimeout(() => {
+                    readyFn().then(resolve, reject);
+                }, 500);
+            });
+        }
+
         const firstSmartAppDataMid =
             appInitialData.get().find((c) => {
                 return c.type === 'smart_app_data' && (c.sdk_meta?.mid || '-1') !== '-1';
@@ -281,7 +300,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
         }
 
         appInitialData.commit();
-        window.AssistantHost?.ready();
+        window.AssistantHost.ready();
     };
 
     if (ready) {
