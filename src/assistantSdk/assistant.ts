@@ -254,8 +254,6 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         requestId: string | undefined = undefined,
         actionApp: AppInfo = app.info,
     ) => {
-        voice.stop();
-
         client.sendServerAction(serverAction, actionApp, messageName).then((messageId) => {
             if (requestId && messageId) {
                 requestIdMap[messageId.toString()] = requestId;
