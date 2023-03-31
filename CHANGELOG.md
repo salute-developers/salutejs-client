@@ -1,3 +1,15 @@
+# v1.13.5 (Fri Mar 31 2023)
+
+#### 🐛 Bug Fix
+
+- fix: убрал прерывание озвучки и слушания в sendServerAction [#84](https://github.com/salute-developers/salutejs-client/pull/84) ([@soulko](https://github.com/soulko))
+
+#### Authors: 1
+
+- Anton Kostenko ([@soulko](https://github.com/soulko))
+
+---
+
 # v1.13.4 (Mon Mar 20 2023)
 
 #### 🐛 Bug Fix
