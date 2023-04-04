@@ -1,3 +1,15 @@
+# v1.14.0 (Tue Apr 04 2023)
+
+#### 🚀 Enhancement
+
+- feat: Добавлена обработка попытки получения аудио на http [#82](https://github.com/salute-developers/salutejs-client/pull/82) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.13.5 (Fri Mar 31 2023)
 
 #### 🐛 Bug Fix
