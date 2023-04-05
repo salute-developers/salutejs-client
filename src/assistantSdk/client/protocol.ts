@@ -81,19 +81,8 @@ export interface ProtocolEvents {
 
 export const createProtocol = (transport: Transport, { logger, getToken, ...params }: VpsConfiguration) => {
     const configuration = { ...params, token: '' };
-    const {
-        url,
-        userId,
-        userChannel,
-        locale,
-        device,
-        settings,
-        legacyDevice,
-        version,
-        messageName,
-        vpsToken,
-        meta,
-    } = configuration;
+    const { url, userId, userChannel, locale, device, settings, legacyDevice, version, messageName, vpsToken, meta } =
+        configuration;
     const basePayload = compileBasePayload({ userId, token: '', messageName, vpsToken, userChannel, version });
 
     const { on, emit } = createNanoEvents<ProtocolEvents>();
@@ -245,7 +234,7 @@ export const createProtocol = (transport: Transport, { logger, getToken, ...para
             } catch (e) {
                 emit('error', {
                     type: 'GET_TOKEN_ERROR',
-                    message: e?.message,
+                    message: (e as Error)?.message,
                 });
                 return;
             }
