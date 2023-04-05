@@ -1,7 +1,8 @@
 /* eslint-disable camelcase, no-underscore-dangle */
 
 import { AppEvent, createAssistant, CreateAssistantDevOptions, VpsEvent } from './assistantSdk/assistant';
-import { renderNativePanel, NativePanelParams } from './NativePanel/NativePanel';
+import { NativePanelParams } from './NativePanel/NativePanel';
+import { renderNativePanel } from './NativePanel/renderNativePanel';
 import {
     SystemMessageDataType,
     ClientLogger,

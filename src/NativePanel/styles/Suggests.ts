@@ -1,8 +1,4 @@
-import React from 'react';
-
 import { fontFamily400 } from '../fonts';
-import { Suggestions } from '../../typings';
-import { NativePanelProps } from '../NativePanel';
 
 export const SuggestsStyles = `
 .Suggests {
@@ -51,22 +47,3 @@ export const SuggestFilledStyles = `
     background-color: rgba(255, 255, 255, 0.12);
     border: 1px solid transparent;
 `;
-
-export const Suggests: React.FC<{
-    suggests: NativePanelProps['suggestions'];
-    onClickHandlerCreator: (suggest: NativePanelProps['suggestions'][0]) => () => void;
-}> = ({ suggests = [], onClickHandlerCreator }) => {
-    if (!suggests.length) {
-        return null;
-    }
-
-    return (
-        <div className="Suggests">
-            {suggests.map((s: Suggestions['buttons'][0]) => (
-                <div key={`suggest-${s.title}`} onClick={onClickHandlerCreator(s)} className="SuggestsSuggest">
-                    {s.title}
-                </div>
-            ))}
-        </div>
-    );
-};

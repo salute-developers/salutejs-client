@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { fontFamily500 } from '../fonts';
 
 export const BubbleStyles = `
@@ -32,14 +30,3 @@ export const BubbleSMStyles = `
     font-size: 12px;
     padding: 8px 12px;
 `;
-
-export const Bubble: React.FC<{
-    text: string;
-    onClick: () => void;
-}> = ({ text, onClick }) => {
-    return (
-        <div className="Bubble" onClick={onClick}>
-            {text}
-        </div>
-    );
-};
