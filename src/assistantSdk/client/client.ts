@@ -1,12 +1,5 @@
 import { createNanoEvents } from '../../nanoevents';
-import {
-    SystemMessageDataType,
-    OriginalMessageType,
-    MessageNames,
-    AppInfo,
-    HistoryMessages,
-    Meta,
-} from '../../typings';
+import { SystemMessageDataType, OriginalMessageType, MessageNames, AppInfo, HistoryMessages } from '../../typings';
 import { GetHistoryResponse } from '../../proto';
 
 import { BatchableMethods, createProtocol } from './protocol';
@@ -24,19 +17,9 @@ export type SystemMessage = SystemMessageDataType & {
     messageName: OriginalMessageType[];
 };
 
-function convertFieldValuesToString<
-    Obj extends Record<string, unknown>,
-    ObjStringified = { [key in keyof Obj]: string },
->(object: Obj): ObjStringified {
-    return Object.keys(object).reduce((acc: Record<string, string>, key: string) => {
-        acc[key] = JSON.stringify(object[key]);
-        return acc;
-    }, {}) as ObjStringified;
-}
-
 export const createClient = (
     protocol: ReturnType<typeof createProtocol>,
-    provideMeta: (() => Promise<Meta>) | undefined = undefined,
+    provideMeta: (() => Promise<MetaStringified>) | undefined = undefined,
 ) => {
     const { on, emit } = createNanoEvents<ClientEvents>();
 
@@ -56,7 +39,7 @@ export const createClient = (
         });
 
     /** отправляет произвольный systemMessage, не подкладывает мету */
-    const sendData = (data: Record<string, unknown>, messageName = '', meta?: Meta): number | Long => {
+    const sendData = (data: Record<string, unknown>, messageName = '', meta?: MetaStringified): number | Long => {
         const messageId = protocol.getMessageId();
 
         protocol.sendSystemMessage(
@@ -66,7 +49,7 @@ export const createClient = (
             },
             true,
             messageId,
-            { meta: convertFieldValuesToString(meta || {}) },
+            { meta: meta || ({} as MetaStringified) },
         );
 
         return messageId;
@@ -92,7 +75,7 @@ export const createClient = (
     const sendMeta = async (
         sendSystemMessage: (data: SendSystemMessageData, last: boolean, params?: { meta?: MetaStringified }) => void,
     ) => {
-        const meta = provideMeta ? await provideMeta() : undefined;
+        const meta = provideMeta ? await provideMeta() : {};
 
         if (typeof meta !== 'undefined') {
             sendSystemMessage(
@@ -102,7 +85,7 @@ export const createClient = (
                 },
                 false,
                 {
-                    meta: convertFieldValuesToString<Meta>(meta || {}),
+                    meta: meta as MetaStringified,
                 },
             );
         }

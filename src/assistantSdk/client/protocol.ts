@@ -2,7 +2,7 @@ import { createNanoEvents } from '../../nanoevents';
 import { IDevice, IInitialSettings, ILegacyDevice, IMessage, IChatHistoryRequest, Message } from '../../proto';
 import { VpsConfiguration, OriginalMessageType, VpsVersion, GetHistoryRequestClient } from '../../typings';
 
-import { createClientMethods } from './methods';
+import { MetaStringified, createClientMethods } from './methods';
 import { Transport } from './types';
 
 const safeJSONParse = <T>(str: string, defaultValue: T): T => {
@@ -79,9 +79,17 @@ export interface ProtocolEvents {
     error: (error: ProtocolError) => void;
 }
 
-export const createProtocol = (transport: Transport, { logger, getToken, ...params }: VpsConfiguration) => {
+export const createProtocol = (
+    transport: Transport,
+    {
+        logger,
+        getToken,
+        getInitialMeta,
+        ...params
+    }: VpsConfiguration & { getInitialMeta?: () => Promise<Record<string, string>> },
+) => {
     const configuration = { ...params, token: '' };
-    const { url, userId, userChannel, locale, device, settings, legacyDevice, version, messageName, vpsToken, meta } =
+    const { url, userId, userChannel, locale, device, settings, legacyDevice, version, messageName, vpsToken } =
         configuration;
     const basePayload = compileBasePayload({ userId, token: '', messageName, vpsToken, userChannel, version });
 
@@ -249,6 +257,8 @@ export const createProtocol = (transport: Transport, { logger, getToken, ...para
                 }
                 sendSettingsOriginal(currentSettings.settings, true, initMessageId);
             } else {
+                const meta = getInitialMeta ? ((await getInitialMeta()) as MetaStringified) : undefined;
+
                 sendInitialSettings(
                     {
                         userId,
@@ -259,7 +269,7 @@ export const createProtocol = (transport: Transport, { logger, getToken, ...para
                     },
                     true,
                     initMessageId,
-                    meta,
+                    { meta },
                 );
             }
 

@@ -18,7 +18,6 @@ import {
     AssistantMeta,
     AssistantCommand,
     HistoryMessages,
-    Meta,
 } from '../typings';
 
 import { createClient } from './client/client';
@@ -28,6 +27,7 @@ import { getAnswerForRequestPermissions, getTime } from './meta';
 import { createVoice, TtsEvent } from './voice/voice';
 import { createMutexedObject } from './mutexedObject';
 import { createMutexSwitcher } from './mutexSwitcher';
+import { MetaStringified } from './client/methods';
 
 const STATE_UPDATE_TIMEOUT = 200;
 
@@ -44,6 +44,16 @@ const DEFAULT_APP: AppInfo = {
     systemName: 'assistant',
     frontendEndpoint: 'None',
 };
+
+function convertFieldValuesToString<
+    Obj extends Record<string, unknown>,
+    ObjStringified = { [key in keyof Obj]: string },
+>(object: Obj): ObjStringified {
+    return Object.keys(object).reduce((acc: Record<string, string>, key: string) => {
+        acc[key] = JSON.stringify(object[key]);
+        return acc;
+    }, {}) as ObjStringified;
+}
 
 const isDefaultApp = (appInfo: AppInfo) => appInfo.frontendStateId === DEFAULT_APP.frontendStateId;
 const promiseTimeout = <T>(promise: Promise<T>, timeout: number): Promise<T> => {
@@ -101,6 +111,7 @@ export type AssistantEvents = {
 
 export interface CreateAssistantDevOptions {
     getMeta?: () => Record<string, unknown>;
+    getInitialMeta?: () => Promise<Record<string, unknown>>;
 }
 
 type BackgroundAppOnCommand<T> = (
@@ -117,7 +128,11 @@ export type AssistantSettings = {
     sendTextAsSsml: boolean;
 };
 
-export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration & CreateAssistantDevOptions) => {
+export const createAssistant = ({
+    getMeta,
+    getInitialMeta,
+    ...configuration
+}: VpsConfiguration & CreateAssistantDevOptions) => {
     const { on, emit } = createNanoEvents<AssistantEvents>();
 
     // хеш [messageId]: requestId, где requestId - пользовательский ид экшена
@@ -144,7 +159,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
 
     let sdkMeta: AssistantMeta = { theme: 'dark' };
 
-    const metaProvider = async (): Promise<Meta> => {
+    const metaProvider = async (): Promise<MetaStringified> => {
         // Стейт нужен только для канваса
         const appState =
             app !== null && app.info.frontendType === 'WEB_APP' && app.getState
@@ -192,18 +207,20 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
 
         const background_apps = await getBackgroundAppsMeta();
 
-        return {
+        return convertFieldValuesToString({
             ...sdkMeta,
             time: getTime(),
             current_app,
             background_apps,
             ...(getMeta ? getMeta() : {}),
-        };
+        });
     };
 
     const transport = createTransport(configuration.fakeVps?.createFakeWS);
     const protocol = createProtocol(transport, {
         ...configuration,
+        getInitialMeta:
+            typeof getInitialMeta !== 'undefined' ? () => getInitialMeta().then(convertFieldValuesToString) : undefined,
         // пока голос не готов, выключаем озвучку
         settings: { ...configuration.settings, dubbing: -1 },
     });
@@ -280,7 +297,7 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
         } = await getAnswerForRequestPermissions(requestMessageId, appInfo, items);
         const meta = await metaProvider();
 
-        client.sendData({ ...data }, 'SERVER_ACTION', { ...meta, ...props });
+        client.sendData({ ...data }, 'SERVER_ACTION', { ...meta, ...convertFieldValuesToString(props) });
     };
 
     subscriptions.push(protocol.on('ready', () => emit('vps', { type: 'ready' })));

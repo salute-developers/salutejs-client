@@ -63,7 +63,7 @@ describe('Тест backgroundApps', () => {
         let appRemoved = false;
 
         onSocketMessage((message) => {
-            if (message?.meta?.background_apps) {
+            if (message?.systemMessage?.data && message?.meta?.background_apps) {
                 const appsInfo = JSON.parse(message?.meta?.background_apps);
 
                 if (appsInfo.length === expectedAppsInfo.length) {
@@ -195,7 +195,7 @@ describe('Тест backgroundApps', () => {
         let callCount = 0;
 
         onSocketMessage((message) => {
-            if (message?.meta?.background_apps) {
+            if (message?.systemMessage?.data && message?.meta?.background_apps) {
                 const appsInfo = JSON.parse(message?.meta?.background_apps);
 
                 expect(appsInfo[0].state).deep.eq(appStates[callCount]);
