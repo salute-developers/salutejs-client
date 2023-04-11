@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase, no-underscore-dangle */
+/* eslint-disable camelcase, no-underscore-dangle */
 
 import { AppEvent, createAssistant, CreateAssistantDevOptions, VpsEvent } from './assistantSdk/assistant';
 import { renderNativePanel, NativePanelParams } from './NativePanel/NativePanel';

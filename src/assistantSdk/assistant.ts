@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable camelcase */
 import { ActionCommand } from '@salutejs/scenario';
 
 import { createNanoEvents } from '../nanoevents';
@@ -103,7 +103,10 @@ export interface CreateAssistantDevOptions {
     getMeta?: () => Record<string, unknown>;
 }
 
-type BackgroundAppOnCommand<T> = (command: AssistantSmartAppData & { smart_app_data: T }, messageId: string) => void;
+type BackgroundAppOnCommand<T> = (
+    command: (AssistantSmartAppData & { smart_app_data?: T }) | AssistantStartSmartSearch,
+    messageId: string,
+) => void;
 
 export type AssistantSettings = {
     /** Отключение фичи воспроизведения голоса */
@@ -121,7 +124,11 @@ export const createAssistant = ({ getMeta, ...configuration }: VpsConfiguration 
     const requestIdMap: Record<string, string> = {};
 
     const subscriptions: Array<() => void> = [];
-    const backgroundApps: { [key: string]: AssistantBackgroundApp & { commandsSubscribers: unknown[] } } = {};
+    const backgroundApps: {
+        [key: string]: AssistantBackgroundApp & {
+            commandsSubscribers: Array<BackgroundAppOnCommand<Record<string, unknown>>>;
+        };
+    } = {};
     const settings = createMutexedObject({
         disableDubbing: configuration.settings.dubbing === -1,
         disableListening: false,

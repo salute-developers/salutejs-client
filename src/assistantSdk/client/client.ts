@@ -26,7 +26,7 @@ export type SystemMessage = SystemMessageDataType & {
 
 function convertFieldValuesToString<
     Obj extends Record<string, unknown>,
-    ObjStringified = { [key in keyof Obj]: string }
+    ObjStringified = { [key in keyof Obj]: string },
 >(object: Obj): ObjStringified {
     return Object.keys(object).reduce((acc: Record<string, string>, key: string) => {
         acc[key] = JSON.stringify(object[key]);
@@ -81,7 +81,7 @@ export const createClient = (
     const sendOpenAssistant = async (
         { isFirstSession }: { isFirstSession: boolean } = { isFirstSession: false },
     ): Promise<SystemMessageDataType> => {
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line camelcase
         const data = isFirstSession ? { is_first_session: true } : {};
         const meta = provideMeta ? await provideMeta() : undefined;
 
@@ -122,7 +122,7 @@ export const createClient = (
 
             protocol.sendSystemMessage(
                 {
-                    // eslint-disable-next-line @typescript-eslint/camelcase
+                    // eslint-disable-next-line camelcase
                     data: { ...systemData, app_info: appInfo, server_action: serverAction },
                     messageName: messageName || 'SERVER_ACTION',
                 },
