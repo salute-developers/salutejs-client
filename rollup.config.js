@@ -10,13 +10,6 @@ import pkg from './package.json';
 
 const common = {
     input: 'src/index.ts',
-    output: {
-        globals: {
-            react: 'React',
-            'react-dom': 'ReactDOM',
-        },
-    },
-    external: ['react', 'react-dom'],
     plugins: [
         commonjs({
             extensions: ['.js', '.jsx', '.ts', '.tsx'],

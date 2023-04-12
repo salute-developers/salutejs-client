@@ -1,9 +1,10 @@
-import { fontFace } from './fonts';
-import { BubbleStyles, BubbleMDStyles, BubbleSMStyles } from './components/Bubble';
-import { SphereButtonStyles, SphereButtonMDStyles, SphereButtonSMStyles } from './components/SphereButton';
-import { CarouselTouchStyles } from './components/CarouselTouch';
-import { KeyboardTouchStyles } from './components/KeyboardTouch';
-import { VoiceTouchStyles } from './components/VoiceTouch';
+import { fontFace } from '../fonts';
+
+import { BubbleStyles, BubbleMDStyles, BubbleSMStyles } from './Bubble';
+import { SphereButtonStyles, SphereButtonMDStyles, SphereButtonSMStyles } from './SphereButton';
+import { CarouselTouchStyles } from './CarouselTouch';
+import { KeyboardTouchStyles } from './KeyboardTouch';
+import { VoiceTouchStyles } from './VoiceTouch';
 import {
     SuggestsStyles,
     SuggestLGStyles,
@@ -11,8 +12,8 @@ import {
     SuggestSMStyles,
     SuggestFilledStyles,
     SuggestOutlinedStyles,
-} from './components/Suggests';
-import { TextInputStyles, TextInputPureStyles, TextInputFilledStyles } from './components/TextInput';
+} from './Suggests';
+import { TextInputStyles, TextInputPureStyles, TextInputFilledStyles } from './TextInput';
 import {
     NativePanelStyles,
     NativePanelTouchStyles,
@@ -24,7 +25,7 @@ import {
     NativePanelPaddingsLGStyles,
     NativePanelPaddingsMDStyles,
     NativePanelPaddingsSMStyles,
-} from './NativePanelStyles';
+} from './NativePanel';
 
 export const styles = `
 ${fontFace}

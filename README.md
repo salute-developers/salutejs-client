@@ -138,10 +138,8 @@ const handleOnRefreshClick = () => {
 Assitant Client доступен для подключения через `<script>`.
 Версию assistant сlient можно поменять в src. Доступ к API осуществляется через глобальную переменную `assistant`.
 
-Пример, для разработки и отладки в браузере (в этом случае обязательно подключение react):
+Пример, для разработки и отладки в браузере:
 ```html
-<script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@salutejs/client@stable/umd/assistant.development.min.js"></script>
 <script>
   const client = assistant.createSmartappDebugger({

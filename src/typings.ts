@@ -50,6 +50,7 @@ export type Theme = {
     name: ThemeColorName;
 };
 
+// eslint-disable-next-line no-shadow
 export enum VpsVersion {
     '1.0' = 1,
     '2.0' = 2,
