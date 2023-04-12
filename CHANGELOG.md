@@ -1,3 +1,20 @@
+# v1.15.0 (Wed Apr 12 2023)
+
+#### 🚀 Enhancement
+
+- feat: Убран React [#67](https://github.com/salute-developers/salutejs-client/pull/67) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### 🐛 Bug Fix
+
+- fix: Отключена отправка приветствия для канвасов [#83](https://github.com/salute-developers/salutejs-client/pull/83) ([@evgeniysemin](https://github.com/evgeniysemin))
+- chore: Обновлены eslint, prettier, typescript [#86](https://github.com/salute-developers/salutejs-client/pull/86) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.14.0 (Tue Apr 04 2023)
 
 #### 🚀 Enhancement
