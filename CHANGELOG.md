@@ -1,3 +1,15 @@
+# v1.16.0 (Thu Apr 13 2023)
+
+#### 🚀 Enhancement
+
+- Отправлять мету в первом сообщении [#88](https://github.com/salute-developers/salutejs-client/pull/88) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.15.0 (Wed Apr 12 2023)
 
 #### 🚀 Enhancement
