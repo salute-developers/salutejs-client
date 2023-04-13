@@ -465,7 +465,6 @@ export type VpsConfiguration = {
     version: VpsVersion;
     messageName?: string;
     vpsToken?: string;
-    meta?: { [k: string]: string };
     logger?: ClientLogger;
     getToken: () => Promise<string>;
 };
