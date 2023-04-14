@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/camelcase */
 
 import { AssistantSettings, AssistantSmartAppData, Surface } from './typings';
 import { initializeAssistantSDK, InitializeAssistantSDKParams } from './dev';
@@ -92,7 +92,7 @@ export const createSmartappDebugger = <A extends AssistantSmartAppData>({
             throw new Error('Token expired');
         }
     } catch (exc) {
-        if ((exc as Error).message !== 'Token expired') {
+        if (exc.message !== 'Token expired') {
             // eslint-disable-next-line no-alert
             alert('Указан невалидный токен!');
             throw new Error('Wrong token');

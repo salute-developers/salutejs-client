@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/camelcase */
 import { AppInfo, Meta, PermissionStatus, PermissionType, SystemMessageDataType } from '../typings';
 
 export type Permission = Record<PermissionType, PermissionStatus>;

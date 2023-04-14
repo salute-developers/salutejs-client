@@ -8,7 +8,7 @@ export const createOnlineRecordPlayer = (record?: AssistantRecord, { context = w
 
     const playServerAction = (action: unknown, message: string) => {
         /// WARNING: requestId не поддерживается
-        // eslint-disable-next-line camelcase
+        // eslint-disable-next-line @typescript-eslint/camelcase
         window.AssistantHost?.sendDataContainer(JSON.stringify({ action, message_name: message }));
     };
 

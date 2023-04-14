@@ -39,15 +39,13 @@ export const createBaseRecorder = <R extends object>(isActive = true, getDefault
 
     const getRecord = () => record;
 
-    const prepareHandler: RecorderHandlerPreparer =
-        (handlerToPrepare) =>
-        (...args) => {
-            if (isActive === false) {
-                return;
-            }
+    const prepareHandler: RecorderHandlerPreparer = (handlerToPrepare) => (...args) => {
+        if (isActive === false) {
+            return;
+        }
 
-            handlerToPrepare(...args);
-        };
+        handlerToPrepare(...args);
+    };
 
     return {
         getRecord,

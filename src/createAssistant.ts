@@ -217,6 +217,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
 
             /// фильтр команды 'назад'
             /// может приходить type='system', но в типах это не отражаем
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore
             if (command.type === 'system' && command.system?.command?.toUpperCase() === 'BACK') {
                 return;
@@ -239,16 +240,16 @@ export const createAssistant = <A extends AssistantSmartAppData>({
                 const { requestId, next } = observables.get(command.sdk_meta.requestId) || {};
 
                 if (Object.keys(meta).length > 0 || requestId) {
-                    // eslint-disable-next-line camelcase
+                    // eslint-disable-next-line @typescript-eslint/camelcase
                     command.sdk_meta = { ...meta };
 
                     if (requestId) {
-                        // eslint-disable-next-line camelcase
+                        // eslint-disable-next-line @typescript-eslint/camelcase
                         command.sdk_meta = { requestId };
                     }
                 }
 
-                next?.(command.type === 'smart_app_data' ? (command as unknown as A) : command);
+                next?.(command.type === 'smart_app_data' ? ((command as unknown) as A) : command);
             }
 
             emitCommand(command as AssistantClientCustomizedCommand<A>);
@@ -273,7 +274,6 @@ export const createAssistant = <A extends AssistantSmartAppData>({
         const firstSmartAppDataMid =
             appInitialData.get().find((c) => {
                 return c.type === 'smart_app_data' && (c.sdk_meta?.mid || '-1') !== '-1';
-                // @ts-ignore
             })?.sdk_meta?.mid || '-1';
 
         if (firstSmartAppDataMid !== '-1') {
@@ -295,7 +295,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
         if (window.AssistantHost?.sendDataContainer) {
             if (onData == null) {
                 window.AssistantHost?.sendDataContainer(
-                    /* eslint-disable-next-line camelcase */
+                    /* eslint-disable-next-line @typescript-eslint/camelcase */
                     JSON.stringify({ data: action, message_name: name || '', requestId }),
                 );
                 return () => {};
@@ -309,7 +309,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
 
             const { subscribe } = createNanoObservable<A | AssistantSmartAppError>(({ next }) => {
                 window.AssistantHost?.sendDataContainer(
-                    /* eslint-disable-next-line camelcase */
+                    /* eslint-disable-next-line @typescript-eslint/camelcase */
                     JSON.stringify({ data: action, message_name: name || '', requestId: realRequestId }),
                 );
 
@@ -343,7 +343,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
         subscribeToCommand,
         sendAction: <
             D extends AssistantSmartAppCommand['smart_app_data'] = AssistantSmartAppCommand['smart_app_data'],
-            E extends AssistantSmartAppError['smart_app_error'] = AssistantSmartAppError['smart_app_error'],
+            E extends AssistantSmartAppError['smart_app_error'] = AssistantSmartAppError['smart_app_error']
         >(
             action: {
                 type: string;

@@ -1,8 +1,7 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "dist",
+        "jsx": "react",
         "target": "ES5",
         "lib": ["ES2020.Promise", "esnext.asynciterable", "DOM"],
         "declaration": true,
@@ -19,10 +18,8 @@
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
-        "allowJs": true,
-        "paths": {
-            "tslib": ["./node_modules/tslib/tslib.d.ts"]
-        }
+        "rootDir": "src",
+        "allowJs": true
     },
     "include": ["src", "global.d.ts"],
     "exclude": ["**/tests/**/*", "**/dist/**/*", "./**/*.spec.ts"]
