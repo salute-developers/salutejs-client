@@ -1,9 +1,17 @@
 module.exports = {
-    extends: ['prettier'],
+    extends: [
+        'airbnb',
+        'airbnb/hooks',
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:cypress/recommended',
+        'prettier/react',
+    ],
     parser: '@typescript-eslint/parser',
-    plugins: ['import', 'prettier', 'cypress', '@typescript-eslint'],
+    plugins: ['react', 'import', 'prettier', 'cypress'],
     rules: {
-        camelcase: 'error',
+        '@typescript-eslint/no-empty-function': 'off',
+        'no-restricted-syntax': 'off', // В for...of циклах ничего плохого нет
         'spaced-comment': ['error', 'always', { markers: ['/'] }], /// разрешаем ts-require directive
         'comma-dangle': ['error', 'always-multiline'],
         'arrow-parens': ['error', 'always'],
@@ -50,6 +58,18 @@ module.exports = {
 
         '@typescript-eslint/explicit-function-return-type': 'off',
 
+        'react/prop-types': 'off',
+        'react/static-property-placement': 'off',
+        'react/state-in-constructor': 'off',
+        'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
+        'react/jsx-one-expression-per-line': 'off',
+        'react/jsx-indent': ['error', 4],
+        'react/jsx-indent-props': ['error', 4],
+        'react/jsx-props-no-spreading': 'off',
+        'react/destructuring-assignment': 'off',
+        'react/sort-comp': 'off',
+        'react/no-array-index-key': 'off',
+
         'jsx-a11y/no-static-element-interactions': 'off',
         'jsx-a11y/click-events-have-key-events': 'off',
         'jsx-a11y/no-noninteractive-tabindex': 'off',
@@ -69,5 +89,31 @@ module.exports = {
         'padding-line-between-statements': 'off',
         'no-unused-expressions': 'off',
         '@typescript-eslint/no-empty-function': 'off',
+    },
+    overrides: [
+        {
+            files: ['*.tsx?'],
+            env: {
+                browser: true,
+            },
+            globals: {
+                window: true,
+                document: true,
+            },
+        },
+        {
+            files: ['*.test.tsx?', '*.test.js'],
+            plugins: ['jest'],
+            env: {
+                browser: true,
+                mocha: true,
+                'jest/globals': true,
+            },
+        },
+    ],
+    settings: {
+        react: {
+            version: '16.13.1',
+        },
     },
 };

@@ -95,13 +95,9 @@ export const createAnswerFromMockByMessageGetter = (record: MockRecorderRecord) 
 };
 
 export const createMockRecorder: MockRecorderCreator = (defaultActive = true) => {
-    const {
-        prepareHandler,
-        start,
-        stop,
-        getRecord: baseGetRecord,
-        updateRecord,
-    } = createBaseRecorder<MockRecorderRecord>(defaultActive, getDefaultRecord);
+    const { prepareHandler, start, stop, getRecord: baseGetRecord, updateRecord } = createBaseRecorder<
+        MockRecorderRecord
+    >(defaultActive, getDefaultRecord);
 
     const getRecord = (): MockRecorderRecord => {
         const baseRecord = baseGetRecord();

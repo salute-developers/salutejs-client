@@ -89,8 +89,18 @@ export const createProtocol = (
     }: VpsConfiguration & { getInitialMeta?: () => Promise<Record<string, string>> },
 ) => {
     const configuration = { ...params, token: '' };
-    const { url, userId, userChannel, locale, device, settings, legacyDevice, version, messageName, vpsToken } =
-        configuration;
+    const {
+        url,
+        userId,
+        userChannel,
+        locale,
+        device,
+        settings,
+        legacyDevice,
+        version,
+        messageName,
+        vpsToken,
+    } = configuration;
     const basePayload = compileBasePayload({ userId, token: '', messageName, vpsToken, userChannel, version });
 
     const { on, emit } = createNanoEvents<ProtocolEvents>();
@@ -242,7 +252,7 @@ export const createProtocol = (
             } catch (e) {
                 emit('error', {
                     type: 'GET_TOKEN_ERROR',
-                    message: (e as Error)?.message,
+                    message: e?.message,
                 });
                 return;
             }
