@@ -1,3 +1,15 @@
+# v1.16.1 (Fri Apr 14 2023)
+
+#### 🐛 Bug Fix
+
+- нерабочая сборка [#89](https://github.com/salute-developers/salutejs-client/pull/89) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.16.0 (Thu Apr 13 2023)
 
 #### 🚀 Enhancement
