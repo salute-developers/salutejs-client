@@ -381,5 +381,8 @@ export const createProtocol = (
         get configuration() {
             return configuration;
         },
+        get status() {
+            return status;
+        },
     };
 };
