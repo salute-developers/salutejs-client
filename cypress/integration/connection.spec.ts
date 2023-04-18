@@ -117,27 +117,30 @@ describe('Подключение к сокету', () => {
         assistantClient.start();
     });
 
-    it('assistant.status возвращает правильные статусы при подключении', () => {
+    it('assistant.status возвращает правильные статусы при подключении', (done) => {
         serverWs.onconnection = () => {
             expect(assistantClient.status).to.be.equal('connecting');
         };
 
         serverWs.onmessage = (messageOriginal) => {
-            const { messageName, text } = Message.decode(messageOriginal.slice(4));
+            const { messageName } = Message.decode(messageOriginal.slice(4));
 
             if (messageName === 'OPEN_ASSISTANT') {
+                cy.clock();
                 expect(assistantClient.status).to.be.equal('connected');
-                window.setTimeout(() => {
+                cy.tick(500).then(() => {
                     expect(assistantClient.status).to.be.equal('ready');
-                }, 500);
-                window.setTimeout(clientWs.close, 1000);
+                }).then(() => {
+                    clientWs.close();
+                });
             }
         };
 
         serverWs.onclose = () => {
-            window.setTimeout(() => {
+            cy.tick(0).then(() => {
                 expect(assistantClient.status).to.be.equal('closed');
-            }, 100);
+                done();
+            });
         };
 
         expect(assistantClient.status).to.be.equal('closed');
