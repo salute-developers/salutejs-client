@@ -1,3 +1,16 @@
+# v1.16.2 (Tue Apr 18 2023)
+
+#### 🐛 Bug Fix
+
+- fix: экспорт assistant.status [#91](https://github.com/salute-developers/salutejs-client/pull/91) ([@soulko](https://github.com/soulko) [@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 2
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+- Anton Kostenko ([@soulko](https://github.com/soulko))
+
+---
+
 # v1.16.1 (Fri Apr 14 2023)
 
 #### 🐛 Bug Fix
