@@ -540,5 +540,8 @@ export const createAssistant = ({
                 sendServerAction: sendServerActionToBackgroundApp,
             };
         },
+        get status() {
+            return protocol.status;
+        },
     };
 };
