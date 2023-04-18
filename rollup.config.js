@@ -3,7 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import replace from 'rollup-plugin-replace';
 import json from '@rollup/plugin-json';
 import typescript from '@rollup/plugin-typescript';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import copy from 'rollup-plugin-copy';
 
 import pkg from './package.json';
