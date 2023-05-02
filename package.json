@@ -12,9 +12,9 @@
         "build": "rollup -c --bundleConfigAsCjs",
         "prepublishOnly": "npm run build",
         "release": "auto shipit",
-        "proto": "pbjs -t static-module src/proto/index.proto > src/proto/index.js && pbts src/proto/index.js -o src/proto/index.d.ts",
-        "asr": "pbjs -t static-module src/assistantSdk/voice/recognizers/asr/index.proto > src/assistantSdk/voice/recognizers/asr/index.js && pbts src/assistantSdk/voice/recognizers/asr/index.js -o src/assistantSdk/voice/recognizers/asr/index.d.ts",
-        "mtt": "pbjs -t static-module src/assistantSdk/voice/recognizers/mtt/index.proto > src/assistantSdk/voice/recognizers/mtt/index.js && pbts src/assistantSdk/voice/recognizers/mtt/index.js -o src/assistantSdk/voice/recognizers/mtt/index.d.ts",
+        "proto": "pbjs --no-typeurl --no-convert --no-verify --no-delimited -t static-module src/proto/index.proto > src/proto/index.js && pbts src/proto/index.js -o src/proto/index.d.ts",
+        "asr": "pbjs --no-typeurl --no-convert --no-verify --no-delimited --no-create --no-encode -t static-module src/assistantSdk/voice/recognizers/asr/index.proto > src/assistantSdk/voice/recognizers/asr/index.js && pbts src/assistantSdk/voice/recognizers/asr/index.js -o src/assistantSdk/voice/recognizers/asr/index.d.ts",
+        "mtt": "pbjs --no-typeurl --no-convert --no-verify --no-delimited --no-create --no-encode -t static-module src/assistantSdk/voice/recognizers/mtt/index.proto > src/assistantSdk/voice/recognizers/mtt/index.js && pbts src/assistantSdk/voice/recognizers/mtt/index.js -o src/assistantSdk/voice/recognizers/mtt/index.d.ts",
         "cy:open": "cypress open",
         "cy:run": "cypress run",
         "test:cy": "cypress run -b chromium --headless",
@@ -32,7 +32,8 @@
     "dependencies": {
         "@salutejs/scenario": "0.30.0",
         "lodash.clonedeep": "4.5.0",
-        "protobufjs": "6.10.3",
+        "long": "5.2.3",
+        "protobufjs": "7.2.3",
         "uuid": "8.0.0"
     },
     "browserslist": [
@@ -47,7 +48,8 @@
         "@rollup/plugin-commonjs": "24.1.0",
         "@rollup/plugin-json": "6.0.0",
         "@rollup/plugin-node-resolve": "15.0.2",
-        "@rollup/plugin-terser": "^0.4.1",
+        "@rollup/plugin-replace": "5.0.2",
+        "@rollup/plugin-terser": "0.4.1",
         "@rollup/plugin-typescript": "11.1.0",
         "@types/jest": "26.0.14",
         "@types/lodash.clonedeep": "4.5.6",
@@ -68,12 +70,12 @@
         "mock-socket": "9.0.3",
         "prettier": "2.8.7",
         "pretty-quick": "3.1.0",
-        "rollup": "2.79.0",
+        "protobufjs-cli": "1.1.1",
+        "rollup": "3.21.5",
         "rollup-plugin-copy": "3.4.0",
-        "rollup-plugin-replace": "2.2.0",
         "ts-loader": "8.0.4",
         "tslib": "2.5.0",
-        "typescript": "5.0.3",
+        "typescript": "4.3.5",
         "webpack": "4.44.2"
     },
     "files": [

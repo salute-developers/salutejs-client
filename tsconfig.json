@@ -20,9 +20,6 @@
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "allowJs": true,
-        "paths": {
-            "tslib": ["./node_modules/tslib/tslib.d.ts"]
-        }
     },
     "include": ["src", "global.d.ts"],
     "exclude": ["**/tests/**/*", "**/dist/**/*", "./**/*.spec.ts"]

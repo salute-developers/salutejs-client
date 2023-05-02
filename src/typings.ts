@@ -1,3 +1,4 @@
+import Long from 'long';
 import {
     Action,
     ActionCommand,
@@ -12,18 +13,9 @@ import {
     SystemMessagePayload,
 } from '@salutejs/scenario';
 
-import {
-    IDevice,
-    ILegacyDevice,
-    IMessage,
-    ISettings,
-    IGetHistoryRequest,
-    IHistoryMessages,
-    IOffset,
-    Message,
-} from './proto';
+import { IDevice, ILegacyDevice, IMessage, ISettings, IGetHistoryRequest, IHistoryMessages, IOffset } from './proto';
 
-export { Message } from './proto';
+export { IMessage } from './proto';
 
 export {
     Suggestions,
@@ -483,8 +475,8 @@ export interface OutcomingMessage {
 
 export type ClientLoggerInitEntryData = Omit<VpsConfiguration, 'getToken' | 'logger'> & { token: string };
 export type ClientLoggerInitEntry = { type: 'init'; params: ClientLoggerInitEntryData };
-export type ClientLoggerIncomingEntry = { type: 'incoming'; message: Message };
-export type ClientLoggerOutcomingEntry = { type: 'outcoming'; message: Message };
+export type ClientLoggerIncomingEntry = { type: 'incoming'; message: IMessage };
+export type ClientLoggerOutcomingEntry = { type: 'outcoming'; message: IMessage };
 export type ClientLoggerEntry = ClientLoggerInitEntry | ClientLoggerIncomingEntry | ClientLoggerOutcomingEntry;
 
 export interface ClientLogger {

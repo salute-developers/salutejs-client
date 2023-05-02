@@ -9,3 +9,4 @@ export {
     createAssistant as createAssistantClient,
 } from './assistantSdk/assistant';
 export { createNavigatorAudioProvider } from './assistantSdk/voice/listener/navigatorAudioProvider';
+export * from './typings';
