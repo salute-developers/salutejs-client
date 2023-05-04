@@ -14,7 +14,6 @@ import {
 } from '@salutejs/scenario';
 
 import { IDevice, ILegacyDevice, IMessage, ISettings, IGetHistoryRequest, IHistoryMessages, IOffset } from './proto';
-
 export { IMessage } from './proto';
 
 export {
@@ -32,6 +31,7 @@ export {
     Character,
     CharacterId,
     Hints,
+    ServerAction,
 } from '@salutejs/scenario';
 
 export type Surface = 'SBERBOX' | 'STARGATE' | 'SATELLITE' | 'COMPANION' | 'SBOL' | 'TV' | 'TV_HUAWEI' | 'TIME';

@@ -8,7 +8,7 @@ import {
     AssistantSmartAppCommand,
 } from '../typings';
 
-import { CURRENT_VERSION } from './index';
+import { CURRENT_VERSION } from './version';
 
 export const createRecordOfflinePlayer = (
     record?: AssistantRecord,

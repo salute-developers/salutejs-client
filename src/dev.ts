@@ -16,7 +16,7 @@ import {
     AssistantSystemCommand,
     FakeVpsParams,
 } from './typings';
-import { renderAssistantRecordPanel } from './record';
+import { renderAssistantRecordPanel } from './record/record-panel';
 import { createConsoleLogger } from './record/console-logger';
 import { createLogCallbackRecorder } from './record/callback-recorder';
 import { createRecordDownloader } from './record/record-downloader';
@@ -48,7 +48,7 @@ export interface RecordParams<R extends Recorder = Recorder> {
     recorder?: R;
 }
 
-export type InitializeAssistantSDKParams = {
+export type initializeNativeSDKEmulatorParams = {
     initPhrase: string;
     url: string;
     /** канал (влияет на навыки) */
@@ -74,7 +74,7 @@ export type InitializeAssistantSDKParams = {
     capabilities?: string;
 } & CreateAssistantDevOptions;
 
-export const initializeAssistantSDK = ({
+export const initializeNativeSDKEmulator = ({
     initPhrase,
     url,
     userChannel,
@@ -102,7 +102,7 @@ export const initializeAssistantSDK = ({
     features,
     capabilities,
     getMeta,
-}: InitializeAssistantSDKParams) => {
+}: initializeNativeSDKEmulatorParams) => {
     const device = {
         platformType: 'WEBDBG',
         platformVersion: '1.0',

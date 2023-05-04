@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 import { AssistantSettings, AssistantSmartAppData, Surface } from './typings';
-import { initializeAssistantSDK, InitializeAssistantSDKParams } from './dev';
+import { initializeNativeSDKEmulator, initializeNativeSDKEmulatorParams } from './dev';
 import { createAssistant, CreateAssistantParams } from './createAssistant';
 
 export type Channel = 'B2C' | 'COMPANION_B2C' | 'SBOL';
@@ -18,7 +18,7 @@ export type CreateAssistantDevParams = CreateAssistantParams & {
     surface?: Surface | string;
     userChannel?: Channel | string;
 } & Pick<
-        InitializeAssistantSDKParams,
+        initializeNativeSDKEmulatorParams,
         | 'initPhrase'
         | 'url'
         | 'userId'
@@ -42,7 +42,7 @@ export const createAssistantDev = <A extends AssistantSmartAppData>({
     userChannel,
     ...sdkParams
 }: CreateAssistantDevParams) => {
-    const { nativePanel } = initializeAssistantSDK({
+    const { nativePanel } = initializeNativeSDKEmulator({
         ...sdkParams,
         surface,
         userChannel: userChannel || channelForSurface[surface] || 'B2C',
@@ -115,15 +115,4 @@ export const createSmartappDebugger = <A extends AssistantSmartAppData>({
     });
 };
 
-export { createRecordOfflinePlayer as createRecordPlayer } from './record/offline-player';
-export { createOnlineRecordPlayer } from './record/online-player';
 export { NativePanelParams } from './NativePanel/NativePanel';
-export * from './dev';
-export * from './record/mock-recorder';
-export * from './record/createMockWsCreator';
-export {
-    createAssistantHostMock,
-    createAssistantHostMockWithRecord,
-    AssistantActionResult,
-    CommandParams,
-} from './mock';

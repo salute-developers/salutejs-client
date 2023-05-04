@@ -69,11 +69,15 @@ export default [
     },
     {
         ...common,
-        input: ['src/createAssistant.ts', 'src/createAssistantDev.ts', 'src/assistantSdk/assistant.ts', 'src/index.ts'],
+        input: ['src/createAssistant.ts', 'src/createAssistantDev.ts', 'src/assistantSdk/assistant.ts', 'src/mock.ts', 'src/index.ts'],
         output: {
             ...common.output,
             dir: 'esm',
             format: 'esm',
+            manualChunks: {
+                'record': ['src/record/index.ts'],
+                'common': ['node_modules/tslib', 'src/nanoevents.ts', 'src/nanoobservable.ts']
+            }
         },
         plugins: [
             nodeResolve({

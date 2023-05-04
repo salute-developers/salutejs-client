@@ -1,4 +1,11 @@
 export * from './createAssistant';
+export {
+    createAssistantHostMock,
+    createAssistantHostMockWithRecord,
+    AssistantActionResult,
+    CommandParams,
+} from './mock';
+export * from './record';
 export * from './createAssistantDev';
 export {
     AssistantEvent,

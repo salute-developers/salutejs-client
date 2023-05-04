@@ -2,7 +2,7 @@
 import { WebSocket, Server } from 'mock-socket';
 
 import { initProtocol } from '../support/helpers/socket.helpers';
-import { initializeAssistantSDK } from '../../src/dev';
+import { initializeNativeSDKEmulator } from '../../src/dev';
 import { Message } from '../../src/proto';
 import { AssistantAppState } from '../../src/typings';
 
@@ -72,7 +72,7 @@ describe('Проверяем', () => {
             },
         };
 
-        const assistant = initializeAssistantSDK({
+        const assistant = initializeNativeSDKEmulator({
             url: SOCKET_URL,
             initPhrase: INIT_PHRASE,
             userChannel: USER_CHANNEL,
