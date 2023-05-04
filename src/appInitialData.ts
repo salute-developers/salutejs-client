@@ -125,7 +125,7 @@ export const appInitialData = (() => {
                 }
 
                 if (
-                    command === ((initialCommand.smart_app_data as unknown) as { command: string }).command ||
+                    command === (initialCommand.smart_app_data as unknown as { command: string }).command ||
                     command === (initialCommand.smart_app_data as AssistantSmartAppCommand['smart_app_data']).type
                 ) {
                     return true;
@@ -134,7 +134,7 @@ export const appInitialData = (() => {
                 return false;
             }) as AssistantClientCustomizedCommand<AssistantSmartAppCommand>;
 
-            return ((result && 'smart_app_data' in result ? result.smart_app_data : result) as unknown) as T;
+            return (result && 'smart_app_data' in result ? result.smart_app_data : result) as unknown as T;
         },
     };
 })();

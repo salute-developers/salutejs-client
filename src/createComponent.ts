@@ -1,7 +1,7 @@
 export type CreateComponentParams<
     Props extends Record<string, unknown>,
     State extends Record<string, unknown>,
-    Refs extends Record<string, HTMLElement>
+    Refs extends Record<string, HTMLElement>,
 > = {
     baseHTMLTemplate: string;
     createRefs: (root: HTMLDivElement) => Refs;
@@ -17,7 +17,7 @@ export type CreateComponentParams<
 export const createComponent = <
     Props extends Record<string, unknown>,
     State extends Record<string, unknown>,
-    Refs extends Record<string, HTMLElement>
+    Refs extends Record<string, HTMLElement>,
 >({
     baseHTMLTemplate,
     createRefs,

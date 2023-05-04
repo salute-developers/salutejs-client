@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable camelcase */
 import { ActionCommand } from '@salutejs/scenario';
 
 import { createNanoEvents } from '../nanoevents';
@@ -47,7 +47,7 @@ const DEFAULT_APP: AppInfo = {
 
 function convertFieldValuesToString<
     Obj extends Record<string, unknown>,
-    ObjStringified = { [key in keyof Obj]: string }
+    ObjStringified = { [key in keyof Obj]: string },
 >(object: Obj): ObjStringified {
     return Object.keys(object).reduce((acc: Record<string, string>, key: string) => {
         acc[key] = JSON.stringify(object[key]);
@@ -114,7 +114,10 @@ export interface CreateAssistantDevOptions {
     getInitialMeta?: () => Promise<Record<string, unknown>>;
 }
 
-type BackgroundAppOnCommand<T> = (command: AssistantSmartAppData & { smart_app_data: T }, messageId: string) => void;
+type BackgroundAppOnCommand<T> = (
+    command: (AssistantSmartAppData & { smart_app_data?: T }) | AssistantStartSmartSearch,
+    messageId: string,
+) => void;
 
 export type AssistantSettings = {
     /** Отключение фичи воспроизведения голоса */
@@ -136,7 +139,11 @@ export const createAssistant = ({
     const requestIdMap: Record<string, string> = {};
 
     const subscriptions: Array<() => void> = [];
-    const backgroundApps: { [key: string]: AssistantBackgroundApp & { commandsSubscribers: unknown[] } } = {};
+    const backgroundApps: {
+        [key: string]: AssistantBackgroundApp & {
+            commandsSubscribers: Array<BackgroundAppOnCommand<Record<string, unknown>>>;
+        };
+    } = {};
     const settings = createMutexedObject({
         disableDubbing: configuration.settings.dubbing === -1,
         disableListening: false,
