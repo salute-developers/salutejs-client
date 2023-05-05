@@ -34,6 +34,12 @@ export type CreateAssistantDevParams = CreateAssistantParams & {
         | 'features'
     >;
 
+if (typeof window !== 'undefined' && typeof process !== 'undefined' && process.env.NODE_ENV === 'production') {
+    console.warn(
+        'Чтобы уменьшить размер бандла - используйте if (process.env.NODE_ENV === "development") createSmartAppDebugger()',
+    );
+}
+
 export const createAssistantDev = <A extends AssistantSmartAppData>({
     getState,
     getRecoveryState,
