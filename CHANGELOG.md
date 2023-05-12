@@ -1,3 +1,20 @@
+# v1.17.0 (Fri May 12 2023)
+
+#### 🚀 Enhancement
+
+- Детектить использование дев методов в пром [#94](https://github.com/salute-developers/salutejs-client/pull/94) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### 🐛 Bug Fix
+
+- chore: Исправлена некорректная сборка после фикса линтера [#92](https://github.com/salute-developers/salutejs-client/pull/92) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.16.2 (Tue Apr 18 2023)
 
 #### 🐛 Bug Fix
