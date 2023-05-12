@@ -1,7 +1,8 @@
 /// <reference types="cypress" />
 
 import { Server } from 'mock-socket';
-import { AppInfo, Message, PermissionType, PermissionStatus } from '../../src';
+import { AppInfo, PermissionType, PermissionStatus } from '../../src';
+import { Message } from '../../src/proto';
 import { sendMessage } from '../support/helpers/socket.helpers';
 import { initServer, initAssistantClient } from '../support/helpers/init';
 

@@ -1,4 +1,6 @@
 /* eslint-disable camelcase */
+import Long from 'long';
+
 import { AppInfo, Meta, PermissionStatus, PermissionType, SystemMessageDataType } from '../typings';
 
 export type Permission = Record<PermissionType, PermissionStatus>;

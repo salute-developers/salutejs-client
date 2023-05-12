@@ -1,4 +1,5 @@
 import * as $protobuf from "protobufjs";
+import Long = require("long");
 /** Properties of a Message. */
 export interface IMessage {
 
@@ -169,14 +170,6 @@ export class Message implements IMessage {
     public static encode(message: IMessage, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Message message, length delimited. Does not implicitly {@link Message.verify|verify} messages.
-     * @param message Message message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IMessage, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Message message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -185,43 +178,6 @@ export class Message implements IMessage {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Message;
-
-    /**
-     * Decodes a Message message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Message
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Message;
-
-    /**
-     * Verifies a Message message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a Message message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns Message
-     */
-    public static fromObject(object: { [k: string]: any }): Message;
-
-    /**
-     * Creates a plain object from a Message message. Also converts values to other types if specified.
-     * @param message Message
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: Message, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this Message to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of an InitialSettings. */
@@ -283,14 +239,6 @@ export class InitialSettings implements IInitialSettings {
     public static encode(message: IInitialSettings, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified InitialSettings message, length delimited. Does not implicitly {@link InitialSettings.verify|verify} messages.
-     * @param message InitialSettings message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IInitialSettings, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes an InitialSettings message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -299,43 +247,6 @@ export class InitialSettings implements IInitialSettings {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): InitialSettings;
-
-    /**
-     * Decodes an InitialSettings message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns InitialSettings
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): InitialSettings;
-
-    /**
-     * Verifies an InitialSettings message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates an InitialSettings message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns InitialSettings
-     */
-    public static fromObject(object: { [k: string]: any }): InitialSettings;
-
-    /**
-     * Creates a plain object from an InitialSettings message. Also converts values to other types if specified.
-     * @param message InitialSettings
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: InitialSettings, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this InitialSettings to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a Device. */
@@ -433,14 +344,6 @@ export class Device implements IDevice {
     public static encode(message: IDevice, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Device message, length delimited. Does not implicitly {@link Device.verify|verify} messages.
-     * @param message Device message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IDevice, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Device message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -449,43 +352,6 @@ export class Device implements IDevice {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Device;
-
-    /**
-     * Decodes a Device message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Device
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Device;
-
-    /**
-     * Verifies a Device message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a Device message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns Device
-     */
-    public static fromObject(object: { [k: string]: any }): Device;
-
-    /**
-     * Creates a plain object from a Device message. Also converts values to other types if specified.
-     * @param message Device
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: Device, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this Device to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a Settings. */
@@ -565,14 +431,6 @@ export class Settings implements ISettings {
     public static encode(message: ISettings, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Settings message, length delimited. Does not implicitly {@link Settings.verify|verify} messages.
-     * @param message Settings message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: ISettings, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Settings message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -581,43 +439,6 @@ export class Settings implements ISettings {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Settings;
-
-    /**
-     * Decodes a Settings message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Settings
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Settings;
-
-    /**
-     * Verifies a Settings message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a Settings message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns Settings
-     */
-    public static fromObject(object: { [k: string]: any }): Settings;
-
-    /**
-     * Creates a plain object from a Settings message. Also converts values to other types if specified.
-     * @param message Settings
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: Settings, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this Settings to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a LegacyDevice. */
@@ -691,14 +512,6 @@ export class LegacyDevice implements ILegacyDevice {
     public static encode(message: ILegacyDevice, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified LegacyDevice message, length delimited. Does not implicitly {@link LegacyDevice.verify|verify} messages.
-     * @param message LegacyDevice message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: ILegacyDevice, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a LegacyDevice message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -707,43 +520,6 @@ export class LegacyDevice implements ILegacyDevice {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): LegacyDevice;
-
-    /**
-     * Decodes a LegacyDevice message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns LegacyDevice
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): LegacyDevice;
-
-    /**
-     * Verifies a LegacyDevice message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a LegacyDevice message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns LegacyDevice
-     */
-    public static fromObject(object: { [k: string]: any }): LegacyDevice;
-
-    /**
-     * Creates a plain object from a LegacyDevice message. Also converts values to other types if specified.
-     * @param message LegacyDevice
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: LegacyDevice, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this LegacyDevice to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a Voice. */
@@ -781,14 +557,6 @@ export class Voice implements IVoice {
     public static encode(message: IVoice, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Voice message, length delimited. Does not implicitly {@link Voice.verify|verify} messages.
-     * @param message Voice message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IVoice, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Voice message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -797,43 +565,6 @@ export class Voice implements IVoice {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Voice;
-
-    /**
-     * Decodes a Voice message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Voice
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Voice;
-
-    /**
-     * Verifies a Voice message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a Voice message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns Voice
-     */
-    public static fromObject(object: { [k: string]: any }): Voice;
-
-    /**
-     * Creates a plain object from a Voice message. Also converts values to other types if specified.
-     * @param message Voice
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: Voice, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this Voice to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a Text. */
@@ -877,14 +608,6 @@ export class Text implements IText {
     public static encode(message: IText, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Text message, length delimited. Does not implicitly {@link Text.verify|verify} messages.
-     * @param message Text message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IText, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Text message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -893,43 +616,6 @@ export class Text implements IText {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Text;
-
-    /**
-     * Decodes a Text message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Text
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Text;
-
-    /**
-     * Verifies a Text message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a Text message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns Text
-     */
-    public static fromObject(object: { [k: string]: any }): Text;
-
-    /**
-     * Creates a plain object from a Text message. Also converts values to other types if specified.
-     * @param message Text
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: Text, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this Text to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a SystemMessage. */
@@ -967,14 +653,6 @@ export class SystemMessage implements ISystemMessage {
     public static encode(message: ISystemMessage, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified SystemMessage message, length delimited. Does not implicitly {@link SystemMessage.verify|verify} messages.
-     * @param message SystemMessage message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: ISystemMessage, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a SystemMessage message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -983,43 +661,6 @@ export class SystemMessage implements ISystemMessage {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): SystemMessage;
-
-    /**
-     * Decodes a SystemMessage message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns SystemMessage
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): SystemMessage;
-
-    /**
-     * Verifies a SystemMessage message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a SystemMessage message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns SystemMessage
-     */
-    public static fromObject(object: { [k: string]: any }): SystemMessage;
-
-    /**
-     * Creates a plain object from a SystemMessage message. Also converts values to other types if specified.
-     * @param message SystemMessage
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: SystemMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this SystemMessage to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a Status. */
@@ -1069,14 +710,6 @@ export class Status implements IStatus {
     public static encode(message: IStatus, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Status message, length delimited. Does not implicitly {@link Status.verify|verify} messages.
-     * @param message Status message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IStatus, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Status message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1085,43 +718,6 @@ export class Status implements IStatus {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Status;
-
-    /**
-     * Decodes a Status message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Status
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Status;
-
-    /**
-     * Verifies a Status message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a Status message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns Status
-     */
-    public static fromObject(object: { [k: string]: any }): Status;
-
-    /**
-     * Creates a plain object from a Status message. Also converts values to other types if specified.
-     * @param message Status
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: Status, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this Status to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a Bytes. */
@@ -1165,14 +761,6 @@ export class Bytes implements IBytes {
     public static encode(message: IBytes, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Bytes message, length delimited. Does not implicitly {@link Bytes.verify|verify} messages.
-     * @param message Bytes message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IBytes, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Bytes message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1181,43 +769,6 @@ export class Bytes implements IBytes {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Bytes;
-
-    /**
-     * Decodes a Bytes message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Bytes
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Bytes;
-
-    /**
-     * Verifies a Bytes message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a Bytes message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns Bytes
-     */
-    public static fromObject(object: { [k: string]: any }): Bytes;
-
-    /**
-     * Creates a plain object from a Bytes message. Also converts values to other types if specified.
-     * @param message Bytes
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: Bytes, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this Bytes to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a DevContext. */
@@ -1267,14 +818,6 @@ export class DevContext implements IDevContext {
     public static encode(message: IDevContext, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified DevContext message, length delimited. Does not implicitly {@link DevContext.verify|verify} messages.
-     * @param message DevContext message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IDevContext, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a DevContext message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1283,43 +826,6 @@ export class DevContext implements IDevContext {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): DevContext;
-
-    /**
-     * Decodes a DevContext message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns DevContext
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): DevContext;
-
-    /**
-     * Verifies a DevContext message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a DevContext message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns DevContext
-     */
-    public static fromObject(object: { [k: string]: any }): DevContext;
-
-    /**
-     * Creates a plain object from a DevContext message. Also converts values to other types if specified.
-     * @param message DevContext
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: DevContext, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this DevContext to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a Cancel. */
@@ -1351,14 +857,6 @@ export class Cancel implements ICancel {
     public static encode(message: ICancel, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Cancel message, length delimited. Does not implicitly {@link Cancel.verify|verify} messages.
-     * @param message Cancel message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: ICancel, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Cancel message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1367,43 +865,6 @@ export class Cancel implements ICancel {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Cancel;
-
-    /**
-     * Decodes a Cancel message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Cancel
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Cancel;
-
-    /**
-     * Verifies a Cancel message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a Cancel message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns Cancel
-     */
-    public static fromObject(object: { [k: string]: any }): Cancel;
-
-    /**
-     * Creates a plain object from a Cancel message. Also converts values to other types if specified.
-     * @param message Cancel
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: Cancel, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this Cancel to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a Mute. */
@@ -1435,14 +896,6 @@ export class Mute implements IMute {
     public static encode(message: IMute, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Mute message, length delimited. Does not implicitly {@link Mute.verify|verify} messages.
-     * @param message Mute message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IMute, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a Mute message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1451,43 +904,6 @@ export class Mute implements IMute {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Mute;
-
-    /**
-     * Decodes a Mute message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Mute
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Mute;
-
-    /**
-     * Verifies a Mute message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a Mute message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns Mute
-     */
-    public static fromObject(object: { [k: string]: any }): Mute;
-
-    /**
-     * Creates a plain object from a Mute message. Also converts values to other types if specified.
-     * @param message Mute
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: Mute, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this Mute to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a GetHistoryRequest. */
@@ -1537,14 +953,6 @@ export class GetHistoryRequest implements IGetHistoryRequest {
     public static encode(message: IGetHistoryRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified GetHistoryRequest message, length delimited. Does not implicitly {@link GetHistoryRequest.verify|verify} messages.
-     * @param message GetHistoryRequest message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IGetHistoryRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a GetHistoryRequest message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1553,43 +961,6 @@ export class GetHistoryRequest implements IGetHistoryRequest {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): GetHistoryRequest;
-
-    /**
-     * Decodes a GetHistoryRequest message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns GetHistoryRequest
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): GetHistoryRequest;
-
-    /**
-     * Verifies a GetHistoryRequest message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a GetHistoryRequest message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns GetHistoryRequest
-     */
-    public static fromObject(object: { [k: string]: any }): GetHistoryRequest;
-
-    /**
-     * Creates a plain object from a GetHistoryRequest message. Also converts values to other types if specified.
-     * @param message GetHistoryRequest
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: GetHistoryRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this GetHistoryRequest to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of an App. */
@@ -1639,14 +1010,6 @@ export class App implements IApp {
     public static encode(message: IApp, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified App message, length delimited. Does not implicitly {@link App.verify|verify} messages.
-     * @param message App message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IApp, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes an App message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1655,43 +1018,6 @@ export class App implements IApp {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): App;
-
-    /**
-     * Decodes an App message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns App
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): App;
-
-    /**
-     * Verifies an App message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates an App message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns App
-     */
-    public static fromObject(object: { [k: string]: any }): App;
-
-    /**
-     * Creates a plain object from an App message. Also converts values to other types if specified.
-     * @param message App
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: App, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this App to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of an Offset. */
@@ -1735,14 +1061,6 @@ export class Offset implements IOffset {
     public static encode(message: IOffset, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Offset message, length delimited. Does not implicitly {@link Offset.verify|verify} messages.
-     * @param message Offset message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IOffset, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes an Offset message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1751,43 +1069,6 @@ export class Offset implements IOffset {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Offset;
-
-    /**
-     * Decodes an Offset message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Offset
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Offset;
-
-    /**
-     * Verifies an Offset message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates an Offset message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns Offset
-     */
-    public static fromObject(object: { [k: string]: any }): Offset;
-
-    /**
-     * Creates a plain object from an Offset message. Also converts values to other types if specified.
-     * @param message Offset
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: Offset, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this Offset to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a ChatHistoryRequest. */
@@ -1837,14 +1118,6 @@ export class ChatHistoryRequest implements IChatHistoryRequest {
     public static encode(message: IChatHistoryRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified ChatHistoryRequest message, length delimited. Does not implicitly {@link ChatHistoryRequest.verify|verify} messages.
-     * @param message ChatHistoryRequest message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IChatHistoryRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a ChatHistoryRequest message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1853,43 +1126,6 @@ export class ChatHistoryRequest implements IChatHistoryRequest {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): ChatHistoryRequest;
-
-    /**
-     * Decodes a ChatHistoryRequest message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns ChatHistoryRequest
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): ChatHistoryRequest;
-
-    /**
-     * Verifies a ChatHistoryRequest message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a ChatHistoryRequest message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns ChatHistoryRequest
-     */
-    public static fromObject(object: { [k: string]: any }): ChatHistoryRequest;
-
-    /**
-     * Creates a plain object from a ChatHistoryRequest message. Also converts values to other types if specified.
-     * @param message ChatHistoryRequest
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: ChatHistoryRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this ChatHistoryRequest to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of an Uuid. */
@@ -1939,14 +1175,6 @@ export class Uuid implements IUuid {
     public static encode(message: IUuid, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified Uuid message, length delimited. Does not implicitly {@link Uuid.verify|verify} messages.
-     * @param message Uuid message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IUuid, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes an Uuid message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -1955,43 +1183,6 @@ export class Uuid implements IUuid {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Uuid;
-
-    /**
-     * Decodes an Uuid message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns Uuid
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): Uuid;
-
-    /**
-     * Verifies an Uuid message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates an Uuid message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns Uuid
-     */
-    public static fromObject(object: { [k: string]: any }): Uuid;
-
-    /**
-     * Creates a plain object from an Uuid message. Also converts values to other types if specified.
-     * @param message Uuid
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: Uuid, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this Uuid to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a GetHistoryResponse. */
@@ -2029,14 +1220,6 @@ export class GetHistoryResponse implements IGetHistoryResponse {
     public static encode(message: IGetHistoryResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified GetHistoryResponse message, length delimited. Does not implicitly {@link GetHistoryResponse.verify|verify} messages.
-     * @param message GetHistoryResponse message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IGetHistoryResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a GetHistoryResponse message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -2045,43 +1228,6 @@ export class GetHistoryResponse implements IGetHistoryResponse {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): GetHistoryResponse;
-
-    /**
-     * Decodes a GetHistoryResponse message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns GetHistoryResponse
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): GetHistoryResponse;
-
-    /**
-     * Verifies a GetHistoryResponse message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a GetHistoryResponse message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns GetHistoryResponse
-     */
-    public static fromObject(object: { [k: string]: any }): GetHistoryResponse;
-
-    /**
-     * Creates a plain object from a GetHistoryResponse message. Also converts values to other types if specified.
-     * @param message GetHistoryResponse
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: GetHistoryResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this GetHistoryResponse to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Properties of a HistoryMessages. */
@@ -2131,14 +1277,6 @@ export class HistoryMessages implements IHistoryMessages {
     public static encode(message: IHistoryMessages, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified HistoryMessages message, length delimited. Does not implicitly {@link HistoryMessages.verify|verify} messages.
-     * @param message HistoryMessages message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IHistoryMessages, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
      * Decodes a HistoryMessages message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
@@ -2147,43 +1285,6 @@ export class HistoryMessages implements IHistoryMessages {
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
     public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): HistoryMessages;
-
-    /**
-     * Decodes a HistoryMessages message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns HistoryMessages
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): HistoryMessages;
-
-    /**
-     * Verifies a HistoryMessages message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a HistoryMessages message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns HistoryMessages
-     */
-    public static fromObject(object: { [k: string]: any }): HistoryMessages;
-
-    /**
-     * Creates a plain object from a HistoryMessages message. Also converts values to other types if specified.
-     * @param message HistoryMessages
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: HistoryMessages, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this HistoryMessages to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
 }
 
 /** Namespace google. */
@@ -2227,14 +1328,6 @@ export namespace google {
             public static encode(message: google.protobuf.IDoubleValue, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified DoubleValue message, length delimited. Does not implicitly {@link google.protobuf.DoubleValue.verify|verify} messages.
-             * @param message DoubleValue message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: google.protobuf.IDoubleValue, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
              * Decodes a DoubleValue message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
@@ -2243,43 +1336,6 @@ export namespace google {
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
             public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.DoubleValue;
-
-            /**
-             * Decodes a DoubleValue message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns DoubleValue
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): google.protobuf.DoubleValue;
-
-            /**
-             * Verifies a DoubleValue message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a DoubleValue message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns DoubleValue
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.DoubleValue;
-
-            /**
-             * Creates a plain object from a DoubleValue message. Also converts values to other types if specified.
-             * @param message DoubleValue
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.DoubleValue, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this DoubleValue to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
         }
 
         /** Properties of a FloatValue. */
@@ -2317,14 +1373,6 @@ export namespace google {
             public static encode(message: google.protobuf.IFloatValue, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified FloatValue message, length delimited. Does not implicitly {@link google.protobuf.FloatValue.verify|verify} messages.
-             * @param message FloatValue message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: google.protobuf.IFloatValue, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
              * Decodes a FloatValue message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
@@ -2333,43 +1381,6 @@ export namespace google {
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
             public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.FloatValue;
-
-            /**
-             * Decodes a FloatValue message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns FloatValue
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): google.protobuf.FloatValue;
-
-            /**
-             * Verifies a FloatValue message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a FloatValue message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns FloatValue
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.FloatValue;
-
-            /**
-             * Creates a plain object from a FloatValue message. Also converts values to other types if specified.
-             * @param message FloatValue
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.FloatValue, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this FloatValue to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
         }
 
         /** Properties of an Int64Value. */
@@ -2407,14 +1418,6 @@ export namespace google {
             public static encode(message: google.protobuf.IInt64Value, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified Int64Value message, length delimited. Does not implicitly {@link google.protobuf.Int64Value.verify|verify} messages.
-             * @param message Int64Value message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: google.protobuf.IInt64Value, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
              * Decodes an Int64Value message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
@@ -2423,43 +1426,6 @@ export namespace google {
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
             public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.Int64Value;
-
-            /**
-             * Decodes an Int64Value message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns Int64Value
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): google.protobuf.Int64Value;
-
-            /**
-             * Verifies an Int64Value message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates an Int64Value message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns Int64Value
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.Int64Value;
-
-            /**
-             * Creates a plain object from an Int64Value message. Also converts values to other types if specified.
-             * @param message Int64Value
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.Int64Value, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this Int64Value to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
         }
 
         /** Properties of a UInt64Value. */
@@ -2497,14 +1463,6 @@ export namespace google {
             public static encode(message: google.protobuf.IUInt64Value, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified UInt64Value message, length delimited. Does not implicitly {@link google.protobuf.UInt64Value.verify|verify} messages.
-             * @param message UInt64Value message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: google.protobuf.IUInt64Value, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
              * Decodes a UInt64Value message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
@@ -2513,43 +1471,6 @@ export namespace google {
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
             public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.UInt64Value;
-
-            /**
-             * Decodes a UInt64Value message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns UInt64Value
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): google.protobuf.UInt64Value;
-
-            /**
-             * Verifies a UInt64Value message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a UInt64Value message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns UInt64Value
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.UInt64Value;
-
-            /**
-             * Creates a plain object from a UInt64Value message. Also converts values to other types if specified.
-             * @param message UInt64Value
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.UInt64Value, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this UInt64Value to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
         }
 
         /** Properties of an Int32Value. */
@@ -2587,14 +1508,6 @@ export namespace google {
             public static encode(message: google.protobuf.IInt32Value, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified Int32Value message, length delimited. Does not implicitly {@link google.protobuf.Int32Value.verify|verify} messages.
-             * @param message Int32Value message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: google.protobuf.IInt32Value, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
              * Decodes an Int32Value message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
@@ -2603,43 +1516,6 @@ export namespace google {
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
             public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.Int32Value;
-
-            /**
-             * Decodes an Int32Value message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns Int32Value
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): google.protobuf.Int32Value;
-
-            /**
-             * Verifies an Int32Value message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates an Int32Value message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns Int32Value
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.Int32Value;
-
-            /**
-             * Creates a plain object from an Int32Value message. Also converts values to other types if specified.
-             * @param message Int32Value
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.Int32Value, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this Int32Value to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
         }
 
         /** Properties of a UInt32Value. */
@@ -2677,14 +1553,6 @@ export namespace google {
             public static encode(message: google.protobuf.IUInt32Value, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified UInt32Value message, length delimited. Does not implicitly {@link google.protobuf.UInt32Value.verify|verify} messages.
-             * @param message UInt32Value message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: google.protobuf.IUInt32Value, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
              * Decodes a UInt32Value message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
@@ -2693,43 +1561,6 @@ export namespace google {
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
             public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.UInt32Value;
-
-            /**
-             * Decodes a UInt32Value message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns UInt32Value
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): google.protobuf.UInt32Value;
-
-            /**
-             * Verifies a UInt32Value message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a UInt32Value message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns UInt32Value
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.UInt32Value;
-
-            /**
-             * Creates a plain object from a UInt32Value message. Also converts values to other types if specified.
-             * @param message UInt32Value
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.UInt32Value, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this UInt32Value to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
         }
 
         /** Properties of a BoolValue. */
@@ -2767,14 +1598,6 @@ export namespace google {
             public static encode(message: google.protobuf.IBoolValue, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified BoolValue message, length delimited. Does not implicitly {@link google.protobuf.BoolValue.verify|verify} messages.
-             * @param message BoolValue message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: google.protobuf.IBoolValue, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
              * Decodes a BoolValue message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
@@ -2783,43 +1606,6 @@ export namespace google {
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
             public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.BoolValue;
-
-            /**
-             * Decodes a BoolValue message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns BoolValue
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): google.protobuf.BoolValue;
-
-            /**
-             * Verifies a BoolValue message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a BoolValue message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns BoolValue
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.BoolValue;
-
-            /**
-             * Creates a plain object from a BoolValue message. Also converts values to other types if specified.
-             * @param message BoolValue
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.BoolValue, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this BoolValue to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
         }
 
         /** Properties of a StringValue. */
@@ -2857,14 +1643,6 @@ export namespace google {
             public static encode(message: google.protobuf.IStringValue, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified StringValue message, length delimited. Does not implicitly {@link google.protobuf.StringValue.verify|verify} messages.
-             * @param message StringValue message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: google.protobuf.IStringValue, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
              * Decodes a StringValue message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
@@ -2873,43 +1651,6 @@ export namespace google {
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
             public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.StringValue;
-
-            /**
-             * Decodes a StringValue message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns StringValue
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): google.protobuf.StringValue;
-
-            /**
-             * Verifies a StringValue message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a StringValue message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns StringValue
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.StringValue;
-
-            /**
-             * Creates a plain object from a StringValue message. Also converts values to other types if specified.
-             * @param message StringValue
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.StringValue, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this StringValue to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
         }
 
         /** Properties of a BytesValue. */
@@ -2947,14 +1688,6 @@ export namespace google {
             public static encode(message: google.protobuf.IBytesValue, writer?: $protobuf.Writer): $protobuf.Writer;
 
             /**
-             * Encodes the specified BytesValue message, length delimited. Does not implicitly {@link google.protobuf.BytesValue.verify|verify} messages.
-             * @param message BytesValue message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: google.protobuf.IBytesValue, writer?: $protobuf.Writer): $protobuf.Writer;
-
-            /**
              * Decodes a BytesValue message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
              * @param [length] Message length if known beforehand
@@ -2963,43 +1696,6 @@ export namespace google {
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
             public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.BytesValue;
-
-            /**
-             * Decodes a BytesValue message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns BytesValue
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {$protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): google.protobuf.BytesValue;
-
-            /**
-             * Verifies a BytesValue message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a BytesValue message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns BytesValue
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.BytesValue;
-
-            /**
-             * Creates a plain object from a BytesValue message. Also converts values to other types if specified.
-             * @param message BytesValue
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.BytesValue, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this BytesValue to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
         }
     }
 }

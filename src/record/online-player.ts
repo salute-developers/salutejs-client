@@ -1,6 +1,6 @@
 import { AssistantRecord } from '../typings';
 
-import { CURRENT_VERSION } from './index';
+import { CURRENT_VERSION } from './version';
 
 export const createOnlineRecordPlayer = (record?: AssistantRecord, { context = window } = {}) => {
     let currentRecord = record;
