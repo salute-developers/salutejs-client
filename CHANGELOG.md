@@ -1,3 +1,15 @@
+# v1.17.1 (Tue May 16 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Добавлен ретрай для вызова AssistantHost.ready() [#81](https://github.com/salute-developers/salutejs-client/pull/81) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.17.0 (Fri May 12 2023)
 
 #### 🚀 Enhancement
