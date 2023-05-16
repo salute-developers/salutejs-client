@@ -69,7 +69,7 @@ export const createVoice = (
     /** Активирует слушание голоса
      * если было активно слушание или проигрывание - останавливает, слушание в этом случае не активируется
      */
-    const listen = async ({ begin }: { begin?: ArrayBuffer[] } = {}): Promise<void> => {
+    const listen = async ({ begin }: { begin?: ArrayBuffer[] } = {}, isAutoListening = false): Promise<void> => {
         if (stopListening()) {
             return;
         }
@@ -86,15 +86,22 @@ export const createVoice = (
         // повторные вызовы не пройдут, пока пользователь не разрешит/запретит аудио
         if (listener.status === 'stopped') {
             return client.init().then(() =>
-                client.createVoiceStream(({ sendVoice, messageId, onMessage }) => {
-                    begin?.forEach((chunk) => sendVoice(new Uint8Array(chunk), false));
+                client.createVoiceStream(
+                    ({ sendVoice, messageId, onMessage }) => {
+                        begin?.forEach((chunk) => sendVoice(new Uint8Array(chunk), false));
 
-                    return speechRecognizer.start({
-                        sendVoice,
-                        messageId,
-                        onMessage,
-                    });
-                }),
+                        return speechRecognizer.start({
+                            sendVoice,
+                            messageId,
+                            onMessage,
+                        });
+                    },
+                    {
+                        source: {
+                            sourceType: isAutoListening ? 'autoListening' : 'lavashar',
+                        },
+                    },
+                ),
             );
         }
     };
@@ -117,12 +124,18 @@ export const createVoice = (
 
         // повторные вызовы не пройдут, пока пользователь не разрешит/запретит аудио
         if (listener.status === 'stopped') {
-            client.createVoiceStream(({ sendVoice, messageId, onMessage }) =>
-                musicRecognizer.start({
-                    sendVoice,
-                    messageId,
-                    onMessage,
-                }),
+            client.createVoiceStream(
+                ({ sendVoice, messageId, onMessage }) =>
+                    musicRecognizer.start({
+                        sendVoice,
+                        messageId,
+                        onMessage,
+                    }),
+                {
+                    source: {
+                        sourceType: 'lavashar',
+                    },
+                },
             );
         }
     };
@@ -225,7 +238,7 @@ export const createVoice = (
                 if (settings.current.disableDubbing === false) {
                     autolistenMesId = messageId;
                 } else {
-                    listen();
+                    listen({}, autoListening);
                 }
             }
         }),

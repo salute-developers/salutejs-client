@@ -18,6 +18,7 @@ import {
     AssistantMeta,
     AssistantCommand,
     HistoryMessages,
+    AdditionalMeta,
 } from '../typings';
 
 import { createClient } from './client/client';
@@ -50,7 +51,9 @@ function convertFieldValuesToString<
     ObjStringified = { [key in keyof Obj]: string },
 >(object: Obj): ObjStringified {
     return Object.keys(object).reduce((acc: Record<string, string>, key: string) => {
-        acc[key] = JSON.stringify(object[key]);
+        if (object[key]) {
+            acc[key] = JSON.stringify(object[key]);
+        }
         return acc;
     }, {}) as ObjStringified;
 }
@@ -159,7 +162,7 @@ export const createAssistant = ({
 
     let sdkMeta: AssistantMeta = { theme: 'dark' };
 
-    const metaProvider = async (): Promise<MetaStringified> => {
+    const metaProvider = async (additionalMeta?: AdditionalMeta): Promise<MetaStringified> => {
         // Стейт нужен только для канваса
         const appState =
             app !== null && app.info.frontendType === 'WEB_APP' && app.getState
@@ -212,6 +215,7 @@ export const createAssistant = ({
             time: getTime(),
             current_app,
             background_apps,
+            ...(additionalMeta || {}),
             ...(getMeta ? getMeta() : {}),
         });
     };
@@ -265,10 +269,10 @@ export const createAssistant = ({
     };
 
     /** отправляет текст */
-    const sendText = (text: string, shouldSendDisableDubbing = false) => {
+    const sendText = (text: string, shouldSendDisableDubbing = false, additionalMeta: AdditionalMeta) => {
         voice.stop();
 
-        client.sendText(text, settings.current.sendTextAsSsml, shouldSendDisableDubbing);
+        client.sendText(text, settings.current.sendTextAsSsml, shouldSendDisableDubbing, additionalMeta);
     };
 
     /** отправляет server_action */
