@@ -1,5 +1,12 @@
 import { createNanoEvents } from '../../nanoevents';
-import { SystemMessageDataType, OriginalMessageType, MessageNames, AppInfo, HistoryMessages } from '../../typings';
+import {
+    SystemMessageDataType,
+    OriginalMessageType,
+    MessageNames,
+    AppInfo,
+    HistoryMessages,
+    AdditionalMeta,
+} from '../../typings';
 import { GetHistoryResponse } from '../../proto';
 
 import { BatchableMethods, createProtocol } from './protocol';
@@ -19,7 +26,7 @@ export type SystemMessage = SystemMessageDataType & {
 
 export const createClient = (
     protocol: ReturnType<typeof createProtocol>,
-    provideMeta: (() => Promise<MetaStringified>) | undefined = undefined,
+    provideMeta: ((additionalMeta?: AdditionalMeta) => Promise<MetaStringified>) | undefined = undefined,
 ) => {
     const { on, emit } = createNanoEvents<ClientEvents>();
 
@@ -74,8 +81,9 @@ export const createClient = (
     /** вызывает sendSystemMessage, куда подкладывает мету */
     const sendMeta = async (
         sendSystemMessage: (data: SendSystemMessageData, last: boolean, params?: { meta?: MetaStringified }) => void,
+        additionalMeta?: AdditionalMeta,
     ) => {
-        const meta = provideMeta ? await provideMeta() : {};
+        const meta = provideMeta ? await provideMeta(additionalMeta) : ({} as MetaStringified);
 
         if (typeof meta !== 'undefined') {
             sendSystemMessage(
@@ -100,20 +108,27 @@ export const createClient = (
         const messageId = protocol.getMessageId();
 
         // мету и server_action отправляем в одном systemMessage
-        await sendMeta((data, _, { meta } = {}) => {
-            const { ...systemData } = data;
+        await sendMeta(
+            (data, _, { meta } = {}) => {
+                const { ...systemData } = data;
 
-            protocol.sendSystemMessage(
-                {
-                    // eslint-disable-next-line camelcase
-                    data: { ...systemData, app_info: appInfo, server_action: serverAction },
-                    messageName: messageName || 'SERVER_ACTION',
+                protocol.sendSystemMessage(
+                    {
+                        // eslint-disable-next-line camelcase
+                        data: { ...systemData, app_info: appInfo, server_action: serverAction },
+                        messageName: messageName || 'SERVER_ACTION',
+                    },
+                    true,
+                    messageId,
+                    { meta },
+                );
+            },
+            {
+                source: {
+                    sourceType: 'vps',
                 },
-                true,
-                messageId,
-                { meta },
-            );
-        });
+            },
+        );
 
         return messageId;
     };
@@ -123,13 +138,14 @@ export const createClient = (
         text: string,
         isSsml = false,
         shouldSendDisableDubbing?: boolean,
+        additionalMeta?: AdditionalMeta,
     ): Promise<number | Long | undefined> => {
         if (text.trim() === '') {
             return undefined;
         }
 
         return protocol.batch(async ({ sendSystemMessage, sendText: clientSendText, sendSettings, messageId }) => {
-            await sendMeta(sendSystemMessage);
+            await sendMeta(sendSystemMessage, additionalMeta);
             const prevDubbing = protocol.configuration.settings.dubbing;
             const sendDisableDubbing = prevDubbing !== -1 && shouldSendDisableDubbing;
 
@@ -159,9 +175,10 @@ export const createClient = (
         }: Pick<BatchableMethods, 'messageId' | 'sendVoice'> & {
             onMessage: (cb: (message: OriginalMessageType) => void) => () => void;
         }) => Promise<void>,
+        additionalMeta: AdditionalMeta,
     ): Promise<void> =>
         protocol.batch(async ({ sendSystemMessage, sendVoice, messageId }) => {
-            await sendMeta(sendSystemMessage);
+            await sendMeta(sendSystemMessage, additionalMeta);
 
             await callback({
                 sendVoice,

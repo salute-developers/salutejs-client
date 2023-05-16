@@ -374,8 +374,18 @@ export interface AssistantBackgroundAppInfo {
     state: Record<string, unknown>;
 }
 
+export interface SourceMeta {
+    sourceType?: string;
+    sourceName?: string;
+    suggestTitle?: string;
+}
 export interface Meta extends ScenarioMeta, AssistantMeta {
     background_apps: AssistantBackgroundAppInfo[];
+    source?: SourceMeta;
+    [key: string]: unknown;
+}
+
+export interface AdditionalMeta extends Pick<Meta, 'source'> {
     [key: string]: unknown;
 }
 
