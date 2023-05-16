@@ -1,3 +1,15 @@
+# v1.17.2 (Tue May 16 2023)
+
+#### 🐛 Bug Fix
+
+- fix: добавил source в мету [#95](https://github.com/salute-developers/salutejs-client/pull/95) ([@soulko](https://github.com/soulko))
+
+#### Authors: 1
+
+- Anton Kostenko ([@soulko](https://github.com/soulko))
+
+---
+
 # v1.17.1 (Tue May 16 2023)
 
 #### 🐛 Bug Fix
