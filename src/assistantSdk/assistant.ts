@@ -269,7 +269,7 @@ export const createAssistant = ({
     };
 
     /** отправляет текст */
-    const sendText = (text: string, shouldSendDisableDubbing = false, additionalMeta: AdditionalMeta) => {
+    const sendText = (text: string, shouldSendDisableDubbing = false, additionalMeta?: AdditionalMeta) => {
         voice.stop();
 
         client.sendText(text, settings.current.sendTextAsSsml, shouldSendDisableDubbing, additionalMeta);

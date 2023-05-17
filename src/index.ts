@@ -17,3 +17,5 @@ export {
 } from './assistantSdk/assistant';
 export { createNavigatorAudioProvider } from './assistantSdk/voice/listener/navigatorAudioProvider';
 export * from './typings';
+export { GetHistoryResponse } from './proto';
+export { PacketWrapperFromServer } from './assistantSdk/voice/recognizers/asr';
