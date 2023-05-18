@@ -1,3 +1,15 @@
+# v1.17.3 (Thu May 18 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Корректная обработка ошибки доступа к микро [#98](https://github.com/salute-developers/salutejs-client/pull/98) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.17.2 (Tue May 16 2023)
 
 #### 🐛 Bug Fix
