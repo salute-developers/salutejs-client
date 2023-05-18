@@ -23,7 +23,7 @@ const common = {
 
 const getUmdConfig = (fileName, input) => ({
     ...common,
-    input: input ? input : common.input,
+    input,
     output: {
         ...common.output,
         file: fileName,
@@ -44,7 +44,7 @@ const getUmdConfig = (fileName, input) => ({
 export default [
     {
         ...common,
-        input: 'src/index.ts',
+        input: ['src/index.ts', 'src/createAssistantDevOrigin.ts'],
         output: {
             ...common.output,
             dir: 'dist',
@@ -69,15 +69,22 @@ export default [
     },
     {
         ...common,
-        input: ['src/createAssistant.ts', 'src/createAssistantDev.ts', 'src/assistantSdk/assistant.ts', 'src/mock.ts', 'src/index.ts'],
+        input: [
+            'src/createAssistant.ts',
+            'src/createAssistantDev.ts',
+            'src/createAssistantDevOrigin.ts',
+            'src/assistantSdk/assistant.ts',
+            'src/mock.ts',
+            'src/index.ts',
+        ],
         output: {
             ...common.output,
             dir: 'esm',
             format: 'esm',
             manualChunks: {
-                'record': ['src/record/index.ts'],
-                'common': ['node_modules/tslib', 'src/nanoevents.ts', 'src/nanoobservable.ts']
-            }
+                record: ['src/record/index.ts'],
+                common: ['node_modules/tslib', 'src/nanoevents.ts', 'src/nanoobservable.ts'],
+            },
         },
         plugins: [
             nodeResolve({
@@ -89,7 +96,7 @@ export default [
         ],
     },
     {
-        ...getUmdConfig(pkg.unpkgdev),
+        ...getUmdConfig(pkg.unpkgdev, 'src/createAssistantDevOrigin.ts'),
     },
     {
         ...getUmdConfig(pkg.unpkg, 'src/createAssistant.ts'),
