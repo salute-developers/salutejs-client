@@ -1,3 +1,15 @@
+# v1.17.4 (Thu May 18 2023)
+
+#### 🐛 Bug Fix
+
+- fix: optional additionalMeta in sendText [#100](https://github.com/salute-developers/salutejs-client/pull/100) ([@soulko](https://github.com/soulko))
+
+#### Authors: 1
+
+- Anton Kostenko ([@soulko](https://github.com/soulko))
+
+---
+
 # v1.17.3 (Thu May 18 2023)
 
 #### 🐛 Bug Fix
