@@ -23,7 +23,7 @@ import {
 
 import { createClient } from './client/client';
 import { createProtocol, ProtocolError } from './client/protocol';
-import { createTransport } from './client/transport';
+import { createTransport, CreateTransportParams } from './client/transport';
 import { getAnswerForRequestPermissions, getTime } from './meta';
 import { createVoice, TtsEvent } from './voice/voice';
 import { createMutexedObject } from './mutexedObject';
@@ -89,7 +89,7 @@ export type AssistantEvent = {
 
 export type VpsEvent =
     | { type: 'ready' }
-    | { type: 'error'; error: Event | undefined }
+    | { type: 'error'; error: Event | Error | undefined }
     | { type: 'outcoming'; message: OriginalMessageType }
     | { type: 'incoming'; systemMessage: SystemMessageDataType; originalMessage: OriginalMessageType };
 
@@ -134,8 +134,9 @@ export type AssistantSettings = {
 export const createAssistant = ({
     getMeta,
     getInitialMeta,
+    checkCertUrl,
     ...configuration
-}: VpsConfiguration & CreateAssistantDevOptions) => {
+}: VpsConfiguration & CreateAssistantDevOptions & Pick<CreateTransportParams, 'checkCertUrl'>) => {
     const { on, emit } = createNanoEvents<AssistantEvents>();
 
     // хеш [messageId]: requestId, где requestId - пользовательский ид экшена
@@ -220,7 +221,10 @@ export const createAssistant = ({
         });
     };
 
-    const transport = createTransport(configuration.fakeVps?.createFakeWS);
+    const transport = createTransport({
+        createWS: configuration.fakeVps?.createFakeWS,
+        checkCertUrl,
+    });
     const protocol = createProtocol(transport, {
         ...configuration,
         getInitialMeta:
@@ -317,7 +321,7 @@ export const createAssistant = ({
 
     // при неудачном переподключении к сокету
     subscriptions.push(
-        transport.on('error', (error: Event | undefined) => {
+        transport.on('error', (error: Event | Error | undefined) => {
             voice.stop();
             protocol.clearQueue();
 

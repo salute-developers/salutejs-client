@@ -1,7 +1,7 @@
 export interface TransportEvents {
     close: () => void;
     connecting: () => void;
-    error: (error?: Event) => void;
+    error: (error?: Event | Error) => void;
     message: (data: Uint8Array) => void;
     open: () => void;
 }
