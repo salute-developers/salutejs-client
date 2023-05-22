@@ -1,3 +1,19 @@
+# v1.18.0 (Mon May 22 2023)
+
+#### 🚀 Enhancement
+
+- feat: Добавлена возможность проверки сертификата перед подключением к сокету [#78](https://github.com/salute-developers/salutejs-client/pull/78) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### 🐛 Bug Fix
+
+- chore: Экспортированы некоторые методы protobuf [#97](https://github.com/salute-developers/salutejs-client/pull/97) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.17.4 (Thu May 18 2023)
 
 #### 🐛 Bug Fix
