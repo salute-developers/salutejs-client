@@ -99,6 +99,7 @@ const createAudioRecorder = (
                 const dataWithVoice = new Uint8Array(data).some((voiceData) => voiceData > 0);
 
                 if (!IS_SAFARI || dataWithVoice) {
+                    resolve(stop);
                     cb(data, last);
                 }
 
@@ -108,7 +109,6 @@ const createAudioRecorder = (
             };
 
             processor.addEventListener('audioprocess', listener);
-            processor.addEventListener('audioprocess', () => resolve(stop), { once: true });
 
             input.connect(processor);
             processor.connect(context.destination);
