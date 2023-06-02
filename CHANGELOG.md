@@ -1,3 +1,15 @@
+# v1.18.1 (Fri Jun 02 2023)
+
+#### 🐛 Bug Fix
+
+- fix: убран пропуск первых слов при listen в сафари [#101](https://github.com/salute-developers/salutejs-client/pull/101) ([@soulko](https://github.com/soulko))
+
+#### Authors: 1
+
+- Anton Kostenko ([@soulko](https://github.com/soulko))
+
+---
+
 # v1.18.0 (Mon May 22 2023)
 
 #### 🚀 Enhancement
