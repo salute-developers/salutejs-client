@@ -1,3 +1,15 @@
+# v1.19.0 (Mon Jun 05 2023)
+
+#### 🚀 Enhancement
+
+- feat: Оптимизирована сборка бандла [#99](https://github.com/salute-developers/salutejs-client/pull/99) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.18.1 (Fri Jun 02 2023)
 
 #### 🐛 Bug Fix
