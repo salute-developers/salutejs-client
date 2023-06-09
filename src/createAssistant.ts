@@ -50,7 +50,7 @@ const excludeTags = ['A', 'AUDIO', 'BUTTON', 'INPUT', 'OPTION', 'SELECT', 'TEXTA
 
 function inIframe() {
     try {
-        return window.self !== window.top;
+        return window.self !== window.parent;
     } catch (e) {
         return true;
     }
@@ -58,7 +58,7 @@ function inIframe() {
 
 if (typeof window !== 'undefined' && inIframe()) {
     const postMessage = (action: AssistantPostMessage) => {
-        window.top?.postMessage(JSON.stringify(action), '*');
+        window.parent?.postMessage(JSON.stringify(action), '*');
     };
 
     const historyBack = () => {
