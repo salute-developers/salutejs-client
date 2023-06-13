@@ -22,6 +22,7 @@ export interface CreateAssistantParams {
     getState: () => AssistantAppState;
     getRecoveryState?: () => unknown;
     ready?: boolean;
+    useCanary?: boolean;
 }
 
 export interface AssistantEvents<A extends AssistantSmartAppData> {
@@ -48,19 +49,15 @@ export type AssistantClientCommandEvents<C extends AssistantClientCommand = Assi
 
 const excludeTags = ['A', 'AUDIO', 'BUTTON', 'INPUT', 'OPTION', 'SELECT', 'TEXTAREA', 'VIDEO'];
 
+// @ts-ignore
+const isTest = typeof window !== 'undefined' && typeof window.Cypress !== 'undefined';
+
 function inIframe() {
     try {
         return window.self !== window.top;
     } catch (e) {
         return true;
     }
-}
-
-if (/[a-zA-Z]/.test('process.env.APP_VERSION')) {
-    console.info(
-        '%cPlease use the latest version of SaluteJS Client. Your version is process.env.APP_VERSION',
-        'color: yellow; font-size: 14px',
-    );
 }
 
 if (typeof window !== 'undefined' && inIframe()) {
@@ -168,6 +165,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     getState,
     getRecoveryState,
     ready = true,
+    useCanary = isTest,
 }: CreateAssistantParams) => {
     const { on, emit: emitOriginal } = createNanoEvents<AssistantEvents<A>>();
     const { on: subscribeToCommand, emit: emitAllCommands } = createNanoEvents<AssistantClientCommandEvents>();
@@ -177,6 +175,12 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     let currentGetRecoveryState = getRecoveryState;
     let isInitialCommandsEmitted = false;
     let readyRetries = 0;
+
+    if (!useCanary && /[a-zA-Z]/.test('process.env.APP_VERSION')) {
+        throw new Error(
+            "Please use the latest version of SaluteJS Client or set the 'useCanary' flag to true. Your version is process.env.APP_VERSION",
+        );
+    }
 
     const emitCommand = (command: AssistantClientCustomizedCommand<A>) => {
         if (command.type === 'smart_app_data') {
