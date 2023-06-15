@@ -20,6 +20,7 @@ import {
     AssistantCommand,
     HistoryMessages,
     AdditionalMeta,
+    Status,
 } from '../typings';
 
 import { createClient } from './client/client';
@@ -107,7 +108,7 @@ export type AssistantEvents = {
     vps: (event: VpsEvent) => void;
     actionCommand: (event: ActionCommandEvent) => void;
     command: (command: AssistantCommand) => void;
-    status: (status: OriginalMessageType['status']) => void;
+    status: (status: Status) => void;
     error: (error: AssistantError) => void;
     history: (history: HistoryMessages[]) => void;
     tts: (event: TtsEvent) => void;

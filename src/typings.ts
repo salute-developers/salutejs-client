@@ -13,8 +13,21 @@ import {
     SystemMessagePayload,
 } from '@salutejs/scenario';
 
-import { IDevice, ILegacyDevice, IMessage, ISettings, IGetHistoryRequest, IHistoryMessages, IOffset } from './proto';
-export { IMessage } from './proto';
+import {
+    IDevice,
+    ILegacyDevice,
+    IMessage,
+    ISettings,
+    IGetHistoryRequest,
+    IHistoryMessages,
+    IOffset,
+    IStatus,
+    IText,
+    IBytes,
+    IInitialSettings,
+    IVoice,
+} from './proto';
+export { IMessage, IDevice, ILegacyDevice, ISettings, InitialSettings, IBytes, IStatus, IText, IVoice } from './proto';
 
 export {
     Suggestions,
@@ -283,41 +296,6 @@ export interface AssistantBackgroundApp {
     getState?: () => Promise<Record<string, unknown>>;
 }
 
-export interface Device {
-    platformType?: string | null;
-    platformVersion?: string | null;
-    surface?: string | null;
-    surfaceVersion?: string | null;
-    features?: string | null;
-    capabilities?: string | null;
-    deviceId?: string | null;
-    deviceManufacturer?: string | null;
-    deviceModel?: string | null;
-    additionalInfo?: string | null;
-    tenant?: string | null;
-}
-
-export interface LegacyDevice {
-    clientType?: string | null;
-    channel?: string | null;
-    channelVersion?: string | null;
-    platformName?: string | null;
-    platformVersion?: string | null;
-    sdkVersion?: string | null;
-    protocolVersion?: string | null;
-}
-
-export interface Settings {
-    dubbing?: number | null;
-    echo?: number | null;
-    ttsEngine?: string | null;
-    asrEngine?: string | null;
-    asrAutoStop?: number | null;
-    devMode?: number | null;
-    authConnector?: string | null;
-    surface?: string | null;
-}
-
 export type EventsType = {
     connecting: () => void;
     ready: () => void;
@@ -415,37 +393,24 @@ export interface OriginalMessageType {
     userId?: string | null;
     vpsToken?: string | null;
     version?: number;
-    bytes?: {
-        data?: Uint8Array | null;
-        desc?: string | null;
-    } | null;
-    voice?: { data?: Uint8Array | null } | null;
-    text?: {
-        data?: string | null;
-        type?: string | null;
-    } | null;
-    status?: {
-        code?: number | null;
-        description?: string | null;
-        technicalDescription?: string | null;
-    } | null;
-    initialSettings?: {
-        userId?: string | null;
-        userChannel?: string | null;
-        device?: Device | null;
-        settings?: Settings | null;
-        locale?: string | null;
-    } | null;
+    bytes?: IBytes | null;
+    voice?: IVoice | null;
+    text?: IText | null;
+    status?: IStatus | null;
+    initialSettings?: IInitialSettings | null;
     cancel?: {} | null;
-    device?: Device | null;
-    legacyDevice?: LegacyDevice | null;
-    settings?: Settings | null;
+    device?: IDevice | null;
+    legacyDevice?: ILegacyDevice | null;
+    settings?: ISettings | null;
     systemMessage?: {
         data?: string | null;
     } | null;
     timestamp?: number | Long | null;
     meta?: { [k: string]: string } | null;
 }
+
+export type NonNullableProperties<T> = { [P in keyof T]: NonNullable<T[P]> };
+export type Status = Required<NonNullableProperties<IStatus>>;
 
 export interface WSCreator {
     (url: string): WebSocket;

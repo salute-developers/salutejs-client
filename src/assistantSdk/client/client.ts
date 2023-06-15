@@ -1,3 +1,5 @@
+import Long from 'long';
+
 import { createNanoEvents } from '../../nanoevents';
 import {
     SystemMessageDataType,
@@ -6,6 +8,7 @@ import {
     AppInfo,
     HistoryMessages,
     AdditionalMeta,
+    Status,
 } from '../../typings';
 import { GetHistoryResponse } from '../../proto';
 
@@ -14,7 +17,7 @@ import { SendSystemMessageData, MetaStringified } from './methods';
 
 export interface ClientEvents {
     voice: (voice: Uint8Array, original: OriginalMessageType) => void;
-    status: (status: OriginalMessageType['status'], original: OriginalMessageType) => void;
+    status: (status: Status, original: OriginalMessageType) => void;
     systemMessage: (systemMessage: SystemMessageDataType, original: OriginalMessageType) => void;
     history: (historyMessages: HistoryMessages[], original: OriginalMessageType) => void;
 }
@@ -197,7 +200,7 @@ export const createClient = (
         }
 
         if (message.status) {
-            emit('status', message.status, message);
+            emit('status', message.status as Status, message);
         }
 
         if (message.messageName === 'TAKE_HISTORY' && message.bytes?.data) {
