@@ -238,7 +238,7 @@ export const createProtocol = (
     subscriptions.push(
         transport.on('open', async () => {
             try {
-                Object.assign(basePayload, { token: await getToken() });
+                getToken && Object.assign(basePayload, { token: await getToken() });
             } catch (e) {
                 emit('error', {
                     type: 'GET_TOKEN_ERROR',

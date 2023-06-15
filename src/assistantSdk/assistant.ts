@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { ActionCommand } from '@salutejs/scenario';
+import Long from 'long';
 
 import { createNanoEvents } from '../nanoevents';
 import {

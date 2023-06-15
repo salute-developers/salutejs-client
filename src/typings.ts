@@ -468,7 +468,7 @@ export type VpsConfiguration = {
     messageName?: string;
     vpsToken?: string;
     logger?: ClientLogger;
-    getToken: () => Promise<string>;
+    getToken?: () => Promise<string>;
 };
 
 export interface IncomingMessage {
