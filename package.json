@@ -18,7 +18,8 @@
         "cy:open": "cypress open",
         "cy:run": "cypress run",
         "test:cy": "cypress run -b chromium --headless",
-        "lint": "eslint --ext .js,.ts,.tsx src/."
+        "lint": "eslint --ext .js,.ts,.tsx src/.",
+        "postinstall": "node postinstall.js"
     },
     "repository": {
         "type": "git",
@@ -81,7 +82,8 @@
     "files": [
         "dist",
         "esm",
-        "umd"
+        "umd",
+        "postinstall.js"
     ],
     "sideEffects": false,
     "auto": {
