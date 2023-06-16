@@ -238,7 +238,7 @@ export const createProtocol = (
     subscriptions.push(
         transport.on('open', async () => {
             try {
-                Object.assign(basePayload, { token: await getToken() });
+                getToken && Object.assign(basePayload, { token: await getToken() });
             } catch (e) {
                 emit('error', {
                     type: 'GET_TOKEN_ERROR',
@@ -294,7 +294,7 @@ export const createProtocol = (
                 status = 'ready';
 
                 emit('ready');
-            }, 500);
+            }, 250);
 
             logger?.({ type: 'init', params: { ...configuration, ...currentSettings } });
         }),
@@ -350,7 +350,7 @@ export const createProtocol = (
             return new Promise<void>((resolve, reject) => {
                 const subs: Array<() => void> = [];
                 subs.push(
-                    transport.on('open', () => {
+                    on('ready', () => {
                         subs.map((sub) => sub());
                         resolve();
                     }),
