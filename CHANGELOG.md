@@ -1,3 +1,15 @@
+# v1.20.0 (Fri Jun 16 2023)
+
+#### 🚀 Enhancement
+
+- Не отправлять чанки до установки соединения [#106](https://github.com/salute-developers/salutejs-client/pull/106) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.19.0 (Mon Jun 05 2023)
 
 #### 🚀 Enhancement
