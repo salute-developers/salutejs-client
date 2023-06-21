@@ -27,7 +27,7 @@ export const createVoiceListener = (
 
     const stop = () => {
         status = 'stopped';
-        stopRecord();
+        stopRecord?.();
         emit('status', 'stopped');
     };
 
@@ -40,8 +40,12 @@ export const createVoiceListener = (
                 stopRecord = recStop;
             })
             .then(() => {
-                status = 'listen';
-                emit('status', 'listen');
+                if (status === 'stopped') {
+                    stopRecord();
+                } else {
+                    status = 'listen';
+                    emit('status', 'listen');
+                }
             })
             .catch((err) => {
                 status = 'stopped';

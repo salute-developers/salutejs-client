@@ -59,7 +59,7 @@ const createAudioRecorder = (
 
         const stop = () => {
             if (state === 'inactive') {
-                throw new Error("Can't stop inactive recorder");
+                return;
             }
 
             state = 'inactive';

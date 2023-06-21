@@ -31,6 +31,9 @@ export const createSpeechRecognizer = (voiceListener: ReturnType<typeof createVo
         onMessage: (cb: (message: OriginalMessageType) => void) => () => void;
     }) =>
         voiceListener.listen(sendVoice).then(() => {
+            if (voiceListener.status === 'stopped') {
+                return;
+            }
             status = 'active';
             currentMessageId = messageId;
             off = onMessage((message: OriginalMessageType) => {
