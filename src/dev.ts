@@ -219,6 +219,8 @@ export const initializeNativeSDKEmulator = ({
 
     const promise = fn();
 
+    // @ts-ignore
+    window.Assistant = assistant;
     window.appInitialData = [];
     window.appRecoveryState = null;
     window.AssistantHost = {
