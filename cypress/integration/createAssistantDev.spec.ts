@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import { Server, WebSocket } from 'mock-socket';
 
-import { APP_INFO, initProtocol } from '../support/helpers/socket.helpers';
+import { APP_INFO, initProtocol } from '../support/helpers/socket';
 import { createAssistantDev } from '../../src/index';
 import { Message } from '../../src/proto';
 import {
@@ -10,7 +10,7 @@ import {
     AssistantSmartAppCommand,
     SystemMessageDataType,
 } from '../../src/typings';
-import { createMessage } from '../support/helpers/clientMethods.helpers';
+import { createMessage } from '../support/helpers/clientMethods';
 
 /* eslint-disable @typescript-eslint/camelcase */
 

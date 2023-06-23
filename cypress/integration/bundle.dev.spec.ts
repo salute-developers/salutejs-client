@@ -2,7 +2,7 @@
 /// <reference types="cypress" />
 
 import { createFakeWs } from '../support/helpers/createFakeWs';
-import { createMessage } from '../support/helpers/clientMethods.helpers';
+import { createMessage } from '../support/helpers/clientMethods';
 import { Message } from '../../src/proto';
 import { AppInfo } from '../../src';
 

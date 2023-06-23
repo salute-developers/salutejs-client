@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import { WebSocket, Server } from 'mock-socket';
 
-import { initProtocol } from '../support/helpers/socket.helpers';
+import { initProtocol } from '../support/helpers/socket';
 import { initializeNativeSDKEmulator } from '../../src/dev';
 import { Message } from '../../src/proto';
 import { AssistantAppState } from '../../src/typings';
