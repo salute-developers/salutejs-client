@@ -1,3 +1,15 @@
+# v1.20.1 (Fri Jun 23 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Использовать window.parent вместо top [#104](https://github.com/salute-developers/salutejs-client/pull/104) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.20.0 (Fri Jun 16 2023)
 
 #### 🚀 Enhancement
