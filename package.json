@@ -15,9 +15,10 @@
         "proto": "pbjs --no-typeurl --no-convert --no-verify --no-delimited -t static-module src/proto/index.proto > src/proto/index.js && pbts src/proto/index.js -o src/proto/index.d.ts",
         "asr": "pbjs --no-typeurl --no-convert --no-verify --no-delimited --no-create --no-encode -t static-module src/assistantSdk/voice/recognizers/asr/index.proto > src/assistantSdk/voice/recognizers/asr/index.js && pbts src/assistantSdk/voice/recognizers/asr/index.js -o src/assistantSdk/voice/recognizers/asr/index.d.ts",
         "mtt": "pbjs --no-typeurl --no-convert --no-verify --no-delimited --no-create --no-encode -t static-module src/assistantSdk/voice/recognizers/mtt/index.proto > src/assistantSdk/voice/recognizers/mtt/index.js && pbts src/assistantSdk/voice/recognizers/mtt/index.js -o src/assistantSdk/voice/recognizers/mtt/index.d.ts",
-        "cy:open": "cypress open",
-        "cy:run": "cypress run",
-        "test:cy": "cypress run -b chromium --headless",
+        "cy:build": "npm run build && rollup -c rollup.cy.config.js --bundleConfigAsCjs",
+        "cy:open": "npm run cy:build && cypress open",
+        "cy:run": "npm run cy:build && cypress run",
+        "test:cy": "npm run cy:build && cypress run -b chromium --headless",
         "lint": "eslint --ext .js,.ts,.tsx src/."
     },
     "repository": {
