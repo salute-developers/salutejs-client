@@ -56,6 +56,13 @@ function inIframe() {
     }
 }
 
+if (/[a-zA-Z]/.test('process.env.APP_VERSION')) {
+    console.info(
+        '%cPlease use the latest version of SaluteJS Client. Your version is process.env.APP_VERSION',
+        'color: yellow; font-size: 14px',
+    );
+}
+
 if (typeof window !== 'undefined' && inIframe()) {
     const postMessage = (action: AssistantPostMessage) => {
         window.parent?.postMessage(JSON.stringify(action), '*');
