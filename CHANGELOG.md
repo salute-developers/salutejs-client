@@ -1,3 +1,15 @@
+# v1.21.0 (Mon Jun 26 2023)
+
+#### 🚀 Enhancement
+
+- feat: Добавлено сообщение о канарейке [#105](https://github.com/salute-developers/salutejs-client/pull/105) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.20.1 (Fri Jun 23 2023)
 
 #### 🐛 Bug Fix
