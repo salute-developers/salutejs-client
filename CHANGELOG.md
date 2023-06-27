@@ -1,3 +1,15 @@
+# v1.21.1 (Tue Jun 27 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Останавливать слушание после assistant.stop [#108](https://github.com/salute-developers/salutejs-client/pull/108) ([@soulko](https://github.com/soulko))
+
+#### Authors: 1
+
+- Anton Kostenko ([@soulko](https://github.com/soulko))
+
+---
+
 # v1.21.0 (Mon Jun 26 2023)
 
 #### 🚀 Enhancement
