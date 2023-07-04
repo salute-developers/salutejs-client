@@ -1,3 +1,15 @@
+# v1.21.2 (Tue Jul 04 2023)
+
+#### 🐛 Bug Fix
+
+- fix: фикс версии uuid для ie [#110](https://github.com/salute-developers/salutejs-client/pull/110) ([@soulko](https://github.com/soulko))
+
+#### Authors: 1
+
+- Anton Kostenko ([@soulko](https://github.com/soulko))
+
+---
+
 # v1.21.1 (Tue Jun 27 2023)
 
 #### 🐛 Bug Fix
