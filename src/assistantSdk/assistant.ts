@@ -370,7 +370,14 @@ export const createAssistant = ({
                 }
 
                 // по-умолчанию activate_app_info: true
-                if (activate_app_info !== false && mesAppInfo && mesAppInfo.applicationId !== app.info.applicationId) {
+                if (
+                    activate_app_info !== false &&
+                    mesAppInfo &&
+                    // игнорируем activate_app_info для чатапов
+                    (mesAppInfo?.frontendType === 'DIALOG' ||
+                        mesAppInfo?.frontendType === 'CHAT_APP' ||
+                        mesAppInfo.applicationId !== app.info.applicationId)
+                ) {
                     emit('app', { type: 'run', app: mesAppInfo });
                 }
 
