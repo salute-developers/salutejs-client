@@ -120,21 +120,22 @@ describe('Проверяем изменение настроек озвучки'
         assistantClient.start();
         assistantClient.changeSettings({ disableDubbing: true, disableListening: true });
     });
+
     it('При включенной озвучке changeSettings применит настройки при завершении озвучки', (done) => {
         let phase: 1 | 2 | 3 = 1;
 
         let intervalId;
 
-        assistantClient.on('assistant', (event) => {
-            if (event.emotion === 'talk') {
+        assistantClient.on('tts', ({ status }) => {
+            if (status === 'start') {
                 phase = 2; // talking phase
                 expect(assistantClient.settings.disableDubbing, 'dubbing не изменился во время озвучки').to.equal(
                     false,
                 );
                 assistantClient.changeSettings({ disableDubbing: true });
             }
-            if (event.emotion === 'idle' && phase === 2) {
-                clearInterval(intervalId);
+            if (status === 'stop' && phase === 2) {
+                window.clearInterval(intervalId);
                 phase = 3; // stopped talking phase
             }
         });
@@ -222,13 +223,13 @@ describe('Проверяем изменение настроек озвучки'
     it('sendText останавливает озвучку и слушание', (done) => {
         let intervalId;
 
-        assistantClient.on('assistant', (event) => {
-            if (event.emotion === 'talk') {
+        assistantClient.on('tts', ({ status }) => {
+            if (status === 'start') {
                 assistantClient.sendText('text');
             }
 
-            if (event.emotion === 'idle') {
-                clearInterval(intervalId);
+            if (status === 'stop') {
+                window.clearInterval(intervalId);
                 done();
             }
         });
@@ -251,6 +252,7 @@ describe('Проверяем изменение настроек озвучки'
         assistantClient.start();
         assistantClient.changeSettings({ disableDubbing: false });
     });
+
     it('sendText при shouldSendDisableDubbing: отправляет {dubbing: -1}', (done) => {
         let settingsReceived = false;
         let textSent = false;
@@ -300,17 +302,18 @@ describe('Проверяем изменение настроек озвучки'
 
         assistantClient.start();
     });
+
     it('stopVoice останавливает озвучку', (done) => {
         let intervalId;
 
-        assistantClient.on('assistant', (event) => {
-            if (event.emotion === 'talk') {
+        assistantClient.on('tts', ({ status }) => {
+            if (status === 'start') {
                 assistantClient.stopVoice();
                 return;
             }
 
-            expect(event.emotion, 'stopVoice останавливает озвучку').to.equal('idle');
-            clearInterval(intervalId);
+            expect(status, 'stopVoice останавливает озвучку').to.equal('stop');
+            window.clearInterval(intervalId);
             done();
         });
 
@@ -333,10 +336,17 @@ describe('Проверяем изменение настроек озвучки'
         assistantClient.start();
         assistantClient.changeSettings({ disableDubbing: false });
     });
+
     it('stopVoice останавливает слушание', (done) => {
+        let listenerStatus: 'listen' | 'started' | 'stopped' | null = null;
+
         assistantClient.on('assistant', (event) => {
+            if (event.listener) {
+                listenerStatus = event.listener.status;
+            }
+
             if (event.asr) {
-                expect(event.emotion, 'stopVoice останавливает слушание').to.equal('idle');
+                expect(listenerStatus, 'stopVoice останавливает слушание').to.equal('stopped');
                 done();
             }
         });

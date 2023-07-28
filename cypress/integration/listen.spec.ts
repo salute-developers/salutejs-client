@@ -44,8 +44,8 @@ describe('Проверяем изменение настроек озвучки'
     });
 
     it('Cancel от VPS останавливает слушание', (done) => {
-        assistantClient.on('assistant', (event) => {
-            if (event.emotion === 'idle') {
+        assistantClient.on('assistant', ({ listener }) => {
+            if (listener?.status === 'stopped') {
                 done();
             }
         });
