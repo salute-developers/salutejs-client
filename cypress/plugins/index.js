@@ -1,4 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
+const path = require('path');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const webpackPreprocessor = require('@cypress/webpack-preprocessor');
 
 module.exports = (on, config) => {
@@ -6,6 +8,9 @@ module.exports = (on, config) => {
         webpackOptions: {
             resolve: {
                 extensions: ['.js', '.jsx', '.ts', '.tsx'],
+                alias: {
+                    'lib': process.env.CY_MODE==='production' ? path.resolve(__dirname, '../../esm/index') : path.resolve(__dirname, '../../src/index')
+                }
             },
             module: {
                 rules: [

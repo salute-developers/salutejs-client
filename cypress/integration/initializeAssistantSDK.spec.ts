@@ -11,6 +11,8 @@ const USER_CHANNEL = 'TEST_CHANNEL';
 const SURFACE = 'TEST_SURFACE';
 const SOCKET_URL = 'ws://test.com';
 
+// @deprecated
+// initializeNativeSDKEmulator - не экспортируем, поэтому и тестить не корректно
 describe('Проверяем', () => {
     let server: undefined | Server;
 

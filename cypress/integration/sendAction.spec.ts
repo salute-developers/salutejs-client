@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { createAssistant } from '../../src/index';
+import { createAssistant } from 'lib';
 
 /* eslint-disable @typescript-eslint/camelcase */
 

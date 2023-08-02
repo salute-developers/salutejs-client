@@ -1,6 +1,8 @@
 /// <reference types="cypress" />
-import { createAssistant, SystemMessageHeaderByttonsType } from '../../src/index';
+import { createAssistant } from 'lib';
 import { Hints, Suggestions } from '@salutejs/scenario';
+
+import { SystemMessageHeaderByttonsType } from '../../src/index';
 
 /* eslint-disable @typescript-eslint/camelcase */
 

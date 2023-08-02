@@ -17,7 +17,7 @@
         "mtt": "pbjs --no-typeurl --no-convert --no-verify --no-delimited --no-create --no-encode -t static-module src/assistantSdk/voice/recognizers/mtt/index.proto > src/assistantSdk/voice/recognizers/mtt/index.js && pbts src/assistantSdk/voice/recognizers/mtt/index.js -o src/assistantSdk/voice/recognizers/mtt/index.d.ts",
         "cy:open": "cypress open",
         "cy:run": "cypress run",
-        "test:cy": "cypress run -b chromium --headless",
+        "test:cy": "CY_MODE=production cypress run -b chromium --headless",
         "lint": "eslint --ext .js,.ts,.tsx src/."
     },
     "repository": {

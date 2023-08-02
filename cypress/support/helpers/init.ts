@@ -1,6 +1,6 @@
 import { Server } from 'mock-socket';
 
-import { createAssistantClient } from '../../../src';
+import { createAssistantClient } from 'lib';
 
 const defaultConfiguration: Parameters<typeof createAssistantClient>[0] = {
 	settings: { dubbing: -1 },
