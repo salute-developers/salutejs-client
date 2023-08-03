@@ -170,7 +170,7 @@ export const createProtocol = (
         return sendInitialSettingsOriginal(data, ...args);
     }) as typeof sendInitialSettingsOriginal;
 
-    const getHistoryRequest = (data: IChatHistoryRequest & { history?: GetHistoryRequestClient }) => {
+    const getHistoryRequest = (data: IChatHistoryRequest & { history?: GetHistoryRequestClient } = {}) => {
         return getHistoryRequestOriginal({
             device: currentSettings.device || null,
             uuid: {
@@ -275,7 +275,7 @@ export const createProtocol = (
 
             status = 'connected';
 
-            clearTimeout(clearReadyTimer);
+            window.clearTimeout(clearReadyTimer);
 
             /// считаем коннект = ready, если по истечении таймаута сокет не был разорван
             /// т.к бек может разрывать сокет, если с settings что-то не так

@@ -7,13 +7,13 @@ import {
     AppInfo,
     AssistantAppState,
     AssistantSmartAppData,
+    AssistantSmartAppError,
     AssistantStartSmartSearch,
     VpsConfiguration,
     EmotionId,
     OriginalMessageType,
     PermissionType,
     SystemMessageDataType,
-    CharacterId,
     AssistantBackgroundApp,
     AssistantBackgroundAppInfo,
     AssistantMeta,
@@ -28,6 +28,7 @@ import { createProtocol, ProtocolError } from './client/protocol';
 import { createTransport, CreateTransportParams } from './client/transport';
 import { getAnswerForRequestPermissions, getTime } from './meta';
 import { createVoice, TtsEvent } from './voice/voice';
+import { VoiceListenerStatus } from './voice/listener/voiceListener';
 import { createMutexedObject } from './mutexedObject';
 import { createMutexSwitcher } from './mutexSwitcher';
 import { MetaStringified } from './client/methods';
@@ -47,6 +48,8 @@ const DEFAULT_APP: AppInfo = {
     systemName: 'assistant',
     frontendEndpoint: 'None',
 };
+
+const BASIC_SMART_APP_COMMANDS_TYPES = ['smart_app_data', 'smart_app_error', 'start_smart_search', 'navigation'];
 
 function convertFieldValuesToString<
     Obj extends Record<string, unknown>,
@@ -81,12 +84,19 @@ const promiseTimeout = <T>(promise: Promise<T>, timeout: number): Promise<T> => 
 export type AppEvent =
     | { type: 'run'; app: AppInfo }
     | { type: 'close'; app: AppInfo }
-    | { type: 'command'; app: AppInfo; command: AssistantSmartAppData | AssistantStartSmartSearch };
+    | {
+          type: 'command';
+          app: AppInfo;
+          command: AssistantSmartAppData | AssistantSmartAppError | AssistantStartSmartSearch;
+      };
 
 export type AssistantEvent = {
     asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
-    character?: CharacterId;
+    /**
+     * @deprecated Use the `on('assistant', { listener })` and `on('tts', tts)` subscriptions to receive voice events
+     */
     emotion?: EmotionId;
+    listener?: { status: VoiceListenerStatus };
 };
 
 export type VpsEvent =
@@ -120,7 +130,7 @@ export interface CreateAssistantDevOptions {
 }
 
 type BackgroundAppOnCommand<T> = (
-    command: (AssistantSmartAppData & { smart_app_data?: T }) | AssistantStartSmartSearch,
+    command: (AssistantSmartAppData & { smart_app_data?: T }) | AssistantSmartAppError | AssistantStartSmartSearch,
     messageId: string,
 ) => void;
 
@@ -363,19 +373,14 @@ export const createAssistant = ({
     subscriptions.push(
         client.on('systemMessage', (systemMessage: SystemMessageDataType, originalMessage: OriginalMessageType) => {
             if (originalMessage.messageName === 'ANSWER_TO_USER') {
-                const { activate_app_info, items, app_info: mesAppInfo, character } = systemMessage;
-
-                if (character) {
-                    emit('assistant', { character: character.id });
-                }
+                const { activate_app_info, items, app_info: mesAppInfo } = systemMessage;
 
                 // по-умолчанию activate_app_info: true
                 if (
                     activate_app_info !== false &&
                     mesAppInfo &&
                     // игнорируем activate_app_info для чатапов
-                    (mesAppInfo?.frontendType === 'DIALOG' ||
-                        mesAppInfo?.frontendType === 'CHAT_APP' ||
+                    (['DIALOG', 'CHAT_APP'].includes(mesAppInfo.frontendType) ||
                         mesAppInfo.applicationId !== app.info.applicationId)
                 ) {
                     emit('app', { type: 'run', app: mesAppInfo });
@@ -386,7 +391,7 @@ export const createAssistant = ({
                         const { command } = items[i];
 
                         if (typeof command !== 'undefined') {
-                            setTimeout(() => emit('command', command));
+                            window.setTimeout(() => emit('command', command));
 
                             if (command.type === 'start_music_recognition') {
                                 voice.shazam();
@@ -409,13 +414,7 @@ export const createAssistant = ({
                                 });
                             }
 
-                            if (
-                                (command.type === 'smart_app_data' ||
-                                    command.type === 'smart_app_error' ||
-                                    command.type === 'start_smart_search' ||
-                                    command.type === 'navigation') &&
-                                mesAppInfo
-                            ) {
+                            if (mesAppInfo && BASIC_SMART_APP_COMMANDS_TYPES.includes(command.type)) {
                                 // эмитим все команды, т.к бывают фоновые команды
                                 emit('app', {
                                     type: 'command',

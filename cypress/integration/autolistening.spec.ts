@@ -3,7 +3,7 @@
 import { Server } from 'mock-socket';
 
 import { Message } from '../../src/proto';
-import { createAssistantClient, MessageNames, EmotionId } from '../../src';
+import { createAssistantClient, MessageNames } from '../../src';
 import { createMessage, createVoiceMessage } from '../support/helpers/clientMethods.helpers';
 import { initServer, initAssistantClient } from '../support/helpers/init';
 
@@ -17,183 +17,181 @@ describe('Автослушание', () => {
     });
 
     afterEach(() => {
-		server?.stop();
+        server?.stop();
     });
 
-	it('Озвучивание прекращается при установке disableDubbing=true', (done) => {
-		let currentEmotion: EmotionId = 'idle';
+    it('Озвучивание прекращается при установке disableDubbing=true', (done) => {
+        let ttsStatus: 'start' | 'stop' | null = null;
 
-		server.on('connection', (socket) => {
-			socket.on('message', (data) => {
-				const message = Message.decode((data as Uint8Array).slice(4));
-				const { messageId, text } = message;
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+                const { messageId, text } = message;
 
-				if (text?.data === 'hello') {
-					[1,2,3,4,5,6,7,8].forEach((i) => {
-						if (i === 4) {
-							assistantClient.changeSettings({ disableDubbing: true });
-						}
+                if (text?.data === 'hello') {
+                    [1, 2, 3, 4, 5, 6, 7, 8].forEach((i) => {
+                        if (i === 4) {
+                            assistantClient.changeSettings({ disableDubbing: true });
+                        }
 
-						socket.send(
-							createVoiceMessage({
-								messageId,
-								last: i === 8 ? 1 : -1,
-							})
-						);
+                        socket.send(
+                            createVoiceMessage({
+                                messageId,
+                                last: i === 8 ? 1 : -1,
+                            }),
+                        );
 
-						expect(currentEmotion).eq(i >= 4 ? 'idle' : 'talk', 'Остановка озвучки работает');
-						
-						if (i === 8) {
-							done();
-						}
-					});
-				}
-			});
-		});
+                        expect(ttsStatus).eq(i >= 4 ? 'stop' : 'start', 'Остановка озвучки работает');
 
-		assistantClient.on('assistant', ({ emotion }) => {
-			if (typeof emotion !== 'undefined') {
-				currentEmotion = emotion;
-			}
-		});
+                        if (i === 8) {
+                            done();
+                        }
+                    });
+                }
+            });
+        });
 
-		assistantClient.changeSettings({ disableDubbing: false });
+        assistantClient.on('tts', ({ status }) => {
+            ttsStatus = status;
+        });
 
-		assistantClient.start();
+        assistantClient.changeSettings({ disableDubbing: false });
 
-		assistantClient.sendText('hello');
-	});
+        assistantClient.start();
 
-	it('Автослушание не запускается при disableListening=true', () => {
-		server.on('connection', (socket) => {
-			socket.on('message', (data) => {
-				const message = Message.decode((data as Uint8Array).slice(4));
-				const { messageId, text, voice } = message;
+        assistantClient.sendText('hello');
+    });
 
-				if (voice) {
-					throw new Error('Слушание запускаться не должно');
-				}
+    it('Автослушание не запускается при disableListening=true', () => {
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+                const { messageId, text, voice } = message;
 
-				if (text?.data === 'hello') {
-					socket.send(
-						createMessage({
-							messageId,
-							messageName: MessageNames.ANSWER_TO_USER,
-							systemMessage: {
-								auto_listening: true,
-								items: [{ bubble: { text: 'Hello!' } }],
-							},
-							last: 1,
-						})
-					);
-				}
-			});
-		});
+                if (voice) {
+                    throw new Error('Слушание запускаться не должно');
+                }
 
-		assistantClient.changeSettings({
-			disableDubbing: true,
-			disableListening: true,
-		});
+                if (text?.data === 'hello') {
+                    socket.send(
+                        createMessage({
+                            messageId,
+                            messageName: MessageNames.ANSWER_TO_USER,
+                            systemMessage: {
+                                auto_listening: true,
+                                items: [{ bubble: { text: 'Hello!' } }],
+                            },
+                            last: 1,
+                        }),
+                    );
+                }
+            });
+        });
 
-		assistantClient.start();
+        assistantClient.changeSettings({
+            disableDubbing: true,
+            disableListening: true,
+        });
 
-		assistantClient.sendText('hello');
+        assistantClient.start();
 
-		cy.wait(2000);
-	});
+        assistantClient.sendText('hello');
 
-	it('При установке disableDubbing=true после запуска слушания ответ не озвучивается, запускается автослушание', () => {
-		let hadListening = false;
+        cy.wait(2000);
+    });
 
-		server.on('connection', (socket) => {
-			socket.on('message', (data) => {
-				const message = Message.decode((data as Uint8Array).slice(4));
-				const { messageId, text, voice } = message;
+    it('При установке disableDubbing=true после запуска слушания ответ не озвучивается, запускается автослушание', () => {
+        let hadListening = false;
 
-				if (voice) {
-					hadListening = true;
-				}
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+                const { messageId, text, voice } = message;
 
-				if (text?.data === 'hello') {
-					socket.send(
-						createVoiceMessage({
-							messageId,
-							messageName: MessageNames.ANSWER_TO_USER,
-							systemMessage: {
-								auto_listening: true,
-							},
-							last: 1,
-						})
-					);
-				}
-			});
-		});
+                if (voice) {
+                    hadListening = true;
+                }
 
-		assistantClient.on('assistant', ({ emotion }) => {
-			if (emotion === 'talk') {
-				throw new Error('Озвучивание запускаться не должно');
-			}
-		});
+                if (text?.data === 'hello') {
+                    socket.send(
+                        createVoiceMessage({
+                            messageId,
+                            messageName: MessageNames.ANSWER_TO_USER,
+                            systemMessage: {
+                                auto_listening: true,
+                            },
+                            last: 1,
+                        }),
+                    );
+                }
+            });
+        });
 
-		assistantClient.changeSettings({
-			disableDubbing: true,
-			disableListening: false,
-		});
+        assistantClient.on('tts', ({ status }) => {
+            if (status === 'start') {
+                throw new Error('Озвучивание запускаться не должно');
+            }
+        });
 
-		assistantClient.start();
+        assistantClient.changeSettings({
+            disableDubbing: true,
+            disableListening: false,
+        });
 
-		assistantClient.sendText('hello');
+        assistantClient.start();
 
-		// Не используем done(), чтобы в любом случае пройти обе проверки
-		cy.wait(2000).then(() => {
-			expect(hadListening).eq(true, 'Автослушание должно запуститься');
-		});
-	});
+        assistantClient.sendText('hello');
 
-	const testAutolisteningAfterVoiceAnswer = (done: () => void, disableDubbing: boolean) => {
-		let isTestDone = false;
+        // Не используем done(), чтобы в любом случае пройти обе проверки
+        cy.wait(2000).then(() => {
+            expect(hadListening).eq(true, 'Автослушание должно запуститься');
+        });
+    });
 
-		server.on('connection', (socket) => {
-			socket.on('message', (data) => {
-				const message = Message.decode((data as Uint8Array).slice(4));
-				const { messageId, text, voice } = message;
+    const testAutolisteningAfterVoiceAnswer = (done: () => void, disableDubbing: boolean) => {
+        let isTestDone = false;
 
-				if (voice && !isTestDone) {
-					done();
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+                const { messageId, text, voice } = message;
 
-					isTestDone = true;
-				}
+                if (voice && !isTestDone) {
+                    done();
 
-				if (text?.data === 'hello') {
-					socket.send(
-						createVoiceMessage({
-							messageId,
-							messageName: MessageNames.ANSWER_TO_USER,
-							systemMessage: {
-								auto_listening: true,
-							},
-							last: 1,
-						})
-					);
-				}
-			});
-		});
+                    isTestDone = true;
+                }
 
-		assistantClient.changeSettings({
-			disableDubbing,
-			disableListening: false,
-		});
+                if (text?.data === 'hello') {
+                    socket.send(
+                        createVoiceMessage({
+                            messageId,
+                            messageName: MessageNames.ANSWER_TO_USER,
+                            systemMessage: {
+                                auto_listening: true,
+                            },
+                            last: 1,
+                        }),
+                    );
+                }
+            });
+        });
 
-		assistantClient.start();
+        assistantClient.changeSettings({
+            disableDubbing,
+            disableListening: false,
+        });
 
-		assistantClient.sendText('hello');
-	};
+        assistantClient.start();
 
-	it('Автослушание после голосового ответа работает (при disableDubbing=false)', (done) => {
-		testAutolisteningAfterVoiceAnswer(done, false);
-	});
+        assistantClient.sendText('hello');
+    };
 
-	it('Автослушание после голосового ответа работает (при disableDubbing=true)', (done) => {
-		testAutolisteningAfterVoiceAnswer(done, true);
-	});
+    it('Автослушание после голосового ответа работает (при disableDubbing=false)', (done) => {
+        testAutolisteningAfterVoiceAnswer(done, false);
+    });
+
+    it('Автослушание после голосового ответа работает (при disableDubbing=true)', (done) => {
+        testAutolisteningAfterVoiceAnswer(done, true);
+    });
 });

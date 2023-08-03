@@ -261,9 +261,9 @@ export const initializeNativeSDKEmulator = ({
     };
 
     const subscribeToListenerStatus = (cb: (event: 'listen' | 'stopped') => void): (() => void) =>
-        assistant.on('assistant', (event) => {
-            if (event.emotion) {
-                cb(event.emotion === 'listen' ? 'listen' : 'stopped');
+        assistant.on('assistant', ({ listener }) => {
+            if (listener) {
+                cb(listener.status === 'stopped' ? 'stopped' : 'listen');
             }
         });
     const subscribeToListenerHypotesis = (cb: (hypotesis: string, last: boolean) => void): (() => void) =>

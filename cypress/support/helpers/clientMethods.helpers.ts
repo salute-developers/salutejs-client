@@ -1,7 +1,7 @@
 import { Server } from 'mock-socket';
 
 import { appendHeader } from '../../../src/assistantSdk/client/protocol';
-import { Message, IText } from '../../../src/proto';
+import { Message, IText, IStatus, IBytes } from '../../../src/proto';
 import { SystemMessageDataType, MessageNames, Character } from '../../../src/typings';
 
 type CreateAnswerBuffer1Params = {
@@ -10,7 +10,9 @@ type CreateAnswerBuffer1Params = {
     systemMessage?: Partial<Omit<SystemMessageDataType, 'character'> & { character: Partial<Character> }>;
     messageName?: string;
     text?: IText;
+    status?: IStatus;
     appendVoice?: boolean;
+    bytes?: IBytes;
 };
 
 export const createMessage = ({
@@ -19,7 +21,9 @@ export const createMessage = ({
     systemMessage,
     messageName = MessageNames.ANSWER_TO_USER,
     text,
+    status,
     appendVoice = false,
+    bytes,
 }: CreateAnswerBuffer1Params) => {
     const encodedAsNodeBuffer = appendHeader(
         Message.encode({
@@ -34,7 +38,9 @@ export const createMessage = ({
                       data: Uint8Array.from({ length: 100 }, () => Math.floor(Math.random() * 5)),
                   },
             text,
+            status,
             last,
+            bytes,
         }).finish(),
     );
     const newBuffer = new ArrayBuffer(encodedAsNodeBuffer.byteLength);
