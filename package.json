@@ -17,6 +17,7 @@
         "mtt": "pbjs --no-typeurl --no-convert --no-verify --no-delimited --no-create --no-encode -t static-module src/assistantSdk/voice/recognizers/mtt/index.proto > src/assistantSdk/voice/recognizers/mtt/index.js && pbts src/assistantSdk/voice/recognizers/mtt/index.js -o src/assistantSdk/voice/recognizers/mtt/index.d.ts",
         "cy:open": "cypress open",
         "cy:run": "cypress run",
+        "cy:report:coverage": "npx nyc report --reporter=html",
         "test:cy": "CY_MODE=production cypress run -b chromium --headless",
         "lint": "eslint --ext .js,.ts,.tsx src/."
     },
@@ -44,6 +45,7 @@
         "@auto-it/npm": "^10.25.0",
         "@commitlint/cli": "11.0.0",
         "@commitlint/config-conventional": "11.0.0",
+        "@cypress/code-coverage": "3.9.12",
         "@cypress/webpack-preprocessor": "5.9.1",
         "@rollup/plugin-commonjs": "24.1.0",
         "@rollup/plugin-json": "6.0.0",
@@ -66,6 +68,7 @@
         "eslint-plugin-prettier": "4.2.1",
         "file-loader": "6.1.0",
         "husky": "4.3.0",
+        "istanbul-instrumenter-loader": "3.0.1",
         "lint-staged": "10.5.4",
         "mock-socket": "9.0.3",
         "prettier": "2.8.7",

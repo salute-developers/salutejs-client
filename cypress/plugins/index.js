@@ -16,6 +16,11 @@ module.exports = (on, config) => {
                 rules: [
                     {
                         test: /\.(ts|tsx)$/,
+                        use: { loader: 'istanbul-instrumenter-loader' },
+                        exclude: /node_modules|cypress/
+                    },
+                    {
+                        test: /\.(ts|tsx)$/,
                         loader: 'ts-loader',
                         options: { transpileOnly: true },
                     },
@@ -36,6 +41,12 @@ module.exports = (on, config) => {
             },
         },
     };
+
+    if (process.env.CY_MODE!=='production') {
+        /// бандл в прод собирается без istanbul,
+        /// поэтому коверейдж не нужен
+        require('@cypress/code-coverage/task')(on, config);
+    }
 
     on('file:preprocessor', webpackPreprocessor(options));
 
