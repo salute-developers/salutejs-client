@@ -33,7 +33,7 @@
         "@salutejs/scenario": "0.30.0",
         "lodash.clonedeep": "4.5.0",
         "long": "5.2.3",
-        "protobufjs": "7.2.3",
+        "protobufjs": "7.2.4",
         "uuid": "8.3.2"
     },
     "browserslist": [
