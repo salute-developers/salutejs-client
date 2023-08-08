@@ -27,3 +27,5 @@ cypress/videos/
 
 .cache
 .env
+.nyc_output
+coverage

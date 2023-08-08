@@ -2,7 +2,7 @@
 import { Server, WebSocket } from 'mock-socket';
 
 import { APP_INFO, initProtocol } from '../support/helpers/socket.helpers';
-import { createAssistantDev } from '../../src/index';
+import { createAssistantDev } from 'lib';
 import { Message } from '../../src/proto';
 import {
     AssistantClientCustomizedCommand,

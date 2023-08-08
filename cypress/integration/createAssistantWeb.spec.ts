@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { createAssistant } from '../../src/index';
+import { createAssistant } from 'lib';
 
 describe('Проверяем createAssistant на вебе (без сдк)', () => {
     const state = { type: 'test app state' };
