@@ -4,7 +4,7 @@ import { Server } from 'mock-socket';
 
 import { createAssistantClient } from '../../src';
 import { Message } from '../../src/proto';
-import { sendMessage } from '../support/helpers/socket.helpers';
+import { sendMessage } from '../support/helpers/socket';
 import { initServer, initAssistantClient } from '../support/helpers/init';
 
 describe('Проверяем обновление токена', () => {

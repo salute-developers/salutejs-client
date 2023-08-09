@@ -5,7 +5,7 @@ import { Server } from 'mock-socket';
 import { createAssistantClient } from '../../src';
 import { MessageNames } from '../../src/typings';
 import { Message } from '../../src/proto';
-import { createMessage } from '../support/helpers/clientMethods.helpers';
+import { createMessage } from '../support/helpers/clientMethods';
 import { initServer, initAssistantClient } from '../support/helpers/init';
 
 describe('Проверяем изменение настроек озвучки', () => {

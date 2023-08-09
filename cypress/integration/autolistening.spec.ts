@@ -1,10 +1,11 @@
+/* eslint-disable camelcase */
 /// <reference types="cypress" />
 
 import { Server } from 'mock-socket';
 
 import { Message } from '../../src/proto';
 import { createAssistantClient, MessageNames } from '../../src';
-import { createMessage, createVoiceMessage } from '../support/helpers/clientMethods.helpers';
+import { createMessage, createVoiceMessage } from '../support/helpers/clientMethods';
 import { initServer, initAssistantClient } from '../support/helpers/init';
 
 describe('Автослушание', () => {

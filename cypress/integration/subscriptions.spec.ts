@@ -6,7 +6,7 @@ import { ActionCommand, AppInfo } from '@salutejs/scenario';
 import { Message } from '../../src/proto';
 import { MessageNames } from '../../src/typings';
 import { VoiceListenerStatus } from '../../src/assistantSdk/voice/listener/voiceListener';
-import { createMessage, createVoiceMessage } from '../support/helpers/clientMethods.helpers';
+import { createMessage, createVoiceMessage } from '../support/helpers/clientMethods';
 import { initAssistantClient, initServer } from '../support/helpers/init';
 
 describe('Подписки на события', () => {

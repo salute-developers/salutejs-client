@@ -2,7 +2,7 @@
 /// <reference types="cypress" />
 import { Server, WebSocket } from 'mock-socket';
 
-import { initProtocol, sendMessage } from '../support/helpers/socket.helpers';
+import { initProtocol, sendMessage } from '../support/helpers/socket';
 import { initServer, initAssistantClient } from '../support/helpers/init';
 import { Message } from '../../src/proto';
 import { createAssistantClient, AppInfo } from '../../src/index';

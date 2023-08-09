@@ -1,8 +1,9 @@
+/* eslint-disable camelcase */
 /// <reference types="cypress" />
 import { Server, WebSocket } from 'mock-socket';
-
-import { APP_INFO, initProtocol } from '../support/helpers/socket.helpers';
 import { createAssistantDev } from 'lib';
+
+import { APP_INFO, initProtocol } from '../support/helpers/socket';
 import { Message } from '../../src/proto';
 import {
     AssistantClientCustomizedCommand,
@@ -10,9 +11,7 @@ import {
     AssistantSmartAppCommand,
     SystemMessageDataType,
 } from '../../src/typings';
-import { createMessage } from '../support/helpers/clientMethods.helpers';
-
-/* eslint-disable @typescript-eslint/camelcase */
+import { createMessage } from '../support/helpers/clientMethods';
 
 const INSETS = { left: 0, top: 0, right: 0, bottom: 144 };
 const CHARACTER = 'sber';
