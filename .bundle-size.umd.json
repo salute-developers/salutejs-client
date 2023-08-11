@@ -1,0 +1,12 @@
+{
+  "assistant.development.min.js": {
+    "bundled": 589997,
+    "minified": 213868,
+    "gzipped": 91270
+  },
+  "assistant.production.min.js": {
+    "bundled": 33184,
+    "minified": 12767,
+    "gzipped": 4481
+  }
+}

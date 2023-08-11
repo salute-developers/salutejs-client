@@ -1,0 +1,57 @@
+name: 'Bundle size reporter'
+
+on:
+  push:
+    branches:
+      - '*'
+      - '!master'
+
+jobs:
+  composite:
+    name: 'composite'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+
+      - name: Checkout to compare branch
+        uses: actions/checkout@v3
+        with:
+          ref: 'bundle-size-showing-file'
+          path: br-base
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate report
+        id: bundleSize
+        uses: nejcm/bundle-size-reporter-action@v1.4.1
+        with:
+          paths: '.bundle-size.umd.json'
+          onlyDiff: 'false'
+
+      - name: Get pull request number
+        uses: actions/github-script@v6
+        id: pr_number
+        with:
+          script: |
+            const data = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              commit_sha: context.sha,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            return data.data[0]?.number?.toString() || '-1';
+          result-encoding: string
+
+      - name: Post report comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: 'Bundle size report'
+          number: ${{ steps.pr_number.outputs.result }}
+          message: '${{ steps.bundleSize.outputs.summary }}'
+
+      - name: Post report console
+        run: |
+          echo '${{ steps.bundleSize.outputs.summary }}' >> $GITHUB_STEP_SUMMARY
+        shell: bash

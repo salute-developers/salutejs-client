@@ -5,6 +5,7 @@ import json from '@rollup/plugin-json';
 import typescript from '@rollup/plugin-typescript';
 import terser from '@rollup/plugin-terser';
 import copy from 'rollup-plugin-copy';
+import { sizeSnapshot } from 'rollup-plugin-size-snapshot';
 
 import pkg from './package.json';
 
@@ -32,6 +33,7 @@ const getUmdConfig = (fileName, input) => ({
         plugins: [terser()],
     },
     plugins: [
+        sizeSnapshot({ snapshotPath: '.bundle-size.umd.json' }),
         nodeResolve({
             browser: true,
             preferBuiltins: true,
@@ -88,6 +90,7 @@ export default [
             },
         },
         plugins: [
+            // sizeSnapshot({ snapshotPath: '.bundle-size.esm.json' }),
             nodeResolve({
                 browser: true,
                 preferBuiltins: true,
