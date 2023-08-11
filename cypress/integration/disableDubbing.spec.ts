@@ -5,7 +5,7 @@ import { Server } from 'mock-socket';
 import { createAssistantClient } from '../../src';
 import { Message } from '../../src/proto';
 import { initServer, initAssistantClient } from '../support/helpers/init';
-import { createVoiceAnswer } from '../support/helpers/clientMethods.helpers';
+import { createVoiceAnswer } from '../support/helpers/clientMethods';
 
 describe('Проверяем изменение настроек озвучки', () => {
     const defaultDubbing = -1;

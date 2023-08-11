@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { WebSocket } from 'mock-socket';
 
 import { appendHeader } from '../../../src/assistantSdk/client/protocol';
@@ -44,7 +45,6 @@ export const sendMessage = (
 
     socket.dispatchEvent({
         type: 'message',
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         data: bufferWithHeader,
     });
@@ -67,9 +67,7 @@ export const initProtocol = (
         if (message.messageName === 'OPEN_ASSISTANT') {
             sendMessage(socket, message.messageId, {
                 systemMessageData: {
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     auto_listening: false,
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     app_info: {
                         applicationId: '',
                         appversionId: '',
@@ -84,9 +82,7 @@ export const initProtocol = (
         if (initPhrase && message.text?.data === initPhrase) {
             sendMessage(socket, message.messageId, {
                 systemMessageData: {
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     auto_listening: false,
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     app_info: APP_INFO,
                     character,
                     items,
