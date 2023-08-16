@@ -5,6 +5,7 @@ import { Message } from '../../src/proto';
 import { initAssistantClient } from '../support/helpers/init';
 // Собственная реализация необходима, так как пакет mock-socket не эмитит событие сокета close на клиенте
 import { createFakeWs } from '../support/helpers/createFakeWs';
+import { WebSocketMock } from '../support/websocketMock';
 
 describe('Подключение к сокету', () => {
     const initAssistant = ({ checkCertUrl, connect }: { checkCertUrl?: string; connect: () => WebSocket }) => {
@@ -128,5 +129,81 @@ describe('Подключение к сокету', () => {
         });
 
         assistant.start();
+    });
+
+    it('reconnect откроет соединение если оно закрыто (3 попытки)', (done) => {
+        const assistantClient = initAssistantClient();
+        let attempt: number = 0;
+        let ws;
+        cy.stub(window, 'WebSocket', (url) => {
+            attempt++;
+            expect(url).to.be.eq('ws://path');
+
+            ws = new WebSocketMock(url);
+            setTimeout(() => {
+                ws.readyState = WebSocket.CLOSED;
+                ws.events.emit('error');
+                ws.events.emit('close');
+                cy.tick(300 * (attempt - 1));
+            });
+            return ws;
+        });
+
+        cy.clock();
+        assistantClient.reconnect();
+
+        /// ожидаем ошибку в конце
+        /// и три попытки переподключения
+        assistantClient.on('vps', ({ type }) => {
+            if (type === 'error') {
+                cy.tick(5000)
+                expect(attempt).to.be.eq(3);
+                done();
+            }
+        })
+    })
+
+    it('reconnect закроет и откроет соедение если оно открыто (3 попытки)', (done) => {
+        const assistantClient = initAssistantClient();
+        let ws;
+        let attempt: number = 0;
+        cy.stub(window, 'WebSocket', (url) => {
+            attempt++;
+
+            expect(url).to.be.eq('ws://path');
+            
+            ws = new WebSocketMock(url);
+            ws.readyState = WebSocket.OPEN;
+            cy.stub(ws, 'close');
+            if (attempt === 1) {
+                setTimeout(() => {
+                    ws.events.emit('open');
+                    assistantClient.reconnect();
+                    expect(ws.close).to.be.called;
+                    ws.events.emit('close');
+                });
+            } else {
+                setTimeout(() => {
+                    ws.readyState = WebSocket.CLOSED;
+                    ws.events.emit('error');
+                    ws.events.emit('close');
+                    cy.tick(300 * (attempt - 2));
+                });
+            }
+            return ws;
+        });
+
+        cy.clock();
+        assistantClient.start();
+
+        /// ожидаем ошибку в конце
+        /// и три попытки переподключения (+1 в начале)
+        assistantClient.on('vps', ({ type }) => {
+            if (type === 'error') {
+                cy.tick(5000)
+                expect(attempt).to.be.eq(4);
+                done();
+            }
+        })
     });
 });
