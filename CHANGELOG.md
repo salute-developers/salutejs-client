@@ -1,3 +1,43 @@
+# v1.21.4 (Tue Aug 22 2023)
+
+#### 🐛 Bug Fix
+
+- в бандл сдк не должен попадать record [#135](https://github.com/salute-developers/salutejs-client/pull/135) ([@sasha-tlt](https://github.com/sasha-tlt))
+- doc: Добавил информацию об ограничении частоты запросов при отладке приложения [#111](https://github.com/salute-developers/salutejs-client/pull/111) (ivlytkin@sberbank.ru [@Lytkini](https://github.com/Lytkini))
+- test: Тесты api reconnect [#133](https://github.com/salute-developers/salutejs-client/pull/133) ([@sasha-tlt](https://github.com/sasha-tlt))
+- test: Упращение хэлперов для тестов [#131](https://github.com/salute-developers/salutejs-client/pull/131) ([@evgeniysemin](https://github.com/evgeniysemin))
+- chore: обновленный конфиг semgrep [#130](https://github.com/salute-developers/salutejs-client/pull/130) ([@sasha-tlt](https://github.com/sasha-tlt))
+- chore: Отчет о покрытии [#114](https://github.com/salute-developers/salutejs-client/pull/114) ([@sasha-tlt](https://github.com/sasha-tlt))
+- test: Тесты на готовой esm-сборке [#114](https://github.com/salute-developers/salutejs-client/pull/114) ([@sasha-tlt](https://github.com/sasha-tlt))
+- chore: semgrep [#129](https://github.com/salute-developers/salutejs-client/pull/129) ([@sasha-tlt](https://github.com/sasha-tlt))
+- test: Добавлены тесты для подписок [#113](https://github.com/salute-developers/salutejs-client/pull/113) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### 🔩 Dependency Updates
+
+- build(deps-dev): bump y18n from 4.0.0 to 4.0.3 [#127](https://github.com/salute-developers/salutejs-client/pull/127) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build(deps-dev): bump elliptic from 6.5.3 to 6.5.4 [#126](https://github.com/salute-developers/salutejs-client/pull/126) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build(deps-dev): bump shelljs from 0.8.4 to 0.8.5 [#124](https://github.com/salute-developers/salutejs-client/pull/124) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build(deps-dev): bump ini from 1.3.5 to 1.3.8 [#128](https://github.com/salute-developers/salutejs-client/pull/128) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build(deps-dev): bump url-parse from 1.4.7 to 1.5.10 [#123](https://github.com/salute-developers/salutejs-client/pull/123) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build(deps): bump tough-cookie and @cypress/request [#122](https://github.com/salute-developers/salutejs-client/pull/122) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build(deps-dev): bump decode-uri-component from 0.2.0 to 0.2.2 [#121](https://github.com/salute-developers/salutejs-client/pull/121) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build(deps-dev): bump loader-utils from 1.4.0 to 1.4.2 [#120](https://github.com/salute-developers/salutejs-client/pull/120) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build(deps-dev): bump async from 3.2.0 to 3.2.4 [#119](https://github.com/salute-developers/salutejs-client/pull/119) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build(deps-dev): bump json5 from 1.0.1 to 1.0.2 [#118](https://github.com/salute-developers/salutejs-client/pull/118) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build(deps-dev): bump word-wrap from 1.2.3 to 1.2.5 [#117](https://github.com/salute-developers/salutejs-client/pull/117) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build(deps-dev): bump qs from 6.5.2 to 6.5.3 [#116](https://github.com/salute-developers/salutejs-client/pull/116) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- build(deps): bump protobufjs from 7.2.3 to 7.2.4 [#115](https://github.com/salute-developers/salutejs-client/pull/115) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- [@Lytkini](https://github.com/Lytkini)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+- Lytkini (ivlytkin@sberbank.ru)
+
+---
+
 # v1.21.3 (Wed Jul 26 2023)
 
 #### 🐛 Bug Fix
