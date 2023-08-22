@@ -31,7 +31,7 @@
         "smartapp"
     ],
     "dependencies": {
-        "@salutejs/scenario": "0.30.0",
+        "@salutejs/scenario": "0.38.0",
         "lodash.clonedeep": "4.5.0",
         "long": "5.2.3",
         "protobufjs": "7.2.4",
