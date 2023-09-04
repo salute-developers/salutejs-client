@@ -1,3 +1,20 @@
+# v1.21.5 (Mon Sep 04 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Поменять адрес точки подключения в dev-режиме [#138](https://github.com/salute-developers/salutejs-client/pull/138) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### 🔩 Dependency Updates
+
+- build(deps): bump node-fetch, @auto-it/conventional-commits, @auto-it/npm and auto [#136](https://github.com/salute-developers/salutejs-client/pull/136) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.21.4 (Tue Aug 22 2023)
 
 #### 🐛 Bug Fix
