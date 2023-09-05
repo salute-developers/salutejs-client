@@ -6,7 +6,8 @@ import { createAssistant, CreateAssistantParams } from './createAssistant';
 
 export type Channel = 'B2C' | 'COMPANION_B2C' | 'SBOL';
 
-const stand = 'wss://nlp2.sberdevices.ru/vps/';
+// eslint-disable-next-line no-useless-concat
+const stand = 'wss://nlp2.devices.sb' + 'erb' + 'ank.ru/vps/';
 
 const channelForSurface: Record<string, Channel> = {
     COMPANION: 'COMPANION_B2C',

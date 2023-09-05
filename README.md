@@ -42,10 +42,11 @@ ____
 
 Для работы с Assistant Client необходимо:
 
-1. Завести аккаунт в [SmartApp Studio](https://smartapp-studio.sberdevices.ru/).
-2. Создать смартап типа [Сanvas App](https://smartapp-code.sberdevices.ru/documentation/#/docs/ru/methodology/research/canvasapp).
-3. Получить токен. Для этого необходимо перейти в *Настройки профиля* > пункт *Auth Token* > опция *Скопировать ключ*.
-4. Передать полученный токен в методе `createSmartappDebugger` в параметре `token`.
+1. Установить сертификат Минцифры если он не установлен.
+2. Завести аккаунт в [SmartApp Studio](https://smartapp-studio.sberdevices.ru/).
+3. Создать смартап типа [Сanvas App](https://smartapp-code.sberdevices.ru/documentation/#/docs/ru/methodology/research/canvasapp).
+4. Получить токен. Для этого необходимо перейти в *Настройки профиля* > пункт *Auth Token* > опция *Скопировать ключ*.
+5. Передать полученный токен в методе `createSmartappDebugger` в параметре `token`.
 
 
 ### Требования к устройствам
