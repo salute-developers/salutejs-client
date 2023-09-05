@@ -1,3 +1,15 @@
+# v1.22.0 (Tue Sep 05 2023)
+
+#### 🚀 Enhancement
+
+- Перейти на сертификат минцифры [#140](https://github.com/salute-developers/salutejs-client/pull/140) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.21.5 (Mon Sep 04 2023)
 
 #### 🐛 Bug Fix
