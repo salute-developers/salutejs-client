@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-import { AssistantSettings, AssistantSmartAppData, Surface } from './typings';
+import { AssistantDev, AssistantSettings, AssistantSmartAppData, Surface } from './typings';
 import { initializeNativeSDKEmulator, initializeNativeSDKEmulatorParams } from './dev';
 import { createAssistant, CreateAssistantParams } from './createAssistant';
 
@@ -41,7 +41,7 @@ export const createAssistantDev = <A extends AssistantSmartAppData>({
     surface = 'SBERBOX',
     userChannel,
     ...sdkParams
-}: CreateAssistantDevParams) => {
+}: CreateAssistantDevParams): AssistantDev<A> => {
     const { nativePanel } = initializeNativeSDKEmulator({
         ...sdkParams,
         surface,
@@ -83,7 +83,7 @@ export const createSmartappDebugger = <A extends AssistantSmartAppData>({
     Pick<
         CreateAssistantDevParams,
         'surface' | 'userChannel' | 'nativePanel' | 'initPhrase' | 'enableRecord' | 'recordParams' | 'getMeta'
-    >) => {
+    >): AssistantDev<A> => {
     try {
         const { exp } = parseJwt(token);
         if (exp * 1000 <= Date.now()) {

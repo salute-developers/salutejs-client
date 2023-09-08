@@ -107,6 +107,62 @@ export interface AssistantViewItemBase<T> {
 
 export type AssistantViewItem = AssistantViewItemBase<Action>;
 
+export interface AssistantEvents<A extends AssistantSmartAppData> {
+    start: () => void;
+    data: (command: AssistantClientCustomizedCommand<A>) => void;
+    command: <T extends AssistantSmartAppCommand['smart_app_data'] = AssistantSmartAppCommand['smart_app_data']>(
+        data: T,
+    ) => void;
+    error: <T extends AssistantSmartAppError['smart_app_error'] = AssistantSmartAppError['smart_app_error']>(
+        error: T,
+    ) => void;
+    tts: (state: Pick<AssistantTtsStateUpdate, 'state' | 'owner'>) => void;
+}
+
+export interface SendDataParams {
+    action: AssistantServerAction;
+    name?: string;
+    requestId?: string;
+}
+
+export type AssistantClientCommandEvents<C extends AssistantClientCommand = AssistantClientCommand> = {
+    [event in C['type']]: (command: C) => void;
+};
+
+export interface Assistant<A extends AssistantSmartAppData> {
+    cancelTts: (() => void) | undefined;
+    close: () => void;
+    getInitialData: () => AssistantClientCommand[];
+    findInInitialData: <T>(args: { type?: string; command?: string }) => T | undefined;
+    getRecoveryState: () => unknown;
+    on: <K extends keyof AssistantEvents<A>>(event: K, cb: AssistantEvents<A>[K]) => () => void;
+    sendAction: <
+        D extends AssistantSmartAppCommand['smart_app_data'],
+        E extends AssistantSmartAppError['smart_app_error'],
+    >(
+        action: { type: string; payload?: unknown },
+        onData: (data: D) => void,
+        onError: (error: E) => void,
+        params: Pick<SendDataParams, 'name' | 'requestId'>,
+    ) => () => void;
+    sendData: (params: SendDataParams) => () => void;
+    sendText: (message: string) => void;
+    setHints: (hints: Hints) => void;
+    setGetRecoveryState: (next: () => unknown) => void;
+    setGetState: (next: () => AssistantAppState) => void;
+    setHeaderButtons: (headerButtons: SystemMessageHeaderByttonsType) => void;
+    setSuggests: (suggestions: Suggestions['buttons']) => void;
+    subscribeToCommand: <K extends keyof AssistantClientCommandEvents>(
+        event: K,
+        cb: AssistantClientCommandEvents[K],
+    ) => () => void;
+    ready: () => void;
+}
+
+export type AssistantDev<A extends AssistantSmartAppData> = Assistant<A> & {
+    nativePanel: { show: () => void; hide: () => void };
+};
+
 export interface AssistantServerActionAppInfo {
     projectId: string;
     applicationId?: string;
