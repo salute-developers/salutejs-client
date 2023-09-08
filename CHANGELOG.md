@@ -1,3 +1,15 @@
+# v1.22.1 (Fri Sep 08 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Исправлены типы динамического экспорта [#142](https://github.com/salute-developers/salutejs-client/pull/142) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.22.0 (Tue Sep 05 2023)
 
 #### 🚀 Enhancement
