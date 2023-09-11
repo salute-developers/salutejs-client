@@ -1,0 +1,27 @@
+{
+  "index.js": {
+    "bundled": 68391,
+    "minified": 18748,
+    "gzipped": 6091
+  },
+  "assistant-!~{001}~.js": {
+    "bundled": 414989,
+    "minified": 110354,
+    "gzipped": 27055
+  },
+  "createAssistantDevOrigin.js": {
+    "bundled": 119683,
+    "minified": 101454,
+    "gzipped": 64063
+  },
+  "assistant.development.min.js": {
+    "bundled": 210132,
+    "minified": 210047,
+    "gzipped": 90494
+  },
+  "assistant.production.min.js": {
+    "bundled": 12127,
+    "minified": 12107,
+    "gzipped": 4351
+  }
+}
