@@ -1,0 +1,89 @@
+* {
+    outline: none;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    font-size: 16px;
+    font-family: 'Helvetica', 'Arial';
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: #fff;
+    background-image: linear-gradient(336.9deg,rgba(4,255,44,0.02) 0%,rgba(255,255,255,0) 64.95%),radial-gradient(66.53% 100% at 73.33% 100%,rgba(0,179,255,0.06) 0%,rgba(0,209,255,0.01) 99.69%),linear-gradient(180deg,rgba(255,255,255,0) 50%,rgba(0,251,59,0.05) 100%),linear-gradient(270deg,rgba(6,195,255,0.05) 0%,rgba(255,255,255,0) 100%);
+}
+
+.control {
+    position: relative;
+    display: flex;
+    margin: 2rem;
+}
+
+.control input {
+    flex: 1;
+}
+
+.control button {
+    position: absolute;
+    right: 0;
+}
+
+input {
+    border: none;
+    border-radius: 1.125rem;
+    background-color: rgba(8,8,8,0.12);
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    height: 2.25rem;
+    line-height: 1.25rem;
+}
+
+button {
+    border: none;
+    border-radius: 1.125rem;
+    height: 2.25rem;
+    padding: 0.625rem 0.75rem;
+    color: #fff;
+    background-color: #21A038;
+    cursor: pointer;
+}
+
+.pulse {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    70% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+#bubble-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 2rem;
+}
+
+.bubble {
+    border-radius: 1.125rem;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    background-color: rgba(8,8,8,0.4);
+    max-width: 200px;
+}
