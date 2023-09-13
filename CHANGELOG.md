@@ -1,3 +1,15 @@
+# v1.23.1 (Wed Sep 13 2023)
+
+#### 🐛 Bug Fix
+
+- Не сериализовывать кнопки для хидера [#145](https://github.com/salute-developers/salutejs-client/pull/145) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.23.0 (Wed Sep 13 2023)
 
 #### 🚀 Enhancement
