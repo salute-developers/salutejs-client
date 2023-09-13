@@ -1,3 +1,15 @@
+# v1.23.0 (Wed Sep 13 2023)
+
+#### 🚀 Enhancement
+
+- Поддержка геолокации [#144](https://github.com/salute-developers/salutejs-client/pull/144) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.22.1 (Fri Sep 08 2023)
 
 #### 🐛 Bug Fix
