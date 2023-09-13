@@ -129,7 +129,7 @@ export type AssistantClientCommandEvents<C extends AssistantClientCommand = Assi
     [event in C['type']]: (command: C) => void;
 };
 
-export interface Assistant<A extends AssistantSmartAppData> {
+export interface Assistant<A extends AssistantSmartAppData = AssistantSmartAppData> {
     cancelTts: (() => void) | undefined;
     close: () => void;
     getInitialData: () => AssistantClientCommand[];
@@ -361,7 +361,7 @@ export interface AssistantHost {
     sendText: (message: string) => void;
     setSuggests: (suggest: string) => void;
     setHints: (hints: string) => void;
-    setHeaderButtons: (headerButtons: SystemMessageHeaderByttonsType) => void;
+    setHeaderButtons?: (headerButtons: SystemMessageHeaderByttonsType) => void;
 }
 
 export interface AssistantWindow {
