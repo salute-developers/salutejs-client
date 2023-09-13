@@ -361,7 +361,7 @@ export interface AssistantHost {
     sendText: (message: string) => void;
     setSuggests: (suggest: string) => void;
     setHints: (hints: string) => void;
-    setHeaderButtons: (headerButtons: string) => void;
+    setHeaderButtons: (headerButtons: SystemMessageHeaderByttonsType) => void;
 }
 
 export interface AssistantWindow {
