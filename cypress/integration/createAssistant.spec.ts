@@ -32,17 +32,17 @@ describe('Проверяем createAssistant', () => {
     const getRecoveryState = () => recoveryState;
     const initAssistant = (params = {}) => createAssistant({ getState, getRecoveryState, ...params });
     const commandsTypes = [
-        'smart_app_data', 
-        'smart_app_error', 
-        'app_context', 
-        'theme', 
-        'character', 
-        'navigation', 
-        'visibility', 
-        'insets', 
-        'dynamic_insets', 
-        'minimum_static_insets', 
-        'maximum_static_insets', 
+        'smart_app_data',
+        'smart_app_error',
+        'app_context',
+        'theme',
+        'character',
+        'navigation',
+        'visibility',
+        'insets',
+        'dynamic_insets',
+        'minimum_static_insets',
+        'maximum_static_insets',
         'tts_state_update',
     ];
     const initialData = [
@@ -230,7 +230,7 @@ describe('Проверяем createAssistant', () => {
         ];
         const assistant = initAssistant();
         assistant.setHeaderButtons(headerButtons);
-        expect(window.AssistantHost.setHeaderButtons).to.calledWith(JSON.stringify(headerButtons));
+        expect(window.AssistantHost.setHeaderButtons).to.calledWith(headerButtons);
     });
 
     it("Проверяем фильтрацию system.command = 'back' - не должна попадать в onData", () => {
@@ -439,7 +439,7 @@ describe('Проверяем createAssistant', () => {
         (async () => {
             window.AssistantHost.ready = () => {
                 window.AssistantHost.ready = readyBefore;
-    
+
                 done();
             };
         })();

@@ -84,8 +84,8 @@ if (typeof window !== 'undefined' && inIframe()) {
         sendText(message: string) {
             postMessage({ type: 'sendText', payload: message });
         },
-        setHeaderButtons(headerButtons: string) {
-            postMessage({ type: 'setHeaderButtons', payload: headerButtons });
+        setHeaderButtons(headerButtons: SystemMessageHeaderByttonsType) {
+            postMessage({ type: 'setHeaderButtons', payload: JSON.stringify(headerButtons) });
         },
     };
 
@@ -394,7 +394,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
                 throw new Error('setHeaderButtons не поддерживается в данной версии клиента');
             }
 
-            window.AssistantHost?.setHeaderButtons(JSON.stringify(headerButtons));
+            window.AssistantHost?.setHeaderButtons(headerButtons);
         },
         ready: readyFn,
     };
