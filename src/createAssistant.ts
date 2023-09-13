@@ -2,7 +2,6 @@ import { v4 } from 'uuid';
 
 import {
     AssistantAppState,
-    AssistantServerAction,
     AssistantClientCustomizedCommand,
     AssistantSmartAppData,
     AssistantClientCommand,
@@ -11,8 +10,11 @@ import {
     AssistantPostMessage,
     Hints,
     Suggestions,
-    AssistantTtsStateUpdate,
     SystemMessageHeaderByttonsType,
+    Assistant,
+    AssistantEvents,
+    AssistantClientCommandEvents,
+    SendDataParams,
 } from './typings';
 import { createNanoEvents } from './nanoevents';
 import { createNanoObservable, ObserverFunc } from './nanoobservable';
@@ -23,28 +25,6 @@ export interface CreateAssistantParams {
     getRecoveryState?: () => unknown;
     ready?: boolean;
 }
-
-export interface AssistantEvents<A extends AssistantSmartAppData> {
-    start: () => void;
-    data: (command: AssistantClientCustomizedCommand<A>) => void;
-    command: <T extends AssistantSmartAppCommand['smart_app_data'] = AssistantSmartAppCommand['smart_app_data']>(
-        data: T,
-    ) => void;
-    error: <T extends AssistantSmartAppError['smart_app_error'] = AssistantSmartAppError['smart_app_error']>(
-        error: T,
-    ) => void;
-    tts: (state: Pick<AssistantTtsStateUpdate, 'state' | 'owner'>) => void;
-}
-
-export interface SendDataParams {
-    action: AssistantServerAction;
-    name?: string;
-    requestId?: string;
-}
-
-export type AssistantClientCommandEvents<C extends AssistantClientCommand = AssistantClientCommand> = {
-    [event in C['type']]: (command: C) => void;
-};
 
 const excludeTags = ['A', 'AUDIO', 'BUTTON', 'INPUT', 'OPTION', 'SELECT', 'TEXTAREA', 'VIDEO'];
 
@@ -168,12 +148,12 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     getState,
     getRecoveryState,
     ready = true,
-}: CreateAssistantParams) => {
+}: CreateAssistantParams): Assistant<A> => {
     const { on, emit: emitOriginal } = createNanoEvents<AssistantEvents<A>>();
     const { on: subscribeToCommand, emit: emitAllCommands } = createNanoEvents<AssistantClientCommandEvents>();
     const observables = new Map<string, { next: ObserverFunc<A | AssistantSmartAppError>; requestId?: string }>();
 
-    let currentGetState = getState;
+    let currentGetState: () => AssistantAppState = getState;
     let currentGetRecoveryState = getRecoveryState;
     let isInitialCommandsEmitted = false;
     let readyRetries = 0;
@@ -362,6 +342,12 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     return {
         cancelTts,
         close: () => window.AssistantHost?.close(),
+        getGeo:
+            typeof window.AssistantHost?.getGeo !== 'undefined'
+                ? () => {
+                      window.AssistantHost.getGeo?.();
+                  }
+                : undefined,
         getInitialData: appInitialData.pull,
         findInInitialData: appInitialData.find,
         getRecoveryState: () => window.appRecoveryState,
@@ -390,7 +376,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
             });
         },
         sendData,
-        setGetState: (nextGetState: () => {}) => {
+        setGetState: (nextGetState: () => AssistantAppState) => {
             currentGetState = nextGetState;
         },
         setGetRecoveryState: (nextGetRecoveryState?: () => unknown) => {
