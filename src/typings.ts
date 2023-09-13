@@ -134,6 +134,7 @@ export interface Assistant<A extends AssistantSmartAppData> {
     close: () => void;
     getInitialData: () => AssistantClientCommand[];
     findInInitialData: <T>(args: { type?: string; command?: string }) => T | undefined;
+    getGeo: (() => void) | undefined;
     getRecoveryState: () => unknown;
     on: <K extends keyof AssistantEvents<A>>(event: K, cb: AssistantEvents<A>[K]) => () => void;
     sendAction: <
@@ -262,6 +263,32 @@ export interface AssistantStartSmartSearch {
     sdk_meta?: SdkMeta;
 }
 
+export interface AssistantGeoLocationCommand {
+    type: 'geo_location';
+    geo: {
+        /** разрешение клиента на передачу данных */
+        geo_permission: 'granted' | 'denied_once' | 'denied_permanently';
+        /** признак работы служб геолокации на устройстве, передается только для Android */
+        is_geo_available?: boolean;
+        locations: Array<{
+            /** тип подключения для передачи данных */
+            source: string;
+            /** широта десятичной дробью */
+            lat: string;
+            /** долгота десятичной дробью */
+            lon: string;
+            /** точность в метрах */
+            accuracy: string;
+            /** время получения координат в миллисекундах (UTC) */
+            timestamp: string;
+            /** скорость движения в м/с */
+            speed?: string;
+            /** высота в метрах */
+            altitude?: string;
+        }>;
+    };
+}
+
 export interface AppContext {
     app_info: AppInfo;
     device_id: string;
@@ -312,6 +339,7 @@ export type AssistantClientCustomizedCommand<T extends AssistantSmartAppData> =
     | AssistantInsetsCommand
     | AssistantSmartAppError
     | AssistantTtsStateUpdate
+    | AssistantGeoLocationCommand
     | T;
 
 export type AssistantClientCommand = AssistantClientCustomizedCommand<AssistantSmartAppCommand>;
@@ -326,6 +354,7 @@ export interface AssistantClient {
 export interface AssistantHost {
     cancelTts?: (options: string) => void;
     close: () => void;
+    getGeo?: () => void;
     ready: () => void;
     sendData: (action: string, message: string | null) => void;
     sendDataContainer: (container: string) => void;

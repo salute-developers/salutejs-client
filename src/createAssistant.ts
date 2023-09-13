@@ -342,6 +342,12 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     return {
         cancelTts,
         close: () => window.AssistantHost?.close(),
+        getGeo:
+            typeof window.AssistantHost?.getGeo !== 'undefined'
+                ? () => {
+                      window.AssistantHost.getGeo?.();
+                  }
+                : undefined,
         getInitialData: appInitialData.pull,
         findInInitialData: appInitialData.find,
         getRecoveryState: () => window.appRecoveryState,

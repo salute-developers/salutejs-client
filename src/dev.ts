@@ -237,6 +237,39 @@ export const initializeNativeSDKEmulator = ({
             initialSmartAppData.splice(0, initialSmartAppData.length);
             window.appRecoveryState = null;
         },
+        getGeo() {
+            navigator.geolocation.getCurrentPosition(
+                ({ coords, timestamp }) => {
+                    emitOnData({
+                        type: 'geo_location',
+                        geo: {
+                            geo_permission: 'granted',
+                            locations: [
+                                {
+                                    source: 'browser',
+                                    lat: coords.latitude.toString(),
+                                    lon: coords.longitude.toString(),
+                                    accuracy: coords.accuracy.toString(),
+                                    timestamp: timestamp.toString(),
+                                    speed: coords.speed?.toString(),
+                                    altitude: coords.altitude?.toString(),
+                                },
+                            ],
+                        },
+                    });
+                },
+                () => {
+                    emitOnData({
+                        type: 'geo_location',
+                        geo: {
+                            geo_permission: 'denied_permanently',
+                            locations: [],
+                        },
+                    });
+                },
+                { timeout: 60000 },
+            );
+        },
         ready() {
             if (assistantReady && window.AssistantClient?.onData) {
                 window.AssistantClient?.onStart && window.AssistantClient?.onStart();
