@@ -373,17 +373,22 @@ export const createAssistant = ({
     subscriptions.push(
         client.on('systemMessage', (systemMessage: SystemMessageDataType, originalMessage: OriginalMessageType) => {
             if (originalMessage.messageName === 'ANSWER_TO_USER') {
-                const { activate_app_info, items, app_info: mesAppInfo } = systemMessage;
+                const { activate_app_info, finished, items, app_info: mesAppInfo } = systemMessage;
+                const isChatApp = mesAppInfo && ['DIALOG', 'CHAT_APP'].includes(mesAppInfo.frontendType);
+                const isAppChanged = mesAppInfo && mesAppInfo.applicationId !== app.info.applicationId;
 
                 // по-умолчанию activate_app_info: true
                 if (
                     activate_app_info !== false &&
-                    mesAppInfo &&
                     // игнорируем activate_app_info для чатапов
-                    (['DIALOG', 'CHAT_APP'].includes(mesAppInfo.frontendType) ||
-                        mesAppInfo.applicationId !== app.info.applicationId)
+                    ((isChatApp && finished !== true) || isAppChanged)
                 ) {
                     emit('app', { type: 'run', app: mesAppInfo });
+                }
+
+                // закрываем чатапп с finished = true
+                if (isChatApp && !isAppChanged && finished === true) {
+                    closeApp();
                 }
 
                 if (items) {
