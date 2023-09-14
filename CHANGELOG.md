@@ -1,3 +1,15 @@
+# v1.23.2 (Thu Sep 14 2023)
+
+#### 🐛 Bug Fix
+
+- fix: реагировать на finished в чатапах [#146](https://github.com/salute-developers/salutejs-client/pull/146) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.23.1 (Wed Sep 13 2023)
 
 #### 🐛 Bug Fix
