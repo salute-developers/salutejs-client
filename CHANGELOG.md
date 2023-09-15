@@ -1,3 +1,15 @@
+# v1.23.3 (Fri Sep 15 2023)
+
+#### 🐛 Bug Fix
+
+- fix: игнорировать activate_app_info для chatapp [#147](https://github.com/salute-developers/salutejs-client/pull/147) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.23.2 (Thu Sep 14 2023)
 
 #### 🐛 Bug Fix
