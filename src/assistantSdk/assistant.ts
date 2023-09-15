@@ -377,11 +377,12 @@ export const createAssistant = ({
                 const isChatApp = mesAppInfo && ['DIALOG', 'CHAT_APP'].includes(mesAppInfo.frontendType);
                 const isAppChanged = mesAppInfo && mesAppInfo.applicationId !== app.info.applicationId;
 
-                // по-умолчанию activate_app_info: true
                 if (
-                    activate_app_info !== false &&
-                    // игнорируем activate_app_info для чатапов
-                    ((isChatApp && finished !== true) || isAppChanged)
+                    isAppChanged &&
+                    // по-умолчанию activate_app_info: true
+                    ((!isChatApp && activate_app_info !== false) ||
+                        // игнорируем activate_app_info для чатапов
+                        (isChatApp && finished !== true))
                 ) {
                     emit('app', { type: 'run', app: mesAppInfo });
                 }
