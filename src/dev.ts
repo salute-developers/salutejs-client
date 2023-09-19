@@ -284,8 +284,8 @@ export const initializeNativeSDKEmulator = ({
         async sendDataContainer(container: string) {
             await promise;
 
-            const { data, message_name: messageName, requestId } = JSON.parse(container);
-            assistant.sendServerAction(data, messageName || 'SERVER_ACTION', requestId);
+            const { data, message_name: messageName, requestId, mode } = JSON.parse(container);
+            assistant.sendServerAction(data, messageName || 'SERVER_ACTION', requestId, undefined, mode);
         },
         setSuggests() {},
         setHints() {},

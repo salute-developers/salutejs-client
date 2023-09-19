@@ -9,6 +9,7 @@ import {
     HistoryMessages,
     AdditionalMeta,
     Status,
+    AssistantServerActionMode,
 } from '../../typings';
 import { GetHistoryResponse } from '../../proto';
 
@@ -107,6 +108,7 @@ export const createClient = (
         serverAction: unknown,
         appInfo: AppInfo,
         messageName = 'SERVER_ACTION',
+        mode?: AssistantServerActionMode,
     ): Promise<number | Long | undefined> => {
         const messageId = protocol.getMessageId();
 
@@ -118,7 +120,7 @@ export const createClient = (
                 protocol.sendSystemMessage(
                     {
                         // eslint-disable-next-line camelcase
-                        data: { ...systemData, app_info: appInfo, server_action: serverAction },
+                        data: { ...systemData, app_info: appInfo, server_action: serverAction, mode },
                         messageName: messageName || 'SERVER_ACTION',
                     },
                     true,

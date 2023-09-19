@@ -21,6 +21,7 @@ import {
     HistoryMessages,
     AdditionalMeta,
     Status,
+    AssistantServerActionMode,
 } from '../typings';
 
 import { createClient } from './client/client';
@@ -297,8 +298,9 @@ export const createAssistant = ({
         messageName = 'SERVER_ACTION',
         requestId: string | undefined = undefined,
         actionApp: AppInfo = app.info,
+        mode?: AssistantServerActionMode,
     ) => {
-        client.sendServerAction(serverAction, actionApp, messageName).then((messageId) => {
+        client.sendServerAction(serverAction, actionApp, messageName, mode).then((messageId) => {
             if (requestId && messageId) {
                 requestIdMap[messageId.toString()] = requestId;
             }

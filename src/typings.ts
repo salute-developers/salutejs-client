@@ -123,6 +123,10 @@ export interface SendDataParams {
     action: AssistantServerAction;
     name?: string;
     requestId?: string;
+    /**
+     * опциональное поле, считаем "foreground" по умолчанию
+     */
+    mode?: AssistantServerActionMode;
 }
 
 export type AssistantClientCommandEvents<C extends AssistantClientCommand = AssistantClientCommand> = {
@@ -171,6 +175,8 @@ export interface AssistantServerActionAppInfo {
 }
 
 export type AssistantServerAction = { action_id: string; parameters?: any } | { type: string; payload?: any };
+
+export type AssistantServerActionMode = 'background' | 'foreground';
 
 export type AssistantCommands =
     | ActionCommand

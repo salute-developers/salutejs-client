@@ -263,7 +263,7 @@ ____
 `owner` - флаг принадлежности озвучки текущему смартапу.
 
 
-#### sendAction({ type: string; payload: Record<string, unknown> }, params?: { name?: string; requestId?: string }) => void
+#### sendAction({ type: string; payload: Record<string, unknown> }, params?: { name?: string; requestId?: string, mode?: 'background'|'foreground' }) => void
 
 Передает ошибки и обработчики ответа от бэкенда. <br>
 `sendAction` — отправляет server-action и типизирует сообщения data и error.<br>
@@ -288,7 +288,7 @@ const unsubscribe = assistant.sendAction<SomeBackendMessage>({ type: 'some_actio
   }, (error) => {});
 ```
 
-#### sendData({ action: [AssistantServerAction](#AssistantServerAction), requestId?: string }, onData?: data: [AssistantCharacterCommand](#AssistantCharacterCommand) | [AssistantNavigationCommand](#AssistantNavigationCommand) | [AssistantSmartAppError](#AssistantSmartAppError) | [AssistantSmartAppCommand](#AssistantSmartAppCommand)) => void): () => void
+#### sendData({ action: [AssistantServerAction](#AssistantServerAction), name?: string, requestId?: string, mode?: 'background'|'foreground' }, onData?: data: [AssistantCharacterCommand](#AssistantCharacterCommand) | [AssistantNavigationCommand](#AssistantNavigationCommand) | [AssistantSmartAppError](#AssistantSmartAppError) | [AssistantSmartAppCommand](#AssistantSmartAppCommand)) => void): () => void
 
 Отправляет события с фронтенда на бэкенд через ассистента.
 Первый параметр (обязательный) принимает данные для отправки.
@@ -642,7 +642,7 @@ const initializeAssistant = (getState: AssistantAppState) => {
 
 Эмуляция команды, полученной от бэкенда. Команда приходит подписчикам `AssistantClient.onData`.
 
-#### waitAction(onAction?: () => void): Promise<{ state: AssistantAppState; action: AssistantServerAction; name?: string; requestId?: string; }>
+#### waitAction(onAction?: () => void): Promise<{ state: AssistantAppState; action: AssistantServerAction; name?: string; requestId?: string; mode?: 'background'|'foreground' }>
 
 Получение `promise`, который будет разрезолвлен при следующем вызове `AssistantClient.sendData`
 
@@ -694,7 +694,7 @@ while(!end) {
 
 Последовательно передает все сообщения лога от ассистента в AssistantClient.
 
-#### getNextAction: { action: AssistantServerAction; name?: string; requestId?: string; }
+#### getNextAction: { action: AssistantServerAction; name?: string; requestId?: string; mode?: 'background'|'foreground'; }
 
 Возвращает следующее сообщение от AssistantClient (вызов `sendData`) в ассистент. Можно использовать для сравнения эталонного сообщения (из лога) и текущего в тесте.
 

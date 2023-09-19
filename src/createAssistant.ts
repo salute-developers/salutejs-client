@@ -295,14 +295,14 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     }
 
     const sendData = (
-        { action, name, requestId }: SendDataParams,
+        { action, name, requestId, mode }: SendDataParams,
         onData?: ObserverFunc<A | AssistantSmartAppError>,
     ): (() => void) => {
         if (window.AssistantHost?.sendDataContainer) {
             if (onData == null) {
                 window.AssistantHost?.sendDataContainer(
                     /* eslint-disable-next-line camelcase */
-                    JSON.stringify({ data: action, message_name: name || '', requestId }),
+                    JSON.stringify({ data: action, message_name: name || '', requestId, mode }),
                 );
                 return () => {};
             }
@@ -316,7 +316,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
             const { subscribe } = createNanoObservable<A | AssistantSmartAppError>(({ next }) => {
                 window.AssistantHost?.sendDataContainer(
                     /* eslint-disable-next-line camelcase */
-                    JSON.stringify({ data: action, message_name: name || '', requestId: realRequestId }),
+                    JSON.stringify({ data: action, message_name: name || '', requestId: realRequestId, mode }),
                 );
 
                 observables.set(realRequestId, { next, requestId });
@@ -363,9 +363,9 @@ export const createAssistant = <A extends AssistantSmartAppData>({
             },
             onData?: ObserverFunc<D>,
             onError?: ObserverFunc<E>,
-            { name, requestId }: Pick<SendDataParams, 'name' | 'requestId'> = {},
+            { name, requestId, mode }: Pick<SendDataParams, 'name' | 'requestId' | 'mode'> = {},
         ) => {
-            return sendData({ action, name, requestId }, (data: A | AssistantSmartAppError) => {
+            return sendData({ action, name, requestId, mode }, (data: A | AssistantSmartAppError) => {
                 if (data.type === 'smart_app_data') {
                     onData?.(data.smart_app_data as D);
                 }
