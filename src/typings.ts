@@ -174,7 +174,14 @@ export interface AssistantServerActionAppInfo {
     appversionId?: string;
 }
 
-export type AssistantServerAction = { action_id: string; parameters?: any } | { type: string; payload?: any };
+export type AssistantServerAction =
+    | { action_id: string; parameters?: any }
+    | {
+          // @deprecated use action_id instead
+          type: string;
+          // @depreacted use parameters instead
+          payload?: any;
+      };
 
 export type AssistantServerActionMode = 'background' | 'foreground';
 

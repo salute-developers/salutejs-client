@@ -116,14 +116,14 @@ assistant.on('data', (command) => {
 const handleOnClick = () => {
     // Отправка сообщения ассистенту с фронтенд.
     // Структура может меняться на усмотрение разработчика, в зависимости от бэкенд
-    assistant.sendData({ action: { type: 'some_action_name', payload: { param: 'some' } } });
+    assistant.sendData({ action: { action_id: 'some_action_name', parameters: { param: 'some' } } });
 };
 
 const handleOnRefreshClick = () => {
     // Отправка сообщения бэкенду с возможностью подписки на ответ.
     // В обработчик assistant.on('data') сообщение не передается
     const unsubscribe = assistant.sendAction(
-        { type: 'some_action_name', payload: { param: 'some' } },
+        { action_id: 'some_action_name', parameters: { param: 'some' } },
         (data: { type: string; payload: Record<string, unknown> }) => {
             // Обработка данных, переданных от бэкенд
             unsubscribe();
@@ -263,7 +263,7 @@ ____
 `owner` - флаг принадлежности озвучки текущему смартапу.
 
 
-#### sendAction({ type: string; payload: Record<string, unknown> }, params?: { name?: string; requestId?: string, mode?: 'background'|'foreground' }) => void
+#### sendAction({ action_id: string; parameters: Record<string, unknown> }, params?: { name?: string; requestId?: string, mode?: 'background'|'foreground' }) => void
 
 Передает ошибки и обработчики ответа от бэкенда. <br>
 `sendAction` — отправляет server-action и типизирует сообщения data и error.<br>
@@ -281,7 +281,7 @@ interface SomeBackendMessage extends AssistantSmartAppCommand['smart_app_data'] 
   },
 }
 
-const unsubscribe = assistant.sendAction<SomeBackendMessage>({ type: 'some_action_name', payload: { someParam: 'some_value' } },
+const unsubscribe = assistant.sendAction<SomeBackendMessage>({ action_id: 'some_action_name', parameters: { someParam: 'some_value' } },
   ({ payload }) => {
     // обработка payload.data
     unsubscribe();
@@ -299,7 +299,7 @@ const unsubscribe = assistant.sendAction<SomeBackendMessage>({ type: 'some_actio
 ```ts
 ...
 
-const unsubscribe = assistant.sendData({ action: { type: 'some_action_name' } }, (data: command) => {
+const unsubscribe = assistant.sendData({ action: { action_id: 'some_action_name' } }, (data: command) => {
   if (data.type === 'smart_app_data' && data.smart_app_data.type === 'target_action') {
     unsubsribe();
     ... // обработка команды
@@ -381,9 +381,9 @@ interface AssistantViewItem {
 ```typescript
 interface AssistantServerAction {
   // Тип Server Action
-  type: string;
+  action_id: string;
   // Любые параметры
-  payload?: Record<string, unknown>;
+  parameters?: Record<string, unknown>;
 }
 ```
 
