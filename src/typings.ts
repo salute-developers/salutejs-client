@@ -123,6 +123,10 @@ export interface SendDataParams {
     action: AssistantServerAction;
     name?: string;
     requestId?: string;
+    /**
+     * опциональное поле, считаем "foreground" по умолчанию
+     */
+    mode?: AssistantServerActionMode;
 }
 
 export type AssistantClientCommandEvents<C extends AssistantClientCommand = AssistantClientCommand> = {
@@ -141,12 +145,12 @@ export interface Assistant<A extends AssistantSmartAppData = AssistantSmartAppDa
         D extends AssistantSmartAppCommand['smart_app_data'],
         E extends AssistantSmartAppError['smart_app_error'],
     >(
-        action: { type: string; payload?: unknown },
-        onData: (data: D) => void,
-        onError: (error: E) => void,
-        params: Pick<SendDataParams, 'name' | 'requestId'>,
+        action: AssistantServerAction,
+        onData?: (data: D) => void,
+        onError?: (error: E) => void,
+        params?: Pick<SendDataParams, 'name' | 'requestId'>,
     ) => () => void;
-    sendData: (params: SendDataParams) => () => void;
+    sendData: (params: SendDataParams, onData?: (data: A | AssistantSmartAppError) => void) => () => void;
     sendText: (message: string) => void;
     setHints: (hints: Hints) => void;
     setGetRecoveryState: (next: () => unknown) => void;
@@ -170,7 +174,16 @@ export interface AssistantServerActionAppInfo {
     appversionId?: string;
 }
 
-export type AssistantServerAction = { action_id: string; parameters?: any } | { type: string; payload?: any };
+export type AssistantServerAction =
+    | { action_id: string; parameters?: any }
+    | {
+          // @deprecated use action_id instead
+          type: string;
+          // @depreacted use parameters instead
+          payload?: any;
+      };
+
+export type AssistantServerActionMode = 'background' | 'foreground';
 
 export type AssistantCommands =
     | ActionCommand
