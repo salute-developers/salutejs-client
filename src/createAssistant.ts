@@ -15,6 +15,7 @@ import {
     AssistantEvents,
     AssistantClientCommandEvents,
     SendDataParams,
+    AssistantServerAction,
 } from './typings';
 import { createNanoEvents } from './nanoevents';
 import { createNanoObservable, ObserverFunc } from './nanoobservable';
@@ -357,10 +358,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
             D extends AssistantSmartAppCommand['smart_app_data'] = AssistantSmartAppCommand['smart_app_data'],
             E extends AssistantSmartAppError['smart_app_error'] = AssistantSmartAppError['smart_app_error'],
         >(
-            action: {
-                type: string;
-                payload?: any;
-            },
+            action: AssistantServerAction,
             onData?: ObserverFunc<D>,
             onError?: ObserverFunc<E>,
             { name, requestId, mode }: Pick<SendDataParams, 'name' | 'requestId' | 'mode'> = {},

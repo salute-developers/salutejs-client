@@ -145,12 +145,12 @@ export interface Assistant<A extends AssistantSmartAppData = AssistantSmartAppDa
         D extends AssistantSmartAppCommand['smart_app_data'],
         E extends AssistantSmartAppError['smart_app_error'],
     >(
-        action: { type: string; payload?: unknown },
-        onData: (data: D) => void,
-        onError: (error: E) => void,
-        params: Pick<SendDataParams, 'name' | 'requestId'>,
+        action: AssistantServerAction,
+        onData?: (data: D) => void,
+        onError?: (error: E) => void,
+        params?: Pick<SendDataParams, 'name' | 'requestId'>,
     ) => () => void;
-    sendData: (params: SendDataParams) => () => void;
+    sendData: (params: SendDataParams, onData?: (data: A | AssistantSmartAppError) => void) => () => void;
     sendText: (message: string) => void;
     setHints: (hints: Hints) => void;
     setGetRecoveryState: (next: () => unknown) => void;
