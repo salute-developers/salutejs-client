@@ -273,15 +273,19 @@ export const createAssistant = ({
     );
 
     /** завершает текущий апп */
-    const closeApp = () => {
-        const current = app;
+    const closeApp = (closing: AppInfo = app.info) => {
+        // переключить на дефолтный апп
+        if (closing.applicationId === app.info.applicationId) {
+            /// выглядит как нарушение логики,
+            /// но с точки зрения апи - ок
+            /// иначе потребителю нужно знать про DEFAULT_APP
+            app = {
+                info: DEFAULT_APP,
+            };
+        }
 
-        app = {
-            info: DEFAULT_APP,
-        };
-
-        if (!isDefaultApp(current.info)) {
-            emit('app', { type: 'close', app: current.info });
+        if (!isDefaultApp(closing)) {
+            emit('app', { type: 'close', app: closing });
         }
     };
 
@@ -375,23 +379,24 @@ export const createAssistant = ({
     subscriptions.push(
         client.on('systemMessage', (systemMessage: SystemMessageDataType, originalMessage: OriginalMessageType) => {
             if (originalMessage.messageName === 'ANSWER_TO_USER') {
-                const { activate_app_info, finished, items, app_info: mesAppInfo } = systemMessage;
-                const isChatApp = mesAppInfo && ['DIALOG', 'CHAT_APP'].includes(mesAppInfo.frontendType);
+                const { activate_app_info, items, app_info: mesAppInfo } = systemMessage;
+                const isChatApp = mesAppInfo && mesAppInfo.frontendType === 'CHAT_APP';
+                const isDialog = mesAppInfo && mesAppInfo.frontendType === 'DIALOG';
                 const isAppChanged = mesAppInfo && mesAppInfo.applicationId !== app.info.applicationId;
 
                 if (
+                    // DIALOG не попадает в current_app
+                    !isDialog &&
                     isAppChanged &&
-                    // по-умолчанию activate_app_info: true
-                    ((!isChatApp && activate_app_info !== false) ||
-                        // игнорируем activate_app_info для чатапов
-                        (isChatApp && finished !== true))
+                    /// игнорируем activate_app_info для чатапов
+                    /// по-умолчанию activate_app_info: true
+                    (isChatApp || activate_app_info !== false)
                 ) {
                     emit('app', { type: 'run', app: mesAppInfo });
                 }
 
-                // закрываем чатапп с finished = true
-                if (isChatApp && !isAppChanged && finished === true) {
-                    closeApp();
+                if (isDialog && isAppChanged && app.info.applicationId !== DEFAULT_APPLICATION_ID) {
+                    emit('app', { type: 'run', app: DEFAULT_APP });
                 }
 
                 if (items) {
@@ -437,8 +442,8 @@ export const createAssistant = ({
                                 });
                             }
 
-                            if (command.type === 'close_app') {
-                                closeApp();
+                            if (command.type === 'close_app' && !isDialog) {
+                                closeApp(mesAppInfo);
                             }
                         }
                     }
