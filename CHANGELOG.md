@@ -1,3 +1,15 @@
+# v1.24.0 (Tue Sep 19 2023)
+
+#### 🚀 Enhancement
+
+- feat: Возможность передавать mode для server_action [#148](https://github.com/salute-developers/salutejs-client/pull/148) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.23.3 (Fri Sep 15 2023)
 
 #### 🐛 Bug Fix
