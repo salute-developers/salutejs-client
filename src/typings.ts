@@ -471,7 +471,6 @@ export type SystemMessageDataType = {
     activate_app_info?: boolean;
     app_info?: AppInfo;
     auto_listening: boolean;
-    finished?: boolean;
     items?: Array<ItemType>;
     suggestions?: Suggestions;
     hints?: Hints;

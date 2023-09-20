@@ -5,6 +5,8 @@ import { AppInfo } from '@salutejs/scenario';
 import { createMessage } from '../support/helpers/clientMethods';
 import { initAssistantClient, initServer } from '../support/helpers/init';
 
+const DEFAULT_APPLICATION_ID = '7c4e23bf-cd93-b57e-874b-d9fc1b35f93d';
+
 const webApp: AppInfo = {
     projectId: 'my-app',
     applicationId: 'my-web-app-applicationId',
@@ -39,7 +41,7 @@ describe('События аппов', () => {
         server.stop();
     });
 
-    it('WEB_APP не/открывается activate_app_info и не реагирует на finished', (done) => {
+    it('WEB_APP не/открывается activate_app_info', (done) => {
         let phase = 1;
 
         server.on('connection', (socket) => {
@@ -49,9 +51,8 @@ describe('События аппов', () => {
                     systemMessage: {
                         activate_app_info: false,
                         app_info: webApp,
-                        finished: false,
                     },
-                })
+                }),
             );
 
             // откроется undefined
@@ -62,9 +63,8 @@ describe('События аппов', () => {
                             ...webApp,
                             applicationId: `${webApp.applicationId}1`,
                         },
-                        finished: true,
                     },
-                })
+                }),
             );
 
             // откроется true
@@ -76,9 +76,8 @@ describe('События аппов', () => {
                             ...webApp,
                             applicationId: `${webApp.applicationId}2`,
                         },
-                        finished: true,
                     },
-                })
+                }),
             );
         });
 
@@ -126,15 +125,26 @@ describe('События аппов', () => {
     });
 
     it('WEB_APP закрывается по close_app', (done) => {
+        let phase = 1;
+
         server.on('connection', (socket) => {
-            socket.on('message', (data) => {
+            socket.on('message', () => {
                 socket.send(
                     createMessage({
                         systemMessage: {
                             app_info: webApp,
-                            items: [
-                                { command: { type: 'close_app' } }
-                            ]
+                            items: [{ command: { type: 'close_app' } }],
+                        },
+                    }),
+                );
+
+                assistantClient.setActiveApp(webApp);
+
+                socket.send(
+                    createMessage({
+                        systemMessage: {
+                            app_info: webApp,
+                            items: [{ command: { type: 'close_app' } }],
                         },
                     }),
                 );
@@ -143,127 +153,156 @@ describe('События аппов', () => {
 
         assistantClient.on('app', (event) => {
             if (event.type === 'close') {
-                expect(event.app.applicationId).to.be.eq(webApp.applicationId);
-                done();
+                expect(
+                    event.app.applicationId,
+                    phase === 1 ? 'вызывается для неактивного аппа' : 'вызывается для активного аппа',
+                ).to.be.eq(webApp.applicationId);
+                if (++phase === 2) {
+                    done();
+                }
             }
         });
 
         assistantClient.start();
-        assistantClient.setActiveApp(webApp);
     });
 
-    it('CHAT_APP и DIALOG не/открываются finished, игнорируют activate_app_info', (done) => {
+    it('DIALOG открывает assistant', (done) => {
         let phase = 1;
+
         server.on('connection', (socket) => {
             // не откроется
             socket.send(
                 createMessage({
                     systemMessage: {
-                        activate_app_info: true,
                         app_info: dialog,
-                        finished: true,
                     },
-                })
+                }),
             );
 
-            // не откроется
+            // открывается чатапп
             socket.send(
                 createMessage({
                     systemMessage: {
-                        activate_app_info: true,
                         app_info: chat,
-                        finished: true,
                     },
-                })
+                }),
             );
 
-            // откроется
+            assistantClient.setActiveApp(chat);
+
+            // открывается assistant
             socket.send(
                 createMessage({
                     systemMessage: {
-                        activate_app_info: false,
-                        app_info: {
-                            ...dialog,
-                            applicationId: `${dialog.applicationId}1`,
-                        },
+                        app_info: dialog,
                     },
-                })
+                }),
             );
 
-            // откроется
+            // открыается канвас
             socket.send(
                 createMessage({
                     systemMessage: {
-                        activate_app_info: false,
-                        app_info: {
-                            ...chat,
-                            applicationId: `${chat.applicationId}2`,
-                        },
+                        app_info: webApp,
                     },
-                })
+                }),
             );
 
-            // откроется
+            assistantClient.setActiveApp(webApp);
+
+            // открывается assistant
             socket.send(
                 createMessage({
                     systemMessage: {
-                        activate_app_info: false,
-                        app_info: {
-                            ...dialog,
-                            applicationId: `${dialog.applicationId}3`,
-                        },
-                        finished: false,
+                        app_info: dialog,
                     },
-                })
-            );
-
-            // откроется
-            socket.send(
-                createMessage({
-                    systemMessage: {
-                        activate_app_info: false,
-                        app_info: {
-                            ...chat,
-                            applicationId: `${chat.applicationId}4`,
-                        },
-                        finished: false,
-                    },
-                })
+                }),
             );
         });
 
         assistantClient.on('app', (event) => {
             if (event.type === 'run') {
-                expect(event.app.applicationId).to.be.eq(`${(phase % 2 === 0 ? chat : dialog).applicationId}${phase++}`);
-                if (phase === 5) {
-                    done();
+                switch (phase) {
+                    case 1:
+                        expect(event.app.applicationId).to.be.eq(chat.applicationId);
+                        break;
+                    case 2:
+                        expect(event.app.applicationId).to.be.eq(DEFAULT_APPLICATION_ID);
+                        break;
+                    case 3:
+                        expect(event.app.applicationId).to.be.eq(webApp.applicationId);
+                        break;
+                    case 4:
+                        expect(event.app.applicationId).to.be.eq(DEFAULT_APPLICATION_ID);
+                        done();
+                        break;
                 }
+                phase++;
 
                 return;
             }
 
-
-            throw new Error(`Unexpected event ${event.type}`)
+            throw new Error(`Unexpected event ${event.type}`);
         });
 
         assistantClient.start();
     });
 
-    it('CHAT_APP закрывается finished=true', (done) => {
+    it('DIALOG close_app не вызывает close', (done) => {
         server.on('connection', (socket) => {
             socket.send(
                 createMessage({
                     systemMessage: {
-                        app_info: chat,
-                        finished: true,
+                        app_info: dialog,
+                        items: [
+                            {
+                                command: { type: 'close_app' },
+                            },
+                        ],
                     },
-                })
+                }),
+            );
+
+            done();
+        });
+
+        assistantClient.on('app', () => {
+            throw new Error('Unexpected event');
+        });
+
+        assistantClient.start();
+    });
+
+    it('CHAT_APP открывается', (done) => {
+        server.on('connection', (socket) => {
+            // не откроется повторно
+            socket.send(
+                createMessage({
+                    systemMessage: {
+                        app_info: chat,
+                    },
+                }),
+            );
+
+            assistantClient.closeApp();
+
+            // откроется с activate_app_info=false
+            socket.send(
+                createMessage({
+                    systemMessage: {
+                        activate_app_info: false,
+                        app_info: {
+                            ...chat,
+                            applicationId: `${chat.applicationId}1`,
+                        },
+                    },
+                }),
             );
         });
 
         assistantClient.on('app', (event) => {
-            if (event.type === 'close') {
-                expect(event.app.applicationId).to.be.eq(chat.applicationId);
+            if (event.type === 'run') {
+                expect(event.app.applicationId).to.be.eq(`${chat.applicationId}1`);
                 done();
             }
         });
@@ -272,26 +311,51 @@ describe('События аппов', () => {
         assistantClient.setActiveApp(chat);
     });
 
-    it('DIALOG закрывается finished=true', (done) => {
+    it('CHAT_APP закрывается по closeApp', (done) => {
+        let phase = 1;
+
         server.on('connection', (socket) => {
             socket.send(
                 createMessage({
                     systemMessage: {
-                        app_info: dialog,
-                        finished: true,
+                        app_info: chat,
+                        items: [
+                            {
+                                command: { type: 'close_app' },
+                            },
+                        ],
                     },
-                })
+                }),
+            );
+
+            assistantClient.setActiveApp(chat);
+
+            socket.send(
+                createMessage({
+                    systemMessage: {
+                        app_info: chat,
+                        items: [
+                            {
+                                command: { type: 'close_app' },
+                            },
+                        ],
+                    },
+                }),
             );
         });
 
         assistantClient.on('app', (event) => {
             if (event.type === 'close') {
-                expect(event.app.applicationId).to.be.eq(dialog.applicationId);
-                done();
+                expect(
+                    event.app.applicationId,
+                    phase === 1 ? 'вызывается для неактивного аппа' : 'вызывается для активного аппа',
+                ).to.be.eq(chat.applicationId);
+                if (++phase === 2) {
+                    done();
+                }
             }
         });
 
         assistantClient.start();
-        assistantClient.setActiveApp(dialog);
     });
 });
