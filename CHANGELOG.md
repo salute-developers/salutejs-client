@@ -1,3 +1,15 @@
+# v1.24.1 (Wed Sep 20 2023)
+
+#### 🐛 Bug Fix
+
+- fix: DIALOG-апп должен переключаться на ассистента [#149](https://github.com/salute-developers/salutejs-client/pull/149) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.24.0 (Tue Sep 19 2023)
 
 #### 🚀 Enhancement
