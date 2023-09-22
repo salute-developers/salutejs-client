@@ -1,13 +1,20 @@
 /* eslint-disable camelcase */
 /// <reference types="cypress" />
 
-import { ActionCommand } from '@salutejs/scenario';
+import { ActionCommand, AppInfo } from '@salutejs/scenario';
 
 import { Message } from '../../src/proto';
 import { MessageNames } from '../../src/typings';
 import { VoiceListenerStatus } from '../../src/assistantSdk/voice/listener/voiceListener';
 import { createMessage, createVoiceMessage } from '../support/helpers/clientMethods';
 import { initAssistantClient, initServer } from '../support/helpers/init';
+
+const dialog: AppInfo = {
+    projectId: 'my-app',
+    applicationId: 'my-dialog-app-applicationId',
+    appversionId: 'my-app-appversionId',
+    frontendType: 'DIALOG',
+};
 
 describe('Подписки на события', () => {
     let server: ReturnType<typeof initServer>;
@@ -178,6 +185,7 @@ describe('Подписки на события', () => {
                     socket.send(
                         createMessage({
                             systemMessage: {
+                                app_info: dialog,
                                 items: [
                                     {
                                         command: actionCommand,
@@ -191,7 +199,8 @@ describe('Подписки на события', () => {
         });
 
         assistantClient.on('actionCommand', (event) => {
-            expect(event.command, 'actionCommand is ok').deep.eq(actionCommand);
+            expect(event.command, 'command is ok').deep.eq(actionCommand);
+            expect(event.appInfo, 'appInfo is ok').deep.eq(dialog);
             done();
         });
 

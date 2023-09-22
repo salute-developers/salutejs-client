@@ -109,6 +109,7 @@ export type VpsEvent =
 export type ActionCommandEvent = {
     type: 'command';
     command: ActionCommand;
+    appInfo: AppInfo;
 };
 
 export type AssistantError = ProtocolError;
@@ -424,6 +425,7 @@ export const createAssistant = ({
                                 emit('actionCommand', {
                                     type: 'command',
                                     command: command as ActionCommand,
+                                    appInfo: mesAppInfo as AppInfo,
                                 });
                             }
 
