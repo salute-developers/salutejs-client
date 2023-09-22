@@ -1,3 +1,17 @@
+# v1.24.2 (Fri Sep 22 2023)
+
+#### 🐛 Bug Fix
+
+- fix: отдавать appInfo в экшенах [#152](https://github.com/salute-developers/salutejs-client/pull/152) ([@sasha-tlt](https://github.com/sasha-tlt))
+- build: отключены тесты [#151](https://github.com/salute-developers/salutejs-client/pull/151) ([@sasha-tlt](https://github.com/sasha-tlt))
+- fix: отдавать appInfo в экшенах [#150](https://github.com/salute-developers/salutejs-client/pull/150) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.24.1 (Wed Sep 20 2023)
 
 #### 🐛 Bug Fix
