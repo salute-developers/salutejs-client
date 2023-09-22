@@ -9,7 +9,7 @@ import { VoiceListenerStatus } from '../../src/assistantSdk/voice/listener/voice
 import { createMessage, createVoiceMessage } from '../support/helpers/clientMethods';
 import { initAssistantClient, initServer } from '../support/helpers/init';
 
-const dialog: AppInfo = {
+const DIALOG: AppInfo = {
     projectId: 'my-app',
     applicationId: 'my-dialog-app-applicationId',
     appversionId: 'my-app-appversionId',
@@ -185,7 +185,7 @@ describe('Подписки на события', () => {
                     socket.send(
                         createMessage({
                             systemMessage: {
-                                app_info: dialog,
+                                app_info: DIALOG,
                                 items: [
                                     {
                                         command: actionCommand,
@@ -200,7 +200,7 @@ describe('Подписки на события', () => {
 
         assistantClient.on('actionCommand', (event) => {
             expect(event.command, 'command is ok').deep.eq(actionCommand);
-            expect(event.appInfo, 'appInfo is ok').deep.eq(dialog);
+            expect(event.appInfo, 'appInfo is ok').deep.eq(DIALOG);
             done();
         });
 
