@@ -15,6 +15,7 @@ describe('Проверяем приветствие', () => {
         args: ArgumentsType<ReturnType<typeof createAssistantClient>['start']>,
         onMessage: (message: Message) => void,
         beforeStart?: (assistant: ReturnType<typeof createAssistantClient>) => void,
+        autostart = true,
     ): ReturnType<typeof createAssistantClient> => {
         server.on('connection', (socket) => {
             assert.isOk('Соединение после старта');
@@ -26,9 +27,9 @@ describe('Проверяем приветствие', () => {
 
         const assistantClient = initAssistantClient({ settings: {} });
 
-        beforeStart && beforeStart(assistantClient);
+        beforeStart?.(assistantClient);
 
-        assistantClient.start(...args);
+        autostart && assistantClient.start(...args);
 
         return assistantClient;
     };
@@ -53,9 +54,7 @@ describe('Проверяем приветствие', () => {
                     const current_app = JSON.parse(meta.current_app);
 
                     expect(data.is_first_session, 'Отправлен "is_first_session"').be.true;
-                    expect(current_app.app_info.systemName, 'Отправлен current_app "assistant"').be.eq(
-                        'assistant',
-                    );
+                    expect(current_app.app_info.systemName, 'Отправлен current_app "assistant"').be.eq('assistant');
 
                     done();
                 }
@@ -73,9 +72,7 @@ describe('Проверяем приветствие', () => {
                     const current_app = JSON.parse(meta.current_app);
 
                     expect(data.is_first_session, 'Не отправлен "is_first_session"').be.eq(undefined);
-                    expect(current_app.app_info.systemName, 'Отправлен current_app "assistant"').be.eq(
-                        'assistant',
-                    );
+                    expect(current_app.app_info.systemName, 'Отправлен current_app "assistant"').be.eq('assistant');
                     assert.isOk('Отправлен "OPEN_ASSISTANT"');
 
                     done();
@@ -132,5 +129,27 @@ describe('Проверяем приветствие', () => {
                 expect(onMessage, 'Соединение, отправлен текст').to.called;
             })
             .then(done);
+    });
+
+    it.only('Запрос приветствия не уходит при assistant.sendText', (done) => {
+        const text = 'lorem';
+
+        const assistantClient = checkStartAssistant(
+            server,
+            [],
+            (message) => {
+                if (message.messageName === 'OPEN_ASSISTANT') {
+                    throw new Error('При sendText OPEN_ASSISTANT не должен отправиться');
+                }
+
+                if (message.text?.data === text) {
+                    done();
+                }
+            },
+            undefined,
+            false,
+        );
+
+        assistantClient.sendText(text);
     });
 });
