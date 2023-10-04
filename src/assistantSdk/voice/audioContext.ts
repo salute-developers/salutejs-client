@@ -8,16 +8,17 @@ export const isAudioSupported = typeof window !== 'undefined' && (window.AudioCo
  * @returns AudioContext
  */
 export const createAudioContext = (options?: AudioContextOptions): AudioContext => {
+    if (!isAudioSupported) {
+        throw new Error('Audio not supported');
+    }
+
     if (window.AudioContext) {
         return new AudioContext(options);
     }
 
-    if (window.webkitAudioContext) {
-        // eslint-disable-next-line new-cap
-        return new window.webkitAudioContext();
-    }
-
-    throw new Error('Audio not supported');
+    // @ts-ignore
+    // eslint-disable-next-line new-cap
+    return new window.webkitAudioContext();
 };
 
 interface ContextEvents {
