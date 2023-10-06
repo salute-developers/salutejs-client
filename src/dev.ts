@@ -190,6 +190,10 @@ export const initializeNativeSDKEmulator = ({
                 initialSmartAppData.push({ type: 'character', character: res.character, sdk_meta: { mid: '-1' } });
             }
 
+            if (res?.feature_launcher) {
+                initialSmartAppData.push({ type: 'feature_launcher', feature_launcher: res.feature_launcher });
+            }
+
             for (const item of res?.items || []) {
                 if (item.command != null && item.command.type === 'smart_app_data') {
                     initialSmartAppData.push({

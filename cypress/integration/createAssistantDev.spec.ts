@@ -86,9 +86,10 @@ describe('Проверяем createAssistantDev', () => {
             type: 'smart_app_data',
             smart_app_data: { type: 'test_command' },
         };
+        const FEATURES = { feature: true };
         server.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
-            initProtocol(socket, { initPhrase: INIT_PHRASE, items: [{ command: COMMAND }] });
+            initProtocol(socket, { initPhrase: INIT_PHRASE, items: [{ command: COMMAND }], systemMessage: { feature_launcher: FEATURES } });
         });
 
         const assistant = createAssistantDev<AssistantSmartAppCommand>({
@@ -99,7 +100,7 @@ describe('Проверяем createAssistantDev', () => {
             initPhrase: INIT_PHRASE,
         });
 
-        const status = { character: false, data: false, insets: false };
+        const status = { character: false, data: false, insets: false, featureLauncher: false };
         assistant.on('start', () => {
             const items = window.appInitialData;
             for (let i = 0; i < items.length; i++) {
@@ -117,12 +118,16 @@ describe('Проверяем createAssistantDev', () => {
                         status.data = true;
                         expect(command.smart_app_data).to.deep.equal(COMMAND.smart_app_data);
                         break;
+                    case 'feature_launcher':
+                        status.featureLauncher = true;
+                        expect(command.feature_launcher).to.deep.equal(FEATURES);
+                        break;
                     default:
                         throw new Error('Unexpected command');
                 }
             }
 
-            if (status.character && status.insets && status.data) {
+            if (status.character && status.insets && status.data && status.featureLauncher) {
                 done();
             }
         });
@@ -133,9 +138,10 @@ describe('Проверяем createAssistantDev', () => {
             type: 'smart_app_data',
             smart_app_data: { type: 'test_command' },
         };
+        const FEATURES = { feature: true };
         server.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
-            initProtocol(socket, { initPhrase: INIT_PHRASE, items: [{ command: COMMAND }] });
+            initProtocol(socket, { initPhrase: INIT_PHRASE, items: [{ command: COMMAND }], systemMessage: { feature_launcher: FEATURES } });
         });
 
         const assistant = createAssistantDev<AssistantSmartAppCommand>({
@@ -146,7 +152,7 @@ describe('Проверяем createAssistantDev', () => {
             initPhrase: INIT_PHRASE,
         });
 
-        const status = { character: false, data: false, insets: false };
+        const status = { character: false, data: false, insets: false, featureLauncher: false };
         assistant.on('data', (command) => {
             switch (command.type) {
                 case 'character':
@@ -161,11 +167,15 @@ describe('Проверяем createAssistantDev', () => {
                     status.data = true;
                     expect(command.smart_app_data).to.deep.equal(COMMAND.smart_app_data);
                     break;
+                case 'feature_launcher':
+                    status.featureLauncher = true;
+                    expect(command.feature_launcher).to.deep.equal(FEATURES);
+                    break;
                 default:
                     throw new Error('Unexpected command');
             }
 
-            if (status.character && status.insets && status.data) {
+            if (status.character && status.insets && status.data && status.featureLauncher) {
                 done();
             }
         });
