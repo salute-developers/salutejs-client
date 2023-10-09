@@ -1,3 +1,20 @@
+# v1.25.0 (Mon Oct 09 2023)
+
+#### 🚀 Enhancement
+
+- feat: формировать feature_laucher в appInitialData [#158](https://github.com/salute-developers/salutejs-client/pull/158) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### 🐛 Bug Fix
+
+- test: Добавлен тест для OPEN_ASSISTANT при sendText [#153](https://github.com/salute-developers/salutejs-client/pull/153) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.24.2 (Fri Sep 22 2023)
 
 #### 🐛 Bug Fix
