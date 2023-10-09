@@ -343,6 +343,11 @@ export interface AssistantTtsStateUpdate {
     owner: boolean;
 }
 
+export interface AssistantFeatureLauncherCommand {
+    type: 'feature_launcher';
+    feature_launcher: Record<string, unknown>;
+}
+
 export type AssistantClientCustomizedCommand<T extends AssistantSmartAppData> =
     | AssistantAppContext
     | AssistantThemeCommand
@@ -353,6 +358,7 @@ export type AssistantClientCustomizedCommand<T extends AssistantSmartAppData> =
     | AssistantSmartAppError
     | AssistantTtsStateUpdate
     | AssistantGeoLocationCommand
+    | AssistantFeatureLauncherCommand
     | T;
 
 export type AssistantClientCommand = AssistantClientCustomizedCommand<AssistantSmartAppCommand>;
@@ -478,6 +484,7 @@ export type SystemMessageDataType = {
     emotion?: {
         emotionId: EmotionId;
     };
+    feature_launcher?: Record<string, unknown>;
     server_action?: AssistantServerAction;
     sdk_meta?: SdkMeta;
     header_buttons?: SystemMessageHeaderByttonsType;

@@ -56,10 +56,12 @@ export const initProtocol = (
         initPhrase,
         character = { id: 'sber', name: 'Сбер', gender: 'male', appeal: 'official' },
         items = [],
+        systemMessage = {}
     }: {
         initPhrase?: string;
         character?: Character;
         items?: Array<{ command: AssistantSmartAppCommand | AssistantNavigationCommand }>;
+        systemMessage?: Partial<SystemMessageDataType>;
     } = {},
 ) => {
     socket.on('message', (data) => {
@@ -86,6 +88,7 @@ export const initProtocol = (
                     app_info: APP_INFO,
                     character,
                     items,
+                    ...systemMessage,
                 },
             });
         }
