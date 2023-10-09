@@ -1,6 +1,4 @@
 /* eslint-disable camelcase */
-import Long from 'long';
-
 import { AppInfo, Meta, PermissionStatus, PermissionType, SystemMessageDataType } from '../typings';
 
 export type Permission = Record<PermissionType, PermissionStatus>;
@@ -13,7 +11,7 @@ export type CommandResponse = Required<Pick<SystemMessageDataType, 'app_info'>> 
     };
     server_action: {
         action_id: 'command_response';
-        request_message_id: number | Long;
+        request_message_id: number;
         command_response: {
             request_permissions?: {
                 permissions: Array<{
@@ -56,7 +54,7 @@ export const getTime = (): Meta['time'] => ({
 });
 
 export const getAnswerForRequestPermissions = async (
-    requestMessageId: number | Long,
+    requestMessageId: number,
     appInfo: AppInfo,
     items: PermissionType[],
 ): Promise<CommandResponse> => {

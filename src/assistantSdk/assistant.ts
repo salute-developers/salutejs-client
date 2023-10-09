@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import { ActionCommand } from '@salutejs/scenario';
-import Long from 'long';
 
 import { createNanoEvents } from '../nanoevents';
 import {
@@ -314,7 +313,7 @@ export const createAssistant = ({
 
     /** отправляет ответ на запрос доступа к местоположению и пр. меты */
     const sendMetaForPermissionRequest = async (
-        requestMessageId: number | Long,
+        requestMessageId: number,
         appInfo: AppInfo,
         items: PermissionType[],
     ) => {
