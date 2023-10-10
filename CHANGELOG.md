@@ -1,3 +1,15 @@
+# v1.26.0 (Tue Oct 10 2023)
+
+#### 🚀 Enhancement
+
+- feat: Добавлен выброс ошибки для незарегистрированных навыков [#156](https://github.com/salute-developers/salutejs-client/pull/156) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.25.0 (Mon Oct 09 2023)
 
 #### 🚀 Enhancement
