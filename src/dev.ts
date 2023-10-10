@@ -178,6 +178,12 @@ export const initializeNativeSDKEmulator = ({
         const res = await assistant.start({ initPhrase, disableGreetings: true });
 
         if (initPhrase && res) {
+            if (res.app_info?.frontendType !== 'WEB_APP') {
+                alert(
+                    'Ваш навык не зарегистрирован, или указаны ошибочные данные. Следуйте инструкции: https://github.com/salute-developers/salutejs-client#аутентификация',
+                );
+            }
+
             initialSmartAppData.push({
                 type: 'insets',
                 insets: { left: 0, top: 0, right: 0, bottom: 144 },
@@ -185,6 +191,7 @@ export const initializeNativeSDKEmulator = ({
             });
 
             appInfo = res?.app_info;
+
             if (res?.character) {
                 character = res?.character.id;
                 initialSmartAppData.push({ type: 'character', character: res.character, sdk_meta: { mid: '-1' } });
@@ -209,6 +216,7 @@ export const initializeNativeSDKEmulator = ({
                 assistant.setActiveApp(appInfo, () =>
                     Promise.resolve((window.AssistantClient?.onRequestState?.() || {}) as AssistantAppState),
                 );
+
                 window.appRecoveryState = recoveryStateRepository.get(appInfo.applicationId);
             }
 
