@@ -29,13 +29,14 @@ export const createSpeechRecognizer = (voiceListener: ReturnType<typeof createVo
         sendVoice: VoiceHandler;
         messageId: number;
         onMessage: (cb: (message: OriginalMessageType) => void) => () => void;
-    }) =>
-        voiceListener.listen(sendVoice).then(() => {
+    }) => {
+        currentMessageId = messageId;
+
+        return voiceListener.listen(sendVoice).then(() => {
             if (voiceListener.status === 'stopped') {
                 return;
             }
             status = 'active';
-            currentMessageId = messageId;
             off = onMessage((message: OriginalMessageType) => {
                 if (message.status && message.status.code != null && message.status.code < 0) {
                     off();
@@ -70,6 +71,7 @@ export const createSpeechRecognizer = (voiceListener: ReturnType<typeof createVo
                 }
             });
         });
+    };
 
     return {
         start,

@@ -24,14 +24,19 @@ export const createVoiceListener = (
     const { emit, on } = createNanoEvents<VoiceStreamEvents>();
     let stopRecord: () => void;
     let status: VoiceListenerStatus = 'stopped';
+    let cancelableToken = { current: false };
 
     const stop = () => {
+        cancelableToken.current = true;
+        cancelableToken = { current: false };
         status = 'stopped';
         stopRecord?.();
         emit('status', 'stopped');
     };
 
     const listen = (handleVoice: VoiceHandler): Promise<void> => {
+        cancelableToken = { current: false };
+        let capturedToken = cancelableToken;
         status = 'started';
         emit('status', 'started');
 
@@ -40,7 +45,7 @@ export const createVoiceListener = (
                 stopRecord = recStop;
             })
             .then(() => {
-                if (status === 'stopped') {
+                if (capturedToken.current === true || status === 'stopped') {
                     stopRecord();
                 } else {
                     status = 'listen';

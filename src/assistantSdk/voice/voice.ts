@@ -36,6 +36,8 @@ export const createVoice = (
     const appInfoDict: Record<string, AppInfo> = {};
     const mesIdQueue: Array<string> = [];
 
+    /** в процессе инициализации ассистента */
+    let isInitializing = false;
     let isPlaying = false; // проигрывается/не проигрывается озвучка
     let autolistenMesId: string | null = null; // id сообщения, после проигрывания которого, нужно активировать слушание
 
@@ -87,7 +89,14 @@ export const createVoice = (
         }
 
         // повторные вызовы не пройдут, пока пользователь не разрешит/запретит аудио
-        if (listener.status === 'stopped') {
+        if (listener.status === 'stopped' && !isInitializing) {
+            isInitializing = true;
+
+            const unsubscribe = listener.on('status', () => {
+                isInitializing = false;
+                unsubscribe();
+            });
+
             return client.init().then(() =>
                 client.createVoiceStream(
                     ({ sendVoice, messageId, onMessage }) => {
@@ -126,19 +135,28 @@ export const createVoice = (
         }
 
         // повторные вызовы не пройдут, пока пользователь не разрешит/запретит аудио
-        if (listener.status === 'stopped') {
-            client.createVoiceStream(
-                ({ sendVoice, messageId, onMessage }) =>
-                    musicRecognizer.start({
-                        sendVoice,
-                        messageId,
-                        onMessage,
-                    }),
-                {
-                    source: {
-                        sourceType: 'lavashar',
+        if (listener.status === 'stopped' && !isInitializing) {
+            isInitializing = true;
+
+            const unsubscribe = listener.on('status', () => {
+                isInitializing = false;
+                unsubscribe();
+            });
+
+            client.init().then(() =>
+                client.createVoiceStream(
+                    ({ sendVoice, messageId, onMessage }) =>
+                        musicRecognizer.start({
+                            sendVoice,
+                            messageId,
+                            onMessage,
+                        }),
+                    {
+                        source: {
+                            sourceType: 'lavashar',
+                        },
                     },
-                },
+                ),
             );
         }
     };
