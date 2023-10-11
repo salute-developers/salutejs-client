@@ -92,11 +92,14 @@ export const createVoice = (
         if (listener.status === 'stopped' && !isInitializing) {
             isInitializing = true;
 
+            const unsubscribe = listener.on('status', () => {
+                isInitializing = false;
+                unsubscribe();
+            });
+
             return client.init().then(() =>
                 client.createVoiceStream(
                     ({ sendVoice, messageId, onMessage }) => {
-                        isInitializing = false;
-
                         begin?.forEach((chunk) => sendVoice(new Uint8Array(chunk), false));
 
                         return speechRecognizer.start({
@@ -135,17 +138,19 @@ export const createVoice = (
         if (listener.status === 'stopped' && !isInitializing) {
             isInitializing = true;
 
+            const unsubscribe = listener.on('status', () => {
+                isInitializing = false;
+                unsubscribe();
+            });
+
             client.init().then(() =>
                 client.createVoiceStream(
-                    ({ sendVoice, messageId, onMessage }) => {
-                        isInitializing = false;
-
-                        return musicRecognizer.start({
+                    ({ sendVoice, messageId, onMessage }) =>
+                        musicRecognizer.start({
                             sendVoice,
                             messageId,
                             onMessage,
-                        });
-                    },
+                        }),
                     {
                         source: {
                             sourceType: 'lavashar',
