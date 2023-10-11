@@ -1,3 +1,15 @@
+# v1.26.1 (Wed Oct 11 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Не допускать двойного слушания [#159](https://github.com/salute-developers/salutejs-client/pull/159) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.26.0 (Tue Oct 10 2023)
 
 #### 🚀 Enhancement
