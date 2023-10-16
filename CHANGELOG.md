@@ -1,3 +1,15 @@
+# v1.26.2 (Mon Oct 16 2023)
+
+#### 🐛 Bug Fix
+
+- fix: воспроизведение озвучки на ios [#161](https://github.com/salute-developers/salutejs-client/pull/161) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.26.1 (Wed Oct 11 2023)
 
 #### 🐛 Bug Fix
