@@ -44,6 +44,13 @@ export const resolveAudioContext = (onReady: (context: AudioContext) => void) =>
             on,
         };
 
+        context.onstatechange = () => {
+            if (audioContext.context.state === 'running') {
+                audioContext.ready = true;
+                emit('ready');
+            }
+        };
+
         /// Контекст может быть не готов для использования сразу после создания
         /// Если попробовать что-то воспроизвести в этом контексте - звука не будет
         if (!audioContext.ready) {
@@ -67,18 +74,11 @@ export const resolveAudioContext = (onReady: (context: AudioContext) => void) =>
                     /// https://sites.google.com/a/chromium.org/dev/audio-video/autoplay
                     audioContext.context.resume();
                 }
-
-                audioContext.ready = true;
-                emit('ready');
             };
 
             /// чтобы сделать контекст готовым к использованию (воспроизведению звука),
-            /// необходимо событие от пользователя
-
-            // для пк
+            /// необходимо событие от пользователя (только не touch)
             document.addEventListener('click', handleClick);
-            // для мобильных устройств
-            document.addEventListener('touchstart', handleClick);
         }
     }
 
