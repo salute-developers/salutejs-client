@@ -56,7 +56,6 @@ export const resolveAudioContext = (onReady: (context: AudioContext) => void) =>
         if (!audioContext.ready) {
             const handleClick = () => {
                 document.removeEventListener('click', handleClick);
-                document.removeEventListener('touchstart', handleClick);
 
                 if (isSafari) {
                     /// проигрываем тишину, т.к нужно что-то проиграть,
