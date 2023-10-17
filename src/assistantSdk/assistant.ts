@@ -508,7 +508,7 @@ export const createAssistant = ({
         get activeApp() {
             return !isDefaultApp(app.info) ? app.info : null;
         },
-        get settings() {
+        get settings(): typeof settings.current {
             return Object.create(
                 Object.getPrototypeOf(settings.current),
                 Object.getOwnPropertyDescriptors(settings.current),

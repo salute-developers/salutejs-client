@@ -18,6 +18,8 @@
         "cy:open": "cypress open",
         "cy:run": "cypress run",
         "cy:report:coverage": "npx nyc report --reporter=html",
+        "cy:proto:asr": "pbjs --no-typeurl --no-convert --no-verify --no-delimited --no-create -t static-module --root cypbroot src/assistantSdk/voice/recognizers/asr/index.proto > cypress/support/proto/asr.js && pbts cypress/support/proto/asr.js -o cypress/support/proto/asr.d.ts",
+        "cy:proto:mtt": "pbjs --no-typeurl --no-convert --no-verify --no-delimited --no-create -t static-module --root cypbroot src/assistantSdk/voice/recognizers/mtt/index.proto > cypress/support/proto/mtt.js && pbts cypress/support/proto/mtt.js -o cypress/support/proto/mtt.d.ts",
         "test:cy": "CY_MODE=production cypress run -b chromium --headless",
         "lint": "eslint --ext .js,.ts,.tsx src/."
     },
