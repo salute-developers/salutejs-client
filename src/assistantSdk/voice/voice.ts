@@ -4,6 +4,7 @@ import { AssistantSettings } from '../assistant';
 import { MutexedObject } from '../mutexedObject';
 
 import { createMusicRecognizer } from './recognizers/musicRecognizer';
+import { Music2TrackProtocol } from './recognizers/mtt';
 import { createSpeechRecognizer } from './recognizers/speechRecognizer';
 import { createVoiceListener, VoiceListenerStatus } from './listener/voiceListener';
 import { createVoicePlayer } from './player/voicePlayer';
@@ -19,10 +20,11 @@ export const createVoice = (
     client: ReturnType<typeof createClient>,
     settings: MutexedObject<AssistantSettings>,
     emit: (event: {
-        asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // lasr и mid нужен для отправки исх бабла в чат
+        asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
         emotion?: EmotionId;
-        tts?: TtsEvent;
         listener?: { status: VoiceListenerStatus };
+        mtt?: { response: Music2TrackProtocol.MttResponse; mid: OriginalMessageType['messageId'] };
+        tts?: TtsEvent;
     }) => void,
     /// пока onReady не вызван, треки не воспроизводятся
     /// когда случится onReady, очередь треков начнет проигрываться
@@ -225,6 +227,8 @@ export const createVoice = (
             });
         }),
     );
+
+    subscriptions.push(musicRecognizer.on('response', (response, mid) => emit({ mtt: { response, mid } })));
 
     // статусы слушания речи
     subscriptions.push(

@@ -1,9 +1,15 @@
+import { createNanoEvents } from '../../../nanoevents';
 import { OriginalMessageType, MessageNames } from '../../../typings';
 import { createVoiceListener } from '../listener/voiceListener';
 
 import { Music2TrackProtocol } from './mtt';
 
+export interface MusicRecognizerEvents {
+    response: (result: Music2TrackProtocol.MttResponse, mid: OriginalMessageType['messageId']) => void;
+}
+
 export const createMusicRecognizer = (voiceListener: ReturnType<typeof createVoiceListener>) => {
+    const { emit, on } = createNanoEvents<MusicRecognizerEvents>();
     let off: () => void;
     let status: 'active' | 'inactive' = 'inactive';
     let currentMessageId: number;
@@ -43,10 +49,10 @@ export const createMusicRecognizer = (voiceListener: ReturnType<typeof createVoi
                             return;
                         }
 
-                        const { decoderResultField, errorResponse } = Music2TrackProtocol.MttResponse.decode(
-                            message.bytes.data,
-                        );
-                        if (decoderResultField?.isFinal || errorResponse) {
+                        const response = Music2TrackProtocol.MttResponse.decode(message.bytes.data);
+                        emit('response', response, message.messageId);
+
+                        if (response.decoderResultField?.isFinal || response.errorResponse) {
                             off();
                             stop();
                         }
@@ -55,6 +61,7 @@ export const createMusicRecognizer = (voiceListener: ReturnType<typeof createVoi
             });
 
     return {
+        on,
         start,
         stop,
         get status() {

@@ -30,6 +30,7 @@ import { createTransport, CreateTransportParams } from './client/transport';
 import { getAnswerForRequestPermissions, getTime } from './meta';
 import { createVoice, TtsEvent } from './voice/voice';
 import { VoiceListenerStatus } from './voice/listener/voiceListener';
+import { Music2TrackProtocol } from './voice/recognizers/mtt';
 import { createMutexedObject } from './mutexedObject';
 import { createMutexSwitcher } from './mutexSwitcher';
 import { MetaStringified } from './client/methods';
@@ -97,6 +98,7 @@ export type AssistantEvent = {
      * @deprecated Use the `on('assistant', { listener })` and `on('tts', tts)` subscriptions to receive voice events
      */
     emotion?: EmotionId;
+    mtt?: { response: Music2TrackProtocol.MttResponse; mid: OriginalMessageType['messageId'] };
     listener?: { status: VoiceListenerStatus };
 };
 
@@ -515,6 +517,7 @@ export const createAssistant = ({
         destroy,
         closeApp,
         listen: voice.listen,
+        shazam: voice.shazam,
         sendServerAction,
         getHistoryRequest: protocol.getHistoryRequest,
         sendText,
