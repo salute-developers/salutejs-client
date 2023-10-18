@@ -275,11 +275,11 @@ export const createProtocol = (
 
             status = 'connected';
 
-            window.clearTimeout(clearReadyTimer);
+            clearTimeout(clearReadyTimer);
 
             /// считаем коннект = ready, если по истечении таймаута сокет не был разорван
             /// т.к бек может разрывать сокет, если с settings что-то не так
-            clearReadyTimer = window.setTimeout(() => {
+            clearReadyTimer = setTimeout(() => {
                 if (status !== 'connected') {
                     return;
                 }
@@ -294,7 +294,7 @@ export const createProtocol = (
                 status = 'ready';
 
                 emit('ready');
-            }, 250);
+            }, 250) as unknown as number;
 
             logger?.({ type: 'init', params: { ...configuration, ...currentSettings } });
         }),
@@ -343,7 +343,10 @@ export const createProtocol = (
         },
         init: () => {
             // в отличии от reconnect не обрывает коннект если он в порядке
-            if (status === 'ready' && window.navigator.onLine) {
+            if (
+                (status === 'ready' && typeof window !== 'undefined' && window.navigator.onLine) ||
+                typeof window === 'undefined'
+            ) {
                 return Promise.resolve();
             }
 

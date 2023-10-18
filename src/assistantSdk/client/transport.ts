@@ -16,19 +16,24 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
     const { on, emit } = createNanoEvents<TransportEvents>();
 
     let hasCert = !checkCertUrl;
-    let retryTimeoutId = -1;
+    let retryTimeoutId: unknown = -1;
     let retries = 0;
     let status: 'closed' | 'closing' | 'connecting' | 'open' = 'closed';
     let webSocket: WebSocket;
     let stopped = true;
 
-    const checkCert = (checkUrl: string) =>
-        new Promise<boolean>((resolve) => {
+    const checkCert = (checkUrl: string) => {
+        if (typeof window === 'undefined') {
+            return Promise.resolve(true);
+        }
+
+        return new Promise<boolean>((resolve) => {
             window
                 .fetch(checkUrl)
                 .then(() => resolve(true))
                 .catch(() => resolve(false));
         });
+    };
 
     const close = () => {
         stopped = true;
@@ -46,7 +51,7 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
         status = 'connecting';
         emit('connecting');
 
-        if (!hasCert && window.navigator.onLine) {
+        if ((!hasCert && typeof window !== 'undefined' && window.navigator.onLine) || typeof window === 'undefined') {
             const okay = await checkCert(checkCertUrl!);
 
             if (!okay) {
@@ -70,7 +75,7 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
                 return;
             }
 
-            window.clearTimeout(retryTimeoutId);
+            clearTimeout(retryTimeoutId as number);
 
             retries = 0;
 
@@ -90,10 +95,10 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
 
             // пробуем переподключаться, если возникла ошибка при коннекте
             if (!webSocket || (webSocket.readyState === 3 && !stopped)) {
-                window.clearTimeout(retryTimeoutId);
+                clearTimeout(retryTimeoutId as number);
 
                 if (retries < 2) {
-                    retryTimeoutId = window.setTimeout(() => {
+                    retryTimeoutId = setTimeout(() => {
                         // eslint-disable-next-line @typescript-eslint/no-use-before-define
                         open(url);
 
@@ -129,7 +134,7 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
             return;
         }
 
-        window.setTimeout(() => reconnect(url));
+        setTimeout(() => reconnect(url));
 
         close();
     };
@@ -141,7 +146,7 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
     return {
         close,
         get isOnline() {
-            return window.navigator.onLine;
+            return (typeof window !== 'undefined' && window.navigator.onLine) || typeof window === 'undefined';
         },
         on,
         open,

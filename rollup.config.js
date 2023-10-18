@@ -94,6 +94,14 @@ export default [
             }),
             typescript({ outDir: 'esm', declaration: false, declarationMap: false, module: 'esnext' }),
             ...common.plugins,
+            copy({
+                targets: [
+                    {
+                        src: 'src/assistantSdk/voice/recognizers/asr/*.d.ts',
+                        dest: 'dist/assistantSdk/voice/recognizers/asr',
+                    },
+                ],
+            }),
         ],
     },
     {

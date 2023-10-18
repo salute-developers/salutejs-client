@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import { ActionCommand } from '@salutejs/scenario';
-import Long from 'long';
 
 import { createNanoEvents } from '../nanoevents';
 import {
@@ -71,7 +70,7 @@ const promiseTimeout = <T>(promise: Promise<T>, timeout: number): Promise<T> => 
     return Promise.race([
         promise.then((v) => {
             if (timeoutId) {
-                window.clearTimeout(timeoutId);
+                clearTimeout(timeoutId);
             }
             return v;
         }),
@@ -316,7 +315,7 @@ export const createAssistant = ({
 
     /** отправляет ответ на запрос доступа к местоположению и пр. меты */
     const sendMetaForPermissionRequest = async (
-        requestMessageId: number | Long,
+        requestMessageId: number,
         appInfo: AppInfo,
         items: PermissionType[],
     ) => {
@@ -407,7 +406,7 @@ export const createAssistant = ({
                         const { command } = items[i];
 
                         if (typeof command !== 'undefined') {
-                            window.setTimeout(() => emit('command', command));
+                            setTimeout(() => emit('command', command));
 
                             if (command.type === 'start_music_recognition') {
                                 voice.shazam();

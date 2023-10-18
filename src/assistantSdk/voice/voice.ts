@@ -225,7 +225,7 @@ export const createVoice = (
 
     // гипотезы распознавания речи
     subscriptions.push(
-        speechRecognizer.on('hypotesis', (text: string, isLast: boolean, mid: number | Long) => {
+        speechRecognizer.on('hypotesis', (text: string, isLast: boolean, mid: number) => {
             emit({
                 asr: {
                     text: listener.status === 'listen' && !settings.current.disableListening ? text : '',

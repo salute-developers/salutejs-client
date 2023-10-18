@@ -132,7 +132,7 @@ export const createNavigatorAudioProvider = (cb: (buffer: ArrayBuffer, last: boo
             return createAudioRecorder(stream, cb);
         })
         .catch((err) => {
-            if (window.location.protocol === 'http:') {
+            if (typeof window !== 'undefined' && window.location.protocol === 'http:') {
                 throw new Error('Audio is supported only on a secure connection');
             }
 
