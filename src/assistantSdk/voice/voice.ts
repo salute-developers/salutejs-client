@@ -1,3 +1,5 @@
+import Long from 'long';
+
 import { createClient } from '../client/client';
 import { AppInfo, EmotionId, OriginalMessageType, SystemMessageDataType } from '../../typings';
 import { AssistantSettings } from '../assistant';
@@ -173,6 +175,12 @@ export const createVoice = (
                     isPlaying = true;
                     emit({ emotion: 'talk' });
                     emit({ tts: { status: 'start', messageId: Number(mesId), appInfo: appInfoDict[mesId] } });
+                }),
+            );
+
+            subscriptions.push(
+                voicePlayer.on('stop', (mesId: string) => {
+                    client.sendCancel(Number(mesId));
                 }),
             );
 

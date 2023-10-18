@@ -25,6 +25,7 @@ export const createTrackStream = (
         delay = 0,
         onPlay,
         onEnd,
+        onStop,
         trackStatus,
     }: {
         sampleRate?: number;
@@ -33,6 +34,7 @@ export const createTrackStream = (
         delay?: number;
         onPlay?: () => void;
         onEnd?: () => void;
+        onStop?: () => void;
         trackStatus?: 'stop' | 'play' | 'end';
     } = {},
 ) => {
@@ -55,6 +57,11 @@ export const createTrackStream = (
         onEnd && onEnd();
         startTime = 0;
         lastChunkOffset = 0;
+    };
+
+    const stop = () => {
+        onStop?.();
+        end();
     };
 
     const play = () => {
@@ -179,6 +186,6 @@ export const createTrackStream = (
             return status;
         },
         play,
-        stop: end,
+        stop,
     };
 };

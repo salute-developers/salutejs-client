@@ -12,6 +12,7 @@ export interface VoicePlayerSettings {
 export type EventsType = {
     play: (trackId: string) => void;
     end: (trackId: string) => void;
+    stop: (trackId: string) => void;
 };
 
 export const createVoicePlayer = (
@@ -59,6 +60,7 @@ export const createVoicePlayer = (
                 numberOfChannels,
                 delay: startVoiceDelay,
                 onPlay: () => emit('play', trackId),
+                onStop: () => emit('stop', trackId),
                 onEnd: () => {
                     emit('end', trackId);
                     play();
