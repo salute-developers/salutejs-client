@@ -1,3 +1,20 @@
+# v1.27.0 (Wed Oct 18 2023)
+
+#### 🚀 Enhancement
+
+- feat: Добавлена отправка cancel при принудительной остановке озвучки [#165](https://github.com/salute-developers/salutejs-client/pull/165) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### 🐛 Bug Fix
+
+- chore: отписка от touchstart [#162](https://github.com/salute-developers/salutejs-client/pull/162) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.26.2 (Mon Oct 16 2023)
 
 #### 🐛 Bug Fix
