@@ -1,3 +1,20 @@
+# v1.28.0 (Wed Oct 18 2023)
+
+#### 🚀 Enhancement
+
+- feat: расширенные статусы слушания [#163](https://github.com/salute-developers/salutejs-client/pull/163) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### 🔩 Dependency Updates
+
+- build(deps-dev): bump @babel/traverse from 7.22.8 to 7.23.2 [#166](https://github.com/salute-developers/salutejs-client/pull/166) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.27.0 (Wed Oct 18 2023)
 
 #### 🚀 Enhancement
