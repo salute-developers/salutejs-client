@@ -125,7 +125,7 @@ export const createVoice = (
     /** Активирует распознавание музыки
      * если было активно слушание или проигрывание - останавливает, распознование музыки в этом случае не активируется
      */
-    const shazam = () => {
+    const shazam = async () => {
         if (stopListening()) {
             return;
         }
@@ -147,7 +147,7 @@ export const createVoice = (
                 unsubscribe();
             });
 
-            client.init().then(() =>
+            return client.init().then(() =>
                 client.createVoiceStream(
                     ({ sendVoice, messageId, onMessage }) =>
                         musicRecognizer.start({
@@ -225,14 +225,10 @@ export const createVoice = (
 
     // гипотезы распознавания речи
     subscriptions.push(
-        speechRecognizer.on('hypotesis', (text: string, isLast: boolean, mid: number | Long) => {
-            emit({
-                asr: {
-                    text: listener.status === 'listen' && !settings.current.disableListening ? text : '',
-                    last: isLast,
-                    mid,
-                },
-            });
+        speechRecognizer.on('hypotesis', (text: string, last: boolean, mid: number | Long) => {
+            if (last || (listener.status === 'listen' && !settings.current.disableListening)) {
+                emit({ asr: { text, last, mid } });
+            }
         }),
     );
 

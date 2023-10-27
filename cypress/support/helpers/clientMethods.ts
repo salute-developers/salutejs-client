@@ -1,7 +1,10 @@
+import Long from 'long';
 import { Server } from 'mock-socket';
 
 import { appendHeader } from '../../../src/assistantSdk/client/protocol';
 import { Message, IText, IStatus, IBytes } from '../../../src/proto';
+import { PacketWrapperFromServer } from '../proto/asr';
+import { Music2TrackProtocol } from '../proto/mtt';
 import { SystemMessageDataType, MessageNames, Character } from '../../../src/typings';
 
 type CreateAnswerBuffer1Params = {
@@ -12,6 +15,7 @@ type CreateAnswerBuffer1Params = {
     text?: IText;
     status?: IStatus;
     appendVoice?: boolean;
+    voiceLength?: number;
     bytes?: IBytes;
 };
 
@@ -22,7 +26,8 @@ export const createMessage = ({
     messageName = MessageNames.ANSWER_TO_USER,
     text,
     status,
-    appendVoice = false,
+    voiceLength,
+    appendVoice = !!voiceLength,
     bytes,
 }: CreateAnswerBuffer1Params) => {
     const encodedAsNodeBuffer = appendHeader(
@@ -35,7 +40,7 @@ export const createMessage = ({
             voice: !appendVoice
                 ? undefined
                 : {
-                      data: Uint8Array.from({ length: 100 }, () => Math.floor(Math.random() * 5)),
+                      data: Uint8Array.from({ length: voiceLength || 100 }, () => Math.floor(Math.random() * 5)),
                   },
             text,
             status,
@@ -89,4 +94,25 @@ export const createServerPong = (server: Server) => {
             }
         });
     });
+};
+
+export const createAsrBytes = (text: string, isFinal: boolean) => {
+    return PacketWrapperFromServer.encode({
+        decoderResultField: {
+            isFinal,
+            hypothesis: [
+                {
+                    words: text,
+                    normalizedText: text,
+                },
+            ],
+        },
+    }).finish();
+};
+
+export const createMttBytes = (isFinal: boolean, error: Music2TrackProtocol.IErrorResponse | null = null) => {
+    return Music2TrackProtocol.MttResponse.encode({
+        errorResponse: error,
+        decoderResultField: { isFinal },
+    }).finish();
 };
