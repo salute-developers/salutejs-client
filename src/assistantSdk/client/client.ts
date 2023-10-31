@@ -193,12 +193,12 @@ export const createClient = (
         });
 
     const off = protocol.on('incoming', (message: OriginalMessageType) => {
-        if (message.voice) {
-            emit('voice', message.voice.data || new Uint8Array(), message);
-        }
-
         if (message.systemMessage?.data) {
             emit('systemMessage', JSON.parse(message.systemMessage.data), message);
+        }
+
+        if (message.voice) {
+            emit('voice', message.voice.data || new Uint8Array(), message);
         }
 
         if (message.status) {
