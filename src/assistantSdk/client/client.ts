@@ -11,12 +11,19 @@ import {
     Mid,
 } from '../../typings';
 import { GetHistoryResponse } from '../../proto';
+import { PacketWrapperFromServer } from '../voice/recognizers/asr';
+import { Music2TrackProtocol } from '../voice/recognizers/mtt';
 
 import { BatchableMethods, createProtocol } from './protocol';
 import { SendSystemMessageData, MetaStringified } from './methods';
 
 export interface ClientEvents {
     voice: (voice: Uint8Array, original: OriginalMessageType) => void;
+    musicRecognition: (response: Music2TrackProtocol.MttResponse, original: OriginalMessageType) => void;
+    stt: (
+        data: { text?: OriginalMessageType['text']; response?: PacketWrapperFromServer },
+        original: OriginalMessageType,
+    ) => void;
     status: (status: Status, original: OriginalMessageType) => void;
     systemMessage: (systemMessage: SystemMessageDataType, original: OriginalMessageType) => void;
     history: (historyMessages: HistoryMessages[], original: OriginalMessageType) => void;
@@ -177,24 +184,14 @@ export const createClient = (
     /** инициализирует исходящий голосовой поток, факт. передает в callback параметры для отправки голоса,
      * отправляет мету */
     const createVoiceStream = (
-        callback: ({
-            messageId,
-            sendVoice,
-            onMessage,
-        }: Pick<BatchableMethods, 'messageId' | 'sendVoice'> & {
-            onMessage: (cb: (message: OriginalMessageType) => void) => () => void;
-        }) => Promise<void>,
+        callback: ({ messageId, sendVoice }: Pick<BatchableMethods, 'messageId' | 'sendVoice'>) => Promise<void>,
         additionalMeta: AdditionalMeta,
-    ): Promise<void> =>
-        protocol.batch(async ({ sendSystemMessage, sendVoice, messageId }) => {
+    ): Promise<void> => {
+        return protocol.batch(async ({ sendSystemMessage, sendVoice, messageId }) => {
             await sendMeta(sendSystemMessage, additionalMeta);
-
-            await callback({
-                sendVoice,
-                messageId,
-                onMessage: (cb: (message: OriginalMessageType) => void) => protocol.on('incoming', cb),
-            });
+            await callback({ sendVoice, messageId });
         });
+    };
 
     const off = protocol.on('incoming', (message: OriginalMessageType) => {
         if (message.systemMessage?.data) {
@@ -217,6 +214,18 @@ export const createClient = (
             }));
 
             emit('history', parsedHistory, message);
+        }
+
+        if (message.messageName === MessageNames.STT && (message.text || message.bytes?.data?.length)) {
+            const response = message.bytes?.data?.length
+                ? PacketWrapperFromServer.decode(message.bytes.data)
+                : undefined;
+
+            emit('stt', { text: message.text, response }, message);
+        }
+
+        if (message.messageName === MessageNames.MTT && message.bytes?.data?.length) {
+            emit('musicRecognition', Music2TrackProtocol.MttResponse.decode(message.bytes.data), message);
         }
     });
 

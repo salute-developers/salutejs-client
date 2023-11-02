@@ -3,7 +3,7 @@ import { Server } from 'mock-socket';
 
 import { appendHeader } from '../../../src/assistantSdk/client/protocol';
 import { Message, IText, IStatus, IBytes } from '../../../src/proto';
-import { PacketWrapperFromServer } from '../proto/asr';
+import { PacketWrapperFromServer, IErrorResponse } from '../proto/asr';
 import { Music2TrackProtocol } from '../proto/mtt';
 import { SystemMessageDataType, MessageNames, Character } from '../../../src/typings';
 
@@ -96,8 +96,9 @@ export const createServerPong = (server: Server) => {
     });
 };
 
-export const createAsrBytes = (text: string, isFinal: boolean) => {
+export const createAsrBytes = (text: string, isFinal: boolean, error: IErrorResponse | null = null) => {
     return PacketWrapperFromServer.encode({
+        errorResponse: error,
         decoderResultField: {
             isFinal,
             hypothesis: [

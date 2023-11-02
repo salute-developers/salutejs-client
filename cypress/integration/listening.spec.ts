@@ -9,7 +9,9 @@ import { Music2TrackProtocol } from '../support/proto/mtt';
 import { createMessage, createAsrBytes, createMttBytes } from '../support/helpers/clientMethods';
 import { initServer, initAssistantClient } from '../support/helpers/init';
 
-describe('Проверяем изменение настроек озвучки', () => {
+const voiceChunk = new Uint8Array(Array(16).fill(16));
+
+describe('Слушание', () => {
     const audioContex = new AudioContext();
 
     let server: Server;
@@ -61,7 +63,7 @@ describe('Проверяем изменение настроек озвучки'
         };
     };
 
-    const canAcceptAsr = (done: () => void, useBytes: boolean) => {
+    const canAcceptAsr = (done: () => void, listen: () => Promise<unknown>, useBytes: boolean) => {
         const asrText1 = 'Lorem Ipsum is';
         const asrText2 = 'Lorem Ipsum is simply dummy text';
 
@@ -111,28 +113,28 @@ describe('Проверяем изменение настроек озвучки'
         });
     };
 
-    const asrWillIgnorForInactiveHearing = (done: () => void, useBytes: boolean) => {
+    const asrWillIgnorForInactiveHearing = (done: () => void, listen: () => Promise<unknown>, useBytes: boolean) => {
         const lastAsr = 'On voice: last';
 
-        let prevAssistantEvent: AssistantEvent | null = null;
+        let prevEvent: AssistantEvent | null = null;
         let hasDone = false;
 
-        assistantClient.on('assistant', (assistantEvent) => {
-            const isPrevEventListenerStopped = prevAssistantEvent?.listener?.status === 'stopped';
+        assistantClient.on('assistant', (event) => {
+            const isPrevEventListenerStopped = prevEvent?.listener?.status === 'stopped';
 
-            prevAssistantEvent = assistantEvent;
+            prevEvent = event;
 
-            if (typeof assistantEvent.asr === 'undefined') {
+            if (typeof event.asr === 'undefined') {
                 return;
             }
 
-            if (assistantEvent.asr.text === lastAsr && assistantEvent.asr.last) {
+            if (event.asr.text === lastAsr && event.asr.last) {
                 hasDone = true;
 
                 done();
             } else if (!isPrevEventListenerStopped) {
                 throw new Error(
-                    `Ни какие гипотезы, кроме последней, не должны приходить при выключенном слушании. Пришло: ${assistantEvent.asr.text}`,
+                    `Ни какие гипотезы, кроме последней, не должны приходить при выключенном слушании. Пришло: ${event.asr.text}`,
                 );
             }
         });
@@ -428,9 +430,7 @@ describe('Проверяем изменение настроек озвучки'
                             createMessage({
                                 messageId: message.messageId,
                                 messageName: MessageNames.STT,
-                                text: {
-                                    data: '',
-                                },
+                                text: { data: '' },
                                 last: 1,
                             }),
                         );
@@ -440,7 +440,7 @@ describe('Проверяем изменение настроек озвучки'
                         socket.send(
                             createMessage({
                                 messageId: message.messageId,
-                                messageName: MessageNames.MUSIC_RECOGNITION,
+                                messageName: MessageNames.MTT,
                                 bytes: {
                                     data: createMttBytes(!mttError, mttError),
                                 },
@@ -454,45 +454,256 @@ describe('Проверяем изменение настроек озвучки'
         listen();
     };
 
-    (['listen', 'shazam'] as Array<'listen' | 'shazam'>).forEach((method) => {
-        it(`stopVoice() для ${method}() останавливает начавшееся слушание и отправляет Cancel`, (done) => {
-            stopVoiceWillStopListeningAndSendCancel(done, assistantClient[method]);
+    const sendVoiceWillSendChunksAndStopListening = (done: () => void, listen: () => Promise<unknown>) => {
+        let wasConnections = false;
+        let listenerStatus: unknown = null;
+
+        const inputConnections = handleVoiceInputConnections({
+            onCreateInput: () => {
+                wasConnections = true;
+            },
         });
 
-        it(`Слушание для ${method}() останавливается при disableListening=true`, (done) => {
-            listeningWillStopAfterDisableListening(done, assistantClient[method]);
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+
+                if (message.voice) {
+                    expect(wasConnections, 'Микрофон включался').to.be.true;
+                    expect(inputConnections.count, 'Микрофон отпущен').eq(0);
+                    expect(listenerStatus, 'listener остановился').eq('stopped');
+
+                    if (message.voice.data?.byteLength === 16) {
+                        done();
+                    }
+                }
+            });
         });
 
-        it(`Слушание для ${method}() не доступно при disableListening=true`, () => {
-            listeningIsNotAvailableWhileListeningIsDisabled(assistantClient[method]);
+        assistantClient.on('assistant', ({ listener }) => {
+            if (listener?.status) {
+                listenerStatus = listener?.status;
+            }
         });
 
-        it(`Отрицательный статус от VPS останавливает слушание для ${method}()`, (done) => {
-            statusWillStopListening(done, assistantClient[method]);
+        assistantClient.changeSettings({ disableDubbing: false });
+        listen().then(() => {
+            assistantClient.sendVoice([voiceChunk]);
+        });
+    };
+
+    const listeningWillSendMetaBeforeVoice = (done: () => void, listen: () => Promise<unknown>) => {
+        let metaMessageId: unknown = null;
+        let hasVoice = false;
+
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+
+                if (message.meta) {
+                    metaMessageId = message.messageId;
+                }
+
+                if (message.voice && !hasVoice) {
+                    hasVoice = true;
+
+                    expect(metaMessageId, 'Мета для голоса была отправлена').eq(message.messageId);
+                    done();
+                }
+            });
         });
 
-        it(`Слушание ${method}() отправляет правильный messageName`, (done) => {
-            listeningWillSendCorrectMessageName(
-                done,
-                assistantClient[method],
-                method === 'listen' ? undefined : MessageNames.MUSIC_RECOGNITION,
-            );
+        assistantClient.changeSettings({ disableDubbing: false });
+        listen();
+    };
+
+    const lastWillNotSendCancel = ({
+        listen,
+        useBytes,
+        messageName,
+        type,
+    }: {
+        listen: () => Promise<unknown>;
+        useBytes: boolean;
+        messageName: string;
+        type: 'last' | 'error' | 'status';
+    }) => {
+        let lastSent = false;
+
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+                const isStt = messageName === 'STT';
+
+                if (message.voice && !lastSent) {
+                    lastSent = true;
+
+                    switch (type) {
+                        case 'last': {
+                            socket.send(
+                                createMessage({
+                                    messageId: message.messageId,
+                                    messageName,
+                                    text: useBytes ? undefined : { data: '' },
+                                    last: useBytes ? undefined : 1,
+                                    bytes: useBytes
+                                        ? { data: isStt ? createAsrBytes('', true) : createMttBytes(true) }
+                                        : undefined,
+                                }),
+                            );
+
+                            break;
+                        }
+
+                        case 'error': {
+                            socket.send(
+                                createMessage({
+                                    messageId: message.messageId,
+                                    messageName,
+                                    last: -1,
+                                    bytes: { data: isStt ? createAsrBytes('', false, {}) : createMttBytes(false, {}) },
+                                }),
+                            );
+
+                            break;
+                        }
+
+                        case 'status': {
+                            socket.send(
+                                createMessage({
+                                    messageId: message.messageId,
+                                    messageName,
+                                    status: { code: -1 },
+                                }),
+                            );
+
+                            break;
+                        }
+
+                        default:
+                            break;
+                    }
+                }
+
+                if (message.cancel) {
+                    throw new Error('Cancel не должен быть отправлен');
+                }
+            });
         });
 
-        it(`Слушание для ${method}() останавливается при last`, (done) => {
-            listeningWillStopByLastOrError(done, assistantClient[method], method);
+        assistantClient.changeSettings({ disableDubbing: false });
+        listen();
+
+        cy.wait(500);
+    };
+
+    (['listen', 'shazam', 'sendVoice'] as Array<'listen' | 'shazam' | 'sendVoice'>).forEach((method) => {
+        const chunks = [voiceChunk];
+        const voiceMethod = () => {
+            // @ts-ignore
+            return assistantClient[method](method === 'sendVoice' ? chunks : undefined);
+        };
+
+        it(`Слушание для ${method}() отправляет правильный messageName`, (done) => {
+            listeningWillSendCorrectMessageName(done, voiceMethod, method === 'shazam' ? MessageNames.MTT : undefined);
         });
 
-        it(`Повторный вызов ${method}() останавливает слушание`, (done) => {
-            doubleCallWillStopListening(done, assistantClient[method]);
+        it(`Слушание для ${method}() отправляет мету перед отправкой голоса`, (done) => {
+            listeningWillSendMetaBeforeVoice(done, voiceMethod);
         });
 
-        it(`Двойной вызов ${method}() не создаёт двойное слушание`, (done) => {
-            doubleClickWillStopListening(done, assistantClient[method]);
+        if (method !== 'sendVoice') {
+            it(`stopVoice() для ${method}() останавливает начавшееся слушание и отправляет Cancel`, (done) => {
+                stopVoiceWillStopListeningAndSendCancel(done, voiceMethod);
+            });
+
+            it(`Слушание для ${method}() останавливается при disableListening=true`, (done) => {
+                listeningWillStopAfterDisableListening(done, voiceMethod);
+            });
+
+            it(`Слушание для ${method}() не доступно при disableListening=true`, () => {
+                listeningIsNotAvailableWhileListeningIsDisabled(voiceMethod);
+            });
+
+            it(`Отрицательный статус от VPS останавливает слушание для ${method}()`, (done) => {
+                statusWillStopListening(done, voiceMethod);
+            });
+
+            it(`Слушание для ${method}() останавливается при last`, (done) => {
+                listeningWillStopByLastOrError(done, voiceMethod, method);
+            });
+
+            it(`Повторный вызов ${method}() останавливает слушание`, (done) => {
+                doubleCallWillStopListening(done, voiceMethod);
+            });
+
+            it(`Двойной вызов ${method}() не создаёт двойное слушание`, (done) => {
+                doubleClickWillStopListening(done, voiceMethod);
+            });
+
+            it(`sendVoice() отправляет готовые чанки и останавливает слушание для ${method}()`, (done) => {
+                sendVoiceWillSendChunksAndStopListening(done, voiceMethod);
+            });
+        }
+
+        if (method !== 'shazam') {
+            it(`Asr (text) при ${method}() принимаются`, (done) => {
+                canAcceptAsr(done, voiceMethod, false);
+            });
+
+            it(`Asr (bytes) при ${method}() принимаются`, (done) => {
+                canAcceptAsr(done, voiceMethod, true);
+            });
+
+            it(`Asr (text) при ${method}() для неактивного слушания игнорируются`, (done) => {
+                asrWillIgnorForInactiveHearing(done, voiceMethod, false);
+            });
+
+            it(`Asr (bytes) при ${method}() для неактивного слушания игнорируются`, (done) => {
+                asrWillIgnorForInactiveHearing(done, voiceMethod, true);
+            });
+        }
+
+        [true, false].forEach((useBytes) => {
+            const isShazam = method === 'shazam';
+            const text = useBytes ? 'bytes' : 'text';
+
+            if (!useBytes && isShazam) {
+                return;
+            }
+
+            it(`Получение last (${text}) от VPS при ${method}() не отправляет cancel`, () => {
+                lastWillNotSendCancel({
+                    type: 'last',
+                    useBytes,
+                    listen: voiceMethod,
+                    messageName: isShazam ? MessageNames.MTT : MessageNames.STT,
+                });
+            });
+
+            it(`Получение отрицательного статуса (${text}) от VPS при ${method}() не отправляет cancel`, () => {
+                lastWillNotSendCancel({
+                    type: 'status',
+                    useBytes,
+                    listen: voiceMethod,
+                    messageName: isShazam ? MessageNames.MTT : MessageNames.STT,
+                });
+            });
+
+            if (useBytes) {
+                it(`Получение ошибки (${text}) от VPS при ${method}() не отправляет cancel`, () => {
+                    lastWillNotSendCancel({
+                        type: 'error',
+                        useBytes,
+                        listen: voiceMethod,
+                        messageName: isShazam ? MessageNames.MTT : MessageNames.STT,
+                    });
+                });
+            }
         });
     });
 
-    it(`Слушание для shazam() останавливается при ошибке`, (done) => {
+    it('Слушание для shazam() останавливается при ошибке', (done) => {
         listeningWillStopByLastOrError(done, assistantClient.shazam, 'shazam', { errorMessage: 'Unexpected' });
     });
 
@@ -517,6 +728,95 @@ describe('Проверяем изменение настроек озвучки'
 
         assistantClient.listen().then(() => {
             assistantClient.shazam();
+        });
+    });
+
+    it('sendVoice() не отправит пустые чанки', () => {
+        server.on('connection', () => {
+            throw new Error('Подключения не должно произойти, так как отправка пустых чанков должна игнорироваться');
+        });
+
+        assistantClient.sendVoice([new Uint8Array(16)]);
+        cy.wait(500);
+    });
+
+    it('sendVoice() отправляет правильный messageName', (done) => {
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+
+                if (message.voice) {
+                    expect(message.messageName).eq(MessageNames.MTT);
+                    done();
+                }
+            });
+        });
+
+        assistantClient.sendVoice([voiceChunk], 'MUSIC_RECOGNITION');
+    });
+
+    it('streamVoice() отправляет правильный messageName', (done) => {
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+
+                if (message.voice) {
+                    expect(message.messageName).eq(MessageNames.MTT);
+                    done();
+                }
+            });
+        });
+
+        assistantClient.streamVoice([voiceChunk], true, 'MUSIC_RECOGNITION');
+    });
+
+    it('streamVoice() отправляет Cancel для стрима без last=true', (done) => {
+        let chunksCount = 0;
+
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+
+                if (message.voice) {
+                    chunksCount += 1;
+                }
+
+                if (message.cancel) {
+                    expect(chunksCount, 'Получены все чанки').eq(3);
+                    done();
+                }
+            });
+        });
+
+        assistantClient.streamVoice([voiceChunk], false).then(() => {
+            assistantClient.streamVoice([voiceChunk], false).then(() => {
+                assistantClient.streamVoice([voiceChunk], false);
+            });
+        });
+    });
+
+    it('streamVoice() при last=true не отправляет Cancel', (done) => {
+        let chunksCount = 0;
+
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+
+                if (message.voice) {
+                    chunksCount += 1;
+                }
+
+                if (message.last === 1 && message.voice) {
+                    expect(chunksCount, 'Получены все чанки').eq(3);
+                    done();
+                }
+            });
+        });
+
+        assistantClient.streamVoice([voiceChunk], false).then(() => {
+            assistantClient.streamVoice([voiceChunk], false).then(() => {
+                assistantClient.streamVoice([voiceChunk], true);
+            });
         });
     });
 
@@ -567,23 +867,7 @@ describe('Проверяем изменение настроек озвучки'
             });
         });
 
-        assistantClient.listen({ begin: [new ArrayBuffer(16)] });
-    });
-
-    it('Asr (text) принимаются', (done) => {
-        canAcceptAsr(done, false);
-    });
-
-    it('Asr (bytes) принимаются', (done) => {
-        canAcceptAsr(done, true);
-    });
-
-    it('Asr (text) для неактивного слушания игнорируются', (done) => {
-        asrWillIgnorForInactiveHearing(done, false);
-    });
-
-    it('Asr (bytes) для неактивного слушания игнорируются', (done) => {
-        asrWillIgnorForInactiveHearing(done, true);
+        assistantClient.listen({ begin: [voiceChunk] });
     });
 
     it('Эмоция listen приходит после старта слушания, idle приходит после его завершении', (done) => {
@@ -678,5 +962,41 @@ describe('Проверяем изменение настроек озвучки'
             expect(getUserMedia).to.be.not.called;
             done();
         });
+    });
+
+    it('Отправка готовых чанков не запускает слушание', (done) => {
+        handleVoiceInputConnections({
+            onCreateInput: () => {
+                throw new Error('Микрофон не должен запрашиваться');
+            },
+        });
+
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+
+                if (message.voice) {
+                    done();
+                }
+            });
+        });
+
+        assistantClient.on('assistant', ({ listener }) => {
+            if (listener) {
+                throw new Error('Слушание не должно затрагиваться');
+            }
+        });
+
+        assistantClient.changeSettings({ disableDubbing: false });
+        assistantClient.sendVoice([voiceChunk]);
+    });
+
+    it('Пустые чанки игнорируются', () => {
+        server.on('connection', () => {
+            throw new Error('Пустые чанки должны игнорироваться');
+        });
+
+        assistantClient.changeSettings({ disableDubbing: false });
+        assistantClient.sendVoice([]);
     });
 });
