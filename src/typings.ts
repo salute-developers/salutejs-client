@@ -393,6 +393,11 @@ export interface AssistantWindow {
     __dangerouslySendVoiceMessage?: (message: string) => void;
     __dangerouslyGetAssistantAppState?: () => AssistantAppState;
     __dangerouslySendTextMessage?: (text: string) => void;
+
+    __ASSISTANT_CLIENT__: {
+        version: string;
+        firstSmartAppDataMid?: string;
+    };
 }
 
 export interface AssistantBackgroundApp {
