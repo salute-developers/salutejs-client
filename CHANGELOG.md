@@ -1,3 +1,26 @@
+# v1.29.0 (Thu Nov 02 2023)
+
+#### 🚀 Enhancement
+
+- feat: Добавить mid в on('status') [#171](https://github.com/salute-developers/salutejs-client/pull/171) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### 🐛 Bug Fix
+
+- fix: Перенести тип для __ASSISTANT_CLIENT__ в AssistantWindow [#170](https://github.com/salute-developers/salutejs-client/pull/170) ([@sasha-tlt](https://github.com/sasha-tlt))
+- test: Добавлены тесты на захват голоса [#164](https://github.com/salute-developers/salutejs-client/pull/164) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### 🔩 Dependency Updates
+
+- build(deps-dev): bump browserify-sign from 4.2.1 to 4.2.2 [#167](https://github.com/salute-developers/salutejs-client/pull/167) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.28.0 (Wed Oct 18 2023)
 
 #### 🚀 Enhancement
