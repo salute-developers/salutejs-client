@@ -122,7 +122,7 @@ export type AssistantEvents = {
     vps: (event: VpsEvent) => void;
     actionCommand: (event: ActionCommandEvent) => void;
     command: (command: AssistantCommand) => void;
-    status: (status: Status) => void;
+    status: (status: Status, mid: number | Long) => void;
     error: (error: AssistantError) => void;
     history: (history: HistoryMessages[]) => void;
     tts: (event: TtsEvent) => void;
@@ -366,8 +366,8 @@ export const createAssistant = ({
 
     // оповещение о статусах
     subscriptions.push(
-        client.on('status', (status) => {
-            emit('status', status);
+        client.on('status', (status, { messageId }) => {
+            emit('status', status, messageId);
         }),
     );
 
