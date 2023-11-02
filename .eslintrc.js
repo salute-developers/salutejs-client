@@ -3,7 +3,7 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     plugins: ['import', 'prettier', 'cypress', '@typescript-eslint'],
     rules: {
-        camelcase: 'error',
+        camelcase: ['error', { allow: ['default_character'] }],
         'spaced-comment': ['error', 'always', { markers: ['/'] }], /// разрешаем ts-require directive
         'comma-dangle': ['error', 'always-multiline'],
         'arrow-parens': ['error', 'always'],
