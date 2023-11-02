@@ -22,6 +22,7 @@ import {
     AdditionalMeta,
     Status,
     AssistantServerActionMode,
+    CharacterId,
 } from '../typings';
 
 import { createClient } from './client/client';
@@ -155,6 +156,8 @@ export const createAssistant = ({
 }: VpsConfiguration & CreateAssistantDevOptions & Pick<CreateTransportParams, 'checkCertUrl'>) => {
     const { on, emit } = createNanoEvents<AssistantEvents>();
 
+    // default_character отправляется в мета при отправке InitialSettings
+    let defaultCharacter: CharacterId = 'sber';
     // хеш [messageId]: requestId, где requestId - пользовательский ид экшена
     const requestIdMap: Record<string, string> = {};
 
@@ -244,7 +247,18 @@ export const createAssistant = ({
     const protocol = createProtocol(transport, {
         ...configuration,
         getInitialMeta:
-            typeof getInitialMeta !== 'undefined' ? () => getInitialMeta().then(convertFieldValuesToString) : undefined,
+            typeof getInitialMeta !== 'undefined'
+                ? () =>
+                      getInitialMeta().then((meta) =>
+                          convertFieldValuesToString({
+                              ...meta,
+                              default_character: defaultCharacter,
+                          }),
+                      )
+                : () =>
+                      convertFieldValuesToString({
+                          default_character: defaultCharacter,
+                      }),
         // пока голос не готов, выключаем озвучку
         settings: { ...configuration.settings, dubbing: -1 },
     });
@@ -583,6 +597,9 @@ export const createAssistant = ({
         },
         get status() {
             return protocol.status;
+        },
+        setDefaultCharacterMeta(characterId: CharacterId) {
+            defaultCharacter = characterId;
         },
     };
 };
