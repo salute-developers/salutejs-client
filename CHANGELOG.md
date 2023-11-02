@@ -1,3 +1,17 @@
+# v1.29.1 (Thu Nov 02 2023)
+
+#### 🐛 Bug Fix
+
+- fix: добавил default_character в мету [#168](https://github.com/salute-developers/salutejs-client/pull/168) ([@soulko](https://github.com/soulko))
+- test: Добавлены тесты для озвучки [#169](https://github.com/salute-developers/salutejs-client/pull/169) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- Anton Kostenko ([@soulko](https://github.com/soulko))
+
+---
+
 # v1.29.0 (Thu Nov 02 2023)
 
 #### 🚀 Enhancement
