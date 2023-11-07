@@ -1,5 +1,5 @@
 import { createNanoEvents } from '../../../nanoevents';
-import { OriginalMessageType, MessageNames } from '../../../typings';
+import { OriginalMessageType, MessageNames, Mid } from '../../../typings';
 import { createVoiceListener } from '../listener/voiceListener';
 
 import { Music2TrackProtocol } from './mtt';
@@ -12,7 +12,7 @@ export const createMusicRecognizer = (voiceListener: ReturnType<typeof createVoi
     const { emit, on } = createNanoEvents<MusicRecognizerEvents>();
     let off: () => void;
     let status: 'active' | 'inactive' = 'inactive';
-    let currentMessageId: number;
+    let currentMessageId: Mid;
 
     const stop = () => {
         if (voiceListener.status !== 'stopped') {
@@ -27,7 +27,7 @@ export const createMusicRecognizer = (voiceListener: ReturnType<typeof createVoi
         onMessage,
     }: {
         sendVoice: (data: Uint8Array, last: boolean, messageName?: string) => void;
-        messageId: number;
+        messageId: Mid;
         onMessage: (cb: (message: OriginalMessageType) => void) => () => void;
     }) =>
         voiceListener

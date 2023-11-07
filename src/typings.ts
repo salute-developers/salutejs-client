@@ -482,6 +482,7 @@ export type SystemMessageDataType = {
     activate_app_info?: boolean;
     app_info?: AppInfo;
     auto_listening: boolean;
+    answerId?: number;
     items?: Array<ItemType>;
     suggestions?: Suggestions;
     hints?: Hints;
@@ -496,7 +497,7 @@ export type SystemMessageDataType = {
 };
 
 export interface OriginalMessageType {
-    messageId: number | Long;
+    messageId: Mid;
     last: number;
     messageName: string;
     token?: string | null;
@@ -669,3 +670,5 @@ export type HistoryMessages = Omit<IHistoryMessages, 'content'> & {
         };
     };
 };
+
+export type Mid = number | Long;

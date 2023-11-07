@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import { ActionCommand } from '@salutejs/scenario';
-import Long from 'long';
 
 import { createNanoEvents } from '../nanoevents';
 import {
@@ -23,6 +22,7 @@ import {
     Status,
     AssistantServerActionMode,
     CharacterId,
+    Mid,
 } from '../typings';
 
 import { createClient } from './client/client';
@@ -123,7 +123,7 @@ export type AssistantEvents = {
     vps: (event: VpsEvent) => void;
     actionCommand: (event: ActionCommandEvent) => void;
     command: (command: AssistantCommand) => void;
-    status: (status: Status, mid: number | Long) => void;
+    status: (status: Status, mid: Mid) => void;
     error: (error: AssistantError) => void;
     history: (history: HistoryMessages[]) => void;
     tts: (event: TtsEvent) => void;
@@ -162,6 +162,8 @@ export const createAssistant = ({
     let defaultCharacter: CharacterId = 'sber';
     // хеш [messageId]: requestId, где requestId - пользовательский ид экшена
     const requestIdMap: Record<string, string> = {};
+    // mid для последнего отправленного/принятого сообщения (кроме server_action)
+    let lastMid: Mid = 0;
 
     const subscriptions: Array<() => void> = [];
     const backgroundApps: {
@@ -312,7 +314,7 @@ export const createAssistant = ({
     const sendText = (text: string, shouldSendDisableDubbing = false, additionalMeta?: AdditionalMeta) => {
         voice.stop();
 
-        client.sendText(text, settings.current.sendTextAsSsml, shouldSendDisableDubbing, additionalMeta);
+        return client.sendText(text, settings.current.sendTextAsSsml, shouldSendDisableDubbing, additionalMeta);
     };
 
     /** отправляет server_action */
@@ -331,11 +333,7 @@ export const createAssistant = ({
     };
 
     /** отправляет ответ на запрос доступа к местоположению и пр. меты */
-    const sendMetaForPermissionRequest = async (
-        requestMessageId: number | Long,
-        appInfo: AppInfo,
-        items: PermissionType[],
-    ) => {
+    const sendMetaForPermissionRequest = async (requestMessageId: Mid, appInfo: AppInfo, items: PermissionType[]) => {
         const {
             meta: { ...props },
             ...data
@@ -369,6 +367,12 @@ export const createAssistant = ({
     // обработка исходящих сообщений
     subscriptions.push(
         protocol.on('outcoming', (message: OriginalMessageType) => {
+            if (message.text || message.voice) {
+                /// не прерываем множественные ответы для сервер-экшенов
+                /// прервем, если получим карточку или бабл в ответ
+                lastMid = message.messageId;
+            }
+
             emit('vps', { type: 'outcoming', message });
         }),
     );
@@ -398,7 +402,7 @@ export const createAssistant = ({
     subscriptions.push(
         client.on('systemMessage', (systemMessage: SystemMessageDataType, originalMessage: OriginalMessageType) => {
             if (originalMessage.messageName === 'ANSWER_TO_USER') {
-                const { activate_app_info, items, app_info: mesAppInfo } = systemMessage;
+                const { answerId = 0, activate_app_info, items = [], app_info: mesAppInfo } = systemMessage;
                 const isChatApp = mesAppInfo && mesAppInfo.frontendType === 'CHAT_APP';
                 const isDialog = mesAppInfo && mesAppInfo.frontendType === 'DIALOG';
                 const isAppChanged = mesAppInfo && mesAppInfo.applicationId !== app.info.applicationId;
@@ -418,8 +422,18 @@ export const createAssistant = ({
                     emit('app', { type: 'run', app: DEFAULT_APP });
                 }
 
-                if (items) {
-                    for (let i = 0; i < (items || []).length; i++) {
+                // cancel для множественных ответов
+                if (answerId >= 2 && lastMid > originalMessage.messageId) {
+                    client.sendCancel(originalMessage.messageId);
+                }
+
+                // последним сообщением считаем, только если пришли карточки/баблы
+                if (lastMid < originalMessage.messageId && items.findIndex(({ bubble, card }) => bubble || card) >= 0) {
+                    lastMid = originalMessage.messageId;
+                }
+
+                if (items.length) {
+                    for (let i = 0; i < items.length; i++) {
                         const { command } = items[i];
 
                         if (typeof command !== 'undefined') {
@@ -540,8 +554,15 @@ export const createAssistant = ({
         start,
         stop: () => {
             voice.stop();
-            protocol.clearQueue();
-            transport.close();
+
+            if (lastMid !== 0) {
+                client.sendCancel(lastMid);
+            }
+
+            setTimeout(() => {
+                protocol.clearQueue();
+                transport.close();
+            });
         },
         stopTts: voice.stopPlaying,
         stopVoice: voice.stop,
