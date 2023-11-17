@@ -340,6 +340,19 @@ export const createAssistant = <A extends AssistantSmartAppData>({
         return () => {};
     };
 
+    const sendAction: Assistant<A>['sendAction'] = (action, onData, onError, params = {}) => {
+        return sendData({ ...params, action }, (data) => {
+            if (data.type === 'smart_app_data') {
+                onData?.(data.smart_app_data);
+            }
+
+            if (data.type === 'smart_app_error') {
+                // @ts-ignore
+                onError?.(data.smart_app_error);
+            }
+        });
+    };
+
     return {
         cancelTts,
         close: () => window.AssistantHost?.close(),
@@ -354,26 +367,32 @@ export const createAssistant = <A extends AssistantSmartAppData>({
         getRecoveryState: () => window.appRecoveryState,
         on,
         subscribeToCommand,
-        sendAction: <
-            D extends AssistantSmartAppCommand['smart_app_data'] = AssistantSmartAppCommand['smart_app_data'],
-            E extends AssistantSmartAppError['smart_app_error'] = AssistantSmartAppError['smart_app_error'],
-        >(
-            action: AssistantServerAction,
-            onData?: ObserverFunc<D>,
-            onError?: ObserverFunc<E>,
-            { name, requestId, mode }: Pick<SendDataParams, 'name' | 'requestId' | 'mode'> = {},
-        ) => {
-            return sendData({ action, name, requestId, mode }, (data: A | AssistantSmartAppError) => {
-                if (data.type === 'smart_app_data') {
-                    onData?.(data.smart_app_data as D);
-                }
-
-                if (data.type === 'smart_app_error') {
-                    onError?.(data.smart_app_error as E);
-                }
+        sendAction,
+        sendData,
+        sendActionPromisified: (action, params = {}) => {
+            return new Promise((resolve, reject) => {
+                const off = sendAction(
+                    action,
+                    (...args) => {
+                        off();
+                        resolve(...args);
+                    },
+                    (...args) => {
+                        off();
+                        reject(...args);
+                    },
+                    params,
+                );
             });
         },
-        sendData,
+        sendDataPromisified: (params) => {
+            return new Promise((resolve) => {
+                const off = sendData(params, (...args) => {
+                    off();
+                    resolve(...args);
+                });
+            });
+        },
         setGetState: (nextGetState: () => AssistantAppState) => {
             currentGetState = nextGetState;
         },

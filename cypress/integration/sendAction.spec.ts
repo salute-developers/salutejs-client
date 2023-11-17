@@ -1,8 +1,6 @@
 /// <reference types="cypress" />
 import { createAssistant } from 'lib';
 
-/* eslint-disable @typescript-eslint/camelcase */
-
 describe('Проверяем sendAction', () => {
     beforeEach(() => {
         window.AssistantHost = {
@@ -142,5 +140,38 @@ describe('Проверяем sendAction', () => {
             undefined,
             { requestId },
         );
+    });
+
+    it('sendActionPromisified() и sendDataPromisified() возвращает ответ', (done) => {
+        const assistant = initAssistant();
+        const commands = [
+            { ...dataCommand, smart_app_data: { command: 'action_command' } },
+            { ...dataCommand, smart_app_data: { command: 'data_command' } },
+        ];
+
+        let dataCount = -1;
+        let commandCount = 0;
+
+        window.AssistantHost.sendDataContainer = (data) => {
+            const { requestId } = JSON.parse(data);
+
+            setTimeout(() => {
+                window.AssistantClient.onData({ ...commands[++dataCount], sdk_meta: { requestId } });
+            }, dataCount);
+        };
+
+        assistant.sendActionPromisified(action).then((command) => {
+            commandCount += 1;
+
+            expect(command, 'sendAction получил свой ответ').deep.eq(commands[0].smart_app_data);
+        });
+
+        assistant.sendDataPromisified(action).then((command) => {
+            commandCount += 1;
+
+            expect(command.smart_app_data, 'sendData получил свой ответ').deep.eq(commands[1].smart_app_data);
+            expect(commandCount, 'Все ответы получены').eq(2);
+            done();
+        });
     });
 });
