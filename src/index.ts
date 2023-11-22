@@ -14,6 +14,8 @@ export {
     ActionCommandEvent,
     AssistantEvents as AssistantClientEvents,
     createAssistant as createAssistantClient,
+    createAssistant as createAssistantSDK,
+    Assistant as AssistantSDK,
 } from './assistantSdk/assistant';
 export { createNavigatorAudioProvider } from './assistantSdk/voice/listener/navigatorAudioProvider';
 export * from './typings';

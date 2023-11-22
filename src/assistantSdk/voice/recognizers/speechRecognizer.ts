@@ -1,5 +1,5 @@
 import { createNanoEvents } from '../../../nanoevents';
-import { MessageNames, OriginalMessageType } from '../../../typings';
+import { MessageNames, Mid, OriginalMessageType } from '../../../typings';
 import { createVoiceListener, VoiceHandler } from '../listener/voiceListener';
 
 import { PacketWrapperFromServer } from './asr';
@@ -12,7 +12,7 @@ export const createSpeechRecognizer = (voiceListener: ReturnType<typeof createVo
     const { emit, on } = createNanoEvents<speechRecognizerEvents>();
     let off: () => void;
     let status: 'active' | 'inactive' = 'inactive';
-    let currentMessageId: number;
+    let currentMessageId: Mid;
 
     const stop = () => {
         if (voiceListener.status !== 'stopped') {
@@ -27,7 +27,7 @@ export const createSpeechRecognizer = (voiceListener: ReturnType<typeof createVo
         onMessage,
     }: {
         sendVoice: VoiceHandler;
-        messageId: number;
+        messageId: Mid;
         onMessage: (cb: (message: OriginalMessageType) => void) => () => void;
     }) => {
         currentMessageId = messageId;

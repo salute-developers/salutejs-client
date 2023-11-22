@@ -1,6 +1,6 @@
 import { createNanoEvents } from '../../nanoevents';
 import { IDevice, IInitialSettings, ILegacyDevice, IMessage, IChatHistoryRequest, Message } from '../../proto';
-import { VpsConfiguration, OriginalMessageType, VpsVersion, GetHistoryRequestClient } from '../../typings';
+import { VpsConfiguration, OriginalMessageType, VpsVersion, GetHistoryRequestClient, Mid } from '../../typings';
 
 import { MetaStringified, createClientMethods } from './methods';
 import { Transport } from './types';
@@ -97,7 +97,7 @@ export const createProtocol = (
     const subscriptions: Array<() => void> = [];
     const messageQueue: Array<IMessage> = [];
 
-    let initMessageId: number; // ид инициализационного сообщения, отправим мессаджи в неинициализированный протокол
+    let initMessageId: Mid; // ид инициализационного сообщения, отправим мессаджи в неинициализированный протокол
     let currentSettings = { device, legacyDevice, settings, locale };
     let currentMessageId = Date.now();
     let status: 'connecting' | 'connected' | 'ready' | 'closed' = 'closed';
@@ -105,7 +105,7 @@ export const createProtocol = (
     let clearReadyTimer: number; // ид таймера установки состояния ready
     let cancelUpdatingSettingsWhenSocketReady = () => {}; // отменяет обновление настроек VPS при готовности сокета
 
-    const getMessageId = () => {
+    const getMessageId = (): Mid => {
         return currentMessageId++;
     };
 
@@ -144,6 +144,7 @@ export const createProtocol = (
         getHistoryRequest: getHistoryRequestOriginal,
         sendCancel,
         sendLegacyDevice: sendLegacyDeviceOriginal,
+        sendMute,
         sendSettings: sendSettingsOriginal,
         sendText,
         sendSystemMessage,
@@ -326,6 +327,7 @@ export const createProtocol = (
         getHistoryRequest,
         getMessageId,
         sendCancel,
+        sendMute,
         sendText,
         sendSystemMessage,
         sendVoice,

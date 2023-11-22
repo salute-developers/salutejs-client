@@ -15,8 +15,10 @@ import {
     IMessage,
     IChatHistoryRequest,
     ChatHistoryRequest,
+    IMute,
+    Mute,
 } from '../../proto';
-import { Meta, VpsVersion, GetHistoryRequestClient, GetHistoryRequestProto } from '../../typings';
+import { Meta, VpsVersion, GetHistoryRequestClient, GetHistoryRequestProto, Mid } from '../../typings';
 
 export type BatchableMethods = {
     sendText: (
@@ -51,7 +53,7 @@ export type BatchableMethods = {
         },
     ) => void;
     sendSettings: (data: ISettings, last?: boolean, messageId?: number) => void;
-    messageId: number;
+    messageId: Mid;
 };
 
 export type SendSystemMessageData = {
@@ -65,7 +67,7 @@ export const createClientMethods = ({
     getMessageId,
     sendMessage,
 }: {
-    getMessageId: () => number;
+    getMessageId: () => Mid;
     sendMessage: (message: IMessage) => void;
 }) => {
     const send = ({
@@ -82,13 +84,14 @@ export const createClientMethods = ({
             | { legacyDevice: LegacyDevice }
             | { initialSettings: InitialSettings }
             | { cancel: Cancel }
+            | { mute: Mute }
             | IChatHistoryRequest
         ) & {
             last: 1 | -1;
             messageName?: string;
             meta?: MetaStringified;
         };
-        messageId: number;
+        messageId: Mid;
     }) => {
         sendMessage({
             messageName: '',
@@ -175,6 +178,16 @@ export const createClientMethods = ({
         return send({
             payload: {
                 legacyDevice: LegacyDevice.create(data),
+                last: last ? 1 : -1,
+            },
+            messageId,
+        });
+    };
+
+    const sendMute = (data: IMute, last = true, messageId = getMessageId()) => {
+        return send({
+            payload: {
+                mute: Mute.create(data),
                 last: last ? 1 : -1,
             },
             messageId,
@@ -328,6 +341,7 @@ export const createClientMethods = ({
         getHistoryRequest,
         sendCancel,
         sendLegacyDevice,
+        sendMute,
         sendSettings,
         sendText,
         sendSystemMessage,

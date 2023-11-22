@@ -1,5 +1,3 @@
-import Long from 'long';
-
 import { createNanoEvents } from '../../nanoevents';
 import {
     SystemMessageDataType,
@@ -10,6 +8,7 @@ import {
     AdditionalMeta,
     Status,
     AssistantServerActionMode,
+    Mid,
 } from '../../typings';
 import { GetHistoryResponse } from '../../proto';
 
@@ -35,7 +34,7 @@ export const createClient = (
     const { on, emit } = createNanoEvents<ClientEvents>();
 
     /** ждет ответ бека и возвращает данные из этого ответа */
-    const waitForAnswer = (messageId: number | Long): Promise<SystemMessageDataType> =>
+    const waitForAnswer = (messageId: Mid): Promise<SystemMessageDataType> =>
         new Promise((resolve) => {
             const off = on('systemMessage', (systemMessageData, originalMessage) => {
                 if (
@@ -50,7 +49,7 @@ export const createClient = (
         });
 
     /** отправляет произвольный systemMessage, не подкладывает мету */
-    const sendData = (data: Record<string, unknown>, messageName = '', meta?: MetaStringified): number | Long => {
+    const sendData = (data: Record<string, unknown>, messageName = '', meta?: MetaStringified): Mid => {
         const messageId = protocol.getMessageId();
 
         protocol.sendSystemMessage(
@@ -67,7 +66,7 @@ export const createClient = (
     };
 
     /** отправляет cancel на сообщение */
-    const sendCancel = (messageId: number): void => {
+    const sendCancel = (messageId: Mid): void => {
         protocol.sendCancel({}, true, messageId);
     };
 
@@ -103,13 +102,18 @@ export const createClient = (
         }
     };
 
+    /** перестать слать озвучку для messageId */
+    const sendMute = (messageId: Mid): void => {
+        protocol.sendMute({}, true, messageId);
+    };
+
     /** отправляет server_action и мету */
     const sendServerAction = async (
         serverAction: unknown,
         appInfo: AppInfo,
         messageName = 'SERVER_ACTION',
         mode?: AssistantServerActionMode,
-    ): Promise<number | Long | undefined> => {
+    ): Promise<Mid | undefined> => {
         const messageId = protocol.getMessageId();
 
         // мету и server_action отправляем в одном systemMessage
@@ -144,7 +148,7 @@ export const createClient = (
         isSsml = false,
         shouldSendDisableDubbing?: boolean,
         additionalMeta?: AdditionalMeta,
-    ): Promise<number | Long | undefined> => {
+    ): Promise<Mid | undefined> => {
         if (text.trim() === '') {
             return undefined;
         }
@@ -228,6 +232,7 @@ export const createClient = (
         sendServerAction,
         sendText,
         sendCancel,
+        sendMute,
         on,
         waitForAnswer,
     };

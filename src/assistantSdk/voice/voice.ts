@@ -1,7 +1,5 @@
-import Long from 'long';
-
 import { createClient } from '../client/client';
-import { AppInfo, EmotionId, OriginalMessageType, SystemMessageDataType } from '../../typings';
+import { AppInfo, EmotionId, Mid, OriginalMessageType, SystemMessageDataType } from '../../typings';
 import { AssistantSettings } from '../assistant';
 import { MutexedObject } from '../mutexedObject';
 
@@ -14,7 +12,7 @@ import { resolveAudioContext, isAudioSupported } from './audioContext';
 
 export interface TtsEvent {
     status: 'start' | 'stop';
-    messageId: number;
+    messageId: Mid;
     appInfo: AppInfo;
 }
 
@@ -125,7 +123,7 @@ export const createVoice = (
     /** Активирует распознавание музыки
      * если было активно слушание или проигрывание - останавливает, распознование музыки в этом случае не активируется
      */
-    const shazam = async () => {
+    const shazam = async (): Promise<void> => {
         if (stopListening()) {
             return;
         }
@@ -182,7 +180,7 @@ export const createVoice = (
 
             subscriptions.push(
                 voicePlayer.on('stop', (mesId: string) => {
-                    client.sendCancel(Number(mesId));
+                    client.sendMute(Number(mesId));
                 }),
             );
 
@@ -225,7 +223,7 @@ export const createVoice = (
 
     // гипотезы распознавания речи
     subscriptions.push(
-        speechRecognizer.on('hypotesis', (text: string, last: boolean, mid: number | Long) => {
+        speechRecognizer.on('hypotesis', (text: string, last: boolean, mid: Mid) => {
             if (last || (listener.status === 'listen' && !settings.current.disableListening)) {
                 emit({ asr: { text, last, mid } });
             }

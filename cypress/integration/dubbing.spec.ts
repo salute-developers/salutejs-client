@@ -1,7 +1,8 @@
 import { Server } from 'mock-socket';
+import Long from 'long';
 
 import { Message } from '../../src/proto';
-import { AppInfo, createAssistantClient, MessageNames } from '../../src';
+import { AppInfo, createAssistantClient, MessageNames, Mid } from '../../src';
 import { createMessage } from '../support/helpers/clientMethods';
 import { initServer, initAssistantClient } from '../support/helpers/init';
 
@@ -67,12 +68,15 @@ describe('Озвучка', () => {
         assistantClient.start();
     });
 
-    it('Принудительная остановка озвучки отправляет cancel в VPS', (done) => {
+    it('Остановка озвучки отправляет mute', (done) => {
+        let mid: number | Long = 0;
+
         server.on('connection', (socket) => {
             socket.on('message', (data) => {
                 const message = Message.decode((data as Uint8Array).slice(4));
 
                 if (message.messageName === 'OPEN_ASSISTANT') {
+                    mid = message.messageId;
                     socket.send(
                         createMessage({
                             messageId: message.messageId,
@@ -83,7 +87,7 @@ describe('Озвучка', () => {
                     );
                 }
 
-                if (message.cancel) {
+                if (message.mute && message.messageId === mid) {
                     done();
                 }
             });
@@ -100,12 +104,14 @@ describe('Озвучка', () => {
     });
 
     (['listen', 'shazam', 'sendText'] as Array<'listen' | 'shazam' | 'sendText'>).forEach((method) => {
-        it(`${method}() останавливает озвучку`, (done) => {
+        it(`${method}() останавливает озвучку и отправляет mute`, (done) => {
+            let mid: number | Long;
+            let status = 'start';
             server.on('connection', (socket) => {
                 socket.on('message', (data) => {
                     const message = Message.decode((data as Uint8Array).slice(4));
-
                     if (message.messageName === 'OPEN_ASSISTANT') {
+                        mid = message.messageId;
                         socket.send(
                             createMessage({
                                 messageId: message.messageId,
@@ -115,25 +121,114 @@ describe('Озвучка', () => {
                             }),
                         );
                     }
+
+                    if (message.mute && message.messageId === mid) {
+                        expect(status).to.be.eq('stop');
+                        done();
+                    }
                 });
             });
 
-            assistantClient.on('tts', ({ status }) => {
-                if (status === 'start') {
+            assistantClient.on('tts', ({ status: nextStatus }) => {
+                status = nextStatus;
+                if (nextStatus === 'start') {
                     const params = method === 'sendText' ? 'Lorem' : undefined;
 
                     // @ts-ignore
                     assistantClient[method](params);
-                }
-
-                if (status === 'stop') {
-                    done();
                 }
             });
 
             assistantClient.changeSettings({ disableDubbing: false });
             assistantClient.start();
         });
+    });
+
+    (['listen', 'shazam', 'sendText'] as Array<'listen' | 'shazam' | 'sendText'>).forEach((method) => {
+        it(`${method}() отправляет cancel для множественных ответов`, (done) => {
+            const mid: Mid = -1;
+            server.on('connection', (socket) => {
+                socket.on('message', (data) => {
+                    const message = Message.decode((data as Uint8Array).slice(4));
+                    if (message.messageName === 'OPEN_ASSISTANT') {
+                        const params = method === 'sendText' ? 'Lorem' : undefined;
+
+                        // @ts-ignore
+                        assistantClient[method](params);
+                        socket.send(
+                            createMessage({
+                                messageId: mid,
+                                messageName: MessageNames.ANSWER_TO_USER,
+                                systemMessage: {
+                                    answerId: 2,
+                                },
+                                last: -1,
+                            }),
+                        );
+                    }
+
+                    if (message.cancel && message.messageId === mid) {
+                        done();
+                    }
+                });
+            });
+
+            assistantClient.changeSettings({ disableDubbing: false });
+            assistantClient.start();
+        });
+    });
+
+    it('Отправляется cancel для предыдущего множественного ответа', (done) => {
+        let counter = 0;
+        let mid: Mid = 0;
+
+        server.on('connection', (socket) => {
+            socket.on('message', (data) => {
+                const message = Message.decode((data as Uint8Array).slice(4));
+
+                if (message.messageName === 'OPEN_ASSISTANT') {
+                    mid = message.messageId;
+                    socket.send(
+                        createMessage({
+                            messageId: message.messageId,
+                            messageName: MessageNames.ANSWER_TO_USER,
+                            systemMessage: { answerId: 1, items: [{ bubble: { text: 'test' } }] },
+                            last: 1,
+                        }),
+                    );
+                    socket.send(
+                        createMessage({
+                            messageId: message.messageId+1,
+                            messageName: MessageNames.ANSWER_TO_USER,
+                            systemMessage: { items: [{ bubble: { text: 'test' } }] },
+                            last: 1,
+                        }),
+                    );
+
+                    socket.send(
+                        createMessage({
+                            messageId: message.messageId,
+                            messageName: MessageNames.ANSWER_TO_USER,
+                            systemMessage: { answerId: 2, items: [{ bubble: { text: 'test' } }] },
+                            last: 1,
+                        }),
+                    );
+                }
+            });
+        });
+        
+        assistantClient.on('vps', (event) => {
+            if (event.type === 'outcoming' && event.message.cancel && event.message.messageId === mid) {
+                counter++;
+            }
+        });
+
+        assistantClient.start();
+
+        setTimeout(() => {
+            expect(counter, 'Ожидаем один cancel').eq(1);
+            done();
+        }, 1000);
     });
 
     it('Входящее сообщение не останавливает озвучку', (done) => {

@@ -586,37 +586,6 @@ describe('Проверяем изменение настроек озвучки'
         asrWillIgnorForInactiveHearing(done, true);
     });
 
-    it('Вызов listen() останавливает озвучку', (done) => {
-        server.on('connection', (socket) => {
-            socket.on('message', (data) => {
-                const message = Message.decode((data as Uint8Array).slice(4));
-
-                if (message.messageName === 'OPEN_ASSISTANT') {
-                    socket.send(
-                        createMessage({
-                            messageId: message.messageId,
-                            messageName: MessageNames.ANSWER_TO_USER,
-                            voiceLength: 1000000,
-                        }),
-                    );
-                }
-            });
-        });
-
-        assistantClient.on('tts', ({ status }) => {
-            if (status === 'start') {
-                assistantClient.listen();
-            }
-
-            if (status === 'stop') {
-                done();
-            }
-        });
-
-        assistantClient.changeSettings({ disableDubbing: false });
-        assistantClient.start();
-    });
-
     it('Эмоция listen приходит после старта слушания, idle приходит после его завершении', (done) => {
         let currentEmotion: EmotionId = 'idle';
         let isVoiceStarted = false;
