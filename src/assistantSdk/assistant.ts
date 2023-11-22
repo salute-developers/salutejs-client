@@ -148,6 +148,8 @@ export type AssistantSettings = {
     sendTextAsSsml: boolean;
 };
 
+export type Assistant = ReturnType<typeof createAssistant>;
+
 export const createAssistant = ({
     getMeta,
     getInitialMeta,
