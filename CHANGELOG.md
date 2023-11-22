@@ -1,3 +1,15 @@
+# v1.30.0 (Wed Nov 22 2023)
+
+#### 🚀 Enhancement
+
+- feat: стрим ответов [#174](https://github.com/salute-developers/salutejs-client/pull/174) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.29.1 (Thu Nov 02 2023)
 
 #### 🐛 Bug Fix
