@@ -1,3 +1,15 @@
+# v1.32.0 (Thu Nov 23 2023)
+
+#### 🚀 Enhancement
+
+- feat: Добавлено API отправки готовых чанков голоса [#172](https://github.com/salute-developers/salutejs-client/pull/172) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.31.0 (Thu Nov 23 2023)
 
 #### 🚀 Enhancement
