@@ -141,16 +141,18 @@ export interface Assistant<A extends AssistantSmartAppData = AssistantSmartAppDa
     getGeo: (() => void) | undefined;
     getRecoveryState: () => unknown;
     on: <K extends keyof AssistantEvents<A>>(event: K, cb: AssistantEvents<A>[K]) => () => void;
-    sendAction: <
-        D extends AssistantSmartAppCommand['smart_app_data'],
-        E extends AssistantSmartAppError['smart_app_error'],
-    >(
-        action: AssistantServerAction,
+    sendAction: <D extends A['smart_app_data'], E extends AssistantSmartAppError['smart_app_error']>(
+        action: SendDataParams['action'],
         onData?: (data: D) => void,
         onError?: (error: E) => void,
-        params?: Pick<SendDataParams, 'name' | 'requestId'>,
+        params?: Omit<SendDataParams, 'action'>,
     ) => () => void;
     sendData: (params: SendDataParams, onData?: (data: A | AssistantSmartAppError) => void) => () => void;
+    sendActionPromisified: (
+        action: SendDataParams['action'],
+        params?: Omit<SendDataParams, 'action'>,
+    ) => Promise<A['smart_app_data'] | AssistantSmartAppError['smart_app_error']>;
+    sendDataPromisified: (params: SendDataParams) => Promise<A | AssistantSmartAppError>;
     sendText: (message: string) => void;
     setHints: (hints: Hints) => void;
     setGetRecoveryState: (next: () => unknown) => void;
