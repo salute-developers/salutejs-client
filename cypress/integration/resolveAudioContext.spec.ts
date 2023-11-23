@@ -7,21 +7,15 @@ describe('AudioContext', () => {
     let emitClick = () => {};
 
     before(() => {
-        const audioContext = (() => {
-            let state = 'suspended';
+        const audioContext = {
+            state: 'suspended',
+            onstatechange: () => {},
+            resume() {
+                this.state = 'running';
 
-            return {
-                onstatechange: () => {},
-                resume() {
-                    state = 'running';
-
-                    this.onstatechange();
-                },
-                get state() {
-                    return state;
-                },
-            };
-        })();
+                this.onstatechange();
+            },
+        };
 
         cy.stub(window, 'AudioContext').callsFake(() => audioContext);
 

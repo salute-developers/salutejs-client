@@ -67,7 +67,7 @@ export enum VpsVersion {
 export const MessageNames = {
     ANSWER_TO_USER: 'ANSWER_TO_USER',
     STT: 'STT',
-    MUSIC_RECOGNITION: 'MUSIC_RECOGNITION',
+    MTT: 'MUSIC_RECOGNITION',
     DO_NOTHING: 'DO_NOTHING',
 };
 

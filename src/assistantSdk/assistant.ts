@@ -551,6 +551,8 @@ export const createAssistant = ({
         sendServerAction,
         getHistoryRequest: protocol.getHistoryRequest,
         sendText,
+        sendVoice: voice.sendVoice,
+        streamVoice: voice.streamVoice,
         start,
         stop: () => {
             voice.stop();
