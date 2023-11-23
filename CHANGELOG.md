@@ -1,3 +1,15 @@
+# v1.31.0 (Thu Nov 23 2023)
+
+#### 🚀 Enhancement
+
+- feat: Добавлены промисы для sendData и sendAction [#175](https://github.com/salute-developers/salutejs-client/pull/175) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.30.0 (Wed Nov 22 2023)
 
 #### 🚀 Enhancement
