@@ -149,13 +149,10 @@ export type AssistantSettings = {
 };
 
 export type Assistant = ReturnType<typeof createAssistant>;
-
-export const createAssistant = ({
-    getMeta,
-    getInitialMeta,
-    checkCertUrl,
-    ...configuration
-}: VpsConfiguration & CreateAssistantDevOptions & Pick<CreateTransportParams, 'checkCertUrl'>) => {
+export type AssistantParams = VpsConfiguration &
+    CreateAssistantDevOptions &
+    Pick<CreateTransportParams, 'checkCertUrl'>;
+export const createAssistant = ({ getMeta, getInitialMeta, checkCertUrl, ...configuration }: AssistantParams) => {
     const { on, emit } = createNanoEvents<AssistantEvents>();
 
     // default_character отправляется в мета при отправке InitialSettings

@@ -16,6 +16,7 @@ export {
     createAssistant as createAssistantClient,
     createAssistant as createAssistantSDK,
     Assistant as AssistantSDK,
+    AssistantParams as AssistantSDKParams,
 } from './assistantSdk/assistant';
 export { createNavigatorAudioProvider } from './assistantSdk/voice/listener/navigatorAudioProvider';
 export * from './typings';
