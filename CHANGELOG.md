@@ -1,3 +1,15 @@
+# v1.32.1 (Tue Nov 28 2023)
+
+#### 🐛 Bug Fix
+
+- Тип для параметров инициализации сдк [#177](https://github.com/salute-developers/salutejs-client/pull/177) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.32.0 (Thu Nov 23 2023)
 
 #### 🚀 Enhancement
