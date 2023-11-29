@@ -114,7 +114,11 @@ export const createVoice = (
                 unsubscribe();
             });
 
-            await client.init();
+            await client.init().catch((error) => {
+                isRecognizeInitializing = false;
+
+                throw error;
+            });
 
             return client.createVoiceStream(
                 ({ sendVoice, messageId }) => {
