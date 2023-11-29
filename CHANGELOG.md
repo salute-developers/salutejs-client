@@ -1,3 +1,15 @@
+# v1.32.2 (Wed Nov 29 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Ломается слушание после оффлайн [#178](https://github.com/salute-developers/salutejs-client/pull/178) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.32.1 (Tue Nov 28 2023)
 
 #### 🐛 Bug Fix
