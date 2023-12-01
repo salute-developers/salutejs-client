@@ -1,0 +1,103 @@
+name: 'Bundle report'
+
+on:
+  pull_request:
+    branches:
+      - '*'
+
+  push:
+    branches:
+      - 'master'
+
+env:
+  merging: ${{ github.event_name == 'push' }}
+
+jobs:
+  main:
+    name: 'bundle-report'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup NodeJS v18.12.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.12.0'
+
+      - name: Checkout master
+        if: ${{ !fromJson(env.merging) }}
+        uses: actions/checkout@v3
+        with:
+          ref: 'master'
+          path: master
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get master bundle report
+        if: ${{ !fromJson(env.merging) }}
+        uses: actions/github-script@v7
+        id: getMasterBundleReport
+        with:
+          script: |
+            const path = require('path');
+            const fs = require('fs');
+            
+            try {
+              const bundleReportPath = path.resolve(process.env.GITHUB_WORKSPACE, 'master', 'bundleReport.json');
+
+              return JSON.parse(fs.readFileSync(bundleReportPath));
+            } catch (_) {
+              return {};
+            }
+
+      - name: Checkout current
+        uses: actions/checkout@v3
+
+      - name: Build bundle
+        run: npm ci && npm run build
+
+      - name: Create current bundle report
+        uses: actions/github-script@v7
+        id: getCurrentBundleReport
+        with:
+          script: |
+            const { createReport } = require('./tools/bundle-report');
+
+            return createReport({
+              baseDir: process.env.GITHUB_WORKSPACE,
+              bundlesDirsNames: ['dist', 'esm', 'umd'],
+            });
+
+      - name: Create bundle summary
+        if: ${{ !fromJson(env.merging) }}
+        uses: actions/github-script@v7
+        id: bundleReport
+        with:
+          result-encoding: string
+          script: |
+            const { createSummary } = require('./tools/bundle-report');
+
+            return createSummary({
+              prevReport: ${{ steps.getMasterBundleReport.outputs.result }},
+              nextReport: ${{ steps.getCurrentBundleReport.outputs.result }},
+            });
+
+      - name: Console result
+        if: ${{ !fromJson(env.merging) }}
+        run: echo '${{ steps.bundleReport.outputs.result }}'
+
+      - name: Comment result
+        if: ${{ !fromJson(env.merging) }}
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: 'Bundle report'
+          number: ${{ github.event.pull_request.number }}
+          message: ${{ steps.bundleReport.outputs.result }}
+
+      - name: Save report
+        if: ${{ fromJson(env.merging) }}
+        run: |
+          echo ${{ steps.getCurrentBundleReport.outputs.result }} > bundle-report.json
+
+          git config --global user.name "$(git log -n 1 --pretty=format:%an)"
+          git config --global user.email "$(git log -n 1 --pretty=format:%ae)"
+          git add bundle-report.json
+          git commit -m "test: [autocommit] Save current bundle report"
+          git push
