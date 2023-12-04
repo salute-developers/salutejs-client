@@ -33,13 +33,9 @@ jobs:
         run: |
           git config --global user.name "$(git log -n 1 --pretty=format:%an)"
           git config --global user.email "$(git log -n 1 --pretty=format:%ae)"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
-          git fetch origin ${{ steps.getBranch.outputs.result }}:${{ steps.getBranch.outputs.result }}
-          git pull origin ${{ steps.getBranch.outputs.result }} --rebase
-          git checkout ${{ steps.getBranch.outputs.result }}
 
           echo { "fileName": "235" } > bundle-report.json
 
           git add bundle-report.json
           git commit -m "test: [autocommit] Save bundle report to ./bundle-report.json"
-          git push origin HEAD:${{ steps.getBranch.outputs.result }}
+          git push
