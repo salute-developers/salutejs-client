@@ -1,13 +1,17 @@
 name: 'Save bundle report'
 
 on:
-  pull_request:
+  push:
     branches:
       - 'master'
 
+  pull_request:
+    branches:
+      - '*'
+
 jobs:
-  composite:
-    name: 'composite'
+  main:
+    name: 'main'
     runs-on: ubuntu-latest
     steps:
       - name: Setup NodeJS v18.12.0
@@ -22,11 +26,10 @@ jobs:
         id: getBranch
         run: echo "result=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
 
-      - name: Show pull request id
-        run: echo ${{ github.event.pull_request.number }}
+      - run: echo 'Hello!'
 
       - name: Save report
-        if: ${{ github.event.pull_request.merged }}
+        if: ${{ github.event_name == 'push' }}
         run: |
           git config --global user.name "$(git log -n 1 --pretty=format:%an)"
           git config --global user.email "$(git log -n 1 --pretty=format:%ae)"
@@ -35,7 +38,7 @@ jobs:
           git pull origin ${{ steps.getBranch.outputs.result }} --rebase
           git checkout ${{ steps.getBranch.outputs.result }}
 
-          echo { "fileName": "125" } > bundle-report.json
+          echo { "fileName": "235" } > bundle-report.json
 
           git add bundle-report.json
           git commit -m "test: [autocommit] Save bundle report to ./bundle-report.json"
