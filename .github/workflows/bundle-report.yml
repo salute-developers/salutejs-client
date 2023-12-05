@@ -93,8 +93,11 @@ jobs:
 
       - name: Save report
         if: ${{ fromJson(env.merging) }}
+        env:
+          BUNDLE_REPORT: ${{ toJSON(steps.getCurrentBundleReport.outputs.result) }}
         run: |
-          echo ${{ steps.getCurrentBundleReport.outputs.result }} > bundle-report.json
+          printf '%s\n' "$BUNDLE_REPORT" > bundle-report.json
+          cat bundle-report.json
 
           git config --global user.name "$(git log -n 1 --pretty=format:%an)"
           git config --global user.email "$(git log -n 1 --pretty=format:%ae)"
