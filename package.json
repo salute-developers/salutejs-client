@@ -10,6 +10,7 @@
     "scripts": {
         "prebuild": "rm -rf ./dist ./esm ./umd",
         "build": "rollup -c --bundleConfigAsCjs",
+        "build:tools": "rm -f ./tools/bundle-report/*.js && tsc ./tools/bundle-report/src/index.ts --outDir ./tools/bundle-report --removeComments --downlevelIteration",
         "prepublishOnly": "npm run build",
         "release": "auto shipit",
         "proto": "pbjs --no-typeurl --no-convert --no-verify --no-delimited -t static-module src/proto/index.proto > src/proto/index.js && pbts src/proto/index.js -o src/proto/index.d.ts",
