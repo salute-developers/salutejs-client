@@ -42,7 +42,7 @@ jobs:
             try {
               const bundleReportPath = path.resolve(process.env.GITHUB_WORKSPACE, 'master', 'bundle-report.json');
 
-              return JSON.parse(fs.readFileSync(bundleReportPath));
+              return JSON.parse(JSON.parse(fs.readFileSync(bundleReportPath, 'utf-8')));
             } catch (_) {
               return {};
             }
