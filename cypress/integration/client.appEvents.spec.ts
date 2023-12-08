@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /// <reference types="cypress" />
 
 import { AppInfo } from '@salutejs/scenario';

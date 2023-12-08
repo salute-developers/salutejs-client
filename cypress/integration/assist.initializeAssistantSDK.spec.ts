@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /// <reference types="cypress" />
 import { WebSocket, Server } from 'mock-socket';
 
@@ -35,7 +36,7 @@ describe('Проверяем', () => {
         let context: Message;
         let doneCalled = false;
 
-        server.on('connection', (socket) => {
+        server?.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
             initProtocol(socket, {
                 initPhrase: INIT_PHRASE,
@@ -53,7 +54,6 @@ describe('Проверяем', () => {
                 }
 
                 if (action && context && !doneCalled) {
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     const current_app = JSON.parse(context.meta.current_app);
                     doneCalled = true;
 

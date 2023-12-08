@@ -21,7 +21,7 @@ describe('Проверяем обновление токена', () => {
         server = initServer();
         assistantClient = initAssistantClient({
             settings: {},
-            getToken: () => Promise.resolve(currentToken)
+            getToken: () => Promise.resolve(currentToken),
         });
 
         assistantClient.on('status', (status) => {

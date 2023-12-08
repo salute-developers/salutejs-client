@@ -198,7 +198,7 @@ describe('Озвучка', () => {
                     );
                     socket.send(
                         createMessage({
-                            messageId: message.messageId+1,
+                            messageId: (message.messageId as number) + 1,
                             messageName: MessageNames.ANSWER_TO_USER,
                             systemMessage: { items: [{ bubble: { text: 'test' } }] },
                             last: 1,
@@ -216,7 +216,7 @@ describe('Озвучка', () => {
                 }
             });
         });
-        
+
         assistantClient.on('vps', (event) => {
             if (event.type === 'outcoming' && event.message.cancel && event.message.messageId === mid) {
                 counter++;

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /// <reference types="cypress" />
 
 import { Server } from 'mock-socket';
@@ -50,7 +51,7 @@ describe('Проверяем приветствие', () => {
             [{ disableGreetings: false, isFirstSession: true }],
             ({ messageName, systemMessage, meta }) => {
                 if (messageName === 'OPEN_ASSISTANT') {
-                    const data = JSON.parse(systemMessage.data);
+                    const data = JSON.parse(systemMessage?.data || '{}');
                     const current_app = JSON.parse(meta.current_app);
 
                     expect(data.is_first_session, 'Отправлен "is_first_session"').be.true;
@@ -68,7 +69,7 @@ describe('Проверяем приветствие', () => {
             [{ disableGreetings: false, isFirstSession: false }],
             ({ messageName, systemMessage, meta }) => {
                 if (messageName === 'OPEN_ASSISTANT') {
-                    const data = JSON.parse(systemMessage.data);
+                    const data = JSON.parse(systemMessage?.data || '{}');
                     const current_app = JSON.parse(meta.current_app);
 
                     expect(data.is_first_session, 'Не отправлен "is_first_session"').be.eq(undefined);

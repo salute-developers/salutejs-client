@@ -1,9 +1,11 @@
 import { Server } from 'mock-socket';
 
+import { AssistantWindow } from '../../src/typings';
 import { Message } from '../../src/proto';
 
 declare global {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
+    interface Window extends AssistantWindow {}
+
     namespace Cypress {
         interface Chainable {
             mockVps: typeof mockVps;
@@ -22,6 +24,6 @@ const mockVps = (onMessage: (message: Message) => void) => {
     });
 
     return cy.wrap(server);
-}
+};
 
 Cypress.Commands.add('mockVps', { prevSubject: false }, mockVps);

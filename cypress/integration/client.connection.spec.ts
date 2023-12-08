@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 
-import { createAssistantClient } from '../../src';
 import { Message } from '../../src/proto';
 import { initAssistantClient } from '../support/helpers/init';
 // Собственная реализация необходима, так как пакет mock-socket не эмитит событие сокета close на клиенте
@@ -156,12 +155,12 @@ describe('Подключение к сокету', () => {
         /// и три попытки переподключения
         assistantClient.on('vps', ({ type }) => {
             if (type === 'error') {
-                cy.tick(5000)
+                cy.tick(5000);
                 expect(attempt).to.be.eq(3);
                 done();
             }
-        })
-    })
+        });
+    });
 
     it('reconnect закроет и откроет соедение если оно открыто (3 попытки)', (done) => {
         const assistantClient = initAssistantClient();
@@ -171,7 +170,7 @@ describe('Подключение к сокету', () => {
             attempt++;
 
             expect(url).to.be.eq('ws://path');
-            
+
             ws = new WebSocketMock(url);
             ws.readyState = WebSocket.OPEN;
             cy.stub(ws, 'close');
@@ -200,10 +199,10 @@ describe('Подключение к сокету', () => {
         /// и три попытки переподключения (+1 в начале)
         assistantClient.on('vps', ({ type }) => {
             if (type === 'error') {
-                cy.tick(5000)
+                cy.tick(5000);
                 expect(attempt).to.be.eq(4);
                 done();
             }
-        })
+        });
     });
 });

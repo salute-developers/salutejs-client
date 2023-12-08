@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /// <reference types="cypress" />
 import { createAssistant } from 'lib';
 
@@ -32,10 +33,10 @@ describe('Проверяем sendAction', () => {
         const assistant = initAssistant();
 
         window.AssistantHost.sendDataContainer = (sended) => {
-            const { data, message_name, requestId } = JSON.parse(sended);
+            const { data, message_name, requestId: reqId } = JSON.parse(sended);
             expect(data, 'пришел экшен').to.deep.equal(action);
             expect(message_name, 'message_name не заполнен').to.empty;
-            expect(requestId, 'requestId заполнен').to.not.empty;
+            expect(reqId, 'requestId заполнен').to.not.empty;
             done();
         };
 
@@ -46,10 +47,10 @@ describe('Проверяем sendAction', () => {
         const assistant = initAssistant();
 
         window.AssistantHost.sendDataContainer = (sended) => {
-            const { data, message_name, requestId } = JSON.parse(sended);
+            const { data, message_name, requestId: reqId } = JSON.parse(sended);
             expect(data, 'пришел экшен').to.deep.equal(action);
             expect(message_name, 'message_name передан').to.equal(name);
-            expect(requestId, 'requestId передан').to.equal(requestId);
+            expect(reqId, 'requestId передан').to.equal(reqId);
             done();
         };
 
@@ -62,9 +63,11 @@ describe('Проверяем sendAction', () => {
         const assistant = initAssistant();
 
         window.AssistantHost.sendDataContainer = (data) => {
-            const { requestId } = JSON.parse(data);
+            const { requestId: reqId } = JSON.parse(data);
             setTimeout(() =>
-                commands.map((command) => window.AssistantClient.onData({ ...command, sdk_meta: { requestId } })),
+                commands.map((command) =>
+                    window.AssistantClient.onData({ ...command, sdk_meta: { requestId: reqId } }),
+                ),
             );
         };
 
@@ -93,10 +96,10 @@ describe('Проверяем sendAction', () => {
         const assistant = initAssistant();
 
         window.AssistantHost.sendDataContainer = (data) => {
-            const { requestId } = JSON.parse(data);
+            const { requestId: reqId } = JSON.parse(data);
             setTimeout(() =>
                 commands.map((command, i) =>
-                    setTimeout(() => window.AssistantClient.onData({ ...command, sdk_meta: { requestId } }), i),
+                    setTimeout(() => window.AssistantClient.onData({ ...command, sdk_meta: { requestId: reqId } }), i),
                 ),
             );
         };
@@ -118,10 +121,10 @@ describe('Проверяем sendAction', () => {
         const assistant = initAssistant();
 
         window.AssistantHost.sendDataContainer = (data) => {
-            const { requestId } = JSON.parse(data);
+            const { requestId: reqId } = JSON.parse(data);
             setTimeout(() =>
                 commands.map((command, i) =>
-                    setTimeout(() => window.AssistantClient.onData({ ...command, sdk_meta: { requestId } }), i),
+                    setTimeout(() => window.AssistantClient.onData({ ...command, sdk_meta: { requestId: reqId } }), i),
                 ),
             );
         };
@@ -153,10 +156,10 @@ describe('Проверяем sendAction', () => {
         let commandCount = 0;
 
         window.AssistantHost.sendDataContainer = (data) => {
-            const { requestId } = JSON.parse(data);
+            const { requestId: reqId } = JSON.parse(data);
 
             setTimeout(() => {
-                window.AssistantClient.onData({ ...commands[++dataCount], sdk_meta: { requestId } });
+                window.AssistantClient.onData({ ...commands[++dataCount], sdk_meta: { requestId: reqId } });
             }, dataCount);
         };
 
