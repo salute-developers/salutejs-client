@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable camelcase */
 /// <reference types="cypress" />
 import { Server, WebSocket } from 'mock-socket';
 
@@ -92,12 +92,13 @@ describe('Тест backgroundApps', () => {
             const app = assistantClient.addBackgroundApp({ appInfo, getState });
 
             return () => {
+                // @ts-ignore
                 return app.onCommand(({ smart_app_data }) => {
-                    const { appInfo, mustBeReceived, last } = smart_app_data;
+                    const { appInfo: info, mustBeReceived, last } = smart_app_data;
 
-                    expect(appInfo).deep.eq(APPS[index]);
+                    expect(info).deep.eq(APPS[index]);
                     expect(mustBeReceived).to.be.true;
-        
+
                     if (last) {
                         commandsEnded += 1;
                     }
@@ -106,7 +107,7 @@ describe('Тест backgroundApps', () => {
                         done();
                     }
                 }).clearSubscribers;
-            }
+            };
         });
 
         onSocketReady((socket) => {
@@ -118,16 +119,16 @@ describe('Тест backgroundApps', () => {
 
                 sendMessage(socket, i, {
                     systemMessageData: {
-                        // eslint-disable-next-line @typescript-eslint/camelcase
                         auto_listening: false,
-                        // eslint-disable-next-line @typescript-eslint/camelcase
                         app_info: appInfo,
-                        items: [{
-                            command: {
-                                type: 'smart_app_data',
-                                smart_app_data: { appInfo, mustBeReceived, last },
+                        items: [
+                            {
+                                command: {
+                                    type: 'smart_app_data',
+                                    smart_app_data: { appInfo, mustBeReceived, last },
+                                },
                             },
-                        }],
+                        ],
                     },
                 });
             };
@@ -170,13 +171,13 @@ describe('Тест backgroundApps', () => {
 
                 if (data.server_action) {
                     receivedCount += 1;
-    
+
                     if (data.app_info?.applicationId !== APPS[0].applicationId) {
                         expect(data.server_action).deep.eq(actionToCurrentApp);
                     } else {
                         expect(data.server_action).deep.eq(actionToBackgroundApp);
                     }
-    
+
                     if (receivedCount === 2) {
                         done();
                     }

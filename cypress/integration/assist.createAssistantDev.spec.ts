@@ -40,7 +40,7 @@ describe('Проверяем createAssistantDev', () => {
         let phraseReceived: boolean;
         let isDone = false;
 
-        server.on('connection', (socket) => {
+        server?.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
             initProtocol(socket);
 
@@ -53,7 +53,7 @@ describe('Проверяем createAssistantDev', () => {
                 if (message.initialSettings) {
                     settingsReceived =
                         message.initialSettings.userChannel === USER_CHANNEL &&
-                        message.initialSettings.device.surface === SURFACE &&
+                        message.initialSettings.device?.surface === SURFACE &&
                         message.initialSettings.device.platformType === 'WEBDBG';
                 }
 
@@ -87,9 +87,13 @@ describe('Проверяем createAssistantDev', () => {
             smart_app_data: { type: 'test_command' },
         };
         const FEATURES = { feature: true };
-        server.on('connection', (socket) => {
+        server?.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
-            initProtocol(socket, { initPhrase: INIT_PHRASE, items: [{ command: COMMAND }], systemMessage: { feature_launcher: FEATURES } });
+            initProtocol(socket, {
+                initPhrase: INIT_PHRASE,
+                items: [{ command: COMMAND }],
+                systemMessage: { feature_launcher: FEATURES },
+            });
         });
 
         const assistant = createAssistantDev<AssistantSmartAppCommand>({
@@ -139,9 +143,13 @@ describe('Проверяем createAssistantDev', () => {
             smart_app_data: { type: 'test_command' },
         };
         const FEATURES = { feature: true };
-        server.on('connection', (socket) => {
+        server?.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
-            initProtocol(socket, { initPhrase: INIT_PHRASE, items: [{ command: COMMAND }], systemMessage: { feature_launcher: FEATURES } });
+            initProtocol(socket, {
+                initPhrase: INIT_PHRASE,
+                items: [{ command: COMMAND }],
+                systemMessage: { feature_launcher: FEATURES },
+            });
         });
 
         const assistant = createAssistantDev<AssistantSmartAppCommand>({
@@ -182,7 +190,7 @@ describe('Проверяем createAssistantDev', () => {
     });
 
     it('Проверяем оповещение подписчиков о старте', (done) => {
-        server.on('connection', (socket) => {
+        server?.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
             initProtocol(socket, { initPhrase: INIT_PHRASE });
         });
@@ -201,7 +209,7 @@ describe('Проверяем createAssistantDev', () => {
     it('Проверяем вызов send_data - ожидаем мессадж с app_info и стейтом в нем', (done) => {
         const state = { item_selector: { items: [] }, key: 'TEST' };
 
-        server.on('connection', (socket) => {
+        server?.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
             initProtocol(socket, { initPhrase: INIT_PHRASE });
 
@@ -219,7 +227,8 @@ describe('Проверяем createAssistantDev', () => {
                     expect(server_action).to.ok;
                     expect(message.meta).to.ok;
 
-                    switch (data.server_action.action_id) {
+                    // @ts-ignore
+                    switch (data.server_action?.action_id) {
                         case 'first':
                             expect(current_app.app_info).to.deep.equal(APP_INFO);
                             expect(current_app.state).to.deep.equal(state);
@@ -248,7 +257,7 @@ describe('Проверяем createAssistantDev', () => {
     it('Проверяем подписку sendAction - ожидаем срабатывание подписки', (done) => {
         const smartAppData = { type: 'test_data' };
 
-        server.on('connection', (socket) => {
+        server?.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
             initProtocol(socket, { initPhrase: INIT_PHRASE });
 
@@ -258,6 +267,7 @@ describe('Проверяем createAssistantDev', () => {
                 if (message.systemMessage?.data && message.systemMessage?.data !== '{}') {
                     const { server_action }: SystemMessageDataType = JSON.parse(message.systemMessage.data);
 
+                    // @ts-ignore
                     if (server_action?.type !== 'test_action') {
                         return;
                     }
@@ -298,7 +308,7 @@ describe('Проверяем createAssistantDev', () => {
         const received = { character: false, navigation: false, data: false, insets: false };
         let handleStart: () => void;
 
-        server.on('connection', (socket) => {
+        server?.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
             initProtocol(socket, {
                 initPhrase: INIT_PHRASE,
@@ -356,7 +366,7 @@ describe('Проверяем createAssistantDev', () => {
         const characterId = 'joy';
         let handleStart: () => void;
 
-        server.on('connection', (socket) => {
+        server?.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
             initProtocol(socket, { initPhrase: INIT_PHRASE });
 
@@ -392,7 +402,7 @@ describe('Проверяем createAssistantDev', () => {
     it('Проверяем восстановление recoveryState', (done) => {
         const recoveryState = { type: 'recovery_state', item_selector: { items: [] } };
 
-        server.on('connection', (socket) => {
+        server?.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
             initProtocol(socket, { initPhrase: INIT_PHRASE });
         });
@@ -431,7 +441,7 @@ describe('Проверяем createAssistantDev', () => {
 
         cy.stub(window.history, 'back', historyBack);
 
-        server.on('connection', (socket) => {
+        server?.on('connection', (socket) => {
             socket.binaryType = 'arraybuffer';
             setTimeout(() =>
                 socket.send(

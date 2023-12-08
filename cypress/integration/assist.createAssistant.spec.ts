@@ -1,10 +1,12 @@
+/* eslint-disable camelcase */
 /// <reference types="cypress" />
+
 import { createAssistant } from 'lib';
 import { Hints, Suggestions } from '@salutejs/scenario';
 
-import { SystemMessageHeaderByttonsType } from '../../src/index';
+import { SystemMessageHeaderByttonsType, createAssistant as createAssistantT } from '../../src/index';
 
-/* eslint-disable @typescript-eslint/camelcase */
+declare type createAssistant = typeof createAssistantT;
 
 describe('Проверяем createAssistant', () => {
     beforeEach(() => {
@@ -57,16 +59,18 @@ describe('Проверяем createAssistant', () => {
         expectedName: string | null,
     ) =>
         new Promise((resolve) => {
-            window.AssistantHost.sendData = (action: string, name: string | null) => {
-                expect(action).not.undefined;
-                expect(action).not.empty;
-                expect(expectedAction).to.deep.equal(JSON.parse(action));
+            window.AssistantHost.sendData = (act: string, name: string | null) => {
+                expect(act).not.undefined;
+                expect(act).not.empty;
+                expect(expectedAction).to.deep.equal(JSON.parse(act));
+
                 if (expectedName) {
                     expect(expectedName).to.equal(name);
                 } else {
                     expect(name).null; // отправляем null, вместо undefined
                 }
-                resolve();
+
+                resolve(undefined);
             };
 
             assistant.sendData({ action: expectedAction, name: expectedName });
@@ -81,17 +85,17 @@ describe('Проверяем createAssistant', () => {
         new Promise((resolve) => {
             window.AssistantHost.sendData = cy.stub();
             window.AssistantHost.sendDataContainer = (container: string) => {
-                const { data, message_name, requestId } = JSON.parse(container);
+                const { data, message_name, requestId: reqId } = JSON.parse(container);
 
                 expect(expectedAction).to.deep.equal(data);
-                expect(expectedRequestId).to.equal(requestId);
+                expect(expectedRequestId).to.equal(reqId);
                 if (expectedName) {
                     expect(expectedName).to.equal(message_name);
                 } else {
                     expect(message_name).empty; // отправляем пустую строку, вместо undefined
                 }
 
-                resolve();
+                resolve(undefined);
             };
 
             assistant.sendData({ action: expectedAction, name: expectedName, requestId: expectedRequestId });
@@ -155,8 +159,8 @@ describe('Проверяем createAssistant', () => {
 
         // не передаем requestId, ожидаем ответ
         window.AssistantHost.sendDataContainer = (data) => {
-            const { requestId } = JSON.parse(data);
-            setTimeout(() => window.AssistantClient.onData({ ...command, sdk_meta: { requestId } }));
+            const { requestId: reqId } = JSON.parse(data);
+            setTimeout(() => window.AssistantClient.onData({ ...command, sdk_meta: { requestId: reqId } }));
         };
         assistant.sendData({ action }, ({ sdk_meta, ...cmd }) => {
             expect(cmd).to.deep.equal(command);
@@ -332,12 +336,12 @@ describe('Проверяем createAssistant', () => {
         let callbackHadCommand = false;
 
         window.AssistantHost.sendDataContainer = (data) => {
-            const { requestId } = JSON.parse(data);
+            const { requestId: reqId } = JSON.parse(data);
 
             window.setTimeout(() => {
                 window.AssistantClient.onData({
                     type: 'smart_app_data',
-                    sdk_meta: { requestId },
+                    sdk_meta: { requestId: reqId },
                     smart_app_data: testResponse,
                 });
             });
