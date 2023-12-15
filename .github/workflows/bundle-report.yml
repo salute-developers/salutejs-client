@@ -5,10 +5,13 @@ on:
     branches:
       - '*'
 
-  merge_group:
+  workflow_run:
+    workflows: [Release]
+    types:
+      - completed
 
 env:
-  merging: ${{ github.event_name == 'merge_group' }}
+  merging: ${{ github.event_name == 'workflow_run' }}
 
 jobs:
   main:
