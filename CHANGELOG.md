@@ -1,3 +1,15 @@
+# v1.32.4 (Fri Dec 15 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Исправлен релиз пакета при мёрже в мастер [#189](https://github.com/salute-developers/salutejs-client/pull/189) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 1
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+
+---
+
 # v1.32.3 (Fri Dec 15 2023)
 
 #### 🐛 Bug Fix
