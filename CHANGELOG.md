@@ -1,3 +1,29 @@
+# v1.32.3 (Fri Dec 15 2023)
+
+#### 🐛 Bug Fix
+
+- fix: Исправлен релиз пакета при мёрже в мастер [#188](https://github.com/salute-developers/salutejs-client/pull/188) ([@evgeniysemin](https://github.com/evgeniysemin))
+- адрес стенда для createSmartappDebugger [#186](https://github.com/salute-developers/salutejs-client/pull/186) ([@sasha-tlt](https://github.com/sasha-tlt))
+- test: Bundle report test [#184](https://github.com/salute-developers/salutejs-client/pull/184) ([@evgeniysemin](https://github.com/evgeniysemin))
+- test: Fixed bundle report saving [#183](https://github.com/salute-developers/salutejs-client/pull/183) ([@evgeniysemin](https://github.com/evgeniysemin))
+- test: Добавлен бандл-репортер в CI [#182](https://github.com/salute-developers/salutejs-client/pull/182) ([@evgeniysemin](https://github.com/evgeniysemin))
+- test: test [#181](https://github.com/salute-developers/salutejs-client/pull/181) ([@evgeniysemin](https://github.com/evgeniysemin))
+- test: test [#180](https://github.com/salute-developers/salutejs-client/pull/180) ([@evgeniysemin](https://github.com/evgeniysemin))
+- test: Save bundle report [#179](https://github.com/salute-developers/salutejs-client/pull/179) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@sasha-tlt](https://github.com/sasha-tlt))
+- test: [autocommit] Save current bundle report ([@evgeniysemin](https://github.com/evgeniysemin))
+- test: [autocommit] Save bundle report to ./bundle-report.json ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.32.2 (Wed Nov 29 2023)
 
 #### 🐛 Bug Fix
