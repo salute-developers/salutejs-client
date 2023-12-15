@@ -5,12 +5,10 @@ on:
     branches:
       - '*'
 
-  push:
-    branches:
-      - 'master'
+  merge_group:
 
 env:
-  merging: ${{ github.event_name == 'push' }}
+  merging: ${{ github.event_name == 'merge_group' }}
 
 jobs:
   main:
