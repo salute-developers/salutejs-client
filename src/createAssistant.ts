@@ -341,7 +341,7 @@ export const createAssistant = <A extends AssistantSmartAppData>({
     };
 
     const sendAction: Assistant<A>['sendAction'] = (action, onData, onError, params = {}) => {
-        return sendData({ ...params, action }, (data) => {
+        const callback = (data: A | AssistantSmartAppError) => {
             if (data.type === 'smart_app_data') {
                 onData?.(data.smart_app_data);
             }
@@ -350,7 +350,9 @@ export const createAssistant = <A extends AssistantSmartAppData>({
                 // @ts-ignore
                 onError?.(data.smart_app_error);
             }
-        });
+        };
+
+        return sendData({ ...params, action }, (onData && callback) || undefined);
     };
 
     return {
