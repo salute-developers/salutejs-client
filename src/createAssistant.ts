@@ -64,29 +64,32 @@ if (typeof window !== 'undefined' && inIframe()) {
 
     window.appInitialData = [];
     window.AssistantHost = {
-        sendDataContainer(json: string) {
+        sendDataContainer(json) {
             postMessage({ type: 'sendDataContainer', payload: json });
         },
         close() {
             postMessage({ type: 'close' });
         },
-        sendData(json: string) {
+        sendData(json) {
             postMessage({ type: 'sendData', payload: json });
         },
-        setSuggests(suggests: string) {
+        setSuggests(suggests) {
             postMessage({ type: 'setSuggests', payload: suggests });
         },
-        setHints(hints: string) {
+        setHints(hints) {
             postMessage({ type: 'setHints', payload: hints });
         },
         ready() {
             postMessage({ type: 'ready' });
         },
-        sendText(message: string) {
+        sendText(message) {
             postMessage({ type: 'sendText', payload: message });
         },
-        setHeaderButtons(headerButtons: SystemMessageHeaderByttonsType) {
+        setHeaderButtons(headerButtons) {
             postMessage({ type: 'setHeaderButtons', payload: JSON.stringify(headerButtons) });
+        },
+        sendDebuggerData(data) {
+            postMessage({ type: 'sendDebuggerData', payload: JSON.stringify(data) });
         },
     };
 

@@ -383,6 +383,13 @@ export interface AssistantHost {
     setSuggests: (suggest: string) => void;
     setHints: (hints: string) => void;
     setHeaderButtons?: (headerButtons: SystemMessageHeaderByttonsType) => void;
+    sendDebuggerData?: (data: {
+        changeStand?: {
+            standUrl: string;
+            duration: number;
+        };
+        [key: string]: unknown;
+    }) => void;
 }
 
 export interface AssistantWindow {
@@ -647,6 +654,10 @@ export type AssistantPostMessage =
       }
     | {
           type: 'setHeaderButtons';
+          payload: string;
+      }
+    | {
+          type: 'sendDebuggerData';
           payload: string;
       };
 
