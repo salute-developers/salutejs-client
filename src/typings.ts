@@ -648,6 +648,10 @@ export type AssistantPostMessage =
     | {
           type: 'setHeaderButtons';
           payload: string;
+      }
+    | {
+          type: 'width';
+          payload: number;
       };
 
 export type GetHistoryRequestProto = IGetHistoryRequest;

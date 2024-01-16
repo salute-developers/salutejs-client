@@ -143,6 +143,27 @@ if (typeof window !== 'undefined' && inIframe()) {
                 break;
         }
     });
+
+    const { marginRight, marginLeft } = window.getComputedStyle(document.body);
+    let prevWidth = document.body.offsetWidth + parseFloat(marginRight) + parseFloat(marginLeft);
+
+    const handleWidthChanged = () => {
+        postMessage({ type: 'width', payload: prevWidth });
+    };
+
+    const observer = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+            const { marginRight, marginLeft } = window.getComputedStyle(document.body);
+            const width = entry.contentRect.width + parseFloat(marginRight) + parseFloat(marginLeft);
+            if (width !== prevWidth) {
+                prevWidth = width;
+                handleWidthChanged();
+            }
+        }
+    });
+
+    observer.observe(document.body);
+    handleWidthChanged();
 }
 
 export const createAssistant = <A extends AssistantSmartAppData>({
