@@ -135,6 +135,12 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
     };
 
     const send = (data: Uint8Array) => {
+        if (!window.navigator.onLine) {
+            close();
+            emit('error');
+            throw new Error('The client seems to be offline');
+        }
+
         webSocket.send(data);
     };
 

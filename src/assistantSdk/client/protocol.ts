@@ -125,9 +125,11 @@ export const createProtocol = (
     const sendMessage = (message: IMessage) => {
         // отправляем инициализационные сообщения или все, когда сессия = ready
         if (status === 'ready' || (typeof initMessageId !== undefined && message.messageId === initMessageId)) {
-            send(message);
+            try {
+                send(message);
 
-            return;
+                return;
+            } catch {}
         }
 
         // накапливаем сообщения, отправим после успешного коннекта
