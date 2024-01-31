@@ -1,3 +1,20 @@
+# v1.32.5 (Wed Jan 31 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Не отправлять сообщения в сокет, если оффлайн [#194](https://github.com/salute-developers/salutejs-client/pull/194) ([@sasha-tlt](https://github.com/sasha-tlt))
+- Не отправлять сообщения в сокет, если оффлайн [#193](https://github.com/salute-developers/salutejs-client/pull/193) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.32.4 (Fri Dec 15 2023)
 
 #### 🐛 Bug Fix
