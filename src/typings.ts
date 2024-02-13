@@ -42,10 +42,11 @@ export {
     PermissionType,
     PermissionStatus,
     Character,
-    CharacterId,
     Hints,
     ServerAction,
 } from '@salutejs/scenario';
+
+export type CharacterId = 'sber' | 'eva' | 'joy';
 
 export type Surface = 'SBERBOX' | 'STARGATE' | 'SATELLITE' | 'COMPANION' | 'SBOL' | 'TV' | 'TV_HUAWEI' | 'TIME';
 
