@@ -1,3 +1,20 @@
+# v1.32.6 (Tue Feb 13 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Не использовать персонажей из salutejs/scenario [#195](https://github.com/salute-developers/salutejs-client/pull/195) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.32.5 (Wed Jan 31 2024)
 
 #### 🐛 Bug Fix
