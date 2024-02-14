@@ -1,3 +1,15 @@
+# v1.32.7 (Wed Feb 14 2024)
+
+#### 🐛 Bug Fix
+
+- fix: исправлена сериализация строк в meta [#196](https://github.com/salute-developers/salutejs-client/pull/196) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.32.6 (Tue Feb 13 2024)
 
 #### 🐛 Bug Fix
