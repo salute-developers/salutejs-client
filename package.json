@@ -44,8 +44,8 @@
         "last 1 Chrome versions"
     ],
     "devDependencies": {
-        "@auto-it/conventional-commits": "^10.25.0",
-        "@auto-it/npm": "^10.25.0",
+        "@auto-it/conventional-commits": "11.0.5",
+        "@auto-it/npm": "11.0.5",
         "@commitlint/cli": "11.0.0",
         "@commitlint/config-conventional": "11.0.0",
         "@cypress/code-coverage": "3.9.12",
@@ -62,7 +62,7 @@
         "@types/uuid": "7.0.3",
         "@typescript-eslint/eslint-plugin": "5.57.1",
         "@typescript-eslint/parser": "5.57.1",
-        "auto": "10.46.0",
+        "auto": "11.0.5",
         "cypress": "7.6.0",
         "eslint": "8.37.0",
         "eslint-config-prettier": "8.8.0",
