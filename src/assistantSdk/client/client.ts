@@ -37,6 +37,7 @@ export type SystemMessage = SystemMessageDataType & {
 export const createClient = (
     protocol: ReturnType<typeof createProtocol>,
     provideMeta: ((additionalMeta?: AdditionalMeta) => Promise<MetaStringified>) | undefined = undefined,
+    { getVoiceMeta }: { getVoiceMeta: () => Record<string, string> },
 ) => {
     const { on, emit } = createNanoEvents<ClientEvents>();
 
@@ -188,8 +189,21 @@ export const createClient = (
         additionalMeta: AdditionalMeta,
     ): Promise<void> => {
         return protocol.batch(async ({ sendSystemMessage, sendVoice, messageId }) => {
+            let first = true;
             await sendMeta(sendSystemMessage, additionalMeta);
-            await callback({ sendVoice, messageId });
+            await callback({
+                sendVoice: (...args) => {
+                    if (first) {
+                        // отправляем мету только в первом чанке с голосом
+                        sendVoice(args[0], args[1], args[2], { ...args[3], meta: getVoiceMeta() as MetaStringified });
+                        first = false;
+                        return;
+                    }
+
+                    sendVoice(...args);
+                },
+                messageId,
+            });
         });
     };
 
