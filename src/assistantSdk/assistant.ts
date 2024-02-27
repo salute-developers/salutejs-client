@@ -132,6 +132,8 @@ export type AssistantEvents = {
 export interface CreateAssistantDevOptions {
     getMeta?: () => Record<string, unknown>;
     getInitialMeta?: () => Promise<Record<string, unknown>>;
+    /** Подставляет мету в первый чанк с голосом для управления рекогнайзером */
+    getVoiceMeta?: () => Record<string, unknown>;
 }
 
 type BackgroundAppOnCommand<T> = (
@@ -152,7 +154,13 @@ export type Assistant = ReturnType<typeof createAssistant>;
 export type AssistantParams = VpsConfiguration &
     CreateAssistantDevOptions &
     Pick<CreateTransportParams, 'checkCertUrl'>;
-export const createAssistant = ({ getMeta, getInitialMeta, checkCertUrl, ...configuration }: AssistantParams) => {
+export const createAssistant = ({
+    getMeta,
+    getInitialMeta,
+    getVoiceMeta,
+    checkCertUrl,
+    ...configuration
+}: AssistantParams) => {
     const { on, emit } = createNanoEvents<AssistantEvents>();
 
     // default_character отправляется в мета при отправке InitialSettings
@@ -263,7 +271,9 @@ export const createAssistant = ({ getMeta, getInitialMeta, checkCertUrl, ...conf
         // пока голос не готов, выключаем озвучку
         settings: { ...configuration.settings, dubbing: -1 },
     });
-    const client = createClient(protocol, metaProvider);
+    const client = createClient(protocol, metaProvider, {
+        getVoiceMeta: () => (getVoiceMeta ? convertFieldValuesToString(getVoiceMeta()) : {}),
+    });
     const voice = createVoice(
         client,
         settings,
