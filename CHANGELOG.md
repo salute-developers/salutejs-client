@@ -1,3 +1,24 @@
+# v1.33.0 (Tue Feb 27 2024)
+
+#### 🚀 Enhancement
+
+- feat: передавать мету в первом чанке с голосом [#200](https://github.com/salute-developers/salutejs-client/pull/200) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### 🐛 Bug Fix
+
+- chore: bump autoit [#199](https://github.com/salute-developers/salutejs-client/pull/199) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.32.7 (Wed Feb 14 2024)
 
 #### 🐛 Bug Fix
