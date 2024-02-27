@@ -1,3 +1,20 @@
+# v1.33.1 (Tue Feb 27 2024)
+
+#### 🐛 Bug Fix
+
+- fix: исправлена сериализация json-строк в meta [#201](https://github.com/salute-developers/salutejs-client/pull/201) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.33.0 (Tue Feb 27 2024)
 
 #### 🚀 Enhancement
