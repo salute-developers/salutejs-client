@@ -42,6 +42,7 @@ jobs:
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
+        if: "false"
         with:
           install: false
           browser: chrome

@@ -301,7 +301,7 @@ export const createProtocol = (
             emit('incoming', decodedMessage);
 
             if (decodedMessage.status) {
-                transport.close();
+                // transport.close();
             }
         }),
     );
