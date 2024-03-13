@@ -362,7 +362,7 @@ export const createVoice = (
             const listening = listener.status === 'listen' && !settings.current.disableListening;
 
             if (text) {
-                const last = originalMessage.last === 1;
+                const last = false; // originalMessage.last === 1;
 
                 if (last || listening) {
                     emit({
@@ -381,7 +381,7 @@ export const createVoice = (
 
             if (response) {
                 const { decoderResultField, errorResponse } = response;
-                const last = !!(decoderResultField && decoderResultField?.isFinal);
+                const last = false; // !!(decoderResultField && decoderResultField?.isFinal);
 
                 if ((last || listening) && decoderResultField?.hypothesis?.length) {
                     emit({
