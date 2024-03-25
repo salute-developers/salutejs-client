@@ -7,7 +7,7 @@ export const isAudioSupported = typeof window !== 'undefined' && (window.AudioCo
  * @param options AudioContextOptions
  * @returns AudioContext
  */
-export const createAudioContext = (options?: AudioContextOptions): AudioContext => {
+export function createAudioContext(options?: AudioContextOptions): AudioContext {
     if (window.AudioContext) {
         return new AudioContext(options);
     }
@@ -18,7 +18,7 @@ export const createAudioContext = (options?: AudioContextOptions): AudioContext 
     }
 
     throw new Error('Audio not supported');
-};
+}
 
 interface ContextEvents {
     ready: () => void;

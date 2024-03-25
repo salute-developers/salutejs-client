@@ -1,5 +1,6 @@
 import { createNanoEvents } from '../../../nanoevents';
 
+import { iosSilentModePatch } from './iosSilentModePatch';
 import { createTrackCollection } from './trackCollection';
 import { createTrackStream } from './trackStream';
 
@@ -32,10 +33,17 @@ export const createVoicePlayer = (
                 return;
             }
 
+            iosSilentModePatch.turnOff();
+
             // очищаем коллекцию, если все треки были воспроизведены
             cursor = 0;
             tracks.clear();
             return;
+        }
+
+        // хак для silent mode ios
+        if (!iosSilentModePatch.isActive) {
+            iosSilentModePatch.turnOn();
         }
 
         // рекурсивно последовательно включаем треки из очереди
@@ -89,6 +97,8 @@ export const createVoicePlayer = (
             cursor++;
             tracks.getByIndex(cur).stop();
         }
+
+        iosSilentModePatch.turnOff();
     };
 
     return {

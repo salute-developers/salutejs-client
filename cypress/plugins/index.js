@@ -1,7 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const path = require('path');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const webpackPreprocessor = require('@cypress/webpack-preprocessor');
+import path from 'path';
+import webpackPreprocessor from '@cypress/webpack-preprocessor';
 
 module.exports = (on, config) => {
     const options = {
@@ -9,12 +7,12 @@ module.exports = (on, config) => {
             resolve: {
                 extensions: ['.js', '.jsx', '.ts', '.tsx'],
                 alias: {
-                    'lib': process.env.CY_MODE==='production' ? path.resolve(__dirname, '../../esm/index') : path.resolve(__dirname, '../../src/index')
+                    'lib': process.env.CY_MODE==='production' ? path.resolve(__dirname, '../../esm/index.js') : path.resolve(__dirname, '../../src/index')
                 }
             },
             module: {
                 rules: [
-                    {
+                    process.env.CY_MODE !== 'production' && {
                         test: /\.(ts|tsx)$/,
                         use: { loader: 'istanbul-instrumenter-loader' },
                         exclude: /node_modules|cypress/

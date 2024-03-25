@@ -19,7 +19,7 @@
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
-        "allowJs": true,
+        "allowJs": true
     },
     "include": ["src", "global.d.ts"],
     "exclude": ["**/tests/**/*", "**/dist/**/*", "./**/*.spec.ts"]
