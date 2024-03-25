@@ -230,7 +230,7 @@ describe('Проверяем createAssistant', () => {
         ];
         const assistant = initAssistant();
         assistant.setHeaderButtons(headerButtons);
-        expect(window.AssistantHost.setHeaderButtons).to.calledWith(headerButtons);
+        expect(window.AssistantHost.setHeaderButtons).to.calledWith(JSON.stringify(headerButtons));
     });
 
     it("Проверяем фильтрацию system.command = 'back' - не должна попадать в onData", () => {
