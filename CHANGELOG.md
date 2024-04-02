@@ -1,3 +1,20 @@
+# v1.33.3 (Tue Apr 02 2024)
+
+#### 🐛 Bug Fix
+
+- Лагание озвучки на android [#205](https://github.com/salute-developers/salutejs-client/pull/205) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.33.2 (Mon Mar 25 2024)
 
 #### 🐛 Bug Fix
