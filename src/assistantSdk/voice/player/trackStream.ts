@@ -1,5 +1,7 @@
 import { createChunkQueue } from './chunkQueue';
 
+const HZ_BYTES_COUNT = 2;
+
 type BytesArraysSizes = {
     incomingMessageVoiceDataLength: number;
     sourceLen: number;
@@ -40,12 +42,14 @@ export const createTrackStream = (
 ) => {
     // очередь загруженных чанков (кусочков) трека
     const queue = createChunkQueue<AudioBufferSourceNode>();
+    let buffer = new ArrayBuffer(0);
     let extraByte: number | null = null;
     let status: 'stop' | 'play' | 'end' = trackStatus || 'stop';
 
     let lastChunkOffset = 0;
     let startTime = 0;
     let firstChunk = true;
+    let loaded = false;
 
     const end = () => {
         // останавливаем воспроизведение чанков из очереди воспроизведения
@@ -74,23 +78,26 @@ export const createTrackStream = (
             onPlay && onPlay();
         }
 
-        if (queue.ended) {
+        if (loaded && queue.ended) {
             end();
             return;
         }
 
         // воспроизводим трек, если он полностью загрузился или длина загруженного больше задержки
-        if (queue.loaded || queue.duration >= delay) {
+        if (loaded || buffer.byteLength / (sampleRate * HZ_BYTES_COUNT) >= delay) {
+            if (buffer.byteLength < 1) {
+                return;
+            }
+
+            const chunk = getChunkFromBuffer();
             startTime = queue.length === 0 ? ctx.currentTime : startTime;
-            const chunks = queue.popAll();
-            chunks.forEach((chunk) => {
-                queue.toPlay(chunk);
-                chunk.start(startTime + lastChunkOffset);
-                lastChunkOffset += chunk.buffer?.duration || 0;
-            });
+            queue.push(chunk);
+            chunk.start(startTime + lastChunkOffset);
+            lastChunkOffset += chunk.buffer?.duration || 0;
         }
     };
 
+    /** Удаляет или добавляет байт для четности */
     const getExtraBytes = (data: Uint8Array, bytesArraysSizes: BytesArraysSizes) => {
         if (extraByte == null && bytesArraysSizes.incomingMessageVoiceDataLength % 2) {
             extraByte = data[bytesArraysSizes.incomingMessageVoiceDataLength - 1];
@@ -133,10 +140,12 @@ export const createTrackStream = (
         return source;
     };
 
-    /** добавляет чанк в очередь на воспроизведение */
-    const write = (data: Uint8Array) => {
-        // 44 байта - заголовок трека
-        const slicePoint = firstChunk ? 44 : 0;
+    /** Получить чанк из буфера */
+    const getChunkFromBuffer = () => {
+        const tmp = buffer;
+        buffer = new ArrayBuffer(0);
+        const data = new Uint8Array(tmp);
+
         const bytesArraysSizes: BytesArraysSizes = {
             incomingMessageVoiceDataLength: data.length,
             sourceLen: data.length,
@@ -144,12 +153,7 @@ export const createTrackStream = (
             prepend: null,
         };
 
-        firstChunk = false;
-
-        if (slicePoint >= data.length) {
-            return;
-        }
-
+        // выравние по два байта
         getExtraBytes(data, bytesArraysSizes);
 
         const dataBuffer = new ArrayBuffer(bytesArraysSizes.incomingMessageVoiceDataLength);
@@ -162,8 +166,24 @@ export const createTrackStream = (
             bufferUi8[0] = bytesArraysSizes.prepend;
         }
 
-        const chunk = createChunk(from16BitToFloat32(bufferI16.slice(slicePoint)));
-        queue.push(chunk);
+        return createChunk(from16BitToFloat32(bufferI16));
+    };
+
+    /** добавляет чанк в очередь на воспроизведение */
+    const write = (data: Uint8Array) => {
+        // 44 байта - заголовок трека
+        const slicePoint = firstChunk ? 44 : 0;
+
+        firstChunk = false;
+
+        if (slicePoint >= data.length) {
+            return;
+        }
+
+        const tmp = new Uint8Array(buffer.byteLength + data.length - slicePoint);
+        tmp.set(new Uint8Array(buffer), 0);
+        tmp.set(slicePoint ? data.slice(slicePoint) : data, buffer.byteLength);
+        buffer = tmp;
 
         if (status === 'play') {
             play();
@@ -172,10 +192,10 @@ export const createTrackStream = (
 
     return {
         get loaded() {
-            return queue.loaded;
+            return loaded;
         },
         setLoaded: () => {
-            queue.allLoaded();
+            loaded = true;
 
             if (status === 'play') {
                 play();
