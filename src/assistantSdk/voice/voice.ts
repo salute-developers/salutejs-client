@@ -57,6 +57,8 @@ export const createVoice = (
     let currentVoiceMessageId: Mid | null = null;
     /** стримит поток чанков. Если метода нет, то стриминг не идёт */
     let streaming: ((chunks: Uint8Array[], last: boolean) => void) | null = null;
+    /** Уничтожает аудио-контекст */
+    let destroyAudioContext: (() => void) | null = null;
 
     /** Останавливает слушание голоса, отправляет cancel. Возвращает true - если слушание было активно */
     const stopVoice = (sendCancel = true): boolean => {
@@ -261,10 +263,11 @@ export const createVoice = (
     };
 
     if (isAudioSupported) {
-        resolveAudioContext((context) => {
+        resolveAudioContext((context, destroy) => {
             /// создаем плеер только если поддерживается аудио
             /// и только когда готов AudioContext
             voicePlayer = createVoicePlayer(context, { startVoiceDelay: 1 });
+            destroyAudioContext = destroy;
 
             // начало проигрывания озвучки
             subscriptions.push(
@@ -423,6 +426,7 @@ export const createVoice = (
             stopVoice();
             voicePlayer?.setActive(false);
             subscriptions.splice(0, subscriptions.length).map((unsubscribe) => unsubscribe());
+            destroyAudioContext?.();
         },
         listen,
         shazam,
