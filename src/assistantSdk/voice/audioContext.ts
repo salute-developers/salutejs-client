@@ -1,5 +1,7 @@
 import { createNanoEvents } from '../../nanoevents';
 
+import { iosSilentModePatch } from './player/iosSilentModePatch';
+
 export const isAudioSupported = typeof window !== 'undefined' && (window.AudioContext || window.webkitAudioContext);
 
 /**
@@ -33,7 +35,7 @@ let audioContext: { context: AudioContext; ready: boolean; on: typeof on };
  * Всегда возвращает один и тот же AudioContext
  * @param onReady Функция, в аргумент которой будет возвращен AudioContext
  */
-export const resolveAudioContext = (onReady: (context: AudioContext) => void) => {
+export const resolveAudioContext = (onReady: (context: AudioContext, destroy: () => void) => void) => {
     if (!audioContext) {
         const isSafari = navigator.vendor.search('Apple') >= 0;
         const context = createAudioContext();
@@ -56,6 +58,8 @@ export const resolveAudioContext = (onReady: (context: AudioContext) => void) =>
         if (!audioContext.ready) {
             const handleClick = () => {
                 document.removeEventListener('click', handleClick);
+
+                iosSilentModePatch.initialize();
 
                 if (isSafari) {
                     /// проигрываем тишину, т.к нужно что-то проиграть,
@@ -82,10 +86,10 @@ export const resolveAudioContext = (onReady: (context: AudioContext) => void) =>
     }
 
     if (audioContext.ready) {
-        onReady && onReady(audioContext.context);
+        onReady && onReady(audioContext.context, () => iosSilentModePatch.destroy());
     } else {
         const unsubscribe = on('ready', () => {
-            onReady(audioContext.context);
+            onReady(audioContext.context, () => iosSilentModePatch.destroy());
             unsubscribe();
         });
     }

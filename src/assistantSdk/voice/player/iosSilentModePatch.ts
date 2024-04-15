@@ -19,10 +19,16 @@ function createSilentAudioFile(sampleRate: number) {
     return `data:audio/wav;base64,UklGRisAAABXQVZFZm10IBAAAAABAAEA${missingCharacters}AgAZGF0YQcAAACAgICAgICAAAA=`;
 }
 
+/**
+ * Создает объект, который позволяет воспроизводить аудио с активным silent mode.
+ * Перед использование нужно вызвать initialize()
+ * Создает <audio> и воспроизводит тишину, управляется turnOn/turnOff.
+ * @returns object
+ */
 const createIosSilentModePatch = () => {
     let audio: HTMLAudioElement | null = null;
 
-    const turnOff = () => {
+    const destroy = () => {
         if (audio === null) {
             return;
         }
@@ -32,30 +38,40 @@ const createIosSilentModePatch = () => {
         audio = null;
     };
 
+    /**
+     * Инициализирует патч,
+     * вызывать по событию взаимодействия пользователя со страницей (click)
+     */
+    const initialize = () => {
+        if (!IS_APPLE_MOBILE) {
+            return;
+        }
+
+        destroy();
+
+        audio = new Audio();
+        audio.setAttribute('x-webkit-airplay', 'deny');
+        audio.preload = 'auto';
+        audio.loop = true;
+        audio.src = createSilentAudioFile(16000);
+        audio.load();
+    };
+
+    const turnOff = () => {
+        audio?.pause();
+    };
+
     return {
+        destroy,
+        initialize,
         turnOff,
         turnOn: () => {
-            if (audio) {
-                turnOff();
-            }
-
-            if (IS_APPLE_MOBILE) {
-                audio = new Audio();
-                audio.setAttribute('x-webkit-airplay', 'deny');
-                audio.preload = 'auto';
-                audio.loop = true;
-                audio.src = createSilentAudioFile(16000);
-                audio.load();
-                audio.play().catch(() => {
-                    if (audio) {
-                        audio.src = 'about:blank';
-                        audio.load();
-                    }
-                });
-            }
+            audio?.play().catch((e) => {
+                console.error('ios audio patch excepted', e);
+            });
         },
         get isActive() {
-            return audio !== null;
+            return audio?.paused === false;
         },
     };
 };
