@@ -1,3 +1,26 @@
+# v1.33.4 (Mon Apr 15 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Не работает воспроизведение в silent mode ios 15 [#209](https://github.com/salute-developers/salutejs-client/pull/209) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@sasha-tlt](https://github.com/sasha-tlt))
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### 🔩 Dependency Updates
+
+- build(deps): bump protobufjs from 7.2.4 to 7.2.5 [#207](https://github.com/salute-developers/salutejs-client/pull/207) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.33.3 (Tue Apr 02 2024)
 
 #### 🐛 Bug Fix
