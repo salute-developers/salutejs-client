@@ -41,6 +41,7 @@ const IS_SAFARI = typeof window !== 'undefined' && /^((?!chrome|android).)*safar
 
 let context: AudioContext;
 let processor: ScriptProcessorNode;
+let analyser: AnalyserNode;
 
 /**
  * Преобразует stream в чанки (кусочки), и передает их в cb,
@@ -51,7 +52,7 @@ let processor: ScriptProcessorNode;
  */
 const createAudioRecorder = (
     stream: MediaStream,
-    cb: (buffer: ArrayBuffer, last: boolean) => void,
+    cb: (buffer: ArrayBuffer, analyserArray: Uint8Array, last: boolean) => void,
 ): Promise<() => void> =>
     new Promise((resolve) => {
         let state: 'inactive' | 'recording' = 'inactive';
@@ -87,20 +88,22 @@ const createAudioRecorder = (
 
             if (!processor) {
                 processor = context.createScriptProcessor(2048, 1, 1);
+                analyser = context.createAnalyser();
             }
 
             const listener = (e: AudioProcessingEvent) => {
                 const buffer = e.inputBuffer.getChannelData(0);
                 const data = downsampleBuffer(buffer, context.sampleRate, TARGET_SAMPLE_RATE);
-
                 const last = state === 'inactive';
+
                 // отсылаем только чанки где есть звук voiceData > 0, т.к.
                 // в safari первые несколько чанков со звуком пустые
-                const dataWithVoice = new Uint8Array(data).some((voiceData) => voiceData > 0);
+                if (!IS_SAFARI || new Uint8Array(data).some((voiceData) => voiceData > 0)) {
+                    const analyserArray = new Uint8Array(analyser.frequencyBinCount);
 
-                if (!IS_SAFARI || dataWithVoice) {
+                    analyser.getByteTimeDomainData(analyserArray);
+                    cb(data, analyserArray, last);
                     resolve(stop);
-                    cb(data, last);
                 }
 
                 if (last) {
@@ -111,6 +114,7 @@ const createAudioRecorder = (
             processor.addEventListener('audioprocess', listener);
 
             input.connect(processor);
+            input.connect(analyser);
             processor.connect(context.destination);
         };
 
@@ -123,7 +127,9 @@ const createAudioRecorder = (
  * @param cb Callback, куда будут передаваться чанки с голосом пользователя
  * @returns Promise, который содержит функцию прерывающую слушание
  */
-export const createNavigatorAudioProvider = (cb: (buffer: ArrayBuffer, last: boolean) => void): Promise<() => void> =>
+export const createNavigatorAudioProvider = (
+    cb: (buffer: ArrayBuffer, analyserArray: Uint8Array, last: boolean) => void,
+): Promise<() => void> =>
     navigator.mediaDevices
         .getUserMedia({
             audio: true,

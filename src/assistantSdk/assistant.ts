@@ -104,6 +104,7 @@ export type AssistantEvent = {
     emotion?: EmotionId;
     mtt?: { response: Music2TrackProtocol.MttResponse; mid: OriginalMessageType['messageId'] };
     listener?: { status: VoiceListenerStatus };
+    voiceAnalyser?: { data: Uint8Array };
 };
 
 export type VpsEvent =

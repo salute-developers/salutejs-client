@@ -4,7 +4,7 @@ import { createNavigatorAudioProvider } from './navigatorAudioProvider';
 
 export type VoiceListenerStatus = 'listen' | 'started' | 'stopped';
 
-export type VoiceHandler = (data: Uint8Array, last: boolean) => void;
+export type VoiceHandler = (data: Uint8Array, analyserArray: Uint8Array, last: boolean) => void;
 
 type VoiceStreamEvents = {
     status: (status: VoiceListenerStatus) => void;
@@ -16,11 +16,7 @@ type VoiceStreamEvents = {
  * @param createAudioProvider Источник голоса
  * @returns Api для запуска и остановки слушания
  */
-export const createVoiceListener = (
-    createAudioProvider: (
-        cb: (data: ArrayBuffer, last: boolean) => void,
-    ) => Promise<() => void> = createNavigatorAudioProvider,
-) => {
+export const createVoiceListener = (createAudioProvider = createNavigatorAudioProvider) => {
     const { emit, on } = createNanoEvents<VoiceStreamEvents>();
     let stopRecord: () => void;
     let status: VoiceListenerStatus = 'stopped';
@@ -40,7 +36,7 @@ export const createVoiceListener = (
         status = 'started';
         emit('status', 'started');
 
-        return createAudioProvider((data: ArrayBuffer, last: boolean) => handleVoice(new Uint8Array(data), last))
+        return createAudioProvider((data, analyser, last) => handleVoice(new Uint8Array(data), analyser, last))
             .then((recStop) => {
                 stopRecord = recStop;
             })

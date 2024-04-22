@@ -36,6 +36,7 @@ export const createVoice = (
         listener?: { status: VoiceListenerStatus };
         mtt?: { response: Music2TrackProtocol.MttResponse; mid: OriginalMessageType['messageId'] };
         tts?: TtsEvent;
+        voiceAnalyser?: { data: Uint8Array };
     }) => void,
     /// пока onReady не вызван, треки не воспроизводятся
     /// когда случится onReady, очередь треков начнет проигрываться
@@ -128,8 +129,9 @@ export const createVoice = (
 
                     currentVoiceMessageId = messageId;
 
-                    return listener.listen((...args) => {
-                        sendVoice(...args, messageName);
+                    return listener.listen((chunk, analyser, last) => {
+                        emit({ voiceAnalyser: { data: analyser } });
+                        sendVoice(chunk, last, messageName);
                     });
                 },
                 {
