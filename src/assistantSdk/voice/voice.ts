@@ -3,6 +3,7 @@ import { AppInfo, EmotionId, OriginalMessageType, Mid, SystemMessageDataType, Me
 import { AssistantSettings } from '../assistant';
 import { MutexedObject } from '../mutexedObject';
 
+import { createNavigatorAudioProvider } from './listener/navigatorAudioProvider';
 import { createVoiceListener, VoiceListenerStatus } from './listener/voiceListener';
 import { createVoicePlayer } from './player/voicePlayer';
 import { resolveAudioContext, isAudioSupported } from './audioContext';
@@ -36,13 +37,15 @@ export const createVoice = (
         listener?: { status: VoiceListenerStatus };
         mtt?: { response: Music2TrackProtocol.MttResponse; mid: OriginalMessageType['messageId'] };
         tts?: TtsEvent;
+        voiceAnalyser?: { data: Uint8Array };
     }) => void,
     /// пока onReady не вызван, треки не воспроизводятся
     /// когда случится onReady, очередь треков начнет проигрываться
     onReady?: () => void,
+    useAnalyser?: boolean,
 ) => {
     let voicePlayer: ReturnType<typeof createVoicePlayer>;
-    const listener = createVoiceListener();
+    const listener = createVoiceListener((cb) => createNavigatorAudioProvider(cb, useAnalyser));
     const subscriptions: Array<() => void> = [];
     const appInfoDict: Record<string, AppInfo> = {};
     const mesIdQueue: Array<string> = [];
@@ -128,8 +131,12 @@ export const createVoice = (
 
                     currentVoiceMessageId = messageId;
 
-                    return listener.listen((...args) => {
-                        sendVoice(...args, messageName);
+                    return listener.listen((chunk, analyser, last) => {
+                        if (analyser) {
+                            emit({ voiceAnalyser: { data: analyser } });
+                        }
+
+                        sendVoice(chunk, last, messageName);
                     });
                 },
                 {

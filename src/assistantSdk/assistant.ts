@@ -104,6 +104,7 @@ export type AssistantEvent = {
     emotion?: EmotionId;
     mtt?: { response: Music2TrackProtocol.MttResponse; mid: OriginalMessageType['messageId'] };
     listener?: { status: VoiceListenerStatus };
+    voiceAnalyser?: { data: Uint8Array };
 };
 
 export type VpsEvent =
@@ -137,6 +138,7 @@ export interface CreateAssistantDevOptions {
     getInitialMeta?: () => Promise<Record<string, unknown>>;
     /** Подставляет мету в первый чанк с голосом для управления рекогнайзером */
     getVoiceMeta?: () => Record<string, unknown>;
+    useVoiceAnalyser?: boolean;
 }
 
 type BackgroundAppOnCommand<T> = (
@@ -162,6 +164,7 @@ export const createAssistant = ({
     getInitialMeta,
     getVoiceMeta,
     checkCertUrl,
+    useVoiceAnalyser,
     ...configuration
 }: AssistantParams) => {
     const { on, emit } = createNanoEvents<AssistantEvents>();
@@ -301,6 +304,7 @@ export const createAssistant = ({
                 protocol.changeSettings({ dubbing: 1 });
             }
         },
+        useVoiceAnalyser,
     );
 
     /** завершает текущий апп */
