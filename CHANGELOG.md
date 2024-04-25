@@ -1,3 +1,20 @@
+# v1.34.0 (Thu Apr 25 2024)
+
+#### 🚀 Enhancement
+
+- feat: Добавлено событие с данными аналайзера [#212](https://github.com/salute-developers/salutejs-client/pull/212) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- [@Salute-Eva](https://github.com/Salute-Eva)
+
+---
+
 # v1.33.6 (Tue Apr 16 2024)
 
 #### 🐛 Bug Fix
