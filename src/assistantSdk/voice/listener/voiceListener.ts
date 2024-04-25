@@ -4,7 +4,7 @@ import { createNavigatorAudioProvider } from './navigatorAudioProvider';
 
 export type VoiceListenerStatus = 'listen' | 'started' | 'stopped';
 
-export type VoiceHandler = (data: Uint8Array, analyserArray: Uint8Array, last: boolean) => void;
+export type VoiceHandler = (data: Uint8Array, analyserArray: Uint8Array | null, last: boolean) => void;
 
 type VoiceStreamEvents = {
     status: (status: VoiceListenerStatus) => void;

@@ -3,6 +3,7 @@ import { AppInfo, EmotionId, OriginalMessageType, Mid, SystemMessageDataType, Me
 import { AssistantSettings } from '../assistant';
 import { MutexedObject } from '../mutexedObject';
 
+import { createNavigatorAudioProvider } from './listener/navigatorAudioProvider';
 import { createVoiceListener, VoiceListenerStatus } from './listener/voiceListener';
 import { createVoicePlayer } from './player/voicePlayer';
 import { resolveAudioContext, isAudioSupported } from './audioContext';
@@ -41,9 +42,10 @@ export const createVoice = (
     /// пока onReady не вызван, треки не воспроизводятся
     /// когда случится onReady, очередь треков начнет проигрываться
     onReady?: () => void,
+    useAnalyser?: boolean,
 ) => {
     let voicePlayer: ReturnType<typeof createVoicePlayer>;
-    const listener = createVoiceListener();
+    const listener = createVoiceListener((cb) => createNavigatorAudioProvider(cb, useAnalyser));
     const subscriptions: Array<() => void> = [];
     const appInfoDict: Record<string, AppInfo> = {};
     const mesIdQueue: Array<string> = [];
@@ -130,7 +132,10 @@ export const createVoice = (
                     currentVoiceMessageId = messageId;
 
                     return listener.listen((chunk, analyser, last) => {
-                        emit({ voiceAnalyser: { data: analyser } });
+                        if (analyser) {
+                            emit({ voiceAnalyser: { data: analyser } });
+                        }
+
                         sendVoice(chunk, last, messageName);
                     });
                 },
