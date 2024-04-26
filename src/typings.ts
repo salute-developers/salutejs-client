@@ -11,6 +11,7 @@ import {
     UUID,
     Meta as ScenarioMeta,
     SystemMessagePayload,
+    VpsMessageReasonModel,
 } from '@salutejs/scenario';
 
 import {
@@ -464,14 +465,8 @@ export interface AssistantBackgroundAppInfo {
     state: Record<string, unknown>;
 }
 
-export interface SourceMeta {
-    sourceType?: string;
-    sourceName?: string;
-    suggestTitle?: string;
-}
 export interface Meta extends ScenarioMeta, AssistantMeta {
-    background_apps: AssistantBackgroundAppInfo[];
-    source?: SourceMeta;
+    source?: VpsMessageReasonModel;
     [key: string]: unknown;
 }
 
