@@ -1,8 +1,9 @@
-const ctx = typeof window !== 'undefined' ? window : self;
 const IS_APPLE_MOBILE =
-    (/iPad|iPhone|iPod/.test(navigator.platform) ||
-        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
-    !(ctx as any).MSStream;
+    typeof window !== 'undefined'
+        ? (/iPad|iPhone|iPod/.test(navigator.platform) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+          !(window as any).MSStream
+        : false;
 
 function createSilentAudioFile(sampleRate: number) {
     const arrayBuffer = new ArrayBuffer(10);
