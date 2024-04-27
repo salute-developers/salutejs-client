@@ -10,7 +10,7 @@ import {
     AssistantServerActionMode,
     Mid,
 } from '../../typings';
-import { GetHistoryResponse } from '../../proto';
+// import { GetHistoryResponse } from '../../proto';
 import { PacketWrapperFromServer } from '../voice/recognizers/asr';
 import { Music2TrackProtocol } from '../voice/recognizers/mtt';
 
@@ -220,15 +220,15 @@ export const createClient = (
             emit('status', message.status as Status, message);
         }
 
-        if (message.messageName === 'TAKE_HISTORY' && message.bytes?.data) {
-            const history = GetHistoryResponse.decode(message.bytes?.data).historyMessages;
-            const parsedHistory: HistoryMessages[] = history.map((historyMessage) => ({
-                ...historyMessage,
-                content: JSON.parse(historyMessage.content || ''),
-            }));
+        // if (message.messageName === 'TAKE_HISTORY' && message.bytes?.data) {
+        //     const history = GetHistoryResponse.decode(message.bytes?.data).historyMessages;
+        //     const parsedHistory: HistoryMessages[] = history.map((historyMessage) => ({
+        //         ...historyMessage,
+        //         content: JSON.parse(historyMessage.content || ''),
+        //     }));
 
-            emit('history', parsedHistory, message);
-        }
+        //     emit('history', parsedHistory, message);
+        // }
 
         if (message.messageName === MessageNames.STT && (message.text || message.bytes?.data?.length)) {
             const response = message.bytes?.data?.length

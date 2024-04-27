@@ -1,81 +1,76 @@
-import * as $protobuf from "protobufjs";
-import Long = require("long");
+import * as $protobuf from 'protobufjs';
+import Long = require('long');
 /** Properties of a Message. */
 export interface IMessage {
-
     /** Message userId */
-    userId?: (string|null);
+    userId?: string | null;
 
     /** Message messageId */
-    messageId?: (number|Long|null);
+    messageId?: number | Long | null;
 
     /** Message last */
-    last?: (number|null);
+    last?: number | null;
 
     /** Message token */
-    token?: (string|null);
+    token?: string | null;
 
     /** Message userChannel */
-    userChannel?: (string|null);
+    userChannel?: string | null;
 
     /** Message vpsToken */
-    vpsToken?: (string|null);
+    vpsToken?: string | null;
 
     /** Устарело с версии 3. */
-    devContext?: (IDevContext[]|null);
+    devContext?: IDevContext[] | null;
 
     /** Message messageName */
-    messageName?: (string|null);
+    messageName?: string | null;
 
     /** Message version */
-    version?: (number|null);
+    version?: number | null;
 
     /** Message voice */
-    voice?: (IVoice|null);
+    voice?: IVoice | null;
 
     /** Message text */
-    text?: (IText|null);
+    text?: IText | null;
 
     /** Message systemMessage */
-    systemMessage?: (ISystemMessage|null);
+    systemMessage?: ISystemMessage | null;
 
     /** Message legacyDevice */
-    legacyDevice?: (ILegacyDevice|null);
+    legacyDevice?: ILegacyDevice | null;
 
     /** Message settings */
-    settings?: (ISettings|null);
+    settings?: ISettings | null;
 
     /** Message status */
-    status?: (IStatus|null);
+    status?: IStatus | null;
 
     /** Message device */
-    device?: (IDevice|null);
+    device?: IDevice | null;
 
     /** Message bytes */
-    bytes?: (IBytes|null);
+    bytes?: IBytes | null;
 
     /** Message initialSettings */
-    initialSettings?: (IInitialSettings|null);
+    initialSettings?: IInitialSettings | null;
 
     /** Message cancel */
-    cancel?: (ICancel|null);
-
-    /** Message getHistoryRequest */
-    getHistoryRequest?: (IGetHistoryRequest|null);
+    cancel?: ICancel | null;
 
     /** Message mute */
-    mute?: (IMute|null);
+    mute?: IMute | null;
 
     /** Message timestamp */
-    timestamp?: (number|Long|null);
+    timestamp?: number | Long | null;
 
     /** Message meta */
-    meta?: ({ [k: string]: string }|null);
+    meta?: { [k: string]: string } | null;
 }
 
 /** Represents a Message. */
 export class Message implements IMessage {
-
     /**
      * Constructs a new Message.
      * @param [properties] Properties to set
@@ -86,7 +81,7 @@ export class Message implements IMessage {
     public userId: string;
 
     /** Message messageId. */
-    public messageId: (number|Long);
+    public messageId: number | Long;
 
     /** Message last. */
     public last: number;
@@ -110,49 +105,57 @@ export class Message implements IMessage {
     public version: number;
 
     /** Message voice. */
-    public voice?: (IVoice|null);
+    public voice?: IVoice | null;
 
     /** Message text. */
-    public text?: (IText|null);
+    public text?: IText | null;
 
     /** Message systemMessage. */
-    public systemMessage?: (ISystemMessage|null);
+    public systemMessage?: ISystemMessage | null;
 
     /** Message legacyDevice. */
-    public legacyDevice?: (ILegacyDevice|null);
+    public legacyDevice?: ILegacyDevice | null;
 
     /** Message settings. */
-    public settings?: (ISettings|null);
+    public settings?: ISettings | null;
 
     /** Message status. */
-    public status?: (IStatus|null);
+    public status?: IStatus | null;
 
     /** Message device. */
-    public device?: (IDevice|null);
+    public device?: IDevice | null;
 
     /** Message bytes. */
-    public bytes?: (IBytes|null);
+    public bytes?: IBytes | null;
 
     /** Message initialSettings. */
-    public initialSettings?: (IInitialSettings|null);
+    public initialSettings?: IInitialSettings | null;
 
     /** Message cancel. */
-    public cancel?: (ICancel|null);
-
-    /** Message getHistoryRequest. */
-    public getHistoryRequest?: (IGetHistoryRequest|null);
+    public cancel?: ICancel | null;
 
     /** Message mute. */
-    public mute?: (IMute|null);
+    public mute?: IMute | null;
 
     /** Message timestamp. */
-    public timestamp: (number|Long);
+    public timestamp: number | Long;
 
     /** Message meta. */
     public meta: { [k: string]: string };
 
     /** Message content. */
-    public content?: ("voice"|"text"|"systemMessage"|"legacyDevice"|"settings"|"status"|"device"|"bytes"|"initialSettings"|"cancel"|"getHistoryRequest"|"mute");
+    public content?:
+        | 'voice'
+        | 'text'
+        | 'systemMessage'
+        | 'legacyDevice'
+        | 'settings'
+        | 'status'
+        | 'device'
+        | 'bytes'
+        | 'initialSettings'
+        | 'cancel'
+        | 'mute';
 
     /**
      * Creates a new Message instance using the specified properties.
@@ -177,31 +180,29 @@ export class Message implements IMessage {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Message;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): Message;
 }
 
 /** Properties of an InitialSettings. */
 export interface IInitialSettings {
-
     /** InitialSettings userId */
-    userId?: (string|null);
+    userId?: string | null;
 
     /** InitialSettings userChannel */
-    userChannel?: (string|null);
+    userChannel?: string | null;
 
     /** InitialSettings device */
-    device?: (IDevice|null);
+    device?: IDevice | null;
 
     /** InitialSettings settings */
-    settings?: (ISettings|null);
+    settings?: ISettings | null;
 
     /** InitialSettings locale */
-    locale?: (string|null);
+    locale?: string | null;
 }
 
 /** Represents an InitialSettings. */
 export class InitialSettings implements IInitialSettings {
-
     /**
      * Constructs a new InitialSettings.
      * @param [properties] Properties to set
@@ -215,10 +216,10 @@ export class InitialSettings implements IInitialSettings {
     public userChannel: string;
 
     /** InitialSettings device. */
-    public device?: (IDevice|null);
+    public device?: IDevice | null;
 
     /** InitialSettings settings. */
-    public settings?: (ISettings|null);
+    public settings?: ISettings | null;
 
     /** InitialSettings locale. */
     public locale: string;
@@ -246,49 +247,47 @@ export class InitialSettings implements IInitialSettings {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): InitialSettings;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): InitialSettings;
 }
 
 /** Properties of a Device. */
 export interface IDevice {
-
     /** Device platformType */
-    platformType?: (string|null);
+    platformType?: string | null;
 
     /** Device platformVersion */
-    platformVersion?: (string|null);
+    platformVersion?: string | null;
 
     /** Обязательно. Пример, SBERBOX */
-    surface?: (string|null);
+    surface?: string | null;
 
     /** Device surfaceVersion */
-    surfaceVersion?: (string|null);
+    surfaceVersion?: string | null;
 
     /** Device features */
-    features?: (string|null);
+    features?: string | null;
 
     /** Device capabilities */
-    capabilities?: (string|null);
+    capabilities?: string | null;
 
     /** Device deviceId */
-    deviceId?: (string|null);
+    deviceId?: string | null;
 
     /** Device deviceManufacturer */
-    deviceManufacturer?: (string|null);
+    deviceManufacturer?: string | null;
 
     /** Device deviceModel */
-    deviceModel?: (string|null);
+    deviceModel?: string | null;
 
     /** Device additionalInfo */
-    additionalInfo?: (string|null);
+    additionalInfo?: string | null;
 
     /** Device tenant */
-    tenant?: (string|null);
+    tenant?: string | null;
 }
 
 /** Represents a Device. */
 export class Device implements IDevice {
-
     /**
      * Constructs a new Device.
      * @param [properties] Properties to set
@@ -351,40 +350,38 @@ export class Device implements IDevice {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Device;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): Device;
 }
 
 /** Properties of a Settings. */
 export interface ISettings {
-
     /** Settings dubbing */
-    dubbing?: (number|null);
+    dubbing?: number | null;
 
     /** Settings echo */
-    echo?: (number|null);
+    echo?: number | null;
 
     /** Settings ttsEngine */
-    ttsEngine?: (string|null);
+    ttsEngine?: string | null;
 
     /** Settings asrEngine */
-    asrEngine?: (string|null);
+    asrEngine?: string | null;
 
     /** Settings asrAutoStop */
-    asrAutoStop?: (number|null);
+    asrAutoStop?: number | null;
 
     /** Settings devMode */
-    devMode?: (number|null);
+    devMode?: number | null;
 
     /** Settings authConnector */
-    authConnector?: (string|null);
+    authConnector?: string | null;
 
     /** Settings surface */
-    surface?: (string|null);
+    surface?: string | null;
 }
 
 /** Represents a Settings. */
 export class Settings implements ISettings {
-
     /**
      * Constructs a new Settings.
      * @param [properties] Properties to set
@@ -438,37 +435,35 @@ export class Settings implements ISettings {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Settings;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): Settings;
 }
 
 /** Properties of a LegacyDevice. */
 export interface ILegacyDevice {
-
     /** LegacyDevice clientType */
-    clientType?: (string|null);
+    clientType?: string | null;
 
     /** LegacyDevice channel */
-    channel?: (string|null);
+    channel?: string | null;
 
     /** LegacyDevice channelVersion */
-    channelVersion?: (string|null);
+    channelVersion?: string | null;
 
     /** LegacyDevice platformName */
-    platformName?: (string|null);
+    platformName?: string | null;
 
     /** LegacyDevice platformVersion */
-    platformVersion?: (string|null);
+    platformVersion?: string | null;
 
     /** LegacyDevice sdkVersion */
-    sdkVersion?: (string|null);
+    sdkVersion?: string | null;
 
     /** LegacyDevice protocolVersion */
-    protocolVersion?: (string|null);
+    protocolVersion?: string | null;
 }
 
 /** Represents a LegacyDevice. */
 export class LegacyDevice implements ILegacyDevice {
-
     /**
      * Constructs a new LegacyDevice.
      * @param [properties] Properties to set
@@ -519,19 +514,17 @@ export class LegacyDevice implements ILegacyDevice {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): LegacyDevice;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): LegacyDevice;
 }
 
 /** Properties of a Voice. */
 export interface IVoice {
-
     /** Voice data */
-    data?: (Uint8Array|null);
+    data?: Uint8Array | null;
 }
 
 /** Represents a Voice. */
 export class Voice implements IVoice {
-
     /**
      * Constructs a new Voice.
      * @param [properties] Properties to set
@@ -564,22 +557,20 @@ export class Voice implements IVoice {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Voice;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): Voice;
 }
 
 /** Properties of a Text. */
 export interface IText {
-
     /** Text data */
-    data?: (string|null);
+    data?: string | null;
 
     /** Text type */
-    type?: (string|null);
+    type?: string | null;
 }
 
 /** Represents a Text. */
 export class Text implements IText {
-
     /**
      * Constructs a new Text.
      * @param [properties] Properties to set
@@ -615,19 +606,17 @@ export class Text implements IText {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Text;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): Text;
 }
 
 /** Properties of a SystemMessage. */
 export interface ISystemMessage {
-
     /** SystemMessage data */
-    data?: (string|null);
+    data?: string | null;
 }
 
 /** Represents a SystemMessage. */
 export class SystemMessage implements ISystemMessage {
-
     /**
      * Constructs a new SystemMessage.
      * @param [properties] Properties to set
@@ -660,25 +649,23 @@ export class SystemMessage implements ISystemMessage {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): SystemMessage;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): SystemMessage;
 }
 
 /** Properties of a Status. */
 export interface IStatus {
-
     /** Status code */
-    code?: (number|null);
+    code?: number | null;
 
     /** Status description */
-    description?: (string|null);
+    description?: string | null;
 
     /** Status technicalDescription */
-    technicalDescription?: (string|null);
+    technicalDescription?: string | null;
 }
 
 /** Represents a Status. */
 export class Status implements IStatus {
-
     /**
      * Constructs a new Status.
      * @param [properties] Properties to set
@@ -717,22 +704,20 @@ export class Status implements IStatus {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Status;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): Status;
 }
 
 /** Properties of a Bytes. */
 export interface IBytes {
-
     /** Bytes data */
-    data?: (Uint8Array|null);
+    data?: Uint8Array | null;
 
     /** Bytes desc */
-    desc?: (string|null);
+    desc?: string | null;
 }
 
 /** Represents a Bytes. */
 export class Bytes implements IBytes {
-
     /**
      * Constructs a new Bytes.
      * @param [properties] Properties to set
@@ -768,25 +753,23 @@ export class Bytes implements IBytes {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Bytes;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): Bytes;
 }
 
 /** Properties of a DevContext. */
 export interface IDevContext {
-
     /** DevContext name */
-    name?: (string|null);
+    name?: string | null;
 
     /** DevContext timestampMs */
-    timestampMs?: (number|Long|null);
+    timestampMs?: number | Long | null;
 
     /** DevContext data */
-    data?: (string|null);
+    data?: string | null;
 }
 
 /** Represents a DevContext. */
 export class DevContext implements IDevContext {
-
     /**
      * Constructs a new DevContext.
      * @param [properties] Properties to set
@@ -797,7 +780,7 @@ export class DevContext implements IDevContext {
     public name: string;
 
     /** DevContext timestampMs. */
-    public timestampMs: (number|Long);
+    public timestampMs: number | Long;
 
     /** DevContext data. */
     public data: string;
@@ -825,16 +808,14 @@ export class DevContext implements IDevContext {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): DevContext;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): DevContext;
 }
 
 /** Properties of a Cancel. */
-export interface ICancel {
-}
+export interface ICancel {}
 
 /** Represents a Cancel. */
 export class Cancel implements ICancel {
-
     /**
      * Constructs a new Cancel.
      * @param [properties] Properties to set
@@ -864,16 +845,14 @@ export class Cancel implements ICancel {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Cancel;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): Cancel;
 }
 
 /** Properties of a Mute. */
-export interface IMute {
-}
+export interface IMute {}
 
 /** Represents a Mute. */
 export class Mute implements IMute {
-
     /**
      * Constructs a new Mute.
      * @param [properties] Properties to set
@@ -903,406 +882,21 @@ export class Mute implements IMute {
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Mute;
-}
-
-/** Properties of a GetHistoryRequest. */
-export interface IGetHistoryRequest {
-
-    /** GetHistoryRequest messageTypes */
-    messageTypes?: (string[]|null);
-
-    /** GetHistoryRequest app */
-    app?: (IApp|null);
-
-    /** GetHistoryRequest offset */
-    offset?: (IOffset|null);
-}
-
-/** Represents a GetHistoryRequest. */
-export class GetHistoryRequest implements IGetHistoryRequest {
-
-    /**
-     * Constructs a new GetHistoryRequest.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: IGetHistoryRequest);
-
-    /** GetHistoryRequest messageTypes. */
-    public messageTypes: string[];
-
-    /** GetHistoryRequest app. */
-    public app?: (IApp|null);
-
-    /** GetHistoryRequest offset. */
-    public offset?: (IOffset|null);
-
-    /**
-     * Creates a new GetHistoryRequest instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns GetHistoryRequest instance
-     */
-    public static create(properties?: IGetHistoryRequest): GetHistoryRequest;
-
-    /**
-     * Encodes the specified GetHistoryRequest message. Does not implicitly {@link GetHistoryRequest.verify|verify} messages.
-     * @param message GetHistoryRequest message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: IGetHistoryRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
-     * Decodes a GetHistoryRequest message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns GetHistoryRequest
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): GetHistoryRequest;
-}
-
-/** Properties of an App. */
-export interface IApp {
-
-    /** App type */
-    type?: (google.protobuf.IStringValue|null);
-
-    /** App projectId */
-    projectId?: (google.protobuf.IStringValue|null);
-
-    /** App systemName */
-    systemName?: (google.protobuf.IStringValue|null);
-}
-
-/** Represents an App. */
-export class App implements IApp {
-
-    /**
-     * Constructs a new App.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: IApp);
-
-    /** App type. */
-    public type?: (google.protobuf.IStringValue|null);
-
-    /** App projectId. */
-    public projectId?: (google.protobuf.IStringValue|null);
-
-    /** App systemName. */
-    public systemName?: (google.protobuf.IStringValue|null);
-
-    /**
-     * Creates a new App instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns App instance
-     */
-    public static create(properties?: IApp): App;
-
-    /**
-     * Encodes the specified App message. Does not implicitly {@link App.verify|verify} messages.
-     * @param message App message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: IApp, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
-     * Decodes an App message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns App
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): App;
-}
-
-/** Properties of an Offset. */
-export interface IOffset {
-
-    /** Offset limit */
-    limit?: (google.protobuf.IStringValue|null);
-
-    /** Offset contentId */
-    contentId?: (google.protobuf.IStringValue|null);
-}
-
-/** Represents an Offset. */
-export class Offset implements IOffset {
-
-    /**
-     * Constructs a new Offset.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: IOffset);
-
-    /** Offset limit. */
-    public limit?: (google.protobuf.IStringValue|null);
-
-    /** Offset contentId. */
-    public contentId?: (google.protobuf.IStringValue|null);
-
-    /**
-     * Creates a new Offset instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns Offset instance
-     */
-    public static create(properties?: IOffset): Offset;
-
-    /**
-     * Encodes the specified Offset message. Does not implicitly {@link Offset.verify|verify} messages.
-     * @param message Offset message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: IOffset, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
-     * Decodes an Offset message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns Offset
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Offset;
-}
-
-/** Properties of a ChatHistoryRequest. */
-export interface IChatHistoryRequest {
-
-    /** ChatHistoryRequest uuid */
-    uuid?: (IUuid|null);
-
-    /** ChatHistoryRequest device */
-    device?: (IDevice|null);
-
-    /** ChatHistoryRequest getHistoryRequest */
-    getHistoryRequest?: (IGetHistoryRequest|null);
-}
-
-/** Represents a ChatHistoryRequest. */
-export class ChatHistoryRequest implements IChatHistoryRequest {
-
-    /**
-     * Constructs a new ChatHistoryRequest.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: IChatHistoryRequest);
-
-    /** ChatHistoryRequest uuid. */
-    public uuid?: (IUuid|null);
-
-    /** ChatHistoryRequest device. */
-    public device?: (IDevice|null);
-
-    /** ChatHistoryRequest getHistoryRequest. */
-    public getHistoryRequest?: (IGetHistoryRequest|null);
-
-    /**
-     * Creates a new ChatHistoryRequest instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns ChatHistoryRequest instance
-     */
-    public static create(properties?: IChatHistoryRequest): ChatHistoryRequest;
-
-    /**
-     * Encodes the specified ChatHistoryRequest message. Does not implicitly {@link ChatHistoryRequest.verify|verify} messages.
-     * @param message ChatHistoryRequest message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: IChatHistoryRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
-     * Decodes a ChatHistoryRequest message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns ChatHistoryRequest
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): ChatHistoryRequest;
-}
-
-/** Properties of an Uuid. */
-export interface IUuid {
-
-    /** Uuid userId */
-    userId?: (string|null);
-
-    /** Uuid userChannel */
-    userChannel?: (string|null);
-
-    /** Uuid sub */
-    sub?: (string|null);
-}
-
-/** Represents an Uuid. */
-export class Uuid implements IUuid {
-
-    /**
-     * Constructs a new Uuid.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: IUuid);
-
-    /** Uuid userId. */
-    public userId: string;
-
-    /** Uuid userChannel. */
-    public userChannel: string;
-
-    /** Uuid sub. */
-    public sub: string;
-
-    /**
-     * Creates a new Uuid instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns Uuid instance
-     */
-    public static create(properties?: IUuid): Uuid;
-
-    /**
-     * Encodes the specified Uuid message. Does not implicitly {@link Uuid.verify|verify} messages.
-     * @param message Uuid message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: IUuid, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
-     * Decodes an Uuid message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns Uuid
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): Uuid;
-}
-
-/** Properties of a GetHistoryResponse. */
-export interface IGetHistoryResponse {
-
-    /** GetHistoryResponse historyMessages */
-    historyMessages?: (IHistoryMessages[]|null);
-}
-
-/** Represents a GetHistoryResponse. */
-export class GetHistoryResponse implements IGetHistoryResponse {
-
-    /**
-     * Constructs a new GetHistoryResponse.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: IGetHistoryResponse);
-
-    /** GetHistoryResponse historyMessages. */
-    public historyMessages: IHistoryMessages[];
-
-    /**
-     * Creates a new GetHistoryResponse instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns GetHistoryResponse instance
-     */
-    public static create(properties?: IGetHistoryResponse): GetHistoryResponse;
-
-    /**
-     * Encodes the specified GetHistoryResponse message. Does not implicitly {@link GetHistoryResponse.verify|verify} messages.
-     * @param message GetHistoryResponse message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: IGetHistoryResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
-     * Decodes a GetHistoryResponse message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns GetHistoryResponse
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): GetHistoryResponse;
-}
-
-/** Properties of a HistoryMessages. */
-export interface IHistoryMessages {
-
-    /** HistoryMessages content */
-    content?: (string|null);
-
-    /** HistoryMessages contentId */
-    contentId?: (string|null);
-
-    /** HistoryMessages timeCreated */
-    timeCreated?: (string|null);
-}
-
-/** Represents a HistoryMessages. */
-export class HistoryMessages implements IHistoryMessages {
-
-    /**
-     * Constructs a new HistoryMessages.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: IHistoryMessages);
-
-    /** HistoryMessages content. */
-    public content: string;
-
-    /** HistoryMessages contentId. */
-    public contentId: string;
-
-    /** HistoryMessages timeCreated. */
-    public timeCreated: string;
-
-    /**
-     * Creates a new HistoryMessages instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns HistoryMessages instance
-     */
-    public static create(properties?: IHistoryMessages): HistoryMessages;
-
-    /**
-     * Encodes the specified HistoryMessages message. Does not implicitly {@link HistoryMessages.verify|verify} messages.
-     * @param message HistoryMessages message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: IHistoryMessages, writer?: $protobuf.Writer): $protobuf.Writer;
-
-    /**
-     * Decodes a HistoryMessages message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns HistoryMessages
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): HistoryMessages;
+    public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): Mute;
 }
 
 /** Namespace google. */
 export namespace google {
-
     /** Namespace protobuf. */
     namespace protobuf {
-
         /** Properties of a DoubleValue. */
         interface IDoubleValue {
-
             /** DoubleValue value */
-            value?: (number|null);
+            value?: number | null;
         }
 
         /** Represents a DoubleValue. */
         class DoubleValue implements IDoubleValue {
-
             /**
              * Constructs a new DoubleValue.
              * @param [properties] Properties to set
@@ -1335,19 +929,17 @@ export namespace google {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.DoubleValue;
+            public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): google.protobuf.DoubleValue;
         }
 
         /** Properties of a FloatValue. */
         interface IFloatValue {
-
             /** FloatValue value */
-            value?: (number|null);
+            value?: number | null;
         }
 
         /** Represents a FloatValue. */
         class FloatValue implements IFloatValue {
-
             /**
              * Constructs a new FloatValue.
              * @param [properties] Properties to set
@@ -1380,19 +972,17 @@ export namespace google {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.FloatValue;
+            public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): google.protobuf.FloatValue;
         }
 
         /** Properties of an Int64Value. */
         interface IInt64Value {
-
             /** Int64Value value */
-            value?: (number|Long|null);
+            value?: number | Long | null;
         }
 
         /** Represents an Int64Value. */
         class Int64Value implements IInt64Value {
-
             /**
              * Constructs a new Int64Value.
              * @param [properties] Properties to set
@@ -1400,7 +990,7 @@ export namespace google {
             constructor(properties?: google.protobuf.IInt64Value);
 
             /** Int64Value value. */
-            public value: (number|Long);
+            public value: number | Long;
 
             /**
              * Creates a new Int64Value instance using the specified properties.
@@ -1425,19 +1015,17 @@ export namespace google {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.Int64Value;
+            public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): google.protobuf.Int64Value;
         }
 
         /** Properties of a UInt64Value. */
         interface IUInt64Value {
-
             /** UInt64Value value */
-            value?: (number|Long|null);
+            value?: number | Long | null;
         }
 
         /** Represents a UInt64Value. */
         class UInt64Value implements IUInt64Value {
-
             /**
              * Constructs a new UInt64Value.
              * @param [properties] Properties to set
@@ -1445,7 +1033,7 @@ export namespace google {
             constructor(properties?: google.protobuf.IUInt64Value);
 
             /** UInt64Value value. */
-            public value: (number|Long);
+            public value: number | Long;
 
             /**
              * Creates a new UInt64Value instance using the specified properties.
@@ -1470,19 +1058,17 @@ export namespace google {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.UInt64Value;
+            public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): google.protobuf.UInt64Value;
         }
 
         /** Properties of an Int32Value. */
         interface IInt32Value {
-
             /** Int32Value value */
-            value?: (number|null);
+            value?: number | null;
         }
 
         /** Represents an Int32Value. */
         class Int32Value implements IInt32Value {
-
             /**
              * Constructs a new Int32Value.
              * @param [properties] Properties to set
@@ -1515,19 +1101,17 @@ export namespace google {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.Int32Value;
+            public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): google.protobuf.Int32Value;
         }
 
         /** Properties of a UInt32Value. */
         interface IUInt32Value {
-
             /** UInt32Value value */
-            value?: (number|null);
+            value?: number | null;
         }
 
         /** Represents a UInt32Value. */
         class UInt32Value implements IUInt32Value {
-
             /**
              * Constructs a new UInt32Value.
              * @param [properties] Properties to set
@@ -1560,19 +1144,17 @@ export namespace google {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.UInt32Value;
+            public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): google.protobuf.UInt32Value;
         }
 
         /** Properties of a BoolValue. */
         interface IBoolValue {
-
             /** BoolValue value */
-            value?: (boolean|null);
+            value?: boolean | null;
         }
 
         /** Represents a BoolValue. */
         class BoolValue implements IBoolValue {
-
             /**
              * Constructs a new BoolValue.
              * @param [properties] Properties to set
@@ -1605,19 +1187,17 @@ export namespace google {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.BoolValue;
+            public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): google.protobuf.BoolValue;
         }
 
         /** Properties of a StringValue. */
         interface IStringValue {
-
             /** StringValue value */
-            value?: (string|null);
+            value?: string | null;
         }
 
         /** Represents a StringValue. */
         class StringValue implements IStringValue {
-
             /**
              * Constructs a new StringValue.
              * @param [properties] Properties to set
@@ -1650,19 +1230,17 @@ export namespace google {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.StringValue;
+            public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): google.protobuf.StringValue;
         }
 
         /** Properties of a BytesValue. */
         interface IBytesValue {
-
             /** BytesValue value */
-            value?: (Uint8Array|null);
+            value?: Uint8Array | null;
         }
 
         /** Represents a BytesValue. */
         class BytesValue implements IBytesValue {
-
             /**
              * Constructs a new BytesValue.
              * @param [properties] Properties to set
@@ -1695,7 +1273,7 @@ export namespace google {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): google.protobuf.BytesValue;
+            public static decode(reader: $protobuf.Reader | Uint8Array, length?: number): google.protobuf.BytesValue;
         }
     }
 }

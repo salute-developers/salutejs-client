@@ -1,23 +1,22 @@
 /*eslint-disable block-scoped-var, id-length, no-control-regex, no-magic-numbers, no-prototype-builtins, no-redeclare, no-shadow, no-var, sort-vars*/
-(function(global, factory) { /* global define, require, module */
+(function (global, factory) {
+    /* global define, require, module */
 
-    /* AMD */ if (typeof define === 'function' && define.amd)
-        define(["protobufjs/minimal"], factory);
-
+    /* AMD */ if (typeof define === 'function' && define.amd) define(['protobufjs/minimal'], factory);
     /* CommonJS */ else if (typeof require === 'function' && typeof module === 'object' && module && module.exports)
-        module.exports = factory(require("protobufjs/minimal"));
-
-})(this, function($protobuf) {
-    "use strict";
+        module.exports = factory(require('protobufjs/minimal'));
+})(this, function ($protobuf) {
+    'use strict';
 
     // Common aliases
-    var $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
-    
+    var $Reader = $protobuf.Reader,
+        $Writer = $protobuf.Writer,
+        $util = $protobuf.util;
+
     // Exported root namespace
-    var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
-    
-    $root.Message = (function() {
-    
+    var $root = $protobuf.roots['default'] || ($protobuf.roots['default'] = {});
+
+    $root.Message = (function () {
         /**
          * Properties of a Message.
          * @exports IMessage
@@ -41,12 +40,11 @@
          * @property {IBytes|null} [bytes] Message bytes
          * @property {IInitialSettings|null} [initialSettings] Message initialSettings
          * @property {ICancel|null} [cancel] Message cancel
-         * @property {IGetHistoryRequest|null} [getHistoryRequest] Message getHistoryRequest
          * @property {IMute|null} [mute] Message mute
          * @property {number|Long|null} [timestamp] Message timestamp
          * @property {Object.<string,string>|null} [meta] Message meta
          */
-    
+
         /**
          * Constructs a new Message.
          * @exports Message
@@ -60,26 +58,25 @@
             this.meta = {};
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * Message userId.
          * @member {string} userId
          * @memberof Message
          * @instance
          */
-        Message.prototype.userId = "";
-    
+        Message.prototype.userId = '';
+
         /**
          * Message messageId.
          * @member {number|Long} messageId
          * @memberof Message
          * @instance
          */
-        Message.prototype.messageId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-    
+        Message.prototype.messageId = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+
         /**
          * Message last.
          * @member {number} last
@@ -87,31 +84,31 @@
          * @instance
          */
         Message.prototype.last = 0;
-    
+
         /**
          * Message token.
          * @member {string} token
          * @memberof Message
          * @instance
          */
-        Message.prototype.token = "";
-    
+        Message.prototype.token = '';
+
         /**
          * Message userChannel.
          * @member {string} userChannel
          * @memberof Message
          * @instance
          */
-        Message.prototype.userChannel = "";
-    
+        Message.prototype.userChannel = '';
+
         /**
          * Message vpsToken.
          * @member {string} vpsToken
          * @memberof Message
          * @instance
          */
-        Message.prototype.vpsToken = "";
-    
+        Message.prototype.vpsToken = '';
+
         /**
          * Устарело с версии 3.
          * @member {Array.<IDevContext>} devContext
@@ -119,15 +116,15 @@
          * @instance
          */
         Message.prototype.devContext = $util.emptyArray;
-    
+
         /**
          * Message messageName.
          * @member {string} messageName
          * @memberof Message
          * @instance
          */
-        Message.prototype.messageName = "";
-    
+        Message.prototype.messageName = '';
+
         /**
          * Message version.
          * @member {number} version
@@ -135,7 +132,7 @@
          * @instance
          */
         Message.prototype.version = 0;
-    
+
         /**
          * Message voice.
          * @member {IVoice|null|undefined} voice
@@ -143,7 +140,7 @@
          * @instance
          */
         Message.prototype.voice = null;
-    
+
         /**
          * Message text.
          * @member {IText|null|undefined} text
@@ -151,7 +148,7 @@
          * @instance
          */
         Message.prototype.text = null;
-    
+
         /**
          * Message systemMessage.
          * @member {ISystemMessage|null|undefined} systemMessage
@@ -159,7 +156,7 @@
          * @instance
          */
         Message.prototype.systemMessage = null;
-    
+
         /**
          * Message legacyDevice.
          * @member {ILegacyDevice|null|undefined} legacyDevice
@@ -167,7 +164,7 @@
          * @instance
          */
         Message.prototype.legacyDevice = null;
-    
+
         /**
          * Message settings.
          * @member {ISettings|null|undefined} settings
@@ -175,7 +172,7 @@
          * @instance
          */
         Message.prototype.settings = null;
-    
+
         /**
          * Message status.
          * @member {IStatus|null|undefined} status
@@ -183,7 +180,7 @@
          * @instance
          */
         Message.prototype.status = null;
-    
+
         /**
          * Message device.
          * @member {IDevice|null|undefined} device
@@ -191,7 +188,7 @@
          * @instance
          */
         Message.prototype.device = null;
-    
+
         /**
          * Message bytes.
          * @member {IBytes|null|undefined} bytes
@@ -199,7 +196,7 @@
          * @instance
          */
         Message.prototype.bytes = null;
-    
+
         /**
          * Message initialSettings.
          * @member {IInitialSettings|null|undefined} initialSettings
@@ -207,7 +204,7 @@
          * @instance
          */
         Message.prototype.initialSettings = null;
-    
+
         /**
          * Message cancel.
          * @member {ICancel|null|undefined} cancel
@@ -215,15 +212,7 @@
          * @instance
          */
         Message.prototype.cancel = null;
-    
-        /**
-         * Message getHistoryRequest.
-         * @member {IGetHistoryRequest|null|undefined} getHistoryRequest
-         * @memberof Message
-         * @instance
-         */
-        Message.prototype.getHistoryRequest = null;
-    
+
         /**
          * Message mute.
          * @member {IMute|null|undefined} mute
@@ -231,15 +220,15 @@
          * @instance
          */
         Message.prototype.mute = null;
-    
+
         /**
          * Message timestamp.
          * @member {number|Long} timestamp
          * @memberof Message
          * @instance
          */
-        Message.prototype.timestamp = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-    
+        Message.prototype.timestamp = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+
         /**
          * Message meta.
          * @member {Object.<string,string>} meta
@@ -247,21 +236,35 @@
          * @instance
          */
         Message.prototype.meta = $util.emptyObject;
-    
+
         // OneOf field names bound to virtual getters and setters
         var $oneOfFields;
-    
+
         /**
          * Message content.
-         * @member {"voice"|"text"|"systemMessage"|"legacyDevice"|"settings"|"status"|"device"|"bytes"|"initialSettings"|"cancel"|"getHistoryRequest"|"mute"|undefined} content
+         * @member {"voice"|"text"|"systemMessage"|"legacyDevice"|"settings"|"status"|"device"|"bytes"|"initialSettings"|"cancel"|"mute"|undefined} content
          * @memberof Message
          * @instance
          */
-        Object.defineProperty(Message.prototype, "content", {
-            get: $util.oneOfGetter($oneOfFields = ["voice", "text", "systemMessage", "legacyDevice", "settings", "status", "device", "bytes", "initialSettings", "cancel", "getHistoryRequest", "mute"]),
-            set: $util.oneOfSetter($oneOfFields)
+        Object.defineProperty(Message.prototype, 'content', {
+            get: $util.oneOfGetter(
+                ($oneOfFields = [
+                    'voice',
+                    'text',
+                    'systemMessage',
+                    'legacyDevice',
+                    'settings',
+                    'status',
+                    'device',
+                    'bytes',
+                    'initialSettings',
+                    'cancel',
+                    'mute',
+                ]),
+            ),
+            set: $util.oneOfSetter($oneOfFields),
         });
-    
+
         /**
          * Creates a new Message instance using the specified properties.
          * @function create
@@ -273,7 +276,7 @@
         Message.create = function create(properties) {
             return new Message(properties);
         };
-    
+
         /**
          * Encodes the specified Message message. Does not implicitly {@link Message.verify|verify} messages.
          * @function encode
@@ -284,59 +287,75 @@
          * @returns {$protobuf.Writer} Writer
          */
         Message.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.userId);
-            if (message.messageId != null && Object.hasOwnProperty.call(message, "messageId"))
-                writer.uint32(/* id 2, wireType 0 =*/16).int64(message.messageId);
-            if (message.last != null && Object.hasOwnProperty.call(message, "last"))
-                writer.uint32(/* id 3, wireType 0 =*/24).int32(message.last);
-            if (message.token != null && Object.hasOwnProperty.call(message, "token"))
-                writer.uint32(/* id 4, wireType 2 =*/34).string(message.token);
-            if (message.voice != null && Object.hasOwnProperty.call(message, "voice"))
-                $root.Voice.encode(message.voice, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
-            if (message.text != null && Object.hasOwnProperty.call(message, "text"))
-                $root.Text.encode(message.text, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
-            if (message.systemMessage != null && Object.hasOwnProperty.call(message, "systemMessage"))
-                $root.SystemMessage.encode(message.systemMessage, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
-            if (message.legacyDevice != null && Object.hasOwnProperty.call(message, "legacyDevice"))
-                $root.LegacyDevice.encode(message.legacyDevice, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
-            if (message.settings != null && Object.hasOwnProperty.call(message, "settings"))
-                $root.Settings.encode(message.settings, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
-            if (message.status != null && Object.hasOwnProperty.call(message, "status"))
-                $root.Status.encode(message.status, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
-            if (message.userChannel != null && Object.hasOwnProperty.call(message, "userChannel"))
-                writer.uint32(/* id 11, wireType 2 =*/90).string(message.userChannel);
-            if (message.vpsToken != null && Object.hasOwnProperty.call(message, "vpsToken"))
-                writer.uint32(/* id 12, wireType 2 =*/98).string(message.vpsToken);
+            if (!writer) writer = $Writer.create();
+            if (message.userId != null && Object.hasOwnProperty.call(message, 'userId'))
+                writer.uint32(/* id 1, wireType 2 =*/ 10).string(message.userId);
+            if (message.messageId != null && Object.hasOwnProperty.call(message, 'messageId'))
+                writer.uint32(/* id 2, wireType 0 =*/ 16).int64(message.messageId);
+            if (message.last != null && Object.hasOwnProperty.call(message, 'last'))
+                writer.uint32(/* id 3, wireType 0 =*/ 24).int32(message.last);
+            if (message.token != null && Object.hasOwnProperty.call(message, 'token'))
+                writer.uint32(/* id 4, wireType 2 =*/ 34).string(message.token);
+            if (message.voice != null && Object.hasOwnProperty.call(message, 'voice'))
+                $root.Voice.encode(message.voice, writer.uint32(/* id 5, wireType 2 =*/ 42).fork()).ldelim();
+            if (message.text != null && Object.hasOwnProperty.call(message, 'text'))
+                $root.Text.encode(message.text, writer.uint32(/* id 6, wireType 2 =*/ 50).fork()).ldelim();
+            if (message.systemMessage != null && Object.hasOwnProperty.call(message, 'systemMessage'))
+                $root.SystemMessage.encode(
+                    message.systemMessage,
+                    writer.uint32(/* id 7, wireType 2 =*/ 58).fork(),
+                ).ldelim();
+            if (message.legacyDevice != null && Object.hasOwnProperty.call(message, 'legacyDevice'))
+                $root.LegacyDevice.encode(
+                    message.legacyDevice,
+                    writer.uint32(/* id 8, wireType 2 =*/ 66).fork(),
+                ).ldelim();
+            if (message.settings != null && Object.hasOwnProperty.call(message, 'settings'))
+                $root.Settings.encode(message.settings, writer.uint32(/* id 9, wireType 2 =*/ 74).fork()).ldelim();
+            if (message.status != null && Object.hasOwnProperty.call(message, 'status'))
+                $root.Status.encode(message.status, writer.uint32(/* id 10, wireType 2 =*/ 82).fork()).ldelim();
+            if (message.userChannel != null && Object.hasOwnProperty.call(message, 'userChannel'))
+                writer.uint32(/* id 11, wireType 2 =*/ 90).string(message.userChannel);
+            if (message.vpsToken != null && Object.hasOwnProperty.call(message, 'vpsToken'))
+                writer.uint32(/* id 12, wireType 2 =*/ 98).string(message.vpsToken);
             if (message.devContext != null && message.devContext.length)
                 for (var i = 0; i < message.devContext.length; ++i)
-                    $root.DevContext.encode(message.devContext[i], writer.uint32(/* id 13, wireType 2 =*/106).fork()).ldelim();
-            if (message.messageName != null && Object.hasOwnProperty.call(message, "messageName"))
-                writer.uint32(/* id 14, wireType 2 =*/114).string(message.messageName);
-            if (message.version != null && Object.hasOwnProperty.call(message, "version"))
-                writer.uint32(/* id 15, wireType 0 =*/120).int32(message.version);
-            if (message.device != null && Object.hasOwnProperty.call(message, "device"))
-                $root.Device.encode(message.device, writer.uint32(/* id 16, wireType 2 =*/130).fork()).ldelim();
-            if (message.bytes != null && Object.hasOwnProperty.call(message, "bytes"))
-                $root.Bytes.encode(message.bytes, writer.uint32(/* id 17, wireType 2 =*/138).fork()).ldelim();
-            if (message.initialSettings != null && Object.hasOwnProperty.call(message, "initialSettings"))
-                $root.InitialSettings.encode(message.initialSettings, writer.uint32(/* id 18, wireType 2 =*/146).fork()).ldelim();
-            if (message.timestamp != null && Object.hasOwnProperty.call(message, "timestamp"))
-                writer.uint32(/* id 19, wireType 0 =*/152).int64(message.timestamp);
-            if (message.meta != null && Object.hasOwnProperty.call(message, "meta"))
+                    $root.DevContext.encode(
+                        message.devContext[i],
+                        writer.uint32(/* id 13, wireType 2 =*/ 106).fork(),
+                    ).ldelim();
+            if (message.messageName != null && Object.hasOwnProperty.call(message, 'messageName'))
+                writer.uint32(/* id 14, wireType 2 =*/ 114).string(message.messageName);
+            if (message.version != null && Object.hasOwnProperty.call(message, 'version'))
+                writer.uint32(/* id 15, wireType 0 =*/ 120).int32(message.version);
+            if (message.device != null && Object.hasOwnProperty.call(message, 'device'))
+                $root.Device.encode(message.device, writer.uint32(/* id 16, wireType 2 =*/ 130).fork()).ldelim();
+            if (message.bytes != null && Object.hasOwnProperty.call(message, 'bytes'))
+                $root.Bytes.encode(message.bytes, writer.uint32(/* id 17, wireType 2 =*/ 138).fork()).ldelim();
+            if (message.initialSettings != null && Object.hasOwnProperty.call(message, 'initialSettings'))
+                $root.InitialSettings.encode(
+                    message.initialSettings,
+                    writer.uint32(/* id 18, wireType 2 =*/ 146).fork(),
+                ).ldelim();
+            if (message.timestamp != null && Object.hasOwnProperty.call(message, 'timestamp'))
+                writer.uint32(/* id 19, wireType 0 =*/ 152).int64(message.timestamp);
+            if (message.meta != null && Object.hasOwnProperty.call(message, 'meta'))
                 for (var keys = Object.keys(message.meta), i = 0; i < keys.length; ++i)
-                    writer.uint32(/* id 20, wireType 2 =*/162).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 2 =*/18).string(message.meta[keys[i]]).ldelim();
-            if (message.cancel != null && Object.hasOwnProperty.call(message, "cancel"))
-                $root.Cancel.encode(message.cancel, writer.uint32(/* id 21, wireType 2 =*/170).fork()).ldelim();
-            if (message.getHistoryRequest != null && Object.hasOwnProperty.call(message, "getHistoryRequest"))
-                $root.GetHistoryRequest.encode(message.getHistoryRequest, writer.uint32(/* id 22, wireType 2 =*/178).fork()).ldelim();
-            if (message.mute != null && Object.hasOwnProperty.call(message, "mute"))
-                $root.Mute.encode(message.mute, writer.uint32(/* id 23, wireType 2 =*/186).fork()).ldelim();
+                    writer
+                        .uint32(/* id 20, wireType 2 =*/ 162)
+                        .fork()
+                        .uint32(/* id 1, wireType 2 =*/ 10)
+                        .string(keys[i])
+                        .uint32(/* id 2, wireType 2 =*/ 18)
+                        .string(message.meta[keys[i]])
+                        .ldelim();
+            if (message.cancel != null && Object.hasOwnProperty.call(message, 'cancel'))
+                $root.Cancel.encode(message.cancel, writer.uint32(/* id 21, wireType 2 =*/ 170).fork()).ldelim();
+            if (message.mute != null && Object.hasOwnProperty.call(message, 'mute'))
+                $root.Mute.encode(message.mute, writer.uint32(/* id 23, wireType 2 =*/ 186).fork()).ldelim();
             return writer;
         };
-    
+
         /**
          * Decodes a Message message from the specified reader or buffer.
          * @function decode
@@ -349,138 +368,133 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         Message.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Message(), key, value;
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.Message(),
+                key,
+                value;
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                    case 1: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                    case 2: {
                         message.messageId = reader.int64();
                         break;
                     }
-                case 3: {
+                    case 3: {
                         message.last = reader.int32();
                         break;
                     }
-                case 4: {
+                    case 4: {
                         message.token = reader.string();
                         break;
                     }
-                case 11: {
+                    case 11: {
                         message.userChannel = reader.string();
                         break;
                     }
-                case 12: {
+                    case 12: {
                         message.vpsToken = reader.string();
                         break;
                     }
-                case 13: {
-                        if (!(message.devContext && message.devContext.length))
-                            message.devContext = [];
+                    case 13: {
+                        if (!(message.devContext && message.devContext.length)) message.devContext = [];
                         message.devContext.push($root.DevContext.decode(reader, reader.uint32()));
                         break;
                     }
-                case 14: {
+                    case 14: {
                         message.messageName = reader.string();
                         break;
                     }
-                case 15: {
+                    case 15: {
                         message.version = reader.int32();
                         break;
                     }
-                case 5: {
+                    case 5: {
                         message.voice = $root.Voice.decode(reader, reader.uint32());
                         break;
                     }
-                case 6: {
+                    case 6: {
                         message.text = $root.Text.decode(reader, reader.uint32());
                         break;
                     }
-                case 7: {
+                    case 7: {
                         message.systemMessage = $root.SystemMessage.decode(reader, reader.uint32());
                         break;
                     }
-                case 8: {
+                    case 8: {
                         message.legacyDevice = $root.LegacyDevice.decode(reader, reader.uint32());
                         break;
                     }
-                case 9: {
+                    case 9: {
                         message.settings = $root.Settings.decode(reader, reader.uint32());
                         break;
                     }
-                case 10: {
+                    case 10: {
                         message.status = $root.Status.decode(reader, reader.uint32());
                         break;
                     }
-                case 16: {
+                    case 16: {
                         message.device = $root.Device.decode(reader, reader.uint32());
                         break;
                     }
-                case 17: {
+                    case 17: {
                         message.bytes = $root.Bytes.decode(reader, reader.uint32());
                         break;
                     }
-                case 18: {
+                    case 18: {
                         message.initialSettings = $root.InitialSettings.decode(reader, reader.uint32());
                         break;
                     }
-                case 21: {
+                    case 21: {
                         message.cancel = $root.Cancel.decode(reader, reader.uint32());
                         break;
                     }
-                case 22: {
-                        message.getHistoryRequest = $root.GetHistoryRequest.decode(reader, reader.uint32());
-                        break;
-                    }
-                case 23: {
+                    case 23: {
                         message.mute = $root.Mute.decode(reader, reader.uint32());
                         break;
                     }
-                case 19: {
+                    case 19: {
                         message.timestamp = reader.int64();
                         break;
                     }
-                case 20: {
-                        if (message.meta === $util.emptyObject)
-                            message.meta = {};
+                    case 20: {
+                        if (message.meta === $util.emptyObject) message.meta = {};
                         var end2 = reader.uint32() + reader.pos;
-                        key = "";
-                        value = "";
+                        key = '';
+                        value = '';
                         while (reader.pos < end2) {
                             var tag2 = reader.uint32();
                             switch (tag2 >>> 3) {
-                            case 1:
-                                key = reader.string();
-                                break;
-                            case 2:
-                                value = reader.string();
-                                break;
-                            default:
-                                reader.skipType(tag2 & 7);
-                                break;
+                                case 1:
+                                    key = reader.string();
+                                    break;
+                                case 2:
+                                    value = reader.string();
+                                    break;
+                                default:
+                                    reader.skipType(tag2 & 7);
+                                    break;
                             }
                         }
                         message.meta[key] = value;
                         break;
                     }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return Message;
     })();
-    
-    $root.InitialSettings = (function() {
-    
+
+    $root.InitialSettings = (function () {
         /**
          * Properties of an InitialSettings.
          * @exports IInitialSettings
@@ -491,7 +505,7 @@
          * @property {ISettings|null} [settings] InitialSettings settings
          * @property {string|null} [locale] InitialSettings locale
          */
-    
+
         /**
          * Constructs a new InitialSettings.
          * @exports InitialSettings
@@ -503,26 +517,25 @@
         function InitialSettings(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * InitialSettings userId.
          * @member {string} userId
          * @memberof InitialSettings
          * @instance
          */
-        InitialSettings.prototype.userId = "";
-    
+        InitialSettings.prototype.userId = '';
+
         /**
          * InitialSettings userChannel.
          * @member {string} userChannel
          * @memberof InitialSettings
          * @instance
          */
-        InitialSettings.prototype.userChannel = "";
-    
+        InitialSettings.prototype.userChannel = '';
+
         /**
          * InitialSettings device.
          * @member {IDevice|null|undefined} device
@@ -530,7 +543,7 @@
          * @instance
          */
         InitialSettings.prototype.device = null;
-    
+
         /**
          * InitialSettings settings.
          * @member {ISettings|null|undefined} settings
@@ -538,15 +551,15 @@
          * @instance
          */
         InitialSettings.prototype.settings = null;
-    
+
         /**
          * InitialSettings locale.
          * @member {string} locale
          * @memberof InitialSettings
          * @instance
          */
-        InitialSettings.prototype.locale = "";
-    
+        InitialSettings.prototype.locale = '';
+
         /**
          * Creates a new InitialSettings instance using the specified properties.
          * @function create
@@ -558,7 +571,7 @@
         InitialSettings.create = function create(properties) {
             return new InitialSettings(properties);
         };
-    
+
         /**
          * Encodes the specified InitialSettings message. Does not implicitly {@link InitialSettings.verify|verify} messages.
          * @function encode
@@ -569,21 +582,20 @@
          * @returns {$protobuf.Writer} Writer
          */
         InitialSettings.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.userId);
-            if (message.userChannel != null && Object.hasOwnProperty.call(message, "userChannel"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.userChannel);
-            if (message.device != null && Object.hasOwnProperty.call(message, "device"))
-                $root.Device.encode(message.device, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.settings != null && Object.hasOwnProperty.call(message, "settings"))
-                $root.Settings.encode(message.settings, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-            if (message.locale != null && Object.hasOwnProperty.call(message, "locale"))
-                writer.uint32(/* id 5, wireType 2 =*/42).string(message.locale);
+            if (!writer) writer = $Writer.create();
+            if (message.userId != null && Object.hasOwnProperty.call(message, 'userId'))
+                writer.uint32(/* id 1, wireType 2 =*/ 10).string(message.userId);
+            if (message.userChannel != null && Object.hasOwnProperty.call(message, 'userChannel'))
+                writer.uint32(/* id 2, wireType 2 =*/ 18).string(message.userChannel);
+            if (message.device != null && Object.hasOwnProperty.call(message, 'device'))
+                $root.Device.encode(message.device, writer.uint32(/* id 3, wireType 2 =*/ 26).fork()).ldelim();
+            if (message.settings != null && Object.hasOwnProperty.call(message, 'settings'))
+                $root.Settings.encode(message.settings, writer.uint32(/* id 4, wireType 2 =*/ 34).fork()).ldelim();
+            if (message.locale != null && Object.hasOwnProperty.call(message, 'locale'))
+                writer.uint32(/* id 5, wireType 2 =*/ 42).string(message.locale);
             return writer;
         };
-    
+
         /**
          * Decodes an InitialSettings message from the specified reader or buffer.
          * @function decode
@@ -596,45 +608,44 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         InitialSettings.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.InitialSettings();
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.InitialSettings();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                    case 1: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                    case 2: {
                         message.userChannel = reader.string();
                         break;
                     }
-                case 3: {
+                    case 3: {
                         message.device = $root.Device.decode(reader, reader.uint32());
                         break;
                     }
-                case 4: {
+                    case 4: {
                         message.settings = $root.Settings.decode(reader, reader.uint32());
                         break;
                     }
-                case 5: {
+                    case 5: {
                         message.locale = reader.string();
                         break;
                     }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return InitialSettings;
     })();
-    
-    $root.Device = (function() {
-    
+
+    $root.Device = (function () {
         /**
          * Properties of a Device.
          * @exports IDevice
@@ -651,7 +662,7 @@
          * @property {string|null} [additionalInfo] Device additionalInfo
          * @property {string|null} [tenant] Device tenant
          */
-    
+
         /**
          * Constructs a new Device.
          * @exports Device
@@ -663,98 +674,97 @@
         function Device(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * Device platformType.
          * @member {string} platformType
          * @memberof Device
          * @instance
          */
-        Device.prototype.platformType = "";
-    
+        Device.prototype.platformType = '';
+
         /**
          * Device platformVersion.
          * @member {string} platformVersion
          * @memberof Device
          * @instance
          */
-        Device.prototype.platformVersion = "";
-    
+        Device.prototype.platformVersion = '';
+
         /**
          * Обязательно. Пример, SBERBOX
          * @member {string} surface
          * @memberof Device
          * @instance
          */
-        Device.prototype.surface = "";
-    
+        Device.prototype.surface = '';
+
         /**
          * Device surfaceVersion.
          * @member {string} surfaceVersion
          * @memberof Device
          * @instance
          */
-        Device.prototype.surfaceVersion = "";
-    
+        Device.prototype.surfaceVersion = '';
+
         /**
          * Device features.
          * @member {string} features
          * @memberof Device
          * @instance
          */
-        Device.prototype.features = "";
-    
+        Device.prototype.features = '';
+
         /**
          * Device capabilities.
          * @member {string} capabilities
          * @memberof Device
          * @instance
          */
-        Device.prototype.capabilities = "";
-    
+        Device.prototype.capabilities = '';
+
         /**
          * Device deviceId.
          * @member {string} deviceId
          * @memberof Device
          * @instance
          */
-        Device.prototype.deviceId = "";
-    
+        Device.prototype.deviceId = '';
+
         /**
          * Device deviceManufacturer.
          * @member {string} deviceManufacturer
          * @memberof Device
          * @instance
          */
-        Device.prototype.deviceManufacturer = "";
-    
+        Device.prototype.deviceManufacturer = '';
+
         /**
          * Device deviceModel.
          * @member {string} deviceModel
          * @memberof Device
          * @instance
          */
-        Device.prototype.deviceModel = "";
-    
+        Device.prototype.deviceModel = '';
+
         /**
          * Device additionalInfo.
          * @member {string} additionalInfo
          * @memberof Device
          * @instance
          */
-        Device.prototype.additionalInfo = "";
-    
+        Device.prototype.additionalInfo = '';
+
         /**
          * Device tenant.
          * @member {string} tenant
          * @memberof Device
          * @instance
          */
-        Device.prototype.tenant = "";
-    
+        Device.prototype.tenant = '';
+
         /**
          * Creates a new Device instance using the specified properties.
          * @function create
@@ -766,7 +776,7 @@
         Device.create = function create(properties) {
             return new Device(properties);
         };
-    
+
         /**
          * Encodes the specified Device message. Does not implicitly {@link Device.verify|verify} messages.
          * @function encode
@@ -777,33 +787,32 @@
          * @returns {$protobuf.Writer} Writer
          */
         Device.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.platformType != null && Object.hasOwnProperty.call(message, "platformType"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.platformType);
-            if (message.platformVersion != null && Object.hasOwnProperty.call(message, "platformVersion"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.platformVersion);
-            if (message.surface != null && Object.hasOwnProperty.call(message, "surface"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.surface);
-            if (message.surfaceVersion != null && Object.hasOwnProperty.call(message, "surfaceVersion"))
-                writer.uint32(/* id 4, wireType 2 =*/34).string(message.surfaceVersion);
-            if (message.features != null && Object.hasOwnProperty.call(message, "features"))
-                writer.uint32(/* id 5, wireType 2 =*/42).string(message.features);
-            if (message.capabilities != null && Object.hasOwnProperty.call(message, "capabilities"))
-                writer.uint32(/* id 6, wireType 2 =*/50).string(message.capabilities);
-            if (message.deviceId != null && Object.hasOwnProperty.call(message, "deviceId"))
-                writer.uint32(/* id 7, wireType 2 =*/58).string(message.deviceId);
-            if (message.deviceManufacturer != null && Object.hasOwnProperty.call(message, "deviceManufacturer"))
-                writer.uint32(/* id 8, wireType 2 =*/66).string(message.deviceManufacturer);
-            if (message.deviceModel != null && Object.hasOwnProperty.call(message, "deviceModel"))
-                writer.uint32(/* id 9, wireType 2 =*/74).string(message.deviceModel);
-            if (message.additionalInfo != null && Object.hasOwnProperty.call(message, "additionalInfo"))
-                writer.uint32(/* id 10, wireType 2 =*/82).string(message.additionalInfo);
-            if (message.tenant != null && Object.hasOwnProperty.call(message, "tenant"))
-                writer.uint32(/* id 11, wireType 2 =*/90).string(message.tenant);
+            if (!writer) writer = $Writer.create();
+            if (message.platformType != null && Object.hasOwnProperty.call(message, 'platformType'))
+                writer.uint32(/* id 1, wireType 2 =*/ 10).string(message.platformType);
+            if (message.platformVersion != null && Object.hasOwnProperty.call(message, 'platformVersion'))
+                writer.uint32(/* id 2, wireType 2 =*/ 18).string(message.platformVersion);
+            if (message.surface != null && Object.hasOwnProperty.call(message, 'surface'))
+                writer.uint32(/* id 3, wireType 2 =*/ 26).string(message.surface);
+            if (message.surfaceVersion != null && Object.hasOwnProperty.call(message, 'surfaceVersion'))
+                writer.uint32(/* id 4, wireType 2 =*/ 34).string(message.surfaceVersion);
+            if (message.features != null && Object.hasOwnProperty.call(message, 'features'))
+                writer.uint32(/* id 5, wireType 2 =*/ 42).string(message.features);
+            if (message.capabilities != null && Object.hasOwnProperty.call(message, 'capabilities'))
+                writer.uint32(/* id 6, wireType 2 =*/ 50).string(message.capabilities);
+            if (message.deviceId != null && Object.hasOwnProperty.call(message, 'deviceId'))
+                writer.uint32(/* id 7, wireType 2 =*/ 58).string(message.deviceId);
+            if (message.deviceManufacturer != null && Object.hasOwnProperty.call(message, 'deviceManufacturer'))
+                writer.uint32(/* id 8, wireType 2 =*/ 66).string(message.deviceManufacturer);
+            if (message.deviceModel != null && Object.hasOwnProperty.call(message, 'deviceModel'))
+                writer.uint32(/* id 9, wireType 2 =*/ 74).string(message.deviceModel);
+            if (message.additionalInfo != null && Object.hasOwnProperty.call(message, 'additionalInfo'))
+                writer.uint32(/* id 10, wireType 2 =*/ 82).string(message.additionalInfo);
+            if (message.tenant != null && Object.hasOwnProperty.call(message, 'tenant'))
+                writer.uint32(/* id 11, wireType 2 =*/ 90).string(message.tenant);
             return writer;
         };
-    
+
         /**
          * Decodes a Device message from the specified reader or buffer.
          * @function decode
@@ -816,69 +825,68 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         Device.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Device();
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.Device();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                    case 1: {
                         message.platformType = reader.string();
                         break;
                     }
-                case 2: {
+                    case 2: {
                         message.platformVersion = reader.string();
                         break;
                     }
-                case 3: {
+                    case 3: {
                         message.surface = reader.string();
                         break;
                     }
-                case 4: {
+                    case 4: {
                         message.surfaceVersion = reader.string();
                         break;
                     }
-                case 5: {
+                    case 5: {
                         message.features = reader.string();
                         break;
                     }
-                case 6: {
+                    case 6: {
                         message.capabilities = reader.string();
                         break;
                     }
-                case 7: {
+                    case 7: {
                         message.deviceId = reader.string();
                         break;
                     }
-                case 8: {
+                    case 8: {
                         message.deviceManufacturer = reader.string();
                         break;
                     }
-                case 9: {
+                    case 9: {
                         message.deviceModel = reader.string();
                         break;
                     }
-                case 10: {
+                    case 10: {
                         message.additionalInfo = reader.string();
                         break;
                     }
-                case 11: {
+                    case 11: {
                         message.tenant = reader.string();
                         break;
                     }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return Device;
     })();
-    
-    $root.Settings = (function() {
-    
+
+    $root.Settings = (function () {
         /**
          * Properties of a Settings.
          * @exports ISettings
@@ -892,7 +900,7 @@
          * @property {string|null} [authConnector] Settings authConnector
          * @property {string|null} [surface] Settings surface
          */
-    
+
         /**
          * Constructs a new Settings.
          * @exports Settings
@@ -904,10 +912,9 @@
         function Settings(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * Settings dubbing.
          * @member {number} dubbing
@@ -915,7 +922,7 @@
          * @instance
          */
         Settings.prototype.dubbing = 0;
-    
+
         /**
          * Settings echo.
          * @member {number} echo
@@ -923,23 +930,23 @@
          * @instance
          */
         Settings.prototype.echo = 0;
-    
+
         /**
          * Settings ttsEngine.
          * @member {string} ttsEngine
          * @memberof Settings
          * @instance
          */
-        Settings.prototype.ttsEngine = "";
-    
+        Settings.prototype.ttsEngine = '';
+
         /**
          * Settings asrEngine.
          * @member {string} asrEngine
          * @memberof Settings
          * @instance
          */
-        Settings.prototype.asrEngine = "";
-    
+        Settings.prototype.asrEngine = '';
+
         /**
          * Settings asrAutoStop.
          * @member {number} asrAutoStop
@@ -947,7 +954,7 @@
          * @instance
          */
         Settings.prototype.asrAutoStop = 0;
-    
+
         /**
          * Settings devMode.
          * @member {number} devMode
@@ -955,23 +962,23 @@
          * @instance
          */
         Settings.prototype.devMode = 0;
-    
+
         /**
          * Settings authConnector.
          * @member {string} authConnector
          * @memberof Settings
          * @instance
          */
-        Settings.prototype.authConnector = "";
-    
+        Settings.prototype.authConnector = '';
+
         /**
          * Settings surface.
          * @member {string} surface
          * @memberof Settings
          * @instance
          */
-        Settings.prototype.surface = "";
-    
+        Settings.prototype.surface = '';
+
         /**
          * Creates a new Settings instance using the specified properties.
          * @function create
@@ -983,7 +990,7 @@
         Settings.create = function create(properties) {
             return new Settings(properties);
         };
-    
+
         /**
          * Encodes the specified Settings message. Does not implicitly {@link Settings.verify|verify} messages.
          * @function encode
@@ -994,27 +1001,26 @@
          * @returns {$protobuf.Writer} Writer
          */
         Settings.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.dubbing != null && Object.hasOwnProperty.call(message, "dubbing"))
-                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.dubbing);
-            if (message.echo != null && Object.hasOwnProperty.call(message, "echo"))
-                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.echo);
-            if (message.ttsEngine != null && Object.hasOwnProperty.call(message, "ttsEngine"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.ttsEngine);
-            if (message.asrEngine != null && Object.hasOwnProperty.call(message, "asrEngine"))
-                writer.uint32(/* id 4, wireType 2 =*/34).string(message.asrEngine);
-            if (message.asrAutoStop != null && Object.hasOwnProperty.call(message, "asrAutoStop"))
-                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.asrAutoStop);
-            if (message.devMode != null && Object.hasOwnProperty.call(message, "devMode"))
-                writer.uint32(/* id 6, wireType 0 =*/48).int32(message.devMode);
-            if (message.authConnector != null && Object.hasOwnProperty.call(message, "authConnector"))
-                writer.uint32(/* id 7, wireType 2 =*/58).string(message.authConnector);
-            if (message.surface != null && Object.hasOwnProperty.call(message, "surface"))
-                writer.uint32(/* id 8, wireType 2 =*/66).string(message.surface);
+            if (!writer) writer = $Writer.create();
+            if (message.dubbing != null && Object.hasOwnProperty.call(message, 'dubbing'))
+                writer.uint32(/* id 1, wireType 0 =*/ 8).int32(message.dubbing);
+            if (message.echo != null && Object.hasOwnProperty.call(message, 'echo'))
+                writer.uint32(/* id 2, wireType 0 =*/ 16).int32(message.echo);
+            if (message.ttsEngine != null && Object.hasOwnProperty.call(message, 'ttsEngine'))
+                writer.uint32(/* id 3, wireType 2 =*/ 26).string(message.ttsEngine);
+            if (message.asrEngine != null && Object.hasOwnProperty.call(message, 'asrEngine'))
+                writer.uint32(/* id 4, wireType 2 =*/ 34).string(message.asrEngine);
+            if (message.asrAutoStop != null && Object.hasOwnProperty.call(message, 'asrAutoStop'))
+                writer.uint32(/* id 5, wireType 0 =*/ 40).int32(message.asrAutoStop);
+            if (message.devMode != null && Object.hasOwnProperty.call(message, 'devMode'))
+                writer.uint32(/* id 6, wireType 0 =*/ 48).int32(message.devMode);
+            if (message.authConnector != null && Object.hasOwnProperty.call(message, 'authConnector'))
+                writer.uint32(/* id 7, wireType 2 =*/ 58).string(message.authConnector);
+            if (message.surface != null && Object.hasOwnProperty.call(message, 'surface'))
+                writer.uint32(/* id 8, wireType 2 =*/ 66).string(message.surface);
             return writer;
         };
-    
+
         /**
          * Decodes a Settings message from the specified reader or buffer.
          * @function decode
@@ -1027,57 +1033,56 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         Settings.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Settings();
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.Settings();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                    case 1: {
                         message.dubbing = reader.int32();
                         break;
                     }
-                case 2: {
+                    case 2: {
                         message.echo = reader.int32();
                         break;
                     }
-                case 3: {
+                    case 3: {
                         message.ttsEngine = reader.string();
                         break;
                     }
-                case 4: {
+                    case 4: {
                         message.asrEngine = reader.string();
                         break;
                     }
-                case 5: {
+                    case 5: {
                         message.asrAutoStop = reader.int32();
                         break;
                     }
-                case 6: {
+                    case 6: {
                         message.devMode = reader.int32();
                         break;
                     }
-                case 7: {
+                    case 7: {
                         message.authConnector = reader.string();
                         break;
                     }
-                case 8: {
+                    case 8: {
                         message.surface = reader.string();
                         break;
                     }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return Settings;
     })();
-    
-    $root.LegacyDevice = (function() {
-    
+
+    $root.LegacyDevice = (function () {
         /**
          * Properties of a LegacyDevice.
          * @exports ILegacyDevice
@@ -1090,7 +1095,7 @@
          * @property {string|null} [sdkVersion] LegacyDevice sdkVersion
          * @property {string|null} [protocolVersion] LegacyDevice protocolVersion
          */
-    
+
         /**
          * Constructs a new LegacyDevice.
          * @exports LegacyDevice
@@ -1102,66 +1107,65 @@
         function LegacyDevice(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * LegacyDevice clientType.
          * @member {string} clientType
          * @memberof LegacyDevice
          * @instance
          */
-        LegacyDevice.prototype.clientType = "";
-    
+        LegacyDevice.prototype.clientType = '';
+
         /**
          * LegacyDevice channel.
          * @member {string} channel
          * @memberof LegacyDevice
          * @instance
          */
-        LegacyDevice.prototype.channel = "";
-    
+        LegacyDevice.prototype.channel = '';
+
         /**
          * LegacyDevice channelVersion.
          * @member {string} channelVersion
          * @memberof LegacyDevice
          * @instance
          */
-        LegacyDevice.prototype.channelVersion = "";
-    
+        LegacyDevice.prototype.channelVersion = '';
+
         /**
          * LegacyDevice platformName.
          * @member {string} platformName
          * @memberof LegacyDevice
          * @instance
          */
-        LegacyDevice.prototype.platformName = "";
-    
+        LegacyDevice.prototype.platformName = '';
+
         /**
          * LegacyDevice platformVersion.
          * @member {string} platformVersion
          * @memberof LegacyDevice
          * @instance
          */
-        LegacyDevice.prototype.platformVersion = "";
-    
+        LegacyDevice.prototype.platformVersion = '';
+
         /**
          * LegacyDevice sdkVersion.
          * @member {string} sdkVersion
          * @memberof LegacyDevice
          * @instance
          */
-        LegacyDevice.prototype.sdkVersion = "";
-    
+        LegacyDevice.prototype.sdkVersion = '';
+
         /**
          * LegacyDevice protocolVersion.
          * @member {string} protocolVersion
          * @memberof LegacyDevice
          * @instance
          */
-        LegacyDevice.prototype.protocolVersion = "";
-    
+        LegacyDevice.prototype.protocolVersion = '';
+
         /**
          * Creates a new LegacyDevice instance using the specified properties.
          * @function create
@@ -1173,7 +1177,7 @@
         LegacyDevice.create = function create(properties) {
             return new LegacyDevice(properties);
         };
-    
+
         /**
          * Encodes the specified LegacyDevice message. Does not implicitly {@link LegacyDevice.verify|verify} messages.
          * @function encode
@@ -1184,25 +1188,24 @@
          * @returns {$protobuf.Writer} Writer
          */
         LegacyDevice.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.clientType != null && Object.hasOwnProperty.call(message, "clientType"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.clientType);
-            if (message.channel != null && Object.hasOwnProperty.call(message, "channel"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.channel);
-            if (message.channelVersion != null && Object.hasOwnProperty.call(message, "channelVersion"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.channelVersion);
-            if (message.platformName != null && Object.hasOwnProperty.call(message, "platformName"))
-                writer.uint32(/* id 4, wireType 2 =*/34).string(message.platformName);
-            if (message.platformVersion != null && Object.hasOwnProperty.call(message, "platformVersion"))
-                writer.uint32(/* id 5, wireType 2 =*/42).string(message.platformVersion);
-            if (message.sdkVersion != null && Object.hasOwnProperty.call(message, "sdkVersion"))
-                writer.uint32(/* id 6, wireType 2 =*/50).string(message.sdkVersion);
-            if (message.protocolVersion != null && Object.hasOwnProperty.call(message, "protocolVersion"))
-                writer.uint32(/* id 7, wireType 2 =*/58).string(message.protocolVersion);
+            if (!writer) writer = $Writer.create();
+            if (message.clientType != null && Object.hasOwnProperty.call(message, 'clientType'))
+                writer.uint32(/* id 1, wireType 2 =*/ 10).string(message.clientType);
+            if (message.channel != null && Object.hasOwnProperty.call(message, 'channel'))
+                writer.uint32(/* id 2, wireType 2 =*/ 18).string(message.channel);
+            if (message.channelVersion != null && Object.hasOwnProperty.call(message, 'channelVersion'))
+                writer.uint32(/* id 3, wireType 2 =*/ 26).string(message.channelVersion);
+            if (message.platformName != null && Object.hasOwnProperty.call(message, 'platformName'))
+                writer.uint32(/* id 4, wireType 2 =*/ 34).string(message.platformName);
+            if (message.platformVersion != null && Object.hasOwnProperty.call(message, 'platformVersion'))
+                writer.uint32(/* id 5, wireType 2 =*/ 42).string(message.platformVersion);
+            if (message.sdkVersion != null && Object.hasOwnProperty.call(message, 'sdkVersion'))
+                writer.uint32(/* id 6, wireType 2 =*/ 50).string(message.sdkVersion);
+            if (message.protocolVersion != null && Object.hasOwnProperty.call(message, 'protocolVersion'))
+                writer.uint32(/* id 7, wireType 2 =*/ 58).string(message.protocolVersion);
             return writer;
         };
-    
+
         /**
          * Decodes a LegacyDevice message from the specified reader or buffer.
          * @function decode
@@ -1215,60 +1218,59 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         LegacyDevice.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.LegacyDevice();
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.LegacyDevice();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                    case 1: {
                         message.clientType = reader.string();
                         break;
                     }
-                case 2: {
+                    case 2: {
                         message.channel = reader.string();
                         break;
                     }
-                case 3: {
+                    case 3: {
                         message.channelVersion = reader.string();
                         break;
                     }
-                case 4: {
+                    case 4: {
                         message.platformName = reader.string();
                         break;
                     }
-                case 5: {
+                    case 5: {
                         message.platformVersion = reader.string();
                         break;
                     }
-                case 6: {
+                    case 6: {
                         message.sdkVersion = reader.string();
                         break;
                     }
-                case 7: {
+                    case 7: {
                         message.protocolVersion = reader.string();
                         break;
                     }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return LegacyDevice;
     })();
-    
-    $root.Voice = (function() {
-    
+
+    $root.Voice = (function () {
         /**
          * Properties of a Voice.
          * @exports IVoice
          * @interface IVoice
          * @property {Uint8Array|null} [data] Voice data
          */
-    
+
         /**
          * Constructs a new Voice.
          * @exports Voice
@@ -1280,10 +1282,9 @@
         function Voice(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * Voice data.
          * @member {Uint8Array} data
@@ -1291,7 +1292,7 @@
          * @instance
          */
         Voice.prototype.data = $util.newBuffer([]);
-    
+
         /**
          * Creates a new Voice instance using the specified properties.
          * @function create
@@ -1303,7 +1304,7 @@
         Voice.create = function create(properties) {
             return new Voice(properties);
         };
-    
+
         /**
          * Encodes the specified Voice message. Does not implicitly {@link Voice.verify|verify} messages.
          * @function encode
@@ -1314,13 +1315,12 @@
          * @returns {$protobuf.Writer} Writer
          */
         Voice.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.data != null && Object.hasOwnProperty.call(message, "data"))
-                writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.data);
+            if (!writer) writer = $Writer.create();
+            if (message.data != null && Object.hasOwnProperty.call(message, 'data'))
+                writer.uint32(/* id 1, wireType 2 =*/ 10).bytes(message.data);
             return writer;
         };
-    
+
         /**
          * Decodes a Voice message from the specified reader or buffer.
          * @function decode
@@ -1333,29 +1333,28 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         Voice.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Voice();
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.Voice();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                    case 1: {
                         message.data = reader.bytes();
                         break;
                     }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return Voice;
     })();
-    
-    $root.Text = (function() {
-    
+
+    $root.Text = (function () {
         /**
          * Properties of a Text.
          * @exports IText
@@ -1363,7 +1362,7 @@
          * @property {string|null} [data] Text data
          * @property {string|null} [type] Text type
          */
-    
+
         /**
          * Constructs a new Text.
          * @exports Text
@@ -1375,26 +1374,25 @@
         function Text(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * Text data.
          * @member {string} data
          * @memberof Text
          * @instance
          */
-        Text.prototype.data = "";
-    
+        Text.prototype.data = '';
+
         /**
          * Text type.
          * @member {string} type
          * @memberof Text
          * @instance
          */
-        Text.prototype.type = "";
-    
+        Text.prototype.type = '';
+
         /**
          * Creates a new Text instance using the specified properties.
          * @function create
@@ -1406,7 +1404,7 @@
         Text.create = function create(properties) {
             return new Text(properties);
         };
-    
+
         /**
          * Encodes the specified Text message. Does not implicitly {@link Text.verify|verify} messages.
          * @function encode
@@ -1417,15 +1415,14 @@
          * @returns {$protobuf.Writer} Writer
          */
         Text.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.data != null && Object.hasOwnProperty.call(message, "data"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.data);
-            if (message.type != null && Object.hasOwnProperty.call(message, "type"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.type);
+            if (!writer) writer = $Writer.create();
+            if (message.data != null && Object.hasOwnProperty.call(message, 'data'))
+                writer.uint32(/* id 1, wireType 2 =*/ 10).string(message.data);
+            if (message.type != null && Object.hasOwnProperty.call(message, 'type'))
+                writer.uint32(/* id 2, wireType 2 =*/ 18).string(message.type);
             return writer;
         };
-    
+
         /**
          * Decodes a Text message from the specified reader or buffer.
          * @function decode
@@ -1438,40 +1435,39 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         Text.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Text();
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.Text();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                    case 1: {
                         message.data = reader.string();
                         break;
                     }
-                case 2: {
+                    case 2: {
                         message.type = reader.string();
                         break;
                     }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return Text;
     })();
-    
-    $root.SystemMessage = (function() {
-    
+
+    $root.SystemMessage = (function () {
         /**
          * Properties of a SystemMessage.
          * @exports ISystemMessage
          * @interface ISystemMessage
          * @property {string|null} [data] SystemMessage data
          */
-    
+
         /**
          * Constructs a new SystemMessage.
          * @exports SystemMessage
@@ -1483,18 +1479,17 @@
         function SystemMessage(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * SystemMessage data.
          * @member {string} data
          * @memberof SystemMessage
          * @instance
          */
-        SystemMessage.prototype.data = "";
-    
+        SystemMessage.prototype.data = '';
+
         /**
          * Creates a new SystemMessage instance using the specified properties.
          * @function create
@@ -1506,7 +1501,7 @@
         SystemMessage.create = function create(properties) {
             return new SystemMessage(properties);
         };
-    
+
         /**
          * Encodes the specified SystemMessage message. Does not implicitly {@link SystemMessage.verify|verify} messages.
          * @function encode
@@ -1517,13 +1512,12 @@
          * @returns {$protobuf.Writer} Writer
          */
         SystemMessage.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.data != null && Object.hasOwnProperty.call(message, "data"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.data);
+            if (!writer) writer = $Writer.create();
+            if (message.data != null && Object.hasOwnProperty.call(message, 'data'))
+                writer.uint32(/* id 1, wireType 2 =*/ 10).string(message.data);
             return writer;
         };
-    
+
         /**
          * Decodes a SystemMessage message from the specified reader or buffer.
          * @function decode
@@ -1536,29 +1530,28 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         SystemMessage.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.SystemMessage();
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.SystemMessage();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                    case 1: {
                         message.data = reader.string();
                         break;
                     }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return SystemMessage;
     })();
-    
-    $root.Status = (function() {
-    
+
+    $root.Status = (function () {
         /**
          * Properties of a Status.
          * @exports IStatus
@@ -1567,7 +1560,7 @@
          * @property {string|null} [description] Status description
          * @property {string|null} [technicalDescription] Status technicalDescription
          */
-    
+
         /**
          * Constructs a new Status.
          * @exports Status
@@ -1579,10 +1572,9 @@
         function Status(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * Status code.
          * @member {number} code
@@ -1590,23 +1582,23 @@
          * @instance
          */
         Status.prototype.code = 0;
-    
+
         /**
          * Status description.
          * @member {string} description
          * @memberof Status
          * @instance
          */
-        Status.prototype.description = "";
-    
+        Status.prototype.description = '';
+
         /**
          * Status technicalDescription.
          * @member {string} technicalDescription
          * @memberof Status
          * @instance
          */
-        Status.prototype.technicalDescription = "";
-    
+        Status.prototype.technicalDescription = '';
+
         /**
          * Creates a new Status instance using the specified properties.
          * @function create
@@ -1618,7 +1610,7 @@
         Status.create = function create(properties) {
             return new Status(properties);
         };
-    
+
         /**
          * Encodes the specified Status message. Does not implicitly {@link Status.verify|verify} messages.
          * @function encode
@@ -1629,17 +1621,16 @@
          * @returns {$protobuf.Writer} Writer
          */
         Status.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.code != null && Object.hasOwnProperty.call(message, "code"))
-                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.code);
-            if (message.description != null && Object.hasOwnProperty.call(message, "description"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.description);
-            if (message.technicalDescription != null && Object.hasOwnProperty.call(message, "technicalDescription"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.technicalDescription);
+            if (!writer) writer = $Writer.create();
+            if (message.code != null && Object.hasOwnProperty.call(message, 'code'))
+                writer.uint32(/* id 1, wireType 0 =*/ 8).int32(message.code);
+            if (message.description != null && Object.hasOwnProperty.call(message, 'description'))
+                writer.uint32(/* id 2, wireType 2 =*/ 18).string(message.description);
+            if (message.technicalDescription != null && Object.hasOwnProperty.call(message, 'technicalDescription'))
+                writer.uint32(/* id 3, wireType 2 =*/ 26).string(message.technicalDescription);
             return writer;
         };
-    
+
         /**
          * Decodes a Status message from the specified reader or buffer.
          * @function decode
@@ -1652,37 +1643,36 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         Status.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Status();
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.Status();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                    case 1: {
                         message.code = reader.int32();
                         break;
                     }
-                case 2: {
+                    case 2: {
                         message.description = reader.string();
                         break;
                     }
-                case 3: {
+                    case 3: {
                         message.technicalDescription = reader.string();
                         break;
                     }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return Status;
     })();
-    
-    $root.Bytes = (function() {
-    
+
+    $root.Bytes = (function () {
         /**
          * Properties of a Bytes.
          * @exports IBytes
@@ -1690,7 +1680,7 @@
          * @property {Uint8Array|null} [data] Bytes data
          * @property {string|null} [desc] Bytes desc
          */
-    
+
         /**
          * Constructs a new Bytes.
          * @exports Bytes
@@ -1702,10 +1692,9 @@
         function Bytes(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * Bytes data.
          * @member {Uint8Array} data
@@ -1713,15 +1702,15 @@
          * @instance
          */
         Bytes.prototype.data = $util.newBuffer([]);
-    
+
         /**
          * Bytes desc.
          * @member {string} desc
          * @memberof Bytes
          * @instance
          */
-        Bytes.prototype.desc = "";
-    
+        Bytes.prototype.desc = '';
+
         /**
          * Creates a new Bytes instance using the specified properties.
          * @function create
@@ -1733,7 +1722,7 @@
         Bytes.create = function create(properties) {
             return new Bytes(properties);
         };
-    
+
         /**
          * Encodes the specified Bytes message. Does not implicitly {@link Bytes.verify|verify} messages.
          * @function encode
@@ -1744,15 +1733,14 @@
          * @returns {$protobuf.Writer} Writer
          */
         Bytes.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.data != null && Object.hasOwnProperty.call(message, "data"))
-                writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.data);
-            if (message.desc != null && Object.hasOwnProperty.call(message, "desc"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.desc);
+            if (!writer) writer = $Writer.create();
+            if (message.data != null && Object.hasOwnProperty.call(message, 'data'))
+                writer.uint32(/* id 1, wireType 2 =*/ 10).bytes(message.data);
+            if (message.desc != null && Object.hasOwnProperty.call(message, 'desc'))
+                writer.uint32(/* id 2, wireType 2 =*/ 18).string(message.desc);
             return writer;
         };
-    
+
         /**
          * Decodes a Bytes message from the specified reader or buffer.
          * @function decode
@@ -1765,33 +1753,32 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         Bytes.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Bytes();
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.Bytes();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                    case 1: {
                         message.data = reader.bytes();
                         break;
                     }
-                case 2: {
+                    case 2: {
                         message.desc = reader.string();
                         break;
                     }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return Bytes;
     })();
-    
-    $root.DevContext = (function() {
-    
+
+    $root.DevContext = (function () {
         /**
          * Properties of a DevContext.
          * @exports IDevContext
@@ -1800,7 +1787,7 @@
          * @property {number|Long|null} [timestampMs] DevContext timestampMs
          * @property {string|null} [data] DevContext data
          */
-    
+
         /**
          * Constructs a new DevContext.
          * @exports DevContext
@@ -1812,34 +1799,33 @@
         function DevContext(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * DevContext name.
          * @member {string} name
          * @memberof DevContext
          * @instance
          */
-        DevContext.prototype.name = "";
-    
+        DevContext.prototype.name = '';
+
         /**
          * DevContext timestampMs.
          * @member {number|Long} timestampMs
          * @memberof DevContext
          * @instance
          */
-        DevContext.prototype.timestampMs = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-    
+        DevContext.prototype.timestampMs = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+
         /**
          * DevContext data.
          * @member {string} data
          * @memberof DevContext
          * @instance
          */
-        DevContext.prototype.data = "";
-    
+        DevContext.prototype.data = '';
+
         /**
          * Creates a new DevContext instance using the specified properties.
          * @function create
@@ -1851,7 +1837,7 @@
         DevContext.create = function create(properties) {
             return new DevContext(properties);
         };
-    
+
         /**
          * Encodes the specified DevContext message. Does not implicitly {@link DevContext.verify|verify} messages.
          * @function encode
@@ -1862,17 +1848,16 @@
          * @returns {$protobuf.Writer} Writer
          */
         DevContext.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.name != null && Object.hasOwnProperty.call(message, "name"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.name);
-            if (message.timestampMs != null && Object.hasOwnProperty.call(message, "timestampMs"))
-                writer.uint32(/* id 2, wireType 0 =*/16).int64(message.timestampMs);
-            if (message.data != null && Object.hasOwnProperty.call(message, "data"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.data);
+            if (!writer) writer = $Writer.create();
+            if (message.name != null && Object.hasOwnProperty.call(message, 'name'))
+                writer.uint32(/* id 1, wireType 2 =*/ 10).string(message.name);
+            if (message.timestampMs != null && Object.hasOwnProperty.call(message, 'timestampMs'))
+                writer.uint32(/* id 2, wireType 0 =*/ 16).int64(message.timestampMs);
+            if (message.data != null && Object.hasOwnProperty.call(message, 'data'))
+                writer.uint32(/* id 3, wireType 2 =*/ 26).string(message.data);
             return writer;
         };
-    
+
         /**
          * Decodes a DevContext message from the specified reader or buffer.
          * @function decode
@@ -1885,43 +1870,42 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         DevContext.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.DevContext();
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.DevContext();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                    case 1: {
                         message.name = reader.string();
                         break;
                     }
-                case 2: {
+                    case 2: {
                         message.timestampMs = reader.int64();
                         break;
                     }
-                case 3: {
+                    case 3: {
                         message.data = reader.string();
                         break;
                     }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return DevContext;
     })();
-    
-    $root.Cancel = (function() {
-    
+
+    $root.Cancel = (function () {
         /**
          * Properties of a Cancel.
          * @exports ICancel
          * @interface ICancel
          */
-    
+
         /**
          * Constructs a new Cancel.
          * @exports Cancel
@@ -1933,10 +1917,9 @@
         function Cancel(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * Creates a new Cancel instance using the specified properties.
          * @function create
@@ -1948,7 +1931,7 @@
         Cancel.create = function create(properties) {
             return new Cancel(properties);
         };
-    
+
         /**
          * Encodes the specified Cancel message. Does not implicitly {@link Cancel.verify|verify} messages.
          * @function encode
@@ -1959,11 +1942,10 @@
          * @returns {$protobuf.Writer} Writer
          */
         Cancel.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
+            if (!writer) writer = $Writer.create();
             return writer;
         };
-    
+
         /**
          * Decodes a Cancel message from the specified reader or buffer.
          * @function decode
@@ -1976,31 +1958,30 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         Cancel.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Cancel();
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.Cancel();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return Cancel;
     })();
-    
-    $root.Mute = (function() {
-    
+
+    $root.Mute = (function () {
         /**
          * Properties of a Mute.
          * @exports IMute
          * @interface IMute
          */
-    
+
         /**
          * Constructs a new Mute.
          * @exports Mute
@@ -2012,10 +1993,9 @@
         function Mute(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
+                    if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
         }
-    
+
         /**
          * Creates a new Mute instance using the specified properties.
          * @function create
@@ -2027,7 +2007,7 @@
         Mute.create = function create(properties) {
             return new Mute(properties);
         };
-    
+
         /**
          * Encodes the specified Mute message. Does not implicitly {@link Mute.verify|verify} messages.
          * @function encode
@@ -2038,11 +2018,10 @@
          * @returns {$protobuf.Writer} Writer
          */
         Mute.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
+            if (!writer) writer = $Writer.create();
             return writer;
         };
-    
+
         /**
          * Decodes a Mute message from the specified reader or buffer.
          * @function decode
@@ -2055,881 +2034,47 @@
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         Mute.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Mute();
+            if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length,
+                message = new $root.Mute();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
         };
-    
+
         return Mute;
     })();
-    
-    $root.GetHistoryRequest = (function() {
-    
-        /**
-         * Properties of a GetHistoryRequest.
-         * @exports IGetHistoryRequest
-         * @interface IGetHistoryRequest
-         * @property {Array.<string>|null} [messageTypes] GetHistoryRequest messageTypes
-         * @property {IApp|null} [app] GetHistoryRequest app
-         * @property {IOffset|null} [offset] GetHistoryRequest offset
-         */
-    
-        /**
-         * Constructs a new GetHistoryRequest.
-         * @exports GetHistoryRequest
-         * @classdesc Represents a GetHistoryRequest.
-         * @implements IGetHistoryRequest
-         * @constructor
-         * @param {IGetHistoryRequest=} [properties] Properties to set
-         */
-        function GetHistoryRequest(properties) {
-            this.messageTypes = [];
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-    
-        /**
-         * GetHistoryRequest messageTypes.
-         * @member {Array.<string>} messageTypes
-         * @memberof GetHistoryRequest
-         * @instance
-         */
-        GetHistoryRequest.prototype.messageTypes = $util.emptyArray;
-    
-        /**
-         * GetHistoryRequest app.
-         * @member {IApp|null|undefined} app
-         * @memberof GetHistoryRequest
-         * @instance
-         */
-        GetHistoryRequest.prototype.app = null;
-    
-        /**
-         * GetHistoryRequest offset.
-         * @member {IOffset|null|undefined} offset
-         * @memberof GetHistoryRequest
-         * @instance
-         */
-        GetHistoryRequest.prototype.offset = null;
-    
-        /**
-         * Creates a new GetHistoryRequest instance using the specified properties.
-         * @function create
-         * @memberof GetHistoryRequest
-         * @static
-         * @param {IGetHistoryRequest=} [properties] Properties to set
-         * @returns {GetHistoryRequest} GetHistoryRequest instance
-         */
-        GetHistoryRequest.create = function create(properties) {
-            return new GetHistoryRequest(properties);
-        };
-    
-        /**
-         * Encodes the specified GetHistoryRequest message. Does not implicitly {@link GetHistoryRequest.verify|verify} messages.
-         * @function encode
-         * @memberof GetHistoryRequest
-         * @static
-         * @param {IGetHistoryRequest} message GetHistoryRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GetHistoryRequest.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.messageTypes != null && message.messageTypes.length)
-                for (var i = 0; i < message.messageTypes.length; ++i)
-                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.messageTypes[i]);
-            if (message.app != null && Object.hasOwnProperty.call(message, "app"))
-                $root.App.encode(message.app, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-            if (message.offset != null && Object.hasOwnProperty.call(message, "offset"))
-                $root.Offset.encode(message.offset, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            return writer;
-        };
-    
-        /**
-         * Decodes a GetHistoryRequest message from the specified reader or buffer.
-         * @function decode
-         * @memberof GetHistoryRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {GetHistoryRequest} GetHistoryRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GetHistoryRequest.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.GetHistoryRequest();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1: {
-                        if (!(message.messageTypes && message.messageTypes.length))
-                            message.messageTypes = [];
-                        message.messageTypes.push(reader.string());
-                        break;
-                    }
-                case 2: {
-                        message.app = $root.App.decode(reader, reader.uint32());
-                        break;
-                    }
-                case 3: {
-                        message.offset = $root.Offset.decode(reader, reader.uint32());
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-    
-        return GetHistoryRequest;
-    })();
-    
-    $root.App = (function() {
-    
-        /**
-         * Properties of an App.
-         * @exports IApp
-         * @interface IApp
-         * @property {google.protobuf.IStringValue|null} [type] App type
-         * @property {google.protobuf.IStringValue|null} [projectId] App projectId
-         * @property {google.protobuf.IStringValue|null} [systemName] App systemName
-         */
-    
-        /**
-         * Constructs a new App.
-         * @exports App
-         * @classdesc Represents an App.
-         * @implements IApp
-         * @constructor
-         * @param {IApp=} [properties] Properties to set
-         */
-        function App(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-    
-        /**
-         * App type.
-         * @member {google.protobuf.IStringValue|null|undefined} type
-         * @memberof App
-         * @instance
-         */
-        App.prototype.type = null;
-    
-        /**
-         * App projectId.
-         * @member {google.protobuf.IStringValue|null|undefined} projectId
-         * @memberof App
-         * @instance
-         */
-        App.prototype.projectId = null;
-    
-        /**
-         * App systemName.
-         * @member {google.protobuf.IStringValue|null|undefined} systemName
-         * @memberof App
-         * @instance
-         */
-        App.prototype.systemName = null;
-    
-        /**
-         * Creates a new App instance using the specified properties.
-         * @function create
-         * @memberof App
-         * @static
-         * @param {IApp=} [properties] Properties to set
-         * @returns {App} App instance
-         */
-        App.create = function create(properties) {
-            return new App(properties);
-        };
-    
-        /**
-         * Encodes the specified App message. Does not implicitly {@link App.verify|verify} messages.
-         * @function encode
-         * @memberof App
-         * @static
-         * @param {IApp} message App message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        App.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.type != null && Object.hasOwnProperty.call(message, "type"))
-                $root.google.protobuf.StringValue.encode(message.type, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            if (message.projectId != null && Object.hasOwnProperty.call(message, "projectId"))
-                $root.google.protobuf.StringValue.encode(message.projectId, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-            if (message.systemName != null && Object.hasOwnProperty.call(message, "systemName"))
-                $root.google.protobuf.StringValue.encode(message.systemName, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            return writer;
-        };
-    
-        /**
-         * Decodes an App message from the specified reader or buffer.
-         * @function decode
-         * @memberof App
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {App} App
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        App.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.App();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1: {
-                        message.type = $root.google.protobuf.StringValue.decode(reader, reader.uint32());
-                        break;
-                    }
-                case 2: {
-                        message.projectId = $root.google.protobuf.StringValue.decode(reader, reader.uint32());
-                        break;
-                    }
-                case 3: {
-                        message.systemName = $root.google.protobuf.StringValue.decode(reader, reader.uint32());
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-    
-        return App;
-    })();
-    
-    $root.Offset = (function() {
-    
-        /**
-         * Properties of an Offset.
-         * @exports IOffset
-         * @interface IOffset
-         * @property {google.protobuf.IStringValue|null} [limit] Offset limit
-         * @property {google.protobuf.IStringValue|null} [contentId] Offset contentId
-         */
-    
-        /**
-         * Constructs a new Offset.
-         * @exports Offset
-         * @classdesc Represents an Offset.
-         * @implements IOffset
-         * @constructor
-         * @param {IOffset=} [properties] Properties to set
-         */
-        function Offset(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-    
-        /**
-         * Offset limit.
-         * @member {google.protobuf.IStringValue|null|undefined} limit
-         * @memberof Offset
-         * @instance
-         */
-        Offset.prototype.limit = null;
-    
-        /**
-         * Offset contentId.
-         * @member {google.protobuf.IStringValue|null|undefined} contentId
-         * @memberof Offset
-         * @instance
-         */
-        Offset.prototype.contentId = null;
-    
-        /**
-         * Creates a new Offset instance using the specified properties.
-         * @function create
-         * @memberof Offset
-         * @static
-         * @param {IOffset=} [properties] Properties to set
-         * @returns {Offset} Offset instance
-         */
-        Offset.create = function create(properties) {
-            return new Offset(properties);
-        };
-    
-        /**
-         * Encodes the specified Offset message. Does not implicitly {@link Offset.verify|verify} messages.
-         * @function encode
-         * @memberof Offset
-         * @static
-         * @param {IOffset} message Offset message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        Offset.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.limit != null && Object.hasOwnProperty.call(message, "limit"))
-                $root.google.protobuf.StringValue.encode(message.limit, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            if (message.contentId != null && Object.hasOwnProperty.call(message, "contentId"))
-                $root.google.protobuf.StringValue.encode(message.contentId, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-            return writer;
-        };
-    
-        /**
-         * Decodes an Offset message from the specified reader or buffer.
-         * @function decode
-         * @memberof Offset
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {Offset} Offset
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        Offset.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Offset();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1: {
-                        message.limit = $root.google.protobuf.StringValue.decode(reader, reader.uint32());
-                        break;
-                    }
-                case 2: {
-                        message.contentId = $root.google.protobuf.StringValue.decode(reader, reader.uint32());
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-    
-        return Offset;
-    })();
-    
-    $root.ChatHistoryRequest = (function() {
-    
-        /**
-         * Properties of a ChatHistoryRequest.
-         * @exports IChatHistoryRequest
-         * @interface IChatHistoryRequest
-         * @property {IUuid|null} [uuid] ChatHistoryRequest uuid
-         * @property {IDevice|null} [device] ChatHistoryRequest device
-         * @property {IGetHistoryRequest|null} [getHistoryRequest] ChatHistoryRequest getHistoryRequest
-         */
-    
-        /**
-         * Constructs a new ChatHistoryRequest.
-         * @exports ChatHistoryRequest
-         * @classdesc Represents a ChatHistoryRequest.
-         * @implements IChatHistoryRequest
-         * @constructor
-         * @param {IChatHistoryRequest=} [properties] Properties to set
-         */
-        function ChatHistoryRequest(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-    
-        /**
-         * ChatHistoryRequest uuid.
-         * @member {IUuid|null|undefined} uuid
-         * @memberof ChatHistoryRequest
-         * @instance
-         */
-        ChatHistoryRequest.prototype.uuid = null;
-    
-        /**
-         * ChatHistoryRequest device.
-         * @member {IDevice|null|undefined} device
-         * @memberof ChatHistoryRequest
-         * @instance
-         */
-        ChatHistoryRequest.prototype.device = null;
-    
-        /**
-         * ChatHistoryRequest getHistoryRequest.
-         * @member {IGetHistoryRequest|null|undefined} getHistoryRequest
-         * @memberof ChatHistoryRequest
-         * @instance
-         */
-        ChatHistoryRequest.prototype.getHistoryRequest = null;
-    
-        /**
-         * Creates a new ChatHistoryRequest instance using the specified properties.
-         * @function create
-         * @memberof ChatHistoryRequest
-         * @static
-         * @param {IChatHistoryRequest=} [properties] Properties to set
-         * @returns {ChatHistoryRequest} ChatHistoryRequest instance
-         */
-        ChatHistoryRequest.create = function create(properties) {
-            return new ChatHistoryRequest(properties);
-        };
-    
-        /**
-         * Encodes the specified ChatHistoryRequest message. Does not implicitly {@link ChatHistoryRequest.verify|verify} messages.
-         * @function encode
-         * @memberof ChatHistoryRequest
-         * @static
-         * @param {IChatHistoryRequest} message ChatHistoryRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ChatHistoryRequest.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.uuid != null && Object.hasOwnProperty.call(message, "uuid"))
-                $root.Uuid.encode(message.uuid, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            if (message.device != null && Object.hasOwnProperty.call(message, "device"))
-                $root.Device.encode(message.device, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-            if (message.getHistoryRequest != null && Object.hasOwnProperty.call(message, "getHistoryRequest"))
-                $root.GetHistoryRequest.encode(message.getHistoryRequest, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-            return writer;
-        };
-    
-        /**
-         * Decodes a ChatHistoryRequest message from the specified reader or buffer.
-         * @function decode
-         * @memberof ChatHistoryRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {ChatHistoryRequest} ChatHistoryRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ChatHistoryRequest.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ChatHistoryRequest();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1: {
-                        message.uuid = $root.Uuid.decode(reader, reader.uint32());
-                        break;
-                    }
-                case 2: {
-                        message.device = $root.Device.decode(reader, reader.uint32());
-                        break;
-                    }
-                case 4: {
-                        message.getHistoryRequest = $root.GetHistoryRequest.decode(reader, reader.uint32());
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-    
-        return ChatHistoryRequest;
-    })();
-    
-    $root.Uuid = (function() {
-    
-        /**
-         * Properties of an Uuid.
-         * @exports IUuid
-         * @interface IUuid
-         * @property {string|null} [userId] Uuid userId
-         * @property {string|null} [userChannel] Uuid userChannel
-         * @property {string|null} [sub] Uuid sub
-         */
-    
-        /**
-         * Constructs a new Uuid.
-         * @exports Uuid
-         * @classdesc Represents an Uuid.
-         * @implements IUuid
-         * @constructor
-         * @param {IUuid=} [properties] Properties to set
-         */
-        function Uuid(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-    
-        /**
-         * Uuid userId.
-         * @member {string} userId
-         * @memberof Uuid
-         * @instance
-         */
-        Uuid.prototype.userId = "";
-    
-        /**
-         * Uuid userChannel.
-         * @member {string} userChannel
-         * @memberof Uuid
-         * @instance
-         */
-        Uuid.prototype.userChannel = "";
-    
-        /**
-         * Uuid sub.
-         * @member {string} sub
-         * @memberof Uuid
-         * @instance
-         */
-        Uuid.prototype.sub = "";
-    
-        /**
-         * Creates a new Uuid instance using the specified properties.
-         * @function create
-         * @memberof Uuid
-         * @static
-         * @param {IUuid=} [properties] Properties to set
-         * @returns {Uuid} Uuid instance
-         */
-        Uuid.create = function create(properties) {
-            return new Uuid(properties);
-        };
-    
-        /**
-         * Encodes the specified Uuid message. Does not implicitly {@link Uuid.verify|verify} messages.
-         * @function encode
-         * @memberof Uuid
-         * @static
-         * @param {IUuid} message Uuid message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        Uuid.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.userId);
-            if (message.userChannel != null && Object.hasOwnProperty.call(message, "userChannel"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.userChannel);
-            if (message.sub != null && Object.hasOwnProperty.call(message, "sub"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.sub);
-            return writer;
-        };
-    
-        /**
-         * Decodes an Uuid message from the specified reader or buffer.
-         * @function decode
-         * @memberof Uuid
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {Uuid} Uuid
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        Uuid.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.Uuid();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1: {
-                        message.userId = reader.string();
-                        break;
-                    }
-                case 2: {
-                        message.userChannel = reader.string();
-                        break;
-                    }
-                case 3: {
-                        message.sub = reader.string();
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-    
-        return Uuid;
-    })();
-    
-    $root.GetHistoryResponse = (function() {
-    
-        /**
-         * Properties of a GetHistoryResponse.
-         * @exports IGetHistoryResponse
-         * @interface IGetHistoryResponse
-         * @property {Array.<IHistoryMessages>|null} [historyMessages] GetHistoryResponse historyMessages
-         */
-    
-        /**
-         * Constructs a new GetHistoryResponse.
-         * @exports GetHistoryResponse
-         * @classdesc Represents a GetHistoryResponse.
-         * @implements IGetHistoryResponse
-         * @constructor
-         * @param {IGetHistoryResponse=} [properties] Properties to set
-         */
-        function GetHistoryResponse(properties) {
-            this.historyMessages = [];
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-    
-        /**
-         * GetHistoryResponse historyMessages.
-         * @member {Array.<IHistoryMessages>} historyMessages
-         * @memberof GetHistoryResponse
-         * @instance
-         */
-        GetHistoryResponse.prototype.historyMessages = $util.emptyArray;
-    
-        /**
-         * Creates a new GetHistoryResponse instance using the specified properties.
-         * @function create
-         * @memberof GetHistoryResponse
-         * @static
-         * @param {IGetHistoryResponse=} [properties] Properties to set
-         * @returns {GetHistoryResponse} GetHistoryResponse instance
-         */
-        GetHistoryResponse.create = function create(properties) {
-            return new GetHistoryResponse(properties);
-        };
-    
-        /**
-         * Encodes the specified GetHistoryResponse message. Does not implicitly {@link GetHistoryResponse.verify|verify} messages.
-         * @function encode
-         * @memberof GetHistoryResponse
-         * @static
-         * @param {IGetHistoryResponse} message GetHistoryResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GetHistoryResponse.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.historyMessages != null && message.historyMessages.length)
-                for (var i = 0; i < message.historyMessages.length; ++i)
-                    $root.HistoryMessages.encode(message.historyMessages[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            return writer;
-        };
-    
-        /**
-         * Decodes a GetHistoryResponse message from the specified reader or buffer.
-         * @function decode
-         * @memberof GetHistoryResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {GetHistoryResponse} GetHistoryResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GetHistoryResponse.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.GetHistoryResponse();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1: {
-                        if (!(message.historyMessages && message.historyMessages.length))
-                            message.historyMessages = [];
-                        message.historyMessages.push($root.HistoryMessages.decode(reader, reader.uint32()));
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-    
-        return GetHistoryResponse;
-    })();
-    
-    $root.HistoryMessages = (function() {
-    
-        /**
-         * Properties of a HistoryMessages.
-         * @exports IHistoryMessages
-         * @interface IHistoryMessages
-         * @property {string|null} [content] HistoryMessages content
-         * @property {string|null} [contentId] HistoryMessages contentId
-         * @property {string|null} [timeCreated] HistoryMessages timeCreated
-         */
-    
-        /**
-         * Constructs a new HistoryMessages.
-         * @exports HistoryMessages
-         * @classdesc Represents a HistoryMessages.
-         * @implements IHistoryMessages
-         * @constructor
-         * @param {IHistoryMessages=} [properties] Properties to set
-         */
-        function HistoryMessages(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-    
-        /**
-         * HistoryMessages content.
-         * @member {string} content
-         * @memberof HistoryMessages
-         * @instance
-         */
-        HistoryMessages.prototype.content = "";
-    
-        /**
-         * HistoryMessages contentId.
-         * @member {string} contentId
-         * @memberof HistoryMessages
-         * @instance
-         */
-        HistoryMessages.prototype.contentId = "";
-    
-        /**
-         * HistoryMessages timeCreated.
-         * @member {string} timeCreated
-         * @memberof HistoryMessages
-         * @instance
-         */
-        HistoryMessages.prototype.timeCreated = "";
-    
-        /**
-         * Creates a new HistoryMessages instance using the specified properties.
-         * @function create
-         * @memberof HistoryMessages
-         * @static
-         * @param {IHistoryMessages=} [properties] Properties to set
-         * @returns {HistoryMessages} HistoryMessages instance
-         */
-        HistoryMessages.create = function create(properties) {
-            return new HistoryMessages(properties);
-        };
-    
-        /**
-         * Encodes the specified HistoryMessages message. Does not implicitly {@link HistoryMessages.verify|verify} messages.
-         * @function encode
-         * @memberof HistoryMessages
-         * @static
-         * @param {IHistoryMessages} message HistoryMessages message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        HistoryMessages.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.content != null && Object.hasOwnProperty.call(message, "content"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.content);
-            if (message.contentId != null && Object.hasOwnProperty.call(message, "contentId"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.contentId);
-            if (message.timeCreated != null && Object.hasOwnProperty.call(message, "timeCreated"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.timeCreated);
-            return writer;
-        };
-    
-        /**
-         * Decodes a HistoryMessages message from the specified reader or buffer.
-         * @function decode
-         * @memberof HistoryMessages
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {HistoryMessages} HistoryMessages
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        HistoryMessages.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.HistoryMessages();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1: {
-                        message.content = reader.string();
-                        break;
-                    }
-                case 2: {
-                        message.contentId = reader.string();
-                        break;
-                    }
-                case 3: {
-                        message.timeCreated = reader.string();
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-    
-        return HistoryMessages;
-    })();
-    
-    $root.google = (function() {
-    
+
+    $root.google = (function () {
         /**
          * Namespace google.
          * @exports google
          * @namespace
          */
         var google = {};
-    
-        google.protobuf = (function() {
-    
+
+        google.protobuf = (function () {
             /**
              * Namespace protobuf.
              * @memberof google
              * @namespace
              */
             var protobuf = {};
-    
-            protobuf.DoubleValue = (function() {
-    
+
+            protobuf.DoubleValue = (function () {
                 /**
                  * Properties of a DoubleValue.
                  * @memberof google.protobuf
                  * @interface IDoubleValue
                  * @property {number|null} [value] DoubleValue value
                  */
-    
+
                 /**
                  * Constructs a new DoubleValue.
                  * @memberof google.protobuf
@@ -2941,10 +2086,9 @@
                 function DoubleValue(properties) {
                     if (properties)
                         for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
+                            if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
                 }
-    
+
                 /**
                  * DoubleValue value.
                  * @member {number} value
@@ -2952,7 +2096,7 @@
                  * @instance
                  */
                 DoubleValue.prototype.value = 0;
-    
+
                 /**
                  * Creates a new DoubleValue instance using the specified properties.
                  * @function create
@@ -2964,7 +2108,7 @@
                 DoubleValue.create = function create(properties) {
                     return new DoubleValue(properties);
                 };
-    
+
                 /**
                  * Encodes the specified DoubleValue message. Does not implicitly {@link google.protobuf.DoubleValue.verify|verify} messages.
                  * @function encode
@@ -2975,13 +2119,12 @@
                  * @returns {$protobuf.Writer} Writer
                  */
                 DoubleValue.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
-                        writer.uint32(/* id 1, wireType 1 =*/9).double(message.value);
+                    if (!writer) writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, 'value'))
+                        writer.uint32(/* id 1, wireType 1 =*/ 9).double(message.value);
                     return writer;
                 };
-    
+
                 /**
                  * Decodes a DoubleValue message from the specified reader or buffer.
                  * @function decode
@@ -2994,36 +2137,35 @@
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 DoubleValue.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.DoubleValue();
+                    if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length,
+                        message = new $root.google.protobuf.DoubleValue();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
+                            case 1: {
                                 message.value = reader.double();
                                 break;
                             }
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;
                 };
-    
+
                 return DoubleValue;
             })();
-    
-            protobuf.FloatValue = (function() {
-    
+
+            protobuf.FloatValue = (function () {
                 /**
                  * Properties of a FloatValue.
                  * @memberof google.protobuf
                  * @interface IFloatValue
                  * @property {number|null} [value] FloatValue value
                  */
-    
+
                 /**
                  * Constructs a new FloatValue.
                  * @memberof google.protobuf
@@ -3035,10 +2177,9 @@
                 function FloatValue(properties) {
                     if (properties)
                         for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
+                            if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
                 }
-    
+
                 /**
                  * FloatValue value.
                  * @member {number} value
@@ -3046,7 +2187,7 @@
                  * @instance
                  */
                 FloatValue.prototype.value = 0;
-    
+
                 /**
                  * Creates a new FloatValue instance using the specified properties.
                  * @function create
@@ -3058,7 +2199,7 @@
                 FloatValue.create = function create(properties) {
                     return new FloatValue(properties);
                 };
-    
+
                 /**
                  * Encodes the specified FloatValue message. Does not implicitly {@link google.protobuf.FloatValue.verify|verify} messages.
                  * @function encode
@@ -3069,13 +2210,12 @@
                  * @returns {$protobuf.Writer} Writer
                  */
                 FloatValue.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
-                        writer.uint32(/* id 1, wireType 5 =*/13).float(message.value);
+                    if (!writer) writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, 'value'))
+                        writer.uint32(/* id 1, wireType 5 =*/ 13).float(message.value);
                     return writer;
                 };
-    
+
                 /**
                  * Decodes a FloatValue message from the specified reader or buffer.
                  * @function decode
@@ -3088,36 +2228,35 @@
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 FloatValue.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.FloatValue();
+                    if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length,
+                        message = new $root.google.protobuf.FloatValue();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
+                            case 1: {
                                 message.value = reader.float();
                                 break;
                             }
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;
                 };
-    
+
                 return FloatValue;
             })();
-    
-            protobuf.Int64Value = (function() {
-    
+
+            protobuf.Int64Value = (function () {
                 /**
                  * Properties of an Int64Value.
                  * @memberof google.protobuf
                  * @interface IInt64Value
                  * @property {number|Long|null} [value] Int64Value value
                  */
-    
+
                 /**
                  * Constructs a new Int64Value.
                  * @memberof google.protobuf
@@ -3129,18 +2268,17 @@
                 function Int64Value(properties) {
                     if (properties)
                         for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
+                            if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
                 }
-    
+
                 /**
                  * Int64Value value.
                  * @member {number|Long} value
                  * @memberof google.protobuf.Int64Value
                  * @instance
                  */
-                Int64Value.prototype.value = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-    
+                Int64Value.prototype.value = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+
                 /**
                  * Creates a new Int64Value instance using the specified properties.
                  * @function create
@@ -3152,7 +2290,7 @@
                 Int64Value.create = function create(properties) {
                     return new Int64Value(properties);
                 };
-    
+
                 /**
                  * Encodes the specified Int64Value message. Does not implicitly {@link google.protobuf.Int64Value.verify|verify} messages.
                  * @function encode
@@ -3163,13 +2301,12 @@
                  * @returns {$protobuf.Writer} Writer
                  */
                 Int64Value.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
-                        writer.uint32(/* id 1, wireType 0 =*/8).int64(message.value);
+                    if (!writer) writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, 'value'))
+                        writer.uint32(/* id 1, wireType 0 =*/ 8).int64(message.value);
                     return writer;
                 };
-    
+
                 /**
                  * Decodes an Int64Value message from the specified reader or buffer.
                  * @function decode
@@ -3182,36 +2319,35 @@
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 Int64Value.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.Int64Value();
+                    if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length,
+                        message = new $root.google.protobuf.Int64Value();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
+                            case 1: {
                                 message.value = reader.int64();
                                 break;
                             }
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;
                 };
-    
+
                 return Int64Value;
             })();
-    
-            protobuf.UInt64Value = (function() {
-    
+
+            protobuf.UInt64Value = (function () {
                 /**
                  * Properties of a UInt64Value.
                  * @memberof google.protobuf
                  * @interface IUInt64Value
                  * @property {number|Long|null} [value] UInt64Value value
                  */
-    
+
                 /**
                  * Constructs a new UInt64Value.
                  * @memberof google.protobuf
@@ -3223,18 +2359,17 @@
                 function UInt64Value(properties) {
                     if (properties)
                         for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
+                            if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
                 }
-    
+
                 /**
                  * UInt64Value value.
                  * @member {number|Long} value
                  * @memberof google.protobuf.UInt64Value
                  * @instance
                  */
-                UInt64Value.prototype.value = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
-    
+                UInt64Value.prototype.value = $util.Long ? $util.Long.fromBits(0, 0, true) : 0;
+
                 /**
                  * Creates a new UInt64Value instance using the specified properties.
                  * @function create
@@ -3246,7 +2381,7 @@
                 UInt64Value.create = function create(properties) {
                     return new UInt64Value(properties);
                 };
-    
+
                 /**
                  * Encodes the specified UInt64Value message. Does not implicitly {@link google.protobuf.UInt64Value.verify|verify} messages.
                  * @function encode
@@ -3257,13 +2392,12 @@
                  * @returns {$protobuf.Writer} Writer
                  */
                 UInt64Value.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
-                        writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.value);
+                    if (!writer) writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, 'value'))
+                        writer.uint32(/* id 1, wireType 0 =*/ 8).uint64(message.value);
                     return writer;
                 };
-    
+
                 /**
                  * Decodes a UInt64Value message from the specified reader or buffer.
                  * @function decode
@@ -3276,36 +2410,35 @@
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 UInt64Value.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.UInt64Value();
+                    if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length,
+                        message = new $root.google.protobuf.UInt64Value();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
+                            case 1: {
                                 message.value = reader.uint64();
                                 break;
                             }
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;
                 };
-    
+
                 return UInt64Value;
             })();
-    
-            protobuf.Int32Value = (function() {
-    
+
+            protobuf.Int32Value = (function () {
                 /**
                  * Properties of an Int32Value.
                  * @memberof google.protobuf
                  * @interface IInt32Value
                  * @property {number|null} [value] Int32Value value
                  */
-    
+
                 /**
                  * Constructs a new Int32Value.
                  * @memberof google.protobuf
@@ -3317,10 +2450,9 @@
                 function Int32Value(properties) {
                     if (properties)
                         for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
+                            if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
                 }
-    
+
                 /**
                  * Int32Value value.
                  * @member {number} value
@@ -3328,7 +2460,7 @@
                  * @instance
                  */
                 Int32Value.prototype.value = 0;
-    
+
                 /**
                  * Creates a new Int32Value instance using the specified properties.
                  * @function create
@@ -3340,7 +2472,7 @@
                 Int32Value.create = function create(properties) {
                     return new Int32Value(properties);
                 };
-    
+
                 /**
                  * Encodes the specified Int32Value message. Does not implicitly {@link google.protobuf.Int32Value.verify|verify} messages.
                  * @function encode
@@ -3351,13 +2483,12 @@
                  * @returns {$protobuf.Writer} Writer
                  */
                 Int32Value.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
-                        writer.uint32(/* id 1, wireType 0 =*/8).int32(message.value);
+                    if (!writer) writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, 'value'))
+                        writer.uint32(/* id 1, wireType 0 =*/ 8).int32(message.value);
                     return writer;
                 };
-    
+
                 /**
                  * Decodes an Int32Value message from the specified reader or buffer.
                  * @function decode
@@ -3370,36 +2501,35 @@
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 Int32Value.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.Int32Value();
+                    if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length,
+                        message = new $root.google.protobuf.Int32Value();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
+                            case 1: {
                                 message.value = reader.int32();
                                 break;
                             }
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;
                 };
-    
+
                 return Int32Value;
             })();
-    
-            protobuf.UInt32Value = (function() {
-    
+
+            protobuf.UInt32Value = (function () {
                 /**
                  * Properties of a UInt32Value.
                  * @memberof google.protobuf
                  * @interface IUInt32Value
                  * @property {number|null} [value] UInt32Value value
                  */
-    
+
                 /**
                  * Constructs a new UInt32Value.
                  * @memberof google.protobuf
@@ -3411,10 +2541,9 @@
                 function UInt32Value(properties) {
                     if (properties)
                         for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
+                            if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
                 }
-    
+
                 /**
                  * UInt32Value value.
                  * @member {number} value
@@ -3422,7 +2551,7 @@
                  * @instance
                  */
                 UInt32Value.prototype.value = 0;
-    
+
                 /**
                  * Creates a new UInt32Value instance using the specified properties.
                  * @function create
@@ -3434,7 +2563,7 @@
                 UInt32Value.create = function create(properties) {
                     return new UInt32Value(properties);
                 };
-    
+
                 /**
                  * Encodes the specified UInt32Value message. Does not implicitly {@link google.protobuf.UInt32Value.verify|verify} messages.
                  * @function encode
@@ -3445,13 +2574,12 @@
                  * @returns {$protobuf.Writer} Writer
                  */
                 UInt32Value.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
-                        writer.uint32(/* id 1, wireType 0 =*/8).uint32(message.value);
+                    if (!writer) writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, 'value'))
+                        writer.uint32(/* id 1, wireType 0 =*/ 8).uint32(message.value);
                     return writer;
                 };
-    
+
                 /**
                  * Decodes a UInt32Value message from the specified reader or buffer.
                  * @function decode
@@ -3464,36 +2592,35 @@
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 UInt32Value.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.UInt32Value();
+                    if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length,
+                        message = new $root.google.protobuf.UInt32Value();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
+                            case 1: {
                                 message.value = reader.uint32();
                                 break;
                             }
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;
                 };
-    
+
                 return UInt32Value;
             })();
-    
-            protobuf.BoolValue = (function() {
-    
+
+            protobuf.BoolValue = (function () {
                 /**
                  * Properties of a BoolValue.
                  * @memberof google.protobuf
                  * @interface IBoolValue
                  * @property {boolean|null} [value] BoolValue value
                  */
-    
+
                 /**
                  * Constructs a new BoolValue.
                  * @memberof google.protobuf
@@ -3505,10 +2632,9 @@
                 function BoolValue(properties) {
                     if (properties)
                         for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
+                            if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
                 }
-    
+
                 /**
                  * BoolValue value.
                  * @member {boolean} value
@@ -3516,7 +2642,7 @@
                  * @instance
                  */
                 BoolValue.prototype.value = false;
-    
+
                 /**
                  * Creates a new BoolValue instance using the specified properties.
                  * @function create
@@ -3528,7 +2654,7 @@
                 BoolValue.create = function create(properties) {
                     return new BoolValue(properties);
                 };
-    
+
                 /**
                  * Encodes the specified BoolValue message. Does not implicitly {@link google.protobuf.BoolValue.verify|verify} messages.
                  * @function encode
@@ -3539,13 +2665,12 @@
                  * @returns {$protobuf.Writer} Writer
                  */
                 BoolValue.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
-                        writer.uint32(/* id 1, wireType 0 =*/8).bool(message.value);
+                    if (!writer) writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, 'value'))
+                        writer.uint32(/* id 1, wireType 0 =*/ 8).bool(message.value);
                     return writer;
                 };
-    
+
                 /**
                  * Decodes a BoolValue message from the specified reader or buffer.
                  * @function decode
@@ -3558,36 +2683,35 @@
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 BoolValue.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.BoolValue();
+                    if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length,
+                        message = new $root.google.protobuf.BoolValue();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
+                            case 1: {
                                 message.value = reader.bool();
                                 break;
                             }
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;
                 };
-    
+
                 return BoolValue;
             })();
-    
-            protobuf.StringValue = (function() {
-    
+
+            protobuf.StringValue = (function () {
                 /**
                  * Properties of a StringValue.
                  * @memberof google.protobuf
                  * @interface IStringValue
                  * @property {string|null} [value] StringValue value
                  */
-    
+
                 /**
                  * Constructs a new StringValue.
                  * @memberof google.protobuf
@@ -3599,18 +2723,17 @@
                 function StringValue(properties) {
                     if (properties)
                         for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
+                            if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
                 }
-    
+
                 /**
                  * StringValue value.
                  * @member {string} value
                  * @memberof google.protobuf.StringValue
                  * @instance
                  */
-                StringValue.prototype.value = "";
-    
+                StringValue.prototype.value = '';
+
                 /**
                  * Creates a new StringValue instance using the specified properties.
                  * @function create
@@ -3622,7 +2745,7 @@
                 StringValue.create = function create(properties) {
                     return new StringValue(properties);
                 };
-    
+
                 /**
                  * Encodes the specified StringValue message. Does not implicitly {@link google.protobuf.StringValue.verify|verify} messages.
                  * @function encode
@@ -3633,13 +2756,12 @@
                  * @returns {$protobuf.Writer} Writer
                  */
                 StringValue.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
-                        writer.uint32(/* id 1, wireType 2 =*/10).string(message.value);
+                    if (!writer) writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, 'value'))
+                        writer.uint32(/* id 1, wireType 2 =*/ 10).string(message.value);
                     return writer;
                 };
-    
+
                 /**
                  * Decodes a StringValue message from the specified reader or buffer.
                  * @function decode
@@ -3652,36 +2774,35 @@
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 StringValue.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.StringValue();
+                    if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length,
+                        message = new $root.google.protobuf.StringValue();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
+                            case 1: {
                                 message.value = reader.string();
                                 break;
                             }
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;
                 };
-    
+
                 return StringValue;
             })();
-    
-            protobuf.BytesValue = (function() {
-    
+
+            protobuf.BytesValue = (function () {
                 /**
                  * Properties of a BytesValue.
                  * @memberof google.protobuf
                  * @interface IBytesValue
                  * @property {Uint8Array|null} [value] BytesValue value
                  */
-    
+
                 /**
                  * Constructs a new BytesValue.
                  * @memberof google.protobuf
@@ -3693,10 +2814,9 @@
                 function BytesValue(properties) {
                     if (properties)
                         for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
+                            if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]];
                 }
-    
+
                 /**
                  * BytesValue value.
                  * @member {Uint8Array} value
@@ -3704,7 +2824,7 @@
                  * @instance
                  */
                 BytesValue.prototype.value = $util.newBuffer([]);
-    
+
                 /**
                  * Creates a new BytesValue instance using the specified properties.
                  * @function create
@@ -3716,7 +2836,7 @@
                 BytesValue.create = function create(properties) {
                     return new BytesValue(properties);
                 };
-    
+
                 /**
                  * Encodes the specified BytesValue message. Does not implicitly {@link google.protobuf.BytesValue.verify|verify} messages.
                  * @function encode
@@ -3727,13 +2847,12 @@
                  * @returns {$protobuf.Writer} Writer
                  */
                 BytesValue.encode = function encode(message, writer) {
-                    if (!writer)
-                        writer = $Writer.create();
-                    if (message.value != null && Object.hasOwnProperty.call(message, "value"))
-                        writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.value);
+                    if (!writer) writer = $Writer.create();
+                    if (message.value != null && Object.hasOwnProperty.call(message, 'value'))
+                        writer.uint32(/* id 1, wireType 2 =*/ 10).bytes(message.value);
                     return writer;
                 };
-    
+
                 /**
                  * Decodes a BytesValue message from the specified reader or buffer.
                  * @function decode
@@ -3746,30 +2865,30 @@
                  * @throws {$protobuf.util.ProtocolError} If required fields are missing
                  */
                 BytesValue.decode = function decode(reader, length) {
-                    if (!(reader instanceof $Reader))
-                        reader = $Reader.create(reader);
-                    var end = length === undefined ? reader.len : reader.pos + length, message = new $root.google.protobuf.BytesValue();
+                    if (!(reader instanceof $Reader)) reader = $Reader.create(reader);
+                    var end = length === undefined ? reader.len : reader.pos + length,
+                        message = new $root.google.protobuf.BytesValue();
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
+                            case 1: {
                                 message.value = reader.bytes();
                                 break;
                             }
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;
                 };
-    
+
                 return BytesValue;
             })();
-    
+
             return protobuf;
         })();
-    
+
         return google;
     })();
 
