@@ -1,3 +1,20 @@
+# v1.34.1 (Sat Apr 27 2024)
+
+#### 🐛 Bug Fix
+
+- fix: window navigator on server [#213](https://github.com/salute-developers/salutejs-client/pull/213) ([@soulko](https://github.com/soulko))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Anton Kostenko ([@soulko](https://github.com/soulko))
+
+---
+
 # v1.34.0 (Thu Apr 25 2024)
 
 #### 🚀 Enhancement
