@@ -1,3 +1,20 @@
+# v1.35.0 (Wed Jun 05 2024)
+
+#### 🚀 Enhancement
+
+- feat: Обновлён Scenario [#214](https://github.com/salute-developers/salutejs-client/pull/214) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- [@Salute-Eva](https://github.com/Salute-Eva)
+
+---
+
 # v1.34.1 (Sat Apr 27 2024)
 
 #### 🐛 Bug Fix
