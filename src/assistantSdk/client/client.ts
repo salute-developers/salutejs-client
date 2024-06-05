@@ -230,7 +230,10 @@ export const createClient = (
             emit('history', parsedHistory, message);
         }
 
-        if (message.messageName === MessageNames.STT && (message.text || message.bytes?.data?.length)) {
+        if (
+            (message.messageName === MessageNames.STT || message.messageName === MessageNames.EOU) &&
+            (message.text || message.bytes?.data?.length)
+        ) {
             const response = message.bytes?.data?.length
                 ? PacketWrapperFromServer.decode(message.bytes.data)
                 : undefined;
