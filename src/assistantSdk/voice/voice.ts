@@ -15,18 +15,18 @@ export interface TtsEvent {
     appInfo: AppInfo;
 }
 
-/** Фильтр тишины */
-const filterEmptyChunks = (chunksOriginal: Uint8Array[]) => {
-    return chunksOriginal.reduce<Uint8Array[]>((acc, chunkOriginal) => {
-        const chunk = chunkOriginal.filter((int) => int);
+// /** Фильтр тишины */
+// const filterEmptyChunks = (chunksOriginal: Uint8Array[]) => {
+//     return chunksOriginal.reduce<Uint8Array[]>((acc, chunkOriginal) => {
+//         const chunk = chunkOriginal.filter((int) => int);
 
-        if (chunk.length) {
-            acc.push(chunk);
-        }
+//         if (chunk.length) {
+//             acc.push(chunk);
+//         }
 
-        return acc;
-    }, []);
-};
+//         return acc;
+//     }, []);
+// };
 
 export const createVoice = (
     client: ReturnType<typeof createClient>,
@@ -158,7 +158,7 @@ export const createVoice = (
      * @param messageName указать, если чанки для шазама
      */
     const streamVoice = async (chunks: Uint8Array[], last: boolean, messageName?: 'MUSIC_RECOGNITION' | undefined) => {
-        chunks = filterEmptyChunks(chunks);
+        // chunks = filterEmptyChunks(chunks);
 
         if (streaming?.(chunks, last)) {
             return;
@@ -220,7 +220,7 @@ export const createVoice = (
      * @param messageName указать, если чанки для шазама
      */
     const sendVoice = async (chunks: Uint8Array[], messageName?: 'MUSIC_RECOGNITION') => {
-        chunks = filterEmptyChunks(chunks);
+        // chunks = filterEmptyChunks(chunks);
 
         stopVoice();
 
