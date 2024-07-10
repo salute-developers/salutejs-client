@@ -99,21 +99,19 @@ const createAudioRecorder = (
                 const buffer = e.inputBuffer.getChannelData(0);
                 const data = downsampleBuffer(buffer, context.sampleRate, TARGET_SAMPLE_RATE);
                 const last = state === 'inactive';
+                let analyserArray: Uint8Array | null = null;
+                
+                if (analyser) {
+                    analyserArray = new Uint8Array(analyser.frequencyBinCount);
 
-                // отсылаем только чанки где есть звук voiceData > 0, т.к.
-                // в safari первые несколько чанков со звуком пустые
-                if (!IS_SAFARI || new Uint8Array(data).some((voiceData) => voiceData > 0)) {
-                    let analyserArray: Uint8Array | null = null;
-
-                    if (analyser) {
-                        analyserArray = new Uint8Array(analyser.frequencyBinCount);
-
-                        analyser?.getByteTimeDomainData(analyserArray);
-                    }
-
-                    cb(data, analyserArray, last);
-                    resolve(stop);
+                    analyser?.getByteTimeDomainData(analyserArray);
                 }
+
+                // // отсылаем только чанки где есть звук voiceData > 0, т.к.
+                // // в safari первые несколько чанков со звуком пустые
+                // const dataWithVoice = new Uint8Array(data).some((voiceData) => voiceData > 0);
+                resolve(stop);
+                cb(data, analyserArray, last);
 
                 if (last) {
                     processor.removeEventListener('audioprocess', listener);
