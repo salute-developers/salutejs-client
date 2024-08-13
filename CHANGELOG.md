@@ -1,3 +1,15 @@
+# v1.35.1 (Tue Aug 13 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Экспорт SourceMeta [#217](https://github.com/salute-developers/salutejs-client/pull/217) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.35.0 (Wed Jun 05 2024)
 
 #### 🚀 Enhancement
