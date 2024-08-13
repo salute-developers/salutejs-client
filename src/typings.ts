@@ -45,6 +45,7 @@ export {
     Character,
     Hints,
     ServerAction,
+    VpsMessageReasonModel as SourceMeta,
 } from '@salutejs/scenario';
 
 export type CharacterId = 'sber' | 'eva' | 'joy';
