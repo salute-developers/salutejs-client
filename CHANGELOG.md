@@ -1,3 +1,15 @@
+# v1.35.2 (Wed Aug 14 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Фикс analyser [#218](https://github.com/salute-developers/salutejs-client/pull/218) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.35.1 (Tue Aug 13 2024)
 
 #### 🐛 Bug Fix
