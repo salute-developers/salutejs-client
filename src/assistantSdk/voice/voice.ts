@@ -42,8 +42,8 @@ export const createVoice = (
     /// пока onReady не вызван, треки не воспроизводятся
     /// когда случится onReady, очередь треков начнет проигрываться
     onReady?: () => void,
-    useAnalyser?: boolean,
 ) => {
+    let useAnalyser = false;
     let voicePlayer: ReturnType<typeof createVoicePlayer>;
     const listener = createVoiceListener((cb) => createNavigatorAudioProvider(cb, useAnalyser));
     const subscriptions: Array<() => void> = [];
@@ -442,6 +442,9 @@ export const createVoice = (
         stop,
         stopPlaying: () => {
             voicePlayer?.stop();
+        },
+        toggleAnalyser: (enable: boolean) => {
+            useAnalyser = enable;
         },
     };
 };

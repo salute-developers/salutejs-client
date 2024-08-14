@@ -93,6 +93,7 @@ const createAudioRecorder = (
 
             if (!analyser && useAnalyser) {
                 analyser = context.createAnalyser();
+                analyser.fftSize = 1024;
             }
 
             const listener = (e: AudioProcessingEvent) => {
@@ -108,7 +109,7 @@ const createAudioRecorder = (
                     if (analyser) {
                         analyserArray = new Uint8Array(analyser.frequencyBinCount);
 
-                        analyser?.getByteTimeDomainData(analyserArray);
+                        analyser?.getByteFrequencyData(analyserArray);
                     }
 
                     cb(data, analyserArray, last);
