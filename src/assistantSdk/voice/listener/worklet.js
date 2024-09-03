@@ -1,4 +1,3 @@
-export const worker = `
 const DEFAULT_BUFFER_SIZE = 2048;
 const DEFAULT_SAMPLE_RATE = 16000;
 
@@ -37,14 +36,15 @@ class PcmWorkletProcessor extends AudioWorkletProcessor {
     _buffer = new Float32Array(this._bufferSize);
     _sampleRate = DEFAULT_SAMPLE_RATE;
     _targetSampleRate = DEFAULT_SAMPLE_RATE;
+    _worker;
 
     constructor(options) {
         super();
 
-        this._bufferSize = options.bufferSize || DEFAULT_BUFFER_SIZE;
+        this._bufferSize = options.processorOptions?.bufferSize || DEFAULT_BUFFER_SIZE;
         this._buffer = new Float32Array(this._bufferSize);
-        this._sampleRate = options.sampleRate || DEFAULT_SAMPLE_RATE;
-        this._targetSampleRate = options.targetSampleRate || DEFAULT_SAMPLE_RATE;
+        this._sampleRate = options.processorOptions?.sampleRate || DEFAULT_SAMPLE_RATE;
+        this._targetSampleRate = options.processorOptions?.targetSampleRate || DEFAULT_SAMPLE_RATE;
     }
 
     append(channelData) {
@@ -60,23 +60,22 @@ class PcmWorkletProcessor extends AudioWorkletProcessor {
         }
     }
 
-    process (inputs, outputs, parameters) {
+    process(inputs, outputs, parameters) {
         this.append(inputs[0][0]);
         return true;
     }
 
     push() {
-        this.port.postMessage(
-            encode(
-                this._bytesWritten < this.bufferSize
-                    ? this._buffer.slice(0, this._bytesWritten)
-                    : this._buffer,
-                this._sampleRate,
-                this._targetSampleRate)
+        const chunk = encode(
+            this._bytesWritten < this.bufferSize ? this._buffer.slice(0, this._bytesWritten) : this._buffer,
+            this._sampleRate,
+            this._targetSampleRate,
         );
+
+        // TODO: SharedArray
+        this.port.postMessage(chunk);
         this._bytesWritten = 0;
     }
 }
 
 registerProcessor('pcm-processor', PcmWorkletProcessor);
-`;

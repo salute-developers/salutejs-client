@@ -22,3 +22,4 @@ export { createNavigatorAudioProvider } from './assistantSdk/voice/listener/navi
 export * from './typings';
 export { GetHistoryResponse } from './proto';
 export { PacketWrapperFromServer } from './assistantSdk/voice/recognizers/asr';
+export { createInifiniteListen } from './assistantSdk/listenSdk/listenSdk';
