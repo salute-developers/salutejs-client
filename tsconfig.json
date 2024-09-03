@@ -4,7 +4,7 @@
         "rootDir": "src",
         "outDir": "dist",
         "target": "ES5",
-        "lib": ["ES2020.Promise", "esnext.asynciterable", "DOM"],
+        "lib": ["ES2020.Promise", "esnext.asynciterable", "DOM", "WebWorker.ImportScripts"],
         "declaration": true,
         "declarationMap": true,
         "composite": false,

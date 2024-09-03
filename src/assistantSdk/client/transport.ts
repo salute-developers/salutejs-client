@@ -46,20 +46,20 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
         status = 'connecting';
         emit('connecting');
 
-        if (!hasCert && window.navigator.onLine) {
-            const okay = await checkCert(checkCertUrl!);
+        // if (!hasCert && window?.navigator.onLine) {
+        //     const okay = await checkCert(checkCertUrl!);
 
-            if (!okay) {
-                status = 'closed';
-                emit('close');
+        //     if (!okay) {
+        //         status = 'closed';
+        //         emit('close');
 
-                emit('error', new Error('Cert authority invalid'));
+        //         emit('error', new Error('Cert authority invalid'));
 
-                return;
-            }
+        //         return;
+        //     }
 
-            hasCert = true;
-        }
+        //     hasCert = true;
+        // }
 
         webSocket = createWS(url);
 
@@ -70,7 +70,7 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
                 return;
             }
 
-            window.clearTimeout(retryTimeoutId);
+            clearTimeout(retryTimeoutId);
 
             retries = 0;
 
@@ -90,10 +90,10 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
 
             // пробуем переподключаться, если возникла ошибка при коннекте
             if (!webSocket || (webSocket.readyState === 3 && !stopped)) {
-                window.clearTimeout(retryTimeoutId);
+                clearTimeout(retryTimeoutId);
 
                 if (retries < 2) {
-                    retryTimeoutId = window.setTimeout(() => {
+                    retryTimeoutId = setTimeout(() => {
                         // eslint-disable-next-line @typescript-eslint/no-use-before-define
                         open(url);
 
@@ -129,17 +129,17 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
             return;
         }
 
-        window.setTimeout(() => reconnect(url));
+        setTimeout(() => reconnect(url));
 
         close();
     };
 
     const send = (data: Uint8Array) => {
-        if (!window.navigator.onLine) {
-            close();
-            emit('error');
-            throw new Error('The client seems to be offline');
-        }
+        // if (!window?.navigator.onLine) {
+        //     close();
+        //     emit('error');
+        //     throw new Error('The client seems to be offline');
+        // }
 
         webSocket.send(data);
     };
@@ -147,7 +147,7 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
     return {
         close,
         get isOnline() {
-            return window.navigator.onLine;
+            return window?.navigator.onLine === true;
         },
         on,
         open,

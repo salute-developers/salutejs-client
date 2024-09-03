@@ -1,13 +1,7 @@
 import { createAudioContext } from '../audioContext';
 
-import { worker } from './worker';
-
 async function initWorklet(context: AudioContext) {
-    const blob: Blob = new Blob([worker], { type: 'application/javascript; charset=utf-8' });
-    const url: string = URL.createObjectURL(blob);
-
-    await context.audioWorklet.addModule(url);
-    URL.revokeObjectURL(url);
+    await context.audioWorklet.addModule(new URL('./worklet.js', import.meta.url));
 }
 
 const TARGET_SAMPLE_RATE = 16000;
@@ -28,8 +22,9 @@ let destination: MediaStreamAudioDestinationNode | null;
  */
 const createAudioRecorder = (
     stream: MediaStream,
-    cb: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
+    cb?: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
     useAnalyser?: boolean,
+    onGetPort?: (port: MessagePort) => void,
 ): Promise<() => void> =>
     new Promise((resolve) => {
         let state: 'inactive' | 'recording' = 'inactive';
@@ -67,21 +62,28 @@ const createAudioRecorder = (
                 analyser.fftSize = 1024;
             }
 
-            pcmProcessingNode = new AudioWorkletNode(context, 'pcm-processor', { sampleRate: context.sampleRate });
-            pcmProcessingNode.port.onmessage = (e) => {
-                const { data } = e;
-                const last = state === 'inactive';
+            pcmProcessingNode = new AudioWorkletNode(context, 'pcm-processor', {
+                processorOptions: { sampleRate: context.sampleRate },
+            });
+            if (onGetPort) {
+                setTimeout(() => resolve(stop));
+                onGetPort(pcmProcessingNode.port);
+            } else {
+                pcmProcessingNode.port.onmessage = (e) => {
+                    const { data } = e;
+                    const last = state === 'inactive';
 
-                let analyserArray: Uint8Array | null = null;
-                if (analyser) {
-                    analyserArray = new Uint8Array(analyser.frequencyBinCount);
+                    let analyserArray: Uint8Array | null = null;
+                    if (analyser) {
+                        analyserArray = new Uint8Array(analyser.frequencyBinCount);
 
-                    analyser?.getByteTimeDomainData(analyserArray);
-                }
+                        analyser?.getByteTimeDomainData(analyserArray);
+                    }
 
-                resolve(stop);
-                cb(data, analyserArray, last);
-            };
+                    resolve(stop);
+                    cb && cb(data, analyserArray, last);
+                };
+            }
 
             source.connect(pcmProcessingNode);
             pcmProcessingNode.connect(context.destination);
@@ -97,15 +99,16 @@ const createAudioRecorder = (
  * @returns Promise, который содержит функцию прерывающую слушание
  */
 export const createNavigatorAudioProvider = (
-    cb: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
+    cb?: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
     useAnalyser?: boolean,
+    onGetPort?: (port: MessagePort) => void,
 ): Promise<() => void> =>
     navigator.mediaDevices
         .getUserMedia({
             audio: true,
         })
         .then((stream) => {
-            return createAudioRecorder(stream, cb, useAnalyser);
+            return createAudioRecorder(stream, cb, useAnalyser, onGetPort);
         })
         .catch((err) => {
             if (window.location.protocol === 'http:') {
