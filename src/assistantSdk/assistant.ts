@@ -279,17 +279,7 @@ export const createAssistant = ({
         getVoiceMeta: () => (getVoiceMeta ? convertFieldValuesToString(getVoiceMeta()) : {}),
     });
     const voice = createVoice(
-        (() => ({
-            init: () => Promise.resolve(),
-            createVoiceStream: (func) =>
-                func({
-                    sendVoice: (params) => {
-                        window.postMessage(JSON.stringify({ voice: params }));
-                    },
-                    messageId: '123',
-                }),
-            on: () => () => {},
-        }))(),
+        client,
         settings,
         (event) => {
             if (typeof event.tts !== 'undefined') {
