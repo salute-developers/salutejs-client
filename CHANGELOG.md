@@ -1,3 +1,20 @@
+# v1.35.3 (Tue Sep 17 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Добавить недостающие файлы в пакет [#220](https://github.com/salute-developers/salutejs-client/pull/220) ([@drauggres](https://github.com/drauggres))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Sergey Volkov ([@drauggres](https://github.com/drauggres))
+
+---
+
 # v1.35.2 (Wed Aug 14 2024)
 
 #### 🐛 Bug Fix
