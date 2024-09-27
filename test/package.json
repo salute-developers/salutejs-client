@@ -1,0 +1,27 @@
+{
+  "name": "client-test",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "rm -rf .parcel-cache && parcel serve ./index.html",
+    "build": "parcel build ./index.html",
+    "preview": "http-server-spa dist index.html 63709",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/optimizer-data-url": "^2.8.3",
+    "@parcel/transformer-inline-string": "^2.8.3",
+    "buffer": "^5.7.1",
+    "http-proxy-middleware": "^2.0.6",
+    "http-server-spa": "^1.3.0",
+    "parcel": "2.8.3",
+    "punycode": "^1.4.1",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@salutejs/client": "^1.36.0--canary.202.eb44102d1be2be70fe5eb824a4696d7d2771ff3b.0"
+  },
+  "sideEffects": false
+}
