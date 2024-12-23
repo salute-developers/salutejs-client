@@ -97,7 +97,7 @@ export type AppEvent =
       };
 
 export type AssistantEvent = {
-    asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
+    asr?: { text: string; normalizedText: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
     /**
      * @deprecated Use the `on('assistant', { listener })` and `on('tts', tts)` subscriptions to receive voice events
      */

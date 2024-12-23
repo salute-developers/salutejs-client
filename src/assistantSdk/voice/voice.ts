@@ -32,7 +32,7 @@ export const createVoice = (
     client: ReturnType<typeof createClient>,
     settings: MutexedObject<AssistantSettings>,
     emit: (event: {
-        asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
+        asr?: { text: string; normalizedText: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
         emotion?: EmotionId;
         listener?: { status: VoiceListenerStatus };
         mtt?: { response: Music2TrackProtocol.MttResponse; mid: OriginalMessageType['messageId'] };
@@ -339,7 +339,7 @@ export const createVoice = (
                 emit({ emotion: 'listen' });
             } else if (status === 'stopped') {
                 voicePlayer?.setActive(!settings.current.disableDubbing);
-                emit({ asr: { text: '' }, emotion: 'idle' });
+                emit({ asr: { text: '', normalizedText: '' }, emotion: 'idle' });
             }
         }),
 
@@ -385,6 +385,7 @@ export const createVoice = (
                         asr: {
                             mid: originalMessage.messageId,
                             text: text.data || '',
+                            normalizedText: response?.decoderResultField?.hypothesis?.[0]?.normalizedText || '',
                             last: originalMessage.last === 1,
                         },
                     });
@@ -404,6 +405,7 @@ export const createVoice = (
                         asr: {
                             mid: originalMessage.messageId,
                             text: decoderResultField.hypothesis[0].normalizedText || '',
+                            normalizedText: decoderResultField.hypothesis[0].normalizedText || '',
                             last: !!(decoderResultField && decoderResultField?.isFinal),
                         },
                     });
