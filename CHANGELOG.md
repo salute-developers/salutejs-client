@@ -1,3 +1,17 @@
+# v1.35.4 (Wed Jan 15 2025)
+
+#### 🐛 Bug Fix
+
+- fix: save fixed context media stream destination [#222](https://github.com/salute-developers/salutejs-client/pull/222) ([@DanilSaidov](https://github.com/DanilSaidov))
+- docs: актуальные ссылки в README.md [#221](https://github.com/salute-developers/salutejs-client/pull/221) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 2
+
+- [@DanilSaidov](https://github.com/DanilSaidov)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.35.3 (Tue Sep 17 2024)
 
 #### 🐛 Bug Fix
