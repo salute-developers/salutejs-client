@@ -42,6 +42,7 @@ const IS_SAFARI = typeof window !== 'undefined' && /^((?!chrome|android).)*safar
 let context: AudioContext;
 let processor: ScriptProcessorNode;
 let analyser: AnalyserNode | null = null;
+let destination: MediaStreamAudioDestinationNode | null;
 
 /**
  * Преобразует stream в чанки (кусочки), и передает их в cb,
@@ -129,7 +130,11 @@ const createAudioRecorder = (
                 input.connect(analyser);
             }
 
-            processor.connect(context.destination);
+            if (!destination) {
+                destination = context.createMediaStreamDestination();
+            }
+
+            processor.connect(destination);
         };
 
         start();
