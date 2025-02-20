@@ -299,7 +299,10 @@ export const createVoice = (
                     emit({ tts: { status: 'stop', messageId: Number(mesId), appInfo: appInfoDict[mesId] } });
 
                     if (mesId === autolistenMessageId) {
-                        listen();
+                        listen().catch((error) => {
+                            // eslint-disable-next-line no-console
+                            console.error(error);
+                        });
                     }
 
                     // очистка сохраненных appInfo и messageId
@@ -357,7 +360,10 @@ export const createVoice = (
                 if (settings.current.disableDubbing === false) {
                     autolistenMessageId = messageId;
                 } else {
-                    listen({}, autoListening);
+                    listen({}, autoListening).catch((error) => {
+                        // eslint-disable-next-line no-console
+                        console.error(error);
+                    });
                 }
             }
         }),
