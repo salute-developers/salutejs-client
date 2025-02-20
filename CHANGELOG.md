@@ -1,3 +1,20 @@
+# v1.35.5 (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- fix: add error handling for auto listening [#223](https://github.com/salute-developers/salutejs-client/pull/223) ([@DanilSaidov](https://github.com/DanilSaidov))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@DanilSaidov](https://github.com/DanilSaidov)
+- [@Salute-Eva](https://github.com/Salute-Eva)
+
+---
+
 # v1.35.4 (Wed Jan 15 2025)
 
 #### 🐛 Bug Fix
