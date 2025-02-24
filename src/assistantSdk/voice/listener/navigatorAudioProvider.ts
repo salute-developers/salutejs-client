@@ -103,7 +103,17 @@ export const createNavigatorAudioProvider = (
 ): Promise<() => void> =>
     navigator.mediaDevices
         .getUserMedia({
-            audio: true,
+            audio: {
+                /**
+                 * Отключение подавления фоновых шумов, автоматического управления громкостью и тд
+                 * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/noiseSuppression
+                 * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/echoCancellation
+                 * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/autoGainControl
+                 */
+                noiseSuppression: false,
+                echoCancellation: false,
+                autoGainControl: false,
+            },
         })
         .then((stream) => {
             return createAudioRecorder(stream, cb, useAnalyser, onGetPort);
