@@ -11,6 +11,7 @@ let context: AudioContext;
 let pcmProcessingNode: AudioWorkletNode;
 let source: MediaStreamAudioSourceNode;
 let analyser: AnalyserNode | null = null;
+let destination: MediaStreamAudioDestinationNode | null;
 
 /**
  * Преобразует stream в чанки (кусочки), и передает их в cb,
@@ -58,6 +59,7 @@ const createAudioRecorder = (
             source = context.createMediaStreamSource(stream);
             if (!analyser && useAnalyser) {
                 analyser = context.createAnalyser();
+                analyser.fftSize = 1024;
             }
 
             pcmProcessingNode = new AudioWorkletNode(context, 'pcm-processor', {

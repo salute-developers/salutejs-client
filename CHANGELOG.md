@@ -1,3 +1,92 @@
+# v1.35.5 (Thu Feb 20 2025)
+
+#### 🐛 Bug Fix
+
+- fix: add error handling for auto listening [#223](https://github.com/salute-developers/salutejs-client/pull/223) ([@DanilSaidov](https://github.com/DanilSaidov))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@DanilSaidov](https://github.com/DanilSaidov)
+- [@Salute-Eva](https://github.com/Salute-Eva)
+
+---
+
+# v1.35.4 (Wed Jan 15 2025)
+
+#### 🐛 Bug Fix
+
+- fix: save fixed context media stream destination [#222](https://github.com/salute-developers/salutejs-client/pull/222) ([@DanilSaidov](https://github.com/DanilSaidov))
+- docs: актуальные ссылки в README.md [#221](https://github.com/salute-developers/salutejs-client/pull/221) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 2
+
+- [@DanilSaidov](https://github.com/DanilSaidov)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
+# v1.35.3 (Tue Sep 17 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Добавить недостающие файлы в пакет [#220](https://github.com/salute-developers/salutejs-client/pull/220) ([@drauggres](https://github.com/drauggres))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Sergey Volkov ([@drauggres](https://github.com/drauggres))
+
+---
+
+# v1.35.2 (Wed Aug 14 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Фикс analyser [#218](https://github.com/salute-developers/salutejs-client/pull/218) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
+# v1.35.1 (Tue Aug 13 2024)
+
+#### 🐛 Bug Fix
+
+- fix: Экспорт SourceMeta [#217](https://github.com/salute-developers/salutejs-client/pull/217) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### Authors: 1
+
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
+# v1.35.0 (Wed Jun 05 2024)
+
+#### 🚀 Enhancement
+
+- feat: Обновлён Scenario [#214](https://github.com/salute-developers/salutejs-client/pull/214) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- [@Salute-Eva](https://github.com/Salute-Eva)
+
+---
+
 # v1.34.1 (Sat Apr 27 2024)
 
 #### 🐛 Bug Fix

@@ -66,6 +66,14 @@ export default [
                         src: 'src/proto/*.d.ts',
                         dest: 'dist/proto',
                     },
+                    {
+                        src: 'src/assistantSdk/voice/recognizers/asr/*.d.ts',
+                        dest: 'dist/assistantSdk/voice/recognizers/asr'
+                    },
+                    {
+                        src: 'src/assistantSdk/voice/recognizers/mtt/*.d.ts',
+                        dest: 'dist/assistantSdk/voice/recognizers/mtt'
+                    },
                 ],
             }),
         ],
