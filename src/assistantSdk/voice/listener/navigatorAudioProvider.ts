@@ -107,14 +107,12 @@ export const createNavigatorAudioProvider = (
         .getUserMedia({
             audio: {
                 /**
-                 * Отключение подавления фоновых шумов, автоматического управления громкостью и тд
+                 * Отключение автоматической обработки аудио
                  * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/noiseSuppression
                  * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/echoCancellation
-                 * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/autoGainControl
                  */
                 noiseSuppression: false,
                 echoCancellation: false,
-                autoGainControl: false,
             },
         })
         .then((stream) => {
