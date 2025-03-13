@@ -400,12 +400,12 @@ export const createVoice = (
                 const { decoderResultField, errorResponse } = response;
                 const last = false; // !!(decoderResultField && decoderResultField?.isFinal);
 
-                if ((last || listening) && decoderResultField?.hypothesis?.length) {
+                if (last || listening) {
                     emit({
                         asr: {
                             mid: originalMessage.messageId,
-                            text: decoderResultField.hypothesis[0].normalizedText || '',
-                            normalizedText: decoderResultField.hypothesis[0].normalizedText || '',
+                            text: decoderResultField?.hypothesis?.[0].normalizedText || '',
+                            normalizedText: decoderResultField?.hypothesis?.[0].normalizedText || '',
                             last: !!(decoderResultField && decoderResultField?.isFinal),
                         },
                     });
