@@ -44,7 +44,12 @@ const getUmdConfig = (fileName, input) => ({
 export default [
     {
         ...common,
-        input: ['src/index.ts', 'src/createAssistantDevOrigin.ts'],
+        input: [
+            'src/index.ts',
+            'src/createAssistantDevOrigin.ts',
+            'src/assistantSdk/voice/listener/worklet.js',
+            'src/assistantSdk/voice/recorder/worker.ts',
+        ],
         output: {
             ...common.output,
             dir: 'dist',
@@ -65,11 +70,11 @@ export default [
                     },
                     {
                         src: 'src/assistantSdk/voice/recognizers/asr/*.d.ts',
-                        dest: 'dist/assistantSdk/voice/recognizers/asr'
+                        dest: 'dist/assistantSdk/voice/recognizers/asr',
                     },
                     {
                         src: 'src/assistantSdk/voice/recognizers/mtt/*.d.ts',
-                        dest: 'dist/assistantSdk/voice/recognizers/mtt'
+                        dest: 'dist/assistantSdk/voice/recognizers/mtt',
                     },
                 ],
             }),
@@ -84,6 +89,8 @@ export default [
             'src/assistantSdk/assistant.ts',
             'src/mock.ts',
             'src/index.ts',
+            'src/assistantSdk/voice/listener/worklet.js',
+            'src/assistantSdk/voice/recorder/worker.ts',
         ],
         output: {
             ...common.output,

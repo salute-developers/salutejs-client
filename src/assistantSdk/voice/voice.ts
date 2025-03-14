@@ -17,15 +17,15 @@ export interface TtsEvent {
 
 /** Фильтр тишины */
 const filterEmptyChunks = (chunksOriginal: Uint8Array[]) => {
-    return chunksOriginal.reduce<Uint8Array[]>((acc, chunkOriginal) => {
-        const chunk = chunkOriginal.filter((int) => int);
+    return chunksOriginal.filter((chunk) => {
+        // Содержит ли чанк хоть какой-то значимый сигнал
+        // Порог тишины
+        const threshold = 0.01;
+        const sum = chunk.reduce((acc, value) => acc + Math.abs(value - 128), 0);
+        const aver = sum / chunk.length;
 
-        if (chunk.length) {
-            acc.push(chunk);
-        }
-
-        return acc;
-    }, []);
+        return aver > threshold;
+    });
 };
 
 export const createVoice = (
@@ -238,7 +238,7 @@ export const createVoice = (
                     isRecognizeInitializing = false;
                     currentVoiceMessageId = messageId;
 
-                    chunks.forEach((chunk) => sendVoiceStream(new Uint8Array(chunk), true, messageName));
+                    chunks.forEach((chunk, index) => sendVoiceStream(chunk, index === chunks.length - 1, messageName));
 
                     return Promise.resolve();
                 },

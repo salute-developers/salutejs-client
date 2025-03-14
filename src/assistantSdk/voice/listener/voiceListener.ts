@@ -6,9 +6,8 @@ export type VoiceListenerStatus = 'listen' | 'started' | 'stopped';
 
 export type VoiceHandler = (data: Uint8Array, analyserArray: Uint8Array | null, last: boolean) => void;
 
-type VoiceStreamEvents = {
+export type VoiceStreamEvents = {
     status: (status: VoiceListenerStatus) => void;
-    hypotesis: (text: string, last: boolean) => void;
 };
 
 /**

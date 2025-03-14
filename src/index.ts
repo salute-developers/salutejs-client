@@ -22,3 +22,7 @@ export { createNavigatorAudioProvider } from './assistantSdk/voice/listener/navi
 export * from './typings';
 export { GetHistoryResponse } from './proto';
 export { PacketWrapperFromServer } from './assistantSdk/voice/recognizers/asr';
+export {
+    createRecorder as createVoiceRecorder,
+    RecorderEvents as VoiceRecorderEvents,
+} from './assistantSdk/voice/recorder/recorder';
