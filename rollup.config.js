@@ -16,6 +16,7 @@ const common = {
         }),
         replace({
             'process.env.APP_VERSION': pkg.version,
+            __import_meta_url: 'import.meta.url',
         }),
         json(),
     ],

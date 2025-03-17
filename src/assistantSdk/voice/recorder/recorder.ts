@@ -7,7 +7,19 @@ export type RecorderEvents = {
     status: (status: VoiceListenerStatus) => void;
 };
 
-const worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' });
+const workerUrl = (() => {
+    if (
+        // eslint-disable-next-line camelcase
+        typeof __webpack_require__ === 'undefined' &&
+        (typeof window === 'undefined' || typeof window.Cypress === 'undefined')
+    ) {
+        return new URL('./worker.js', __import_meta_url);
+    }
+
+    return '/src/assistantSdk/voice/recorder/worker.js';
+})();
+
+const worker = new Worker(workerUrl, { type: 'module' });
 
 export const createRecorder = () => {
     const { on, emit } = createNanoEvents<RecorderEvents>();

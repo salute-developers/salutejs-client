@@ -144,7 +144,7 @@ describe('Озвучка', () => {
         });
     });
 
-    (['listen', 'shazam', 'sendText'] as Array<'listen' | 'shazam' | 'sendText'>).forEach((method) => {
+    (['listen', 'sendText', 'shazam'] as Array<'listen' | 'shazam' | 'sendText'>).forEach((method) => {
         it(`${method}() отправляет cancel для множественных ответов`, (done) => {
             const mid: Mid = -1;
             server.on('connection', (socket) => {
@@ -198,7 +198,7 @@ describe('Озвучка', () => {
                     );
                     socket.send(
                         createMessage({
-                            messageId: message.messageId+1,
+                            messageId: message.messageId + 1,
                             messageName: MessageNames.ANSWER_TO_USER,
                             systemMessage: { items: [{ bubble: { text: 'test' } }] },
                             last: 1,
@@ -216,7 +216,7 @@ describe('Озвучка', () => {
                 }
             });
         });
-        
+
         assistantClient.on('vps', (event) => {
             if (event.type === 'outcoming' && event.message.cancel && event.message.messageId === mid) {
                 counter++;

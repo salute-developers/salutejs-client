@@ -7,15 +7,18 @@ module.exports = (on, config) => {
             resolve: {
                 extensions: ['.js', '.jsx', '.ts', '.tsx'],
                 alias: {
-                    'lib': process.env.CY_MODE==='production' ? path.resolve(__dirname, '../../esm/index.js') : path.resolve(__dirname, '../../src/index')
-                }
+                    lib:
+                        process.env.CY_MODE === 'production'
+                            ? path.resolve(__dirname, '../../esm/index.js')
+                            : path.resolve(__dirname, '../../src/index'),
+                },
             },
             module: {
                 rules: [
                     process.env.CY_MODE !== 'production' && {
                         test: /\.(ts|tsx)$/,
                         use: { loader: 'istanbul-instrumenter-loader' },
-                        exclude: /node_modules|cypress/
+                        exclude: /node_modules|cypress/,
                     },
                     {
                         test: /\.(ts|tsx)$/,
@@ -40,7 +43,7 @@ module.exports = (on, config) => {
         },
     };
 
-    if (process.env.CY_MODE!=='production') {
+    if (process.env.CY_MODE !== 'production') {
         /// бандл в прод собирается без istanbul,
         /// поэтому коверейдж не нужен
         require('@cypress/code-coverage/task')(on, config);

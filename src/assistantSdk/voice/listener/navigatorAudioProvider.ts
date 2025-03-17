@@ -1,7 +1,19 @@
 import { createAudioContext } from '../audioContext';
 
+const workletUrl = (() => {
+    if (
+        // eslint-disable-next-line camelcase
+        typeof __webpack_require__ === 'undefined' &&
+        (typeof window === 'undefined' || typeof window.Cypress === 'undefined')
+    ) {
+        return new URL('./worklet.js', __import_meta_url);
+    }
+
+    return '/src/assistantSdk/voice/listener/worklet.js';
+})();
+
 async function initWorklet(context: AudioContext) {
-    await context.audioWorklet.addModule(new URL('./worklet.js', import.meta.url));
+    await context.audioWorklet.addModule(workletUrl);
 }
 
 const TARGET_SAMPLE_RATE = 16000;

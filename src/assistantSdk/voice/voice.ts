@@ -21,7 +21,7 @@ const filterEmptyChunks = (chunksOriginal: Uint8Array[]) => {
         // Содержит ли чанк хоть какой-то значимый сигнал
         // Порог тишины
         const threshold = 0.01;
-        const sum = chunk.reduce((acc, value) => acc + Math.abs(value - 128), 0);
+        const sum = chunk.reduce((acc, value) => acc + value, 0);
         const aver = sum / chunk.length;
 
         return aver > threshold;
