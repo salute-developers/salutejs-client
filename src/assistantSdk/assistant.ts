@@ -60,10 +60,7 @@ function convertFieldValuesToString<
 >(object: Obj): ObjStringified {
     return Object.keys(object).reduce((acc: Record<string, string>, key: string) => {
         if (object[key]) {
-            acc[key] =
-                typeof object[key] === 'string' && (object[key] as string).startsWith('{')
-                    ? (object[key] as string)
-                    : JSON.stringify(object[key]);
+            acc[key] = typeof object[key] === 'string' ? (object[key] as string) : JSON.stringify(object[key]);
         }
         return acc;
     }, {}) as ObjStringified;
