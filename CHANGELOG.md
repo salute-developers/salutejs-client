@@ -1,3 +1,20 @@
+# v1.35.6 (Tue Apr 15 2025)
+
+#### 🐛 Bug Fix
+
+- fix: сериализация строк для meta [#227](https://github.com/salute-developers/salutejs-client/pull/227) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.35.5 (Thu Feb 20 2025)
 
 #### 🐛 Bug Fix
