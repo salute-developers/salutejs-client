@@ -2,7 +2,7 @@
 
 import { Server } from 'mock-socket';
 
-import { AssistantEvent, createAssistantClient } from '../../src';
+import type { AssistantSDK, AssistantSDKEvent } from '../../src/assistantSdk/typings';
 import { EmotionId, MessageNames } from '../../src/typings';
 import { Message } from '../../src/proto';
 import { Music2TrackProtocol } from '../support/proto/mtt';
@@ -15,7 +15,7 @@ describe('Слушание', () => {
     const audioContex = new AudioContext();
 
     let server: Server;
-    let assistantClient: ReturnType<typeof createAssistantClient>;
+    let assistantClient: AssistantSDK;
 
     before(() => {
         cy.stub(window, 'AudioContext').callsFake(() => audioContex);
@@ -116,7 +116,7 @@ describe('Слушание', () => {
     const asrWillIgnorForInactiveHearing = (done: () => void, listen: () => Promise<unknown>, useBytes: boolean) => {
         const lastAsr = 'On voice: last';
 
-        let prevEvent: AssistantEvent | null = null;
+        let prevEvent: AssistantSDKEvent | null = null;
         let hasDone = false;
 
         assistantClient.on('assistant', (event) => {

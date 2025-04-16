@@ -2,7 +2,7 @@
 
 import { Server } from 'mock-socket';
 
-import { createAssistantClient } from '../../src';
+import type { AssistantSDK } from '../../src/assistantSdk/typings';
 import { Message } from '../../src/proto';
 import { initAssistantClient, initServer } from '../support/helpers/init';
 
@@ -12,11 +12,11 @@ type ArgumentsType<T> = T extends (...args: infer U) => any ? U : never;
 describe('Проверяем приветствие', () => {
     const checkStartAssistant = (
         server: Server,
-        args: ArgumentsType<ReturnType<typeof createAssistantClient>['start']>,
+        args: ArgumentsType<AssistantSDK['start']>,
         onMessage: (message: Message) => void,
-        beforeStart?: (assistant: ReturnType<typeof createAssistantClient>) => void,
+        beforeStart?: (assistant: AssistantSDK) => void,
         autostart = true,
-    ): ReturnType<typeof createAssistantClient> => {
+    ): AssistantSDK => {
         server.on('connection', (socket) => {
             assert.isOk('Соединение после старта');
 

@@ -6,35 +6,29 @@ import {
     AppInfo,
     AssistantAppState,
     AssistantSmartAppData,
-    AssistantSmartAppError,
     AssistantStartSmartSearch,
-    VpsConfiguration,
-    EmotionId,
     OriginalMessageType,
     PermissionType,
     SystemMessageDataType,
     AssistantBackgroundApp,
     AssistantBackgroundAppInfo,
     AssistantMeta,
-    AssistantCommand,
-    HistoryMessages,
     AdditionalMeta,
-    Status,
     AssistantServerActionMode,
     CharacterId,
     Mid,
 } from '../typings';
 
+import { AssistantSDKEvents, AssistantSDKParams, BackgroundAppOnCommand, AssistantSDK } from './typings';
 import { createClient } from './client/client';
-import { createProtocol, ProtocolError } from './client/protocol';
-import { createTransport, CreateTransportParams } from './client/transport';
+import { createProtocol } from './client/protocol';
+import { createTransport } from './client/transport';
 import { getAnswerForRequestPermissions, getTime } from './meta';
-import { createVoice, TtsEvent } from './voice/voice';
-import { VoiceListenerStatus } from './voice/listener/voiceListener';
-import { Music2TrackProtocol } from './voice/recognizers/mtt';
+import { createVoice } from './voice/voice';
 import { createMutexedObject } from './mutexedObject';
 import { createMutexSwitcher } from './mutexSwitcher';
 import { MetaStringified } from './client/methods';
+import { ProtocolError } from './client/types';
 
 const STATE_UPDATE_TIMEOUT = 200;
 
@@ -84,85 +78,15 @@ const promiseTimeout = <T>(promise: Promise<T>, timeout: number): Promise<T> => 
     ]);
 };
 
-export type AppEvent =
-    | { type: 'run'; app: AppInfo }
-    | { type: 'close'; app: AppInfo }
-    | {
-          type: 'command';
-          app: AppInfo;
-          command: AssistantSmartAppData | AssistantSmartAppError | AssistantStartSmartSearch;
-      };
-
-export type AssistantEvent = {
-    asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
-    /**
-     * @deprecated Use the `on('assistant', { listener })` and `on('tts', tts)` subscriptions to receive voice events
-     */
-    emotion?: EmotionId;
-    mtt?: { response: Music2TrackProtocol.MttResponse; mid: OriginalMessageType['messageId'] };
-    listener?: { status: VoiceListenerStatus };
-    voiceAnalyser?: { data: Uint8Array };
-};
-
-export type VpsEvent =
-    | { type: 'ready' }
-    | { type: 'error'; error: Event | Error | undefined }
-    | { type: 'outcoming'; message: OriginalMessageType }
-    | { type: 'incoming'; systemMessage: SystemMessageDataType; originalMessage: OriginalMessageType };
-
-export type ActionCommandEvent = {
-    type: 'command';
-    command: ActionCommand;
-    appInfo: AppInfo;
-};
-
-export type AssistantError = ProtocolError;
-
-export type AssistantEvents = {
-    app: (event: AppEvent) => void;
-    assistant: (event: AssistantEvent) => void;
-    vps: (event: VpsEvent) => void;
-    actionCommand: (event: ActionCommandEvent) => void;
-    command: (command: AssistantCommand) => void;
-    status: (status: Status, mid: Mid) => void;
-    error: (error: AssistantError) => void;
-    history: (history: HistoryMessages[]) => void;
-    tts: (event: TtsEvent) => void;
-};
-
-export interface CreateAssistantDevOptions {
-    getMeta?: () => Record<string, unknown>;
-    getInitialMeta?: () => Promise<Record<string, unknown>>;
-    /** Подставляет мету в первый чанк с голосом для управления рекогнайзером */
-    getVoiceMeta?: () => Record<string, unknown>;
-}
-
-type BackgroundAppOnCommand<T> = (
-    command: (AssistantSmartAppData & { smart_app_data?: T }) | AssistantSmartAppError | AssistantStartSmartSearch,
-    messageId: string,
-) => void;
-
-export type AssistantSettings = {
-    /** Отключение фичи воспроизведения голоса */
-    disableDubbing: boolean;
-    /** Отключение фичи слушания речи */
-    disableListening: boolean;
-    /** Отправка текстовых сообщений с type: application/ssml */
-    sendTextAsSsml: boolean;
-};
-
-export type Assistant = ReturnType<typeof createAssistant>;
-export type AssistantParams = VpsConfiguration &
-    CreateAssistantDevOptions &
-    Pick<CreateTransportParams, 'checkCertUrl'>;
 export const createAssistant = ({
     getMeta,
     getInitialMeta,
     getVoiceMeta,
     checkCertUrl,
+    voiceOptions = { shouldUseOpus: false },
     ...configuration
-}: AssistantParams) => {
-    const { on, emit } = createNanoEvents<AssistantEvents>();
+}: AssistantSDKParams): AssistantSDK => {
+    const { on, emit } = createNanoEvents<AssistantSDKEvents>();
 
     // default_character отправляется в мета при отправке InitialSettings
     let defaultCharacter: CharacterId = 'sber';
@@ -270,7 +194,11 @@ export const createAssistant = ({
                           default_character: defaultCharacter,
                       }),
         // пока голос не готов, выключаем озвучку
-        settings: { ...configuration.settings, dubbing: -1 },
+        settings: {
+            ...configuration.settings,
+            dubbing: -1,
+            asrEngine: configuration.settings.asrEngine,
+        },
     });
     const client = createClient(protocol, metaProvider, {
         getVoiceMeta: () => (getVoiceMeta ? convertFieldValuesToString(getVoiceMeta()) : {}),
@@ -278,6 +206,7 @@ export const createAssistant = ({
     const voice = createVoice(
         client,
         settings,
+        voiceOptions,
         (event) => {
             if (typeof event.tts !== 'undefined') {
                 emit('tts', event.tts);

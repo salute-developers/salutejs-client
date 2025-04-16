@@ -2,13 +2,14 @@ import { Server } from 'mock-socket';
 import Long from 'long';
 
 import { Message } from '../../src/proto';
-import { AppInfo, createAssistantClient, MessageNames, Mid } from '../../src';
+import type { AssistantSDK } from '../../src/assistantSdk/typings';
+import { AppInfo, MessageNames, Mid } from '../../src/typings';
 import { createMessage } from '../support/helpers/clientMethods';
 import { initServer, initAssistantClient } from '../support/helpers/init';
 
 describe('Озвучка', () => {
     let server: Server;
-    let assistantClient: ReturnType<typeof createAssistantClient>;
+    let assistantClient: AssistantSDK;
 
     beforeEach(() => {
         server = initServer();
@@ -198,7 +199,7 @@ describe('Озвучка', () => {
                     );
                     socket.send(
                         createMessage({
-                            messageId: message.messageId+1,
+                            messageId: message.messageId + 1,
                             messageName: MessageNames.ANSWER_TO_USER,
                             systemMessage: { items: [{ bubble: { text: 'test' } }] },
                             last: 1,
@@ -216,7 +217,7 @@ describe('Озвучка', () => {
                 }
             });
         });
-        
+
         assistantClient.on('vps', (event) => {
             if (event.type === 'outcoming' && event.message.cancel && event.message.messageId === mid) {
                 counter++;

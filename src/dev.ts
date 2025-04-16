@@ -1,6 +1,7 @@
 /* eslint-disable camelcase, no-underscore-dangle */
 
-import { AppEvent, createAssistant, CreateAssistantDevOptions, VpsEvent } from './assistantSdk/assistant';
+import { createAssistant } from './assistantSdk/assistant';
+import { AppEvent, CreateAssistantDevOptions, VpsEvent } from './assistantSdk/typings';
 import { NativePanelParams } from './NativePanel/NativePanel';
 import { renderNativePanel } from './NativePanel/renderNativePanel';
 import {

@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 
-import { createAssistantClient } from '../../src';
 import { Message } from '../../src/proto';
 import { initAssistantClient } from '../support/helpers/init';
 // Собственная реализация необходима, так как пакет mock-socket не эмитит событие сокета close на клиенте
