@@ -270,7 +270,11 @@ export const createAssistant = ({
                           default_character: defaultCharacter,
                       }),
         // пока голос не готов, выключаем озвучку
-        settings: { ...configuration.settings, dubbing: -1 },
+        settings: {
+            ...configuration.settings,
+            dubbing: -1,
+            asrEngine: configuration.settings.asrEngine || 'opus_default_asr',
+        },
     });
     const client = createClient(protocol, metaProvider, {
         getVoiceMeta: () => (getVoiceMeta ? convertFieldValuesToString(getVoiceMeta()) : {}),
