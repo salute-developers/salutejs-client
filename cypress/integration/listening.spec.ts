@@ -28,6 +28,7 @@ describe('Слушание', () => {
 
     afterEach(() => {
         server?.stop();
+        assistantClient.destroy();
     });
 
     const handleVoiceInputConnections = ({ onCreateInput }: { onCreateInput?: () => void } = {}) => {

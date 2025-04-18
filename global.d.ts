@@ -6,5 +6,10 @@ declare global {
 
     interface Window {
         webkitAudioContext?: new () => AudioContext;
+        Cypress?: any;
     }
+
+    /** import.meta.url */
+    declare const __import_meta_url: string;
+    declare const __webpack_require__: any;
 }

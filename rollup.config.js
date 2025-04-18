@@ -16,6 +16,7 @@ const common = {
         }),
         replace({
             'process.env.APP_VERSION': pkg.version,
+            __import_meta_url: 'import.meta.url',
         }),
         json(),
     ],
@@ -65,11 +66,11 @@ export default [
                     },
                     {
                         src: 'src/assistantSdk/voice/recognizers/asr/*.d.ts',
-                        dest: 'dist/assistantSdk/voice/recognizers/asr'
+                        dest: 'dist/assistantSdk/voice/recognizers/asr',
                     },
                     {
                         src: 'src/assistantSdk/voice/recognizers/mtt/*.d.ts',
-                        dest: 'dist/assistantSdk/voice/recognizers/mtt'
+                        dest: 'dist/assistantSdk/voice/recognizers/mtt',
                     },
                 ],
             }),
@@ -84,6 +85,9 @@ export default [
             'src/assistantSdk/assistant.ts',
             'src/mock.ts',
             'src/index.ts',
+            'src/assistantSdk/audio/recorder.ts',
+            'src/assistantSdk/audio/createWaveform.ts',
+            'src/assistantSdk/audio/encoderWorker.min.js',
         ],
         output: {
             ...common.output,
@@ -102,6 +106,14 @@ export default [
             }),
             typescript({ outDir: 'esm', declaration: false, declarationMap: false, module: 'esnext' }),
             ...common.plugins,
+            copy({
+                targets: [
+                    {
+                        src: 'src/assistantSdk/audio/encoderWasm.wasm',
+                        dest: 'esm',
+                    },
+                ],
+            }),
         ],
     },
     {
