@@ -24,15 +24,20 @@ function withoutWorker() {
       settings: {
         dubbing: -1,
         asrAutoStop: -1,
+        asrEngine: 'opus_default_asr',
         authConnector: "developer_portal_jwt",
       },
       version: 5,
+      voiceOptions: {
+        shouldUseOpus: true,
+        encoderWasmUrl: 'http://localhost:1234/opusEncoder.wasm'
+      },
       getToken: () => Promise.resolve(token),
       getVoiceMeta: () => ({
         SEND_EOU: true,
         MAX_EOU_TIMEOUT_SEC: 4,
-      })
-  });
+      }),
+    });
 
   assistant.on('assistant', (event) => {
     if (event.asr) {
@@ -85,6 +90,7 @@ function withWorker() {
           settings: {
             dubbing: -1,
             asrAutoStop: -1,
+            asrEngine: 'opus_default_asr',
             authConnector: "developer_portal_jwt",
           },
           version: 5,
@@ -106,4 +112,4 @@ function withWorker() {
     });
 }
 
-withoutWorker();
+withWorker();

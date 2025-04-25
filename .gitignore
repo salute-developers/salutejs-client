@@ -29,3 +29,4 @@ cypress/videos/
 .env
 .nyc_output
 coverage
+.parcel-cache

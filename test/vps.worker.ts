@@ -24,10 +24,11 @@ function convertFieldValuesToString<
 let _client: ReturnType<typeof createClient>;
 let _stream: (chunk: Uint8Array, last: boolean) => void;
 let _push: (text: string) => void;
+let _buffer: Uint8Array[] = [];
 
 function init({ token, voiceMeta, ...config }, restApiUrl: string) {
     const sessionId = v4();
-    const convertedVoiceMeta = convertFieldValuesToString(voiceMeta);
+    const convertedVoiceMeta = voiceMeta ? convertFieldValuesToString(voiceMeta) : '';
     const transport = createTransport({});
     const protocol = createProtocol(transport, { ...config, getToken: () => token });
     _client = createClient(protocol, undefined, {
@@ -68,6 +69,13 @@ function start(port: MessagePort) {
         .then(() => {
             _client.createVoiceStream(({ sendVoice }) => {
                 _stream = sendVoice;
+                
+                if (_buffer.length > 0) {
+                    for (let i = 0; i < _buffer.length; i++) {
+                        _stream(_buffer[i], false);
+                    }
+                    _buffer = [];
+                }
 
                 return Promise.resolve();
             }, {});
@@ -77,7 +85,11 @@ function start(port: MessagePort) {
         });
 
     port.onmessage = (event) => {
-        _stream?.(event.data, false);
+        if (_stream) {
+            _stream(event.data, false);
+        } else {
+            _buffer.push(event.data);
+        }
     };
 }
 
