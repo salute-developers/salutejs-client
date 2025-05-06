@@ -94,7 +94,7 @@ export const createProtocol = (
     const basePayload = compileBasePayload({ userId, token: '', messageName, vpsToken, userChannel, version });
 
     const { on, emit } = createNanoEvents<ProtocolEvents>();
-    const subscriptions: Array<() => void> = [];
+    let subscriptions: Array<() => void> = [];
     const messageQueue: Array<IMessage> = [];
 
     let initMessageId: Mid; // ид инициализационного сообщения, отправим мессаджи в неинициализированный протокол
@@ -230,17 +230,13 @@ export const createProtocol = (
         sendSettingsOriginal(obj);
     };
 
-    subscriptions.push(
+    subscriptions = [
         transport.on('connecting', () => {
             status = 'connecting';
         }),
-    );
-    subscriptions.push(
         transport.on('close', () => {
             status = 'closed';
         }),
-    );
-    subscriptions.push(
         transport.on('open', async () => {
             try {
                 getToken && Object.assign(basePayload, { token: await getToken() });
@@ -303,8 +299,6 @@ export const createProtocol = (
 
             logger?.({ type: 'init', params: { ...configuration, ...currentSettings } });
         }),
-    );
-    subscriptions.push(
         transport.on('message', (message: Uint8Array) => {
             const decodedMessage = Message.decode(removeHeader(message));
 
@@ -316,7 +310,7 @@ export const createProtocol = (
                 transport.close();
             }
         }),
-    );
+    ];
 
     return {
         clearQueue: () => {
