@@ -1,3 +1,20 @@
+# v1.35.7 (Mon May 19 2025)
+
+#### 🐛 Bug Fix
+
+- fix: Откат фикса сериализации [#229](https://github.com/salute-developers/salutejs-client/pull/229) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- [@Salute-Eva](https://github.com/Salute-Eva)
+
+---
+
 # v1.35.6 (Tue Apr 15 2025)
 
 #### 🐛 Bug Fix
