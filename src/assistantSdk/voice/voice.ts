@@ -322,13 +322,13 @@ export const createVoice = (
 
     subscriptions.push(
         // обработка входящей озвучки
-        client.on('voice', (data, message) => {
-            if (settings.current.disableDubbing) {
-                return;
-            }
+        // client.on('voice', (data, message) => {
+        //     if (settings.current.disableDubbing) {
+        //         return;
+        //     }
 
-            voicePlayer?.append(data, message.messageId.toString(), message.last === 1);
-        }),
+        //     voicePlayer?.append(data, message.messageId.toString(), message.last === 1);
+        // }),
 
         // статусы слушания речи
         listener.on('status', (status: VoiceListenerStatus) => {
