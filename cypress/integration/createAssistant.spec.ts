@@ -2,7 +2,7 @@
 import { createAssistant } from 'lib';
 import { Hints, Suggestions } from '@salutejs/scenario';
 
-import { SystemMessageHeaderByttonsType } from '../../src/index';
+import type { SystemMessageHeaderByttonsType } from '../../src/typings';
 
 /* eslint-disable @typescript-eslint/camelcase */
 

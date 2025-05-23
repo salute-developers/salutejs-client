@@ -1,6 +1,6 @@
 import { createClient } from '../client/client';
 import { AppInfo, EmotionId, OriginalMessageType, Mid, SystemMessageDataType, MessageNames } from '../../typings';
-import { AssistantSettings } from '../assistant';
+import { AssistantSDKSettings, AssistantSDKVoiceOptions } from '../typings';
 import { MutexedObject } from '../mutexedObject';
 
 import { createNavigatorAudioProvider } from './listener/navigatorAudioProvider';
@@ -8,31 +8,29 @@ import { createVoiceListener, VoiceListenerStatus } from './listener/voiceListen
 import { createVoicePlayer } from './player/voicePlayer';
 import { resolveAudioContext, isAudioSupported } from './audioContext';
 import { Music2TrackProtocol } from './recognizers/mtt';
+import { createAudioRecorder } from './recorder/recorder';
+import { OpusEncoder } from './encoder/opusEncoder';
+import { TtsEvent } from './types';
 
-export interface TtsEvent {
-    status: 'start' | 'stop';
-    messageId: number;
-    appInfo: AppInfo;
-}
+// /** Фильтр тишины */
+// const filterEmptyChunks = (chunksOriginal: Uint8Array[]) => {
+//     return chunksOriginal.reduce<Uint8Array[]>((acc, chunkOriginal) => {
+//         const chunk = chunkOriginal.filter((int) => int);
 
-/** Фильтр тишины */
-const filterEmptyChunks = (chunksOriginal: Uint8Array[]) => {
-    return chunksOriginal.reduce<Uint8Array[]>((acc, chunkOriginal) => {
-        const chunk = chunkOriginal.filter((int) => int);
+//         if (chunk.length) {
+//             acc.push(chunk);
+//         }
 
-        if (chunk.length) {
-            acc.push(chunk);
-        }
-
-        return acc;
-    }, []);
-};
+//         return acc;
+//     }, []);
+// };
 
 export const createVoice = (
     client: ReturnType<typeof createClient>,
-    settings: MutexedObject<AssistantSettings>,
+    settings: MutexedObject<AssistantSDKSettings>,
+    options: AssistantSDKVoiceOptions,
     emit: (event: {
-        asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
+        asr?: { text: string; normalizedText: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
         emotion?: EmotionId;
         listener?: { status: VoiceListenerStatus };
         mtt?: { response: Music2TrackProtocol.MttResponse; mid: OriginalMessageType['messageId'] };
@@ -45,7 +43,20 @@ export const createVoice = (
 ) => {
     let useAnalyser = false;
     let voicePlayer: ReturnType<typeof createVoicePlayer>;
-    const listener = createVoiceListener((cb) => createNavigatorAudioProvider(cb, useAnalyser));
+    const recorderProvider = (
+        stream: MediaStream,
+        cb: (data: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
+    ) =>
+        createAudioRecorder(
+            stream,
+            cb,
+            useAnalyser,
+            options.shouldUseOpus
+                ? (port: MessagePort) =>
+                      new OpusEncoder(port, { streamMode: true, encoderWasmUrl: options.encoderWasmUrl })
+                : undefined,
+        );
+    const listener = createVoiceListener((cb) => createNavigatorAudioProvider(recorderProvider, cb));
     const subscriptions: Array<() => void> = [];
     const appInfoDict: Record<string, AppInfo> = {};
     const mesIdQueue: Array<string> = [];
@@ -158,7 +169,7 @@ export const createVoice = (
      * @param messageName указать, если чанки для шазама
      */
     const streamVoice = async (chunks: Uint8Array[], last: boolean, messageName?: 'MUSIC_RECOGNITION' | undefined) => {
-        chunks = filterEmptyChunks(chunks);
+        // chunks = filterEmptyChunks(chunks);
 
         if (streaming?.(chunks, last)) {
             return;
@@ -220,7 +231,7 @@ export const createVoice = (
      * @param messageName указать, если чанки для шазама
      */
     const sendVoice = async (chunks: Uint8Array[], messageName?: 'MUSIC_RECOGNITION') => {
-        chunks = filterEmptyChunks(chunks);
+        // chunks = filterEmptyChunks(chunks);
 
         stopVoice();
 
@@ -339,7 +350,7 @@ export const createVoice = (
                 emit({ emotion: 'listen' });
             } else if (status === 'stopped') {
                 voicePlayer?.setActive(!settings.current.disableDubbing);
-                emit({ asr: { text: '' }, emotion: 'idle' });
+                emit({ asr: { text: '', normalizedText: '' }, emotion: 'idle' });
             }
         }),
 
@@ -378,14 +389,15 @@ export const createVoice = (
             const listening = listener.status === 'listen' && !settings.current.disableListening;
 
             if (text) {
-                const last = originalMessage.last === 1;
+                const last = false; // originalMessage.last === 1;
 
                 if (last || listening) {
                     emit({
                         asr: {
                             mid: originalMessage.messageId,
                             text: text.data || '',
-                            last,
+                            normalizedText: response?.decoderResultField?.hypothesis?.[0]?.normalizedText || '',
+                            last: originalMessage.last === 1,
                         },
                     });
                 }
@@ -397,14 +409,15 @@ export const createVoice = (
 
             if (response) {
                 const { decoderResultField, errorResponse } = response;
-                const last = !!(decoderResultField && decoderResultField?.isFinal);
+                const last = false; // !!(decoderResultField && decoderResultField?.isFinal);
 
                 if ((last || listening) && decoderResultField?.hypothesis?.length) {
                     emit({
                         asr: {
                             mid: originalMessage.messageId,
                             text: decoderResultField.hypothesis[0].normalizedText || '',
-                            last,
+                            normalizedText: decoderResultField.hypothesis[0].normalizedText || '',
+                            last: !!(decoderResultField && decoderResultField?.isFinal),
                         },
                     });
                 }

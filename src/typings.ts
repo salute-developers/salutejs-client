@@ -72,6 +72,7 @@ export const MessageNames = {
     STT: 'STT',
     MTT: 'MUSIC_RECOGNITION',
     DO_NOTHING: 'DO_NOTHING',
+    EOU: 'EOU',
 };
 
 export interface DPMessage extends IMessage {
