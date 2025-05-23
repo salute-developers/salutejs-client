@@ -1,3 +1,20 @@
+# v1.35.8 (Fri May 23 2025)
+
+#### 🐛 Bug Fix
+
+- fix: update default settings after first connection [#231](https://github.com/salute-developers/salutejs-client/pull/231) ([@DanilSaidov](https://github.com/DanilSaidov))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@DanilSaidov](https://github.com/DanilSaidov)
+- [@Salute-Eva](https://github.com/Salute-Eva)
+
+---
+
 # v1.35.7 (Mon May 19 2025)
 
 #### 🐛 Bug Fix
