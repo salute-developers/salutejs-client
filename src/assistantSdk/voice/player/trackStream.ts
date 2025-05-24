@@ -99,20 +99,16 @@ export const createTrackStream = (
 
     /** Удаляет или добавляет байт для четности */
     const getExtraBytes = (data: Uint8Array, bytesArraysSizes: BytesArraysSizes) => {
-        if (extraByte == null && bytesArraysSizes.incomingMessageVoiceDataLength % 2) {
+        if (extraByte != null) {
+            bytesArraysSizes.prepend = extraByte;
+            bytesArraysSizes.start = 1;
+            bytesArraysSizes.incomingMessageVoiceDataLength += 1;
+            extraByte = null;
+        }
+        if (bytesArraysSizes.incomingMessageVoiceDataLength % 2) {
             extraByte = data[bytesArraysSizes.incomingMessageVoiceDataLength - 1];
             bytesArraysSizes.incomingMessageVoiceDataLength -= 1;
             bytesArraysSizes.sourceLen -= 1;
-        } else if (extraByte != null) {
-            bytesArraysSizes.prepend = extraByte;
-            bytesArraysSizes.start = 1;
-            if (bytesArraysSizes.incomingMessageVoiceDataLength % 2) {
-                bytesArraysSizes.incomingMessageVoiceDataLength += 1;
-                extraByte = null;
-            } else {
-                extraByte = data[bytesArraysSizes.incomingMessageVoiceDataLength - 1];
-                bytesArraysSizes.sourceLen -= 1;
-            }
         }
     };
 
