@@ -4,13 +4,14 @@
 import { Server } from 'mock-socket';
 
 import { Message } from '../../src/proto';
-import { createAssistantClient, MessageNames } from '../../src';
+import type { AssistantSDK } from '../../src/assistantSdk/typings';
+import { MessageNames } from '../../src/typings';
 import { createMessage, createVoiceMessage } from '../support/helpers/clientMethods';
 import { initServer, initAssistantClient } from '../support/helpers/init';
 
 describe('Автослушание', () => {
     let server: Server;
-    let assistantClient: ReturnType<typeof createAssistantClient>;
+    let assistantClient: AssistantSDK;
 
     beforeEach(() => {
         server = initServer();

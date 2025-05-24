@@ -1,6 +1,6 @@
 import { createClient } from '../client/client';
 import { AppInfo, EmotionId, OriginalMessageType, Mid, SystemMessageDataType, MessageNames } from '../../typings';
-import { AssistantSettings } from '../assistant';
+import { AssistantSDKSettings, AssistantSDKVoiceOptions } from '../typings';
 import { MutexedObject } from '../mutexedObject';
 
 import { createNavigatorAudioProvider } from './listener/navigatorAudioProvider';
@@ -8,12 +8,9 @@ import { createVoiceListener, VoiceListenerStatus } from './listener/voiceListen
 import { createVoicePlayer } from './player/voicePlayer';
 import { resolveAudioContext, isAudioSupported } from './audioContext';
 import { Music2TrackProtocol } from './recognizers/mtt';
-
-export interface TtsEvent {
-    status: 'start' | 'stop';
-    messageId: number;
-    appInfo: AppInfo;
-}
+import { createAudioRecorder } from './recorder/recorder';
+import { OpusEncoder } from './encoder/opusEncoder';
+import { TtsEvent } from './types';
 
 /** Фильтр тишины */
 const filterEmptyChunks = (chunksOriginal: Uint8Array[]) => {
@@ -30,7 +27,8 @@ const filterEmptyChunks = (chunksOriginal: Uint8Array[]) => {
 
 export const createVoice = (
     client: ReturnType<typeof createClient>,
-    settings: MutexedObject<AssistantSettings>,
+    settings: MutexedObject<AssistantSDKSettings>,
+    options: AssistantSDKVoiceOptions,
     emit: (event: {
         asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
         emotion?: EmotionId;
@@ -45,7 +43,20 @@ export const createVoice = (
 ) => {
     let useAnalyser = false;
     let voicePlayer: ReturnType<typeof createVoicePlayer>;
-    const listener = createVoiceListener((cb) => createNavigatorAudioProvider(cb, useAnalyser));
+    const recorderProvider = (
+        stream: MediaStream,
+        cb: (data: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
+    ) =>
+        createAudioRecorder(
+            stream,
+            cb,
+            useAnalyser,
+            options.shouldUseOpus
+                ? (port: MessagePort) =>
+                      new OpusEncoder(port, { streamMode: true, encoderWasmUrl: options.encoderWasmUrl })
+                : undefined,
+        );
+    const listener = createVoiceListener((cb) => createNavigatorAudioProvider(recorderProvider, cb));
     const subscriptions: Array<() => void> = [];
     const appInfoDict: Record<string, AppInfo> = {};
     const mesIdQueue: Array<string> = [];

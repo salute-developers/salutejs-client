@@ -21,7 +21,7 @@
         "cy:report:coverage": "npx nyc report --reporter=html",
         "cy:proto:asr": "pbjs --no-typeurl --no-convert --no-verify --no-delimited --no-create -t static-module --root cypbroot src/assistantSdk/voice/recognizers/asr/index.proto > cypress/support/proto/asr.js && pbts cypress/support/proto/asr.js -o cypress/support/proto/asr.d.ts",
         "cy:proto:mtt": "pbjs --no-typeurl --no-convert --no-verify --no-delimited --no-create -t static-module --root cypbroot src/assistantSdk/voice/recognizers/mtt/index.proto > cypress/support/proto/mtt.js && pbts cypress/support/proto/mtt.js -o cypress/support/proto/mtt.d.ts",
-        "test:cy": "CY_MODE=production cypress run -b chromium --headless",
+        "test:cy": "CY_MODE=production cypress run -b chrome --headless",
         "lint": "eslint --ext .js,.ts,.tsx src/."
     },
     "repository": {
@@ -79,6 +79,7 @@
         "protobufjs-cli": "1.1.1",
         "rollup": "3.21.5",
         "rollup-plugin-copy": "3.4.0",
+        "rollup-plugin-string": "3.0.0",
         "ts-loader": "8.0.4",
         "tslib": "2.5.0",
         "typescript": "4.3.5",

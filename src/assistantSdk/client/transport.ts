@@ -1,12 +1,7 @@
 import { createNanoEvents } from '../../nanoevents';
 import { WSCreator } from '../../typings';
 
-import { Transport, TransportEvents } from './types';
-
-export type CreateTransportParams = {
-    createWS?: WSCreator;
-    checkCertUrl?: string;
-};
+import { CreateTransportParams, Transport, TransportEvents } from './types';
 
 const RETRY_INTERVAL = 300; // ms
 

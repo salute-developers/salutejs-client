@@ -5,6 +5,7 @@ import json from '@rollup/plugin-json';
 import typescript from '@rollup/plugin-typescript';
 import terser from '@rollup/plugin-terser';
 import copy from 'rollup-plugin-copy';
+import { string } from 'rollup-plugin-string';
 
 import pkg from './package.json';
 
@@ -32,6 +33,14 @@ const getUmdConfig = (fileName, input) => ({
         plugins: [terser()],
     },
     plugins: [
+        string({
+            include: 'src/assistantSdk/voice/recorder/worklet.js',
+            exclude: ['**/*.ts', '**/*.tsx'],
+        }),
+        string({
+            include: 'src/assistantSdk/voice/encoder/encoderWorker.min.js',
+            exclude: ['**/*.ts', '**/*.tsx'],
+        }),
         nodeResolve({
             browser: true,
             preferBuiltins: true,
@@ -49,8 +58,29 @@ export default [
             ...common.output,
             dir: 'dist',
             format: 'cjs',
+            manualChunks: (id) => {
+                if (id.includes('encoderWorker.min.js')) {
+                    return 'encoderWorker.min';
+                }
+
+                if (id.includes('worklet.js')) {
+                    return 'worklet';
+                }
+
+                return null;
+            },
+            entryFileNames: '[name].js',
+            chunkFileNames: '[name].js',
         },
         plugins: [
+            string({
+                include: 'src/assistantSdk/voice/encoder/encoderWorker.min.js',
+                exclude: ['**/*.ts', '**/*.tsx'],
+            }),
+            string({
+                include: 'src/assistantSdk/voice/recorder/worklet.js',
+                exclude: ['**/*.ts', '**/*.tsx'],
+            }),
             nodeResolve({
                 browser: true,
                 preferBuiltins: true,
@@ -65,11 +95,15 @@ export default [
                     },
                     {
                         src: 'src/assistantSdk/voice/recognizers/asr/*.d.ts',
-                        dest: 'dist/assistantSdk/voice/recognizers/asr'
+                        dest: 'dist/assistantSdk/voice/recognizers/asr',
                     },
                     {
                         src: 'src/assistantSdk/voice/recognizers/mtt/*.d.ts',
-                        dest: 'dist/assistantSdk/voice/recognizers/mtt'
+                        dest: 'dist/assistantSdk/voice/recognizers/mtt',
+                    },
+                    {
+                        src: 'src/assistantSdk/voice/encoder/opusEncoder.wasm',
+                        dest: 'dist',
                     },
                 ],
             }),
@@ -84,24 +118,64 @@ export default [
             'src/assistantSdk/assistant.ts',
             'src/mock.ts',
             'src/index.ts',
+            'src/assistantSdk/voice/encoder/opusEncoder.ts',
         ],
         output: {
             ...common.output,
             dir: 'esm',
             format: 'esm',
-            manualChunks: {
-                sdk: ['src/proto/index.js', 'src/assistantSdk/client/protocol.ts', 'src/typings.ts'],
-                record: ['src/record/index.ts'],
-                common: ['node_modules/tslib', 'src/nanoevents.ts', 'src/nanoobservable.ts'],
+            manualChunks: (id) => {
+                if (id.includes('encoderWorker.min.js')) {
+                    return 'encoderWorker.min';
+                }
+                if (id.includes('worklet.js')) {
+                    return 'worklet';
+                }
+                if (
+                    id.includes('src/proto/index.js') ||
+                    id.includes('src/assistantSdk/client/protocol.ts') ||
+                    id.includes('src/typings.ts')
+                ) {
+                    return 'sdk';
+                }
+                if (id.includes('src/record/index.ts')) {
+                    return 'record';
+                }
+                if (
+                    id.includes('node_modules/tslib') ||
+                    id.includes('src/nanoevents.ts') ||
+                    id.includes('src/nanoobservable.ts')
+                ) {
+                    return 'common';
+                }
+                return null;
             },
+            entryFileNames: '[name].js',
+            chunkFileNames: '[name].js',
         },
         plugins: [
+            string({
+                include: 'src/assistantSdk/voice/encoder/encoderWorker.min.js',
+                exclude: ['**/*.ts', '**/*.tsx'],
+            }),
+            string({
+                include: 'src/assistantSdk/voice/recorder/worklet.js',
+                exclude: ['**/*.ts', '**/*.tsx'],
+            }),
             nodeResolve({
                 browser: true,
                 preferBuiltins: true,
             }),
             typescript({ outDir: 'esm', declaration: false, declarationMap: false, module: 'esnext' }),
             ...common.plugins,
+            copy({
+                targets: [
+                    {
+                        src: 'src/assistantSdk/voice/encoder/opusEncoder.wasm',
+                        dest: 'esm',
+                    },
+                ],
+            }),
         ],
     },
     {

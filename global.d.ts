@@ -6,5 +6,6 @@ declare global {
 
     interface Window {
         webkitAudioContext?: new () => AudioContext;
+        Cypress?: any;
     }
 }
