@@ -73,46 +73,42 @@ export const createTrackStream = (
             return;
         }
 
-        if (status !== 'play') {
+        const isPlaying = status === 'play';
+        if (!isPlaying) {
             status = 'play';
             onPlay && onPlay();
+        }
+
+        // воспроизводим трек, если источник уже проигрывается или поток полностью загрузился или длина загруженного
+        // больше задержки
+        if (isPlaying || loaded || buffer.byteLength / (sampleRate * HZ_BYTES_COUNT) >= delay) {
+            if (buffer.byteLength > 0) {
+                const chunk = getChunkFromBuffer();
+                startTime = queue.length === 0 ? ctx.currentTime : startTime;
+                queue.push(chunk);
+                chunk.start(startTime + lastChunkOffset);
+                lastChunkOffset += chunk.buffer?.duration || 0;
+            }
         }
 
         if (loaded && queue.ended) {
             end();
             return;
         }
-
-        // воспроизводим трек, если он полностью загрузился или длина загруженного больше задержки
-        if (loaded || buffer.byteLength / (sampleRate * HZ_BYTES_COUNT) >= delay) {
-            if (buffer.byteLength < 1) {
-                return;
-            }
-
-            const chunk = getChunkFromBuffer();
-            startTime = queue.length === 0 ? ctx.currentTime : startTime;
-            queue.push(chunk);
-            chunk.start(startTime + lastChunkOffset);
-            lastChunkOffset += chunk.buffer?.duration || 0;
-        }
     };
 
     /** Удаляет или добавляет байт для четности */
     const getExtraBytes = (data: Uint8Array, bytesArraysSizes: BytesArraysSizes) => {
-        if (extraByte == null && bytesArraysSizes.incomingMessageVoiceDataLength % 2) {
+        if (extraByte != null) {
+            bytesArraysSizes.prepend = extraByte;
+            bytesArraysSizes.start = 1;
+            bytesArraysSizes.incomingMessageVoiceDataLength += 1;
+            extraByte = null;
+        }
+        if (bytesArraysSizes.incomingMessageVoiceDataLength % 2) {
             extraByte = data[bytesArraysSizes.incomingMessageVoiceDataLength - 1];
             bytesArraysSizes.incomingMessageVoiceDataLength -= 1;
             bytesArraysSizes.sourceLen -= 1;
-        } else if (extraByte != null) {
-            bytesArraysSizes.prepend = extraByte;
-            bytesArraysSizes.start = 1;
-            if (bytesArraysSizes.incomingMessageVoiceDataLength % 2) {
-                bytesArraysSizes.incomingMessageVoiceDataLength += 1;
-                extraByte = null;
-            } else {
-                extraByte = data[bytesArraysSizes.incomingMessageVoiceDataLength - 1];
-                bytesArraysSizes.sourceLen -= 1;
-            }
         }
     };
 
@@ -132,7 +128,7 @@ export const createTrackStream = (
         source.connect(ctx.destination);
         source.onended = () => {
             queue.remove(source);
-            if (queue.ended && status !== 'end') {
+            if (queue.ended && status !== 'end' && loaded) {
                 status = 'end';
                 onEnd && onEnd();
             }
