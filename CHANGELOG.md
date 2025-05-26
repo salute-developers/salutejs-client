@@ -1,3 +1,17 @@
+# v1.35.9 (Mon May 26 2025)
+
+#### 🐛 Bug Fix
+
+- Исправить вопроизведение коротких tts аудио [#233](https://github.com/salute-developers/salutejs-client/pull/233) ([@drauggres](https://github.com/drauggres))
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Sergey Volkov ([@drauggres](https://github.com/drauggres))
+
+---
+
 # v1.35.8 (Fri May 23 2025)
 
 #### 🐛 Bug Fix
