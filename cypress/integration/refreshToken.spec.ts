@@ -2,7 +2,7 @@
 
 import { Server } from 'mock-socket';
 
-import { createAssistantClient } from '../../src';
+import type { AssistantSDK } from '../../src/assistantSdk/typings';
 import { Message } from '../../src/proto';
 import { sendMessage } from '../support/helpers/socket';
 import { initServer, initAssistantClient } from '../support/helpers/init';
@@ -13,7 +13,7 @@ describe('Проверяем обновление токена', () => {
     let currentToken = token1;
 
     let server: Server;
-    let assistantClient: ReturnType<typeof createAssistantClient>;
+    let assistantClient: AssistantSDK;
 
     beforeEach(() => {
         currentToken = token1;
@@ -21,7 +21,7 @@ describe('Проверяем обновление токена', () => {
         server = initServer();
         assistantClient = initAssistantClient({
             settings: {},
-            getToken: () => Promise.resolve(currentToken)
+            getToken: () => Promise.resolve(currentToken),
         });
 
         assistantClient.on('status', (status) => {

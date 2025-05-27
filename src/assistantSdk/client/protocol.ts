@@ -1,9 +1,9 @@
 import { createNanoEvents } from '../../nanoevents';
 import { IDevice, IInitialSettings, ILegacyDevice, IMessage, IChatHistoryRequest, Message } from '../../proto';
-import { VpsConfiguration, OriginalMessageType, VpsVersion, GetHistoryRequestClient, Mid } from '../../typings';
+import { VpsConfiguration, VpsVersion, GetHistoryRequestClient, Mid } from '../../typings';
 
 import { MetaStringified, createClientMethods } from './methods';
-import { Transport } from './types';
+import { ProtocolEvents, Transport } from './types';
 
 const safeJSONParse = <T>(str: string, defaultValue: T): T => {
     try {
@@ -66,18 +66,6 @@ export const removeHeader = (uint8Array: Uint8Array): Uint8Array => {
 
     return newUint8Array;
 };
-
-export interface ProtocolError {
-    type: 'GET_TOKEN_ERROR';
-    message?: string;
-}
-
-export interface ProtocolEvents {
-    incoming: (message: OriginalMessageType) => void;
-    outcoming: (message: OriginalMessageType) => void;
-    ready: () => void;
-    error: (error: ProtocolError) => void;
-}
 
 export const createProtocol = (
     transport: Transport,

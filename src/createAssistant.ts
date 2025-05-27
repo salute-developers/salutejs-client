@@ -15,7 +15,6 @@ import {
     AssistantEvents,
     AssistantClientCommandEvents,
     SendDataParams,
-    AssistantServerAction,
 } from './typings';
 import { createNanoEvents } from './nanoevents';
 import { createNanoObservable, ObserverFunc } from './nanoobservable';

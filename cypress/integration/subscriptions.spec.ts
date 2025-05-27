@@ -59,6 +59,7 @@ describe('Подписки на события', () => {
 
         let prevListenerStatus: VoiceListenerStatus = 'stopped';
         let eventsCount = 0;
+        let isDone = false;
 
         server.on('connection', (socket) => {
             socket.on('message', (data) => {
@@ -94,7 +95,8 @@ describe('Подписки на события', () => {
                 expect(event.asr.text, 'asr is ok').eq(asr);
             }
 
-            if (eventsCount === 2) {
+            if (eventsCount === 2 && !isDone) {
+                isDone = true;
                 done();
             }
         });
