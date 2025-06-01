@@ -5,7 +5,8 @@ import { Server, WebSocket } from 'mock-socket';
 import { initProtocol, sendMessage } from '../support/helpers/socket';
 import { initServer, initAssistantClient } from '../support/helpers/init';
 import { Message } from '../../src/proto';
-import { createAssistantClient, AppInfo } from '../../src/index';
+import type { AssistantSDK } from '../../src/assistantSdk/typings';
+import type { AppInfo } from '../../src/typings';
 
 describe('Тест backgroundApps', () => {
     const APPS = [
@@ -26,7 +27,7 @@ describe('Тест backgroundApps', () => {
     const getState = () => Promise.resolve({});
 
     let server: Server;
-    let assistantClient: ReturnType<typeof createAssistantClient>;
+    let assistantClient: AssistantSDK;
 
     const onSocketReady = (callback: (socket: WebSocket) => void) => {
         server?.on('connection', (socket) => {
@@ -97,7 +98,7 @@ describe('Тест backgroundApps', () => {
 
                     expect(appInfo).deep.eq(APPS[index]);
                     expect(mustBeReceived).to.be.true;
-        
+
                     if (last) {
                         commandsEnded += 1;
                     }
@@ -106,7 +107,7 @@ describe('Тест backgroundApps', () => {
                         done();
                     }
                 }).clearSubscribers;
-            }
+            };
         });
 
         onSocketReady((socket) => {
@@ -122,12 +123,14 @@ describe('Тест backgroundApps', () => {
                         auto_listening: false,
                         // eslint-disable-next-line @typescript-eslint/camelcase
                         app_info: appInfo,
-                        items: [{
-                            command: {
-                                type: 'smart_app_data',
-                                smart_app_data: { appInfo, mustBeReceived, last },
+                        items: [
+                            {
+                                command: {
+                                    type: 'smart_app_data',
+                                    smart_app_data: { appInfo, mustBeReceived, last },
+                                },
                             },
-                        }],
+                        ],
                     },
                 });
             };
@@ -170,13 +173,13 @@ describe('Тест backgroundApps', () => {
 
                 if (data.server_action) {
                     receivedCount += 1;
-    
+
                     if (data.app_info?.applicationId !== APPS[0].applicationId) {
                         expect(data.server_action).deep.eq(actionToCurrentApp);
                     } else {
                         expect(data.server_action).deep.eq(actionToBackgroundApp);
                     }
-    
+
                     if (receivedCount === 2) {
                         done();
                     }

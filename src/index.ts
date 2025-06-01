@@ -8,17 +8,27 @@ export {
 export * from './record';
 export * from './createAssistantDev';
 export {
-    AssistantEvent,
+    createAssistant as createAssistantClient,
+    createAssistant as createAssistantSDK,
+} from './assistantSdk/assistant';
+export type {
+    AssistantSDKEvent,
+    AssistantSDKEvent as AssistantEvent,
+    AssistantSDKEvents,
+    AssistantSDKEvents as AssistantClientEvents,
+    AssistantSDKParams,
     AppEvent,
     VpsEvent,
     ActionCommandEvent,
-    AssistantEvents as AssistantClientEvents,
-    createAssistant as createAssistantClient,
-    createAssistant as createAssistantSDK,
-    Assistant as AssistantSDK,
-    AssistantParams as AssistantSDKParams,
-} from './assistantSdk/assistant';
+    AssistantSDK,
+} from './assistantSdk/typings';
 export { createNavigatorAudioProvider } from './assistantSdk/voice/listener/navigatorAudioProvider';
 export * from './typings';
 export { GetHistoryResponse } from './proto';
+export { createAudioRecorder } from './assistantSdk/voice/recorder/recorder';
 export { PacketWrapperFromServer } from './assistantSdk/voice/recognizers/asr';
+export { createVoiceListener } from './assistantSdk/voice/listener/voiceListener';
+export { OpusEncoder } from './assistantSdk/voice/encoder/opusEncoder';
+export { createClient } from './assistantSdk/client/client';
+export { createProtocol } from './assistantSdk/client/protocol';
+export { createTransport } from './assistantSdk/client/transport';
