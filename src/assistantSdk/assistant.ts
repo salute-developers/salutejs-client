@@ -567,11 +567,6 @@ export const createAssistant = ({
         start,
         stop: () => {
             voice.stop();
-
-            if (lastMid !== 0) {
-                client.sendCancel(lastMid);
-            }
-
             setTimeout(() => {
                 protocol.clearQueue();
                 transport.close();
