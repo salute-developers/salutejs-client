@@ -1,3 +1,20 @@
+# v1.35.10 (Wed Aug 06 2025)
+
+#### 🐛 Bug Fix
+
+- fix: экспорт транспорта из пакета [#234](https://github.com/salute-developers/salutejs-client/pull/234) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.35.9 (Mon May 26 2025)
 
 #### 🐛 Bug Fix
