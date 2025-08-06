@@ -65,11 +65,11 @@ export default [
                     },
                     {
                         src: 'src/assistantSdk/voice/recognizers/asr/*.d.ts',
-                        dest: 'dist/assistantSdk/voice/recognizers/asr'
+                        dest: 'dist/assistantSdk/voice/recognizers/asr',
                     },
                     {
                         src: 'src/assistantSdk/voice/recognizers/mtt/*.d.ts',
-                        dest: 'dist/assistantSdk/voice/recognizers/mtt'
+                        dest: 'dist/assistantSdk/voice/recognizers/mtt',
                     },
                 ],
             }),
@@ -93,6 +93,8 @@ export default [
                 sdk: ['src/proto/index.js', 'src/assistantSdk/client/protocol.ts', 'src/typings.ts'],
                 record: ['src/record/index.ts'],
                 common: ['node_modules/tslib', 'src/nanoevents.ts', 'src/nanoobservable.ts'],
+                transport: ['src/assistantSdk/client/transport.ts'],
+                voicePlayer: ['src/assistantSdk/voice/player/voicePlayer.ts'],
             },
         },
         plugins: [
