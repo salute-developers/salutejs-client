@@ -149,10 +149,15 @@ const createAudioRecorder = (
 export const createNavigatorAudioProvider = (
     cb: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
     useAnalyser?: boolean,
+    options?: {
+        echoCancellation?: boolean;
+    },
 ): Promise<() => void> =>
     navigator.mediaDevices
         .getUserMedia({
-            audio: true,
+            audio: {
+                echoCancellation: options?.echoCancellation,
+            },
         })
         .then((stream) => {
             return createAudioRecorder(stream, cb, useAnalyser);
