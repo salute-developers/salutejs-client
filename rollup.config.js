@@ -93,7 +93,7 @@ export default [
                 sdk: ['src/proto/index.js', 'src/assistantSdk/client/protocol.ts', 'src/typings.ts'],
                 record: ['src/record/index.ts'],
                 common: ['node_modules/tslib', 'src/nanoevents.ts', 'src/nanoobservable.ts'],
-                transport: ['src/assistantSdk/client/transport.ts'],
+                client: ['src/assistantSdk/client/pureClient.ts'],
                 voicePlayer: ['src/assistantSdk/voice/player/voicePlayer.ts'],
             },
         },
