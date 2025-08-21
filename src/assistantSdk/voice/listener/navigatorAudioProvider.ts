@@ -54,6 +54,7 @@ let destination: MediaStreamAudioDestinationNode | null;
 const createAudioRecorder = (
     stream: MediaStream,
     cb: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
+    targetSampleRate: number,
     useAnalyser?: boolean,
 ): Promise<() => void> =>
     new Promise((resolve) => {
@@ -82,7 +83,7 @@ const createAudioRecorder = (
             if (!context) {
                 context = createAudioContext({
                     // firefox не умеет выравнивать samplerate, будем делать это самостоятельно
-                    sampleRate: IS_FIREFOX ? undefined : TARGET_SAMPLE_RATE,
+                    sampleRate: IS_FIREFOX ? undefined : targetSampleRate,
                 });
             }
 
@@ -149,9 +150,10 @@ const createAudioRecorder = (
 export const createNavigatorAudioProvider = (
     cb: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
     useAnalyser?: boolean,
-    options?: {
+    options: {
         echoCancellation?: boolean;
-    },
+        targetSampleRate?: number;
+    } = {},
 ): Promise<() => void> =>
     navigator.mediaDevices
         .getUserMedia({
@@ -160,7 +162,7 @@ export const createNavigatorAudioProvider = (
             },
         })
         .then((stream) => {
-            return createAudioRecorder(stream, cb, useAnalyser);
+            return createAudioRecorder(stream, cb, options.targetSampleRate || TARGET_SAMPLE_RATE, useAnalyser);
         })
         .catch((err) => {
             if (window.location.protocol === 'http:') {
