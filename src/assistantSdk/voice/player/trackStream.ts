@@ -1,4 +1,5 @@
 import { createChunkQueue } from './chunkQueue';
+import { parseWavHeader } from './utils';
 
 const HZ_BYTES_COUNT = 2;
 
@@ -171,10 +172,31 @@ export const createTrackStream = (
 
     /** добавляет чанк в очередь на воспроизведение */
     const write = (data: Uint8Array) => {
-        // 44 байта - заголовок трека
-        const slicePoint = firstChunk ? 44 : 0;
+        let slicePoint = 0;
 
-        firstChunk = false;
+        if (firstChunk) {
+            // Проверяем наличие WAV заголовка
+            const wavHeader = parseWavHeader(data);
+
+            if (wavHeader) {
+                // Найден валидный WAV заголовок - пропускаем его
+                slicePoint = wavHeader.headerSize;
+                // actualSampleRate = wavHeader.sampleRate;
+                // actualChannels = wavHeader.channels;
+
+                // Предупреждение о несоответствии параметров
+                if (wavHeader.sampleRate !== sampleRate) {
+                    console.warn(`WAV файл содержит sampleRate ${wavHeader.sampleRate}, но ожидался ${sampleRate}`);
+                }
+                if (wavHeader.channels !== numberOfChannels) {
+                    console.warn(`WAV файл содержит ${wavHeader.channels} каналов, но ожидался ${numberOfChannels}`);
+                }
+            } else {
+                slicePoint = 0;
+            }
+
+            firstChunk = false;
+        }
 
         if (slicePoint >= data.length) {
             return;
