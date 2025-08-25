@@ -80,9 +80,12 @@ export const createTrackStream = (
             onPlay && onPlay();
         }
 
+        const bytesPerSecond = sampleRate * HZ_BYTES_COUNT * numberOfChannels;
+        const bufferDurationSeconds = buffer.byteLength / bytesPerSecond;
+
         // воспроизводим трек, если источник уже проигрывается или поток полностью загрузился или длина загруженного
         // больше задержки
-        if (isPlaying || loaded || buffer.byteLength / (sampleRate * HZ_BYTES_COUNT) >= delay) {
+        if (isPlaying || loaded || bufferDurationSeconds >= delay) {
             if (buffer.byteLength > 0) {
                 const chunk = getChunkFromBuffer();
                 startTime = queue.length === 0 ? ctx.currentTime : startTime;
