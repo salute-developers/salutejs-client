@@ -35,58 +35,8 @@ import { Music2TrackProtocol } from './voice/recognizers/mtt';
 import { createMutexedObject } from './mutexedObject';
 import { createMutexSwitcher } from './mutexSwitcher';
 import { MetaStringified } from './client/methods';
-
-const STATE_UPDATE_TIMEOUT = 200;
-
-const DEFAULT_PROJECT_ID = 'd929986a-611a-2ba0-6174-1928c99600a5';
-const DEFAULT_APPLICATION_ID = '7c4e23bf-cd93-b57e-874b-d9fc1b35f93d';
-const DEFAULT_APP_VERSION_ID = '26d0bb2e-45d6-a276-f70e-6c016d1f9cff';
-
-const DEFAULT_APP: AppInfo = {
-    projectId: DEFAULT_PROJECT_ID,
-    applicationId: DEFAULT_APPLICATION_ID,
-    appversionId: DEFAULT_APP_VERSION_ID,
-    frontendStateId: [DEFAULT_PROJECT_ID, DEFAULT_APPLICATION_ID, DEFAULT_APP_VERSION_ID].join('_'),
-    frontendType: 'DIALOG',
-    systemName: 'assistant',
-    frontendEndpoint: 'None',
-};
-
-const BASIC_SMART_APP_COMMANDS_TYPES = ['smart_app_data', 'smart_app_error', 'start_smart_search', 'navigation'];
-
-function convertFieldValuesToString<
-    Obj extends Record<string, unknown>,
-    ObjStringified = { [key in keyof Obj]: string },
->(object: Obj): ObjStringified {
-    return Object.keys(object).reduce((acc: Record<string, string>, key: string) => {
-        if (object[key]) {
-            acc[key] =
-                typeof object[key] === 'string' && object[key].startsWith('{')
-                    ? object[key]
-                    : JSON.stringify(object[key]);
-        }
-
-        return acc;
-    }, {}) as ObjStringified;
-}
-
-const isDefaultApp = (appInfo: AppInfo) => appInfo.frontendStateId === DEFAULT_APP.frontendStateId;
-const promiseTimeout = <T>(promise: Promise<T>, timeout: number): Promise<T> => {
-    let timeoutId: number | undefined;
-    return Promise.race([
-        promise.then((v) => {
-            if (timeoutId) {
-                window.clearTimeout(timeoutId);
-            }
-            return v;
-        }),
-        new Promise<never>((_, reject) => {
-            timeoutId = window.setTimeout(() => {
-                reject(new Error(`Timed out in ${timeout} ms.`));
-            }, timeout);
-        }),
-    ]);
-};
+import { convertFieldValuesToString, isDefaultApp, promiseTimeout } from './utils';
+import { BASIC_SMART_APP_COMMANDS_TYPES, DEFAULT_APP, STATE_UPDATE_TIMEOUT } from './const';
 
 export type AppEvent =
     | { type: 'run'; app: AppInfo }
@@ -430,7 +380,7 @@ export const createAssistant = ({
                     emit('app', { type: 'run', app: mesAppInfo });
                 }
 
-                if (isDialog && isAppChanged && app.info.applicationId !== DEFAULT_APPLICATION_ID) {
+                if (isDialog && isAppChanged && app.info.applicationId !== DEFAULT_APP.applicationId) {
                     emit('app', { type: 'run', app: DEFAULT_APP });
                 }
 
