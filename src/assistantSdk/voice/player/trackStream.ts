@@ -14,7 +14,17 @@ const from16BitToFloat32 = (incomingData: Int16Array) => {
     const l = incomingData.length;
     const outputData = new Float32Array(l);
     for (let i = 0; i < l; i += 1) {
-        outputData[i] = incomingData[i] / 32768.0;
+        let sample = incomingData[i] / 32768.0;
+
+        // Ограничиваем значения диапазоном [-1.0, 1.0]
+        sample = Math.max(-1.0, Math.min(1.0, sample));
+
+        // Защита от NaN и бесконечности
+        if (!isFinite(sample)) {
+            sample = 0.0;
+        }
+
+        outputData[i] = sample;
     }
     return outputData;
 };
@@ -43,6 +53,7 @@ export const createTrackStream = (
 ) => {
     // очередь загруженных чанков (кусочков) трека
     const queue = createChunkQueue<AudioBufferSourceNode>();
+    const targetChunkSize = sampleRate * numberOfChannels * HZ_BYTES_COUNT * 0.1;
     let buffer = new ArrayBuffer(0);
     let extraByte: number | null = null;
     let status: 'stop' | 'play' | 'end' = trackStatus || 'stop';
@@ -86,12 +97,18 @@ export const createTrackStream = (
         // воспроизводим трек, если источник уже проигрывается или поток полностью загрузился или длина загруженного
         // больше задержки
         if (isPlaying || loaded || bufferDurationSeconds >= delay) {
-            if (buffer.byteLength > 0) {
+            if (buffer.byteLength >= targetChunkSize || (loaded && buffer.byteLength > 0)) {
                 const chunk = getChunkFromBuffer();
+                if (!chunk.buffer) {
+                    return;
+                }
+
                 startTime = queue.length === 0 ? ctx.currentTime : startTime;
                 queue.push(chunk);
                 chunk.start(startTime + lastChunkOffset);
-                lastChunkOffset += chunk.buffer?.duration || 0;
+
+                const chunkDuration = chunk.buffer.duration || 0;
+                lastChunkOffset += chunkDuration;
             }
         }
 
@@ -146,9 +163,21 @@ export const createTrackStream = (
 
     /** Получить чанк из буфера */
     const getChunkFromBuffer = () => {
-        const tmp = buffer;
-        buffer = new ArrayBuffer(0);
-        const data = new Uint8Array(tmp);
+        const chunkSizeToTake = Math.min(targetChunkSize, buffer.byteLength);
+
+        // Если данных мало и поток не завершен, не обрабатываем
+        if (chunkSizeToTake < targetChunkSize && !loaded) {
+            return createChunk(new Float32Array(0)); // Возвращаем пустой чанк
+        }
+
+        // Извлекаем порцию данных
+        const chunkBuffer = buffer.slice(0, chunkSizeToTake);
+
+        // Обновляем основной буфер (убираем обработанную часть)
+        const remainingBuffer = buffer.slice(chunkSizeToTake);
+        buffer = remainingBuffer;
+
+        const data = new Uint8Array(chunkBuffer);
 
         const bytesArraysSizes: BytesArraysSizes = {
             incomingMessageVoiceDataLength: data.length,
