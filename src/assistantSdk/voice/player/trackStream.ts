@@ -234,6 +234,8 @@ export const createTrackStream = (
             return;
         }
 
+        console.log('write');
+
         const tmp = new Uint8Array(buffer.byteLength + data.length - slicePoint);
         tmp.set(new Uint8Array(buffer), 0);
         tmp.set(slicePoint ? data.slice(slicePoint) : data, buffer.byteLength);
