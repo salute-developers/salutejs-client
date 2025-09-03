@@ -152,6 +152,7 @@ export const createNavigatorAudioProvider = (
     useAnalyser?: boolean,
     options: {
         echoCancellation?: boolean;
+        noiseSuppression?: boolean;
         targetSampleRate?: number;
     } = {},
 ): Promise<() => void> =>
@@ -159,6 +160,7 @@ export const createNavigatorAudioProvider = (
         .getUserMedia({
             audio: {
                 echoCancellation: options?.echoCancellation,
+                noiseSuppression: options?.noiseSuppression,
             },
         })
         .then((stream) => {
