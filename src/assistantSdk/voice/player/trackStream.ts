@@ -14,7 +14,17 @@ const from16BitToFloat32 = (incomingData: Int16Array) => {
     const l = incomingData.length;
     const outputData = new Float32Array(l);
     for (let i = 0; i < l; i += 1) {
-        outputData[i] = incomingData[i] / 32768.0;
+        let sample = incomingData[i] / 32768.0;
+
+        // Ограничиваем значения диапазоном [-1.0, 1.0]
+        sample = Math.max(-1.0, Math.min(1.0, sample));
+
+        // Защита от NaN и бесконечности
+        if (!isFinite(sample)) {
+            sample = 0.0;
+        }
+
+        outputData[i] = sample;
     }
     return outputData;
 };
