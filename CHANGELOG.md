@@ -1,3 +1,21 @@
+# v1.36.0 (Wed Sep 03 2025)
+
+#### 🚀 Enhancement
+
+- feat: Добавлен флаг echoCancellation для AudioProvider [#235](https://github.com/salute-developers/salutejs-client/pull/235) ([@evgeniysemin](https://github.com/evgeniysemin) [@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 3
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.35.10 (Wed Aug 06 2025)
 
 #### 🐛 Bug Fix
