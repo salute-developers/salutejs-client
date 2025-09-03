@@ -23,4 +23,4 @@ export * from './typings';
 export { GetHistoryResponse } from './proto';
 export { PacketWrapperFromServer } from './assistantSdk/voice/recognizers/asr';
 export { createVoicePlayer } from './assistantSdk/voice/player/voicePlayer';
-export { createTransport } from './assistantSdk/client/transport';
+export { createClient } from './assistantSdk/client/pureClient';

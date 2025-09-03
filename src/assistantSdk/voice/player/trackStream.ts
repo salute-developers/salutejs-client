@@ -1,4 +1,5 @@
 import { createChunkQueue } from './chunkQueue';
+import { parseWavHeader } from './utils';
 
 const HZ_BYTES_COUNT = 2;
 
@@ -13,7 +14,17 @@ const from16BitToFloat32 = (incomingData: Int16Array) => {
     const l = incomingData.length;
     const outputData = new Float32Array(l);
     for (let i = 0; i < l; i += 1) {
-        outputData[i] = incomingData[i] / 32768.0;
+        let sample = incomingData[i] / 32768.0;
+
+        // Ограничиваем значения диапазоном [-1.0, 1.0]
+        sample = Math.max(-1.0, Math.min(1.0, sample));
+
+        // Защита от NaN и бесконечности
+        if (!isFinite(sample)) {
+            sample = 0.0;
+        }
+
+        outputData[i] = sample;
     }
     return outputData;
 };
@@ -79,9 +90,12 @@ export const createTrackStream = (
             onPlay && onPlay();
         }
 
+        const bytesPerSecond = sampleRate * HZ_BYTES_COUNT * numberOfChannels;
+        const bufferDurationSeconds = buffer.byteLength / bytesPerSecond;
+
         // воспроизводим трек, если источник уже проигрывается или поток полностью загрузился или длина загруженного
         // больше задержки
-        if (isPlaying || loaded || buffer.byteLength / (sampleRate * HZ_BYTES_COUNT) >= delay) {
+        if (isPlaying || loaded || bufferDurationSeconds >= delay) {
             if (buffer.byteLength > 0) {
                 const chunk = getChunkFromBuffer();
                 startTime = queue.length === 0 ? ctx.currentTime : startTime;
@@ -171,10 +185,31 @@ export const createTrackStream = (
 
     /** добавляет чанк в очередь на воспроизведение */
     const write = (data: Uint8Array) => {
-        // 44 байта - заголовок трека
-        const slicePoint = firstChunk ? 44 : 0;
+        let slicePoint = 0;
 
-        firstChunk = false;
+        if (firstChunk) {
+            // Проверяем наличие WAV заголовка
+            const wavHeader = parseWavHeader(data);
+
+            if (wavHeader) {
+                // Найден валидный WAV заголовок - пропускаем его
+                slicePoint = wavHeader.headerSize;
+                // actualSampleRate = wavHeader.sampleRate;
+                // actualChannels = wavHeader.channels;
+
+                // Предупреждение о несоответствии параметров
+                if (wavHeader.sampleRate !== sampleRate) {
+                    console.warn(`WAV файл содержит sampleRate ${wavHeader.sampleRate}, но ожидался ${sampleRate}`);
+                }
+                if (wavHeader.channels !== numberOfChannels) {
+                    console.warn(`WAV файл содержит ${wavHeader.channels} каналов, но ожидался ${numberOfChannels}`);
+                }
+            } else {
+                slicePoint = 0;
+            }
+
+            firstChunk = false;
+        }
 
         if (slicePoint >= data.length) {
             return;
