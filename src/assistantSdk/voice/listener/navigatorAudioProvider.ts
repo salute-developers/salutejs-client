@@ -70,6 +70,9 @@ const createAudioRecorder = (
                 onGetPort(pcmProcessingNode.port);
             } else {
                 pcmProcessingNode.port.onmessage = (e) => {
+                    console.log(
+                        'MESSAGE BY pcmProcessingNode - если этот лог появляется более одного раза, то гипотеза подтверждена',
+                    );
                     const { data } = e;
                     const last = state === 'inactive';
 
@@ -98,13 +101,13 @@ const createAudioRecorder = (
  * @param cb Callback, куда будут передаваться чанки с голосом пользователя
  * @returns Promise, который содержит функцию прерывающую слушание
  */
-export const createNavigatorAudioProvider = (
+export const createNavigatorAudioProvider = async (
     cb?: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
     useAnalyser?: boolean,
     onGetPort?: (port: MessagePort) => void,
-): Promise<() => void> =>
-    Promise.all([
-        navigator.mediaDevices.getUserMedia({
+): Promise<() => void> => {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
             audio: {
                 /**
                  * Отключение автоматической обработки аудио
@@ -114,22 +117,21 @@ export const createNavigatorAudioProvider = (
                 noiseSuppression: false,
                 echoCancellation: false,
             },
-        }),
-        navigator.permissions.query({
-            name: 'microphone',
-        }),
-    ])
-        .then(([stream, permission]) => {
-            if (permission.state !== 'granted') {
-                throw Error('PERMISSION_FOR_MICROPHONE_REQUIRED');
-            }
-
-            return createAudioRecorder(stream, cb, useAnalyser, onGetPort);
-        })
-        .catch((err) => {
-            if (window.location.protocol === 'http:') {
-                throw new Error('Audio is supported only on a secure connection');
-            }
-
-            throw err;
         });
+        const permission = await navigator.permissions.query({
+            name: 'microphone',
+        });
+
+        if (permission.state !== 'granted') {
+            throw Error('PERMISSION_FOR_MICROPHONE_REQUIRED');
+        }
+
+        return createAudioRecorder(stream, cb, useAnalyser, onGetPort);
+    } catch (err) {
+        if (window.location.protocol === 'http:') {
+            throw new Error('Audio is supported only on a secure connection');
+        }
+
+        throw err;
+    }
+};
