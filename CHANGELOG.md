@@ -1,3 +1,103 @@
+# v1.36.0 (Wed Sep 03 2025)
+
+#### 🚀 Enhancement
+
+- feat: Добавлен флаг echoCancellation для AudioProvider [#235](https://github.com/salute-developers/salutejs-client/pull/235) ([@evgeniysemin](https://github.com/evgeniysemin) [@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 3
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
+# v1.35.10 (Wed Aug 06 2025)
+
+#### 🐛 Bug Fix
+
+- fix: экспорт транспорта из пакета [#234](https://github.com/salute-developers/salutejs-client/pull/234) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
+# v1.35.9 (Mon May 26 2025)
+
+#### 🐛 Bug Fix
+
+- Исправить вопроизведение коротких tts аудио [#233](https://github.com/salute-developers/salutejs-client/pull/233) ([@drauggres](https://github.com/drauggres))
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Sergey Volkov ([@drauggres](https://github.com/drauggres))
+
+---
+
+# v1.35.8 (Fri May 23 2025)
+
+#### 🐛 Bug Fix
+
+- fix: update default settings after first connection [#231](https://github.com/salute-developers/salutejs-client/pull/231) ([@DanilSaidov](https://github.com/DanilSaidov))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@DanilSaidov](https://github.com/DanilSaidov)
+- [@Salute-Eva](https://github.com/Salute-Eva)
+
+---
+
+# v1.35.7 (Mon May 19 2025)
+
+#### 🐛 Bug Fix
+
+- fix: Откат фикса сериализации [#229](https://github.com/salute-developers/salutejs-client/pull/229) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- [@Salute-Eva](https://github.com/Salute-Eva)
+
+---
+
+# v1.35.6 (Tue Apr 15 2025)
+
+#### 🐛 Bug Fix
+
+- fix: сериализация строк для meta [#227](https://github.com/salute-developers/salutejs-client/pull/227) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.35.5 (Thu Feb 20 2025)
 
 #### 🐛 Bug Fix

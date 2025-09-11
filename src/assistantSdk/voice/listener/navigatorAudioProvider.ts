@@ -51,7 +51,7 @@ const createAudioRecorder = (
             if (!context) {
                 context = createAudioContext({
                     // firefox не умеет выравнивать samplerate, будем делать это самостоятельно
-                    sampleRate: IS_FIREFOX ? undefined : TARGET_SAMPLE_RATE,
+                    sampleRate: IS_FIREFOX ? undefined : targetSampleRate,
                 });
                 await initWorklet(context);
             }

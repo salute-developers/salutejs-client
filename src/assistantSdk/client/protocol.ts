@@ -179,8 +179,8 @@ export const createProtocol = (
         return getHistoryRequestOriginal({
             device: currentSettings.device || null,
             uuid: {
-                userId: data.uuid?.userId || userId,
-                userChannel: data.uuid?.userChannel || userChannel,
+                userId: data.uuid?.userId || configuration.userId,
+                userChannel: data.uuid?.userChannel || configuration.userChannel,
             },
             history: { ...(data.history || {}) },
         });
@@ -266,8 +266,8 @@ export const createProtocol = (
 
                 sendInitialSettings(
                     {
-                        userId,
-                        userChannel,
+                        userId: configuration.userId,
+                        userChannel: configuration.userChannel,
                         device: currentSettings.device,
                         settings: currentSettings.settings,
                         locale: version > 3 ? currentSettings.locale : undefined,
