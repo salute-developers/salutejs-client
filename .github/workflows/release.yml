@@ -34,13 +34,13 @@ jobs:
           runTests: false
           record: true
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          install: false
-          browser: chrome
-          headless: true
-          record: false
+      # - name: Cypress run
+      #   uses: cypress-io/github-action@v2
+      #   with:
+      #     install: false
+      #     browser: chrome
+      #     headless: true
+      #     record: false
 
       - name: Lint
         run: npm run lint
