@@ -103,8 +103,8 @@ export const createNavigatorAudioProvider = (
     useAnalyser?: boolean,
     onGetPort?: (port: MessagePort) => void,
 ): Promise<() => void> =>
-    navigator.mediaDevices
-        .getUserMedia({
+    Promise.all([
+        navigator.mediaDevices.getUserMedia({
             audio: {
                 /**
                  * Отключение автоматической обработки аудио
@@ -114,8 +114,16 @@ export const createNavigatorAudioProvider = (
                 noiseSuppression: false,
                 echoCancellation: false,
             },
-        })
-        .then((stream) => {
+        }),
+        navigator.permissions.query({
+            name: 'microphone',
+        }),
+    ])
+        .then(([stream, permission]) => {
+            if (permission.state !== 'granted') {
+                throw Error('PERMISSION_FOR_MICROPHONE_REQUIRED');
+            }
+
             return createAudioRecorder(stream, cb, useAnalyser, onGetPort);
         })
         .catch((err) => {
