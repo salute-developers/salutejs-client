@@ -79,7 +79,7 @@ export type AssistantEvents = {
     actionCommand: (event: ActionCommandEvent) => void;
     command: (command: AssistantCommand) => void;
     status: (status: Status, mid: Mid) => void;
-    error: (error: AssistantError) => void;
+    error: (error: AssistantError | Error) => void;
     history: (history: HistoryMessages[]) => void;
     tts: (event: TtsEvent) => void;
 };
@@ -252,6 +252,9 @@ export const createAssistant = ({
             if (!settings.current.disableDubbing) {
                 protocol.changeSettings({ dubbing: 1 });
             }
+        },
+        (error: Error) => {
+            emit('error', error);
         },
     );
 

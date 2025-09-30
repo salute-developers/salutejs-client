@@ -84,7 +84,10 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
         });
 
         webSocket.addEventListener('error', (e) => {
+            console.error(`${new Date()} - WebSocket error with status ${status} and retries count ${retries}`);
+
             if (status !== 'connecting') {
+                emit('error', e);
                 throw e;
             }
 
@@ -103,6 +106,7 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
                     retries = 0;
 
                     emit('error', e);
+                    throw e;
                 }
             }
         });
@@ -141,7 +145,11 @@ export const createTransport = ({ createWS = defaultWSCreator, checkCertUrl }: C
         //     throw new Error('The client seems to be offline');
         // }
 
-        webSocket.send(data);
+        if (status === 'open') {
+            webSocket.send(data);
+        } else {
+            throw new Error(`Trying to send a message to the websocket with status ${status}`);
+        }
     };
 
     return {

@@ -33,13 +33,14 @@ export const createVoiceListener = (
         emit('status', 'stopped');
     };
 
-    const listen = (handleVoice?: VoiceHandler): Promise<void> => {
+    const listen = async (stream: MediaStream, handleVoice?: VoiceHandler): Promise<void> => {
         cancelableToken = { current: false };
         let capturedToken = cancelableToken;
         status = 'started';
         emit('status', 'started');
 
         return createAudioProvider(
+            stream,
             handleVoice ? (data, analyser, last) => handleVoice(new Uint8Array(data), analyser, last) : undefined,
             false,
             onGetPort,

@@ -11,7 +11,7 @@ const worker = new Worker(new URL('./vps.worker.ts', import.meta.url), { type: '
 
 export function createInifiniteListen(config: InifinteListenParams, restApiUrl: string) {
     const listener = createVoiceListener(
-        (cb, ...args) => createNavigatorAudioProvider(cb, ...args),
+        (stream, cb, ...args) => createNavigatorAudioProvider(stream, cb, ...args),
         (port: MessagePort) => {
             worker.postMessage({ type: 'start' }, [port]);
         },

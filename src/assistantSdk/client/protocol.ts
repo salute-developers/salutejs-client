@@ -129,13 +129,18 @@ export const createProtocol = (
                 send(message);
 
                 return;
-            } catch {
+            } catch (error) {
+                console.warn('Error in message sending', error);
                 /* игнорируем ошибку, ожидаем что ниже сообщение упадет в очередь */
             }
         }
 
         // накапливаем сообщения, отправим после успешного коннекта
         messageQueue.push(message);
+
+        if (messageQueue.length > 10) {
+            throw new Error('messageQueue length is over 10. It is mean that salutejs-client cant send messages.');
+        }
 
         if (status === 'closed' && !destroyed) {
             transport.open(url);
@@ -362,9 +367,23 @@ export const createProtocol = (
                     }),
                 );
                 subs.push(
-                    transport.on('error', () => {
+                    transport.on('error', (error) => {
                         subs.map((sub) => sub());
-                        reject(new Error('Network error'));
+                        let errorString = '';
+
+                        if (error instanceof Error) {
+                            errorString = `Network error: [${error.name}] ${error.message}\n${
+                                error.stack ?? 'No stack trace'
+                            }`;
+                        } else {
+                            try {
+                                errorString = `Network error: ${typeof error}: ${JSON.stringify(error)}`;
+                            } catch {
+                                errorString = 'Network error: unparsed error';
+                            }
+                        }
+
+                        reject(new Error(errorString));
                     }),
                 );
 

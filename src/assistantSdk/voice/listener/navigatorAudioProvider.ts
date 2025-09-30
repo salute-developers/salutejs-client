@@ -23,8 +23,10 @@ let destination: MediaStreamAudioDestinationNode | null;
 const createAudioRecorder = (
     stream: MediaStream,
     cb?: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
+    targetSampleRate: number,
     useAnalyser?: boolean,
     onGetPort?: (port: MessagePort) => void,
+    onError?: (error: Error) => void,
 ): Promise<() => void> =>
     new Promise((resolve) => {
         let state: 'inactive' | 'recording' = 'inactive';
@@ -70,18 +72,24 @@ const createAudioRecorder = (
                 onGetPort(pcmProcessingNode.port);
             } else {
                 pcmProcessingNode.port.onmessage = (e) => {
-                    const { data } = e;
-                    const last = state === 'inactive';
+                    try {
+                        const { data } = e;
+                        const last = state === 'inactive';
 
-                    let analyserArray: Uint8Array | null = null;
-                    if (analyser) {
-                        analyserArray = new Uint8Array(analyser.frequencyBinCount);
+                        let analyserArray: Uint8Array | null = null;
+                        if (analyser) {
+                            analyserArray = new Uint8Array(analyser.frequencyBinCount);
 
-                        analyser?.getByteTimeDomainData(analyserArray);
+                            analyser?.getByteTimeDomainData(analyserArray);
+                        }
+
+                        cb && cb(data, analyserArray, last);
+                        resolve(stop);
+                    } catch (error) {
+                        stop();
+
+                        onError?.(error as Error);
                     }
-
-                    resolve(stop);
-                    cb && cb(data, analyserArray, last);
                 };
             }
 
@@ -98,38 +106,21 @@ const createAudioRecorder = (
  * @param cb Callback, куда будут передаваться чанки с голосом пользователя
  * @returns Promise, который содержит функцию прерывающую слушание
  */
-export const createNavigatorAudioProvider = (
+export const createNavigatorAudioProvider = async (
+    stream: MediaStream,
     cb?: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
     useAnalyser?: boolean,
     onGetPort?: (port: MessagePort) => void,
-): Promise<() => void> =>
-    Promise.all([
-        navigator.mediaDevices.getUserMedia({
-            audio: {
-                /**
-                 * Отключение автоматической обработки аудио
-                 * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/noiseSuppression
-                 * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/echoCancellation
-                 */
-                noiseSuppression: false,
-                echoCancellation: false,
-            },
-        }),
-        navigator.permissions.query({
-            name: 'microphone',
-        }),
-    ])
-        .then(([stream, permission]) => {
-            if (permission.state !== 'granted') {
-                throw Error('PERMISSION_FOR_MICROPHONE_REQUIRED');
-            }
+    targetSampleRate?: number,
+    onError?: (error: Error) => void,
+): Promise<() => void> => {
+    try {
+        return createAudioRecorder(stream, cb, targetSampleRate || TARGET_SAMPLE_RATE, useAnalyser, onGetPort, onError);
+    } catch (err) {
+        if (window.location.protocol === 'http:') {
+            throw new Error('Audio is supported only on a secure connection');
+        }
 
-            return createAudioRecorder(stream, cb, useAnalyser, onGetPort);
-        })
-        .catch((err) => {
-            if (window.location.protocol === 'http:') {
-                throw new Error('Audio is supported only on a secure connection');
-            }
-
-            throw err;
-        });
+        throw err;
+    }
+};

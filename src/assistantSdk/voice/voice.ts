@@ -42,10 +42,13 @@ export const createVoice = (
     /// пока onReady не вызван, треки не воспроизводятся
     /// когда случится onReady, очередь треков начнет проигрываться
     onReady?: () => void,
+    onError?: (error: Error) => void,
 ) => {
     let useAnalyser = false;
     let voicePlayer: ReturnType<typeof createVoicePlayer>;
-    const listener = createVoiceListener((cb) => createNavigatorAudioProvider(cb, useAnalyser));
+    const listener = createVoiceListener((stream, cb) =>
+        createNavigatorAudioProvider(stream, cb, useAnalyser, undefined, undefined, onError),
+    );
     const subscriptions: Array<() => void> = [];
     const appInfoDict: Record<string, AppInfo> = {};
     const mesIdQueue: Array<string> = [];
@@ -111,6 +114,26 @@ export const createVoice = (
 
         // повторные вызовы не пройдут
         if (listener.status === 'stopped' && !isRecognizeInitializing) {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    /**
+                     * Отключение автоматической обработки аудио
+                     * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/noiseSuppression
+                     * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/echoCancellation
+                     */
+                    noiseSuppression: false,
+                    echoCancellation: false,
+                },
+            });
+
+            const permission = await navigator.permissions.query({
+                name: 'microphone',
+            });
+
+            if (permission.state !== 'granted') {
+                throw Error('PERMISSION_FOR_MICROPHONE_REQUIRED');
+            }
+
             isRecognizeInitializing = true;
 
             const unsubscribe = listener.on('status', () => {
@@ -131,7 +154,7 @@ export const createVoice = (
 
                     currentVoiceMessageId = messageId;
 
-                    return listener.listen((chunk, analyser, last) => {
+                    return listener.listen(stream, (chunk, analyser, last) => {
                         if (analyser) {
                             emit({ voiceAnalyser: { data: analyser } });
                         }
