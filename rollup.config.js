@@ -9,7 +9,6 @@ import copy from 'rollup-plugin-copy';
 import pkg from './package.json';
 
 const common = {
-    input: 'src/index.ts',
     plugins: [
         commonjs({
             extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -44,7 +43,11 @@ const getUmdConfig = (fileName, input) => ({
 export default [
     {
         ...common,
-        input: ['src/index.ts', 'src/createAssistantDevOrigin.ts'],
+        input: [
+            'src/index.ts',
+            'src/createAssistantDevOrigin.ts',
+            'src/assistantSdk/voice/listener/worklet.js' /*,'src/assistantSdk/listenSdk/vps.worker.ts','src/assistantSdk/listenSdk/sw.ts'*/,
+        ],
         output: {
             ...common.output,
             dir: 'dist',
@@ -84,6 +87,10 @@ export default [
             'src/assistantSdk/assistant.ts',
             'src/mock.ts',
             'src/index.ts',
+            'src/assistantSdk/voice/listener/worklet.js',
+            // 'src/assistantSdk/listenSdk/vps.worker.ts',
+            // 'src/assistantSdk/listenSdk/listenSdk.ts',
+            // 'src/assistantSdk/listenSdk/sw.ts',
         ],
         output: {
             ...common.output,

@@ -15,24 +15,24 @@ export interface TtsEvent {
     appInfo: AppInfo;
 }
 
-/** Фильтр тишины */
-const filterEmptyChunks = (chunksOriginal: Uint8Array[]) => {
-    return chunksOriginal.reduce<Uint8Array[]>((acc, chunkOriginal) => {
-        const chunk = chunkOriginal.filter((int) => int);
+// /** Фильтр тишины */
+// const filterEmptyChunks = (chunksOriginal: Uint8Array[]) => {
+//     return chunksOriginal.reduce<Uint8Array[]>((acc, chunkOriginal) => {
+//         const chunk = chunkOriginal.filter((int) => int);
 
-        if (chunk.length) {
-            acc.push(chunk);
-        }
+//         if (chunk.length) {
+//             acc.push(chunk);
+//         }
 
-        return acc;
-    }, []);
-};
+//         return acc;
+//     }, []);
+// };
 
 export const createVoice = (
     client: ReturnType<typeof createClient>,
     settings: MutexedObject<AssistantSettings>,
     emit: (event: {
-        asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
+        asr?: { text: string; normalizedText: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
         emotion?: EmotionId;
         listener?: { status: VoiceListenerStatus };
         mtt?: { response: Music2TrackProtocol.MttResponse; mid: OriginalMessageType['messageId'] };
@@ -42,10 +42,13 @@ export const createVoice = (
     /// пока onReady не вызван, треки не воспроизводятся
     /// когда случится onReady, очередь треков начнет проигрываться
     onReady?: () => void,
+    onError?: (error: Error) => void,
 ) => {
     let useAnalyser = false;
     let voicePlayer: ReturnType<typeof createVoicePlayer>;
-    const listener = createVoiceListener((cb) => createNavigatorAudioProvider(cb, useAnalyser));
+    const listener = createVoiceListener((stream, cb) =>
+        createNavigatorAudioProvider(stream, cb, useAnalyser, undefined, undefined, onError),
+    );
     const subscriptions: Array<() => void> = [];
     const appInfoDict: Record<string, AppInfo> = {};
     const mesIdQueue: Array<string> = [];
@@ -111,6 +114,26 @@ export const createVoice = (
 
         // повторные вызовы не пройдут
         if (listener.status === 'stopped' && !isRecognizeInitializing) {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    /**
+                     * Отключение автоматической обработки аудио
+                     * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/noiseSuppression
+                     * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/echoCancellation
+                     */
+                    noiseSuppression: false,
+                    echoCancellation: false,
+                },
+            });
+
+            const permission = await navigator.permissions.query({
+                name: 'microphone',
+            });
+
+            if (permission.state !== 'granted') {
+                throw Error('PERMISSION_FOR_MICROPHONE_REQUIRED');
+            }
+
             isRecognizeInitializing = true;
 
             const unsubscribe = listener.on('status', () => {
@@ -131,7 +154,7 @@ export const createVoice = (
 
                     currentVoiceMessageId = messageId;
 
-                    return listener.listen((chunk, analyser, last) => {
+                    return listener.listen(stream, (chunk, analyser, last) => {
                         if (analyser) {
                             emit({ voiceAnalyser: { data: analyser } });
                         }
@@ -158,7 +181,7 @@ export const createVoice = (
      * @param messageName указать, если чанки для шазама
      */
     const streamVoice = async (chunks: Uint8Array[], last: boolean, messageName?: 'MUSIC_RECOGNITION' | undefined) => {
-        chunks = filterEmptyChunks(chunks);
+        // chunks = filterEmptyChunks(chunks);
 
         if (streaming?.(chunks, last)) {
             return;
@@ -220,7 +243,7 @@ export const createVoice = (
      * @param messageName указать, если чанки для шазама
      */
     const sendVoice = async (chunks: Uint8Array[], messageName?: 'MUSIC_RECOGNITION') => {
-        chunks = filterEmptyChunks(chunks);
+        // chunks = filterEmptyChunks(chunks);
 
         stopVoice();
 
@@ -322,13 +345,13 @@ export const createVoice = (
 
     subscriptions.push(
         // обработка входящей озвучки
-        client.on('voice', (data, message) => {
-            if (settings.current.disableDubbing) {
-                return;
-            }
+        // client.on('voice', (data, message) => {
+        //     if (settings.current.disableDubbing) {
+        //         return;
+        //     }
 
-            voicePlayer?.append(data, message.messageId.toString(), message.last === 1);
-        }),
+        //     voicePlayer?.append(data, message.messageId.toString(), message.last === 1);
+        // }),
 
         // статусы слушания речи
         listener.on('status', (status: VoiceListenerStatus) => {
@@ -339,7 +362,7 @@ export const createVoice = (
                 emit({ emotion: 'listen' });
             } else if (status === 'stopped') {
                 voicePlayer?.setActive(!settings.current.disableDubbing);
-                emit({ asr: { text: '' }, emotion: 'idle' });
+                emit({ asr: { text: '', normalizedText: '' }, emotion: 'idle' });
             }
         }),
 
@@ -378,14 +401,15 @@ export const createVoice = (
             const listening = listener.status === 'listen' && !settings.current.disableListening;
 
             if (text) {
-                const last = originalMessage.last === 1;
+                const last = false; // originalMessage.last === 1;
 
                 if (last || listening) {
                     emit({
                         asr: {
                             mid: originalMessage.messageId,
                             text: text.data || '',
-                            last,
+                            normalizedText: response?.decoderResultField?.hypothesis?.[0]?.normalizedText || '',
+                            last: originalMessage.last === 1,
                         },
                     });
                 }
@@ -397,14 +421,15 @@ export const createVoice = (
 
             if (response) {
                 const { decoderResultField, errorResponse } = response;
-                const last = !!(decoderResultField && decoderResultField?.isFinal);
+                const last = false; // !!(decoderResultField && decoderResultField?.isFinal);
 
-                if ((last || listening) && decoderResultField?.hypothesis?.length) {
+                if (last || listening) {
                     emit({
                         asr: {
                             mid: originalMessage.messageId,
-                            text: decoderResultField.hypothesis[0].normalizedText || '',
-                            last,
+                            text: decoderResultField?.hypothesis?.[0].normalizedText || '',
+                            normalizedText: decoderResultField?.hypothesis?.[0].normalizedText || '',
+                            last: !!(decoderResultField && decoderResultField?.isFinal),
                         },
                     });
                 }

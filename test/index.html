@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>My First Parcel App</title>
+    <style>
+      html {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        font-size: 16px;
+      }
+
+      body {
+        background: transparent;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      input {
+        margin-top: 50%;
+        margin-left: 30%;
+        font-size: 3rem;
+      }
+
+      audio {
+        visibility: hidden;
+      }
+
+      .tick {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 1em;
+        padding: 1em;
+        background-color: #fff;
+        color: #000;
+      }
+    </style>
+    <script type="module" src="index.ts"></script>
+    
+  <body>
+    <audio
+      paused
+      loop
+      controls
+      src="https://upload.wikimedia.org/wikipedia/commons/0/07/Silence.ogg"></audio>
+    </head>
+    <!-- <input type="text" /> -->
+    <div class="tick">
+      <span>Set Timeout Ticks</span>
+      <span id="timeoutTicks">0</span>
+      <span>Seconds from start</span>
+      <span id="fromStart">0</span>
+    </div>
+  </body>
+</html>

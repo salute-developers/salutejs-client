@@ -274,13 +274,24 @@ export const createClientMethods = ({
         });
     };
 
+    function getStack() {
+        const obj = {};
+        if ('captureStackTrace' in Error) {
+            // Avoid getStack itself in the stack trace
+            Error.captureStackTrace(obj, getStack);
+        }
+
+        // @ts-ignore
+        return obj.stack;
+    }
+
     const batch = <T>(cb: (methods: BatchableMethods) => T): T => {
         const batchingMessageId = getMessageId();
         let lastMessageSent = false;
-        const checkLastMessageStatus = (last?: boolean) => {
+        const checkLastMessageStatus = (last?: boolean, caller?: string) => {
             if (lastMessageSent) {
                 if (last) {
-                    throw new Error("Can't send two last items in batch");
+                    throw new Error("Can't send two last items in batch: " + caller + ' Stack: ' + getStack());
                 } else {
                     throw new Error("Can't send messages in batch after last message have been sent");
                 }
@@ -290,7 +301,7 @@ export const createClientMethods = ({
         };
 
         const upgradedSendText: typeof sendText = (...[data, params, type]) => {
-            checkLastMessageStatus(params?.last === 1);
+            checkLastMessageStatus(params?.last === 1, 'upgradedSendText');
             return sendText(data, params, type, batchingMessageId);
         };
 
@@ -301,7 +312,7 @@ export const createClientMethods = ({
                 meta?: MetaStringified;
             },
         ) => ReturnType<typeof sendSystemMessage> = (data, last, params) => {
-            checkLastMessageStatus(last);
+            checkLastMessageStatus(last, 'upgradedSendSystemMessage');
             return sendSystemMessage(data, last, batchingMessageId, params);
         };
 
@@ -313,7 +324,7 @@ export const createClientMethods = ({
                 meta?: MetaStringified;
             },
         ) => ReturnType<typeof sendVoice> = (data, last, mesName, params) => {
-            checkLastMessageStatus(last);
+            checkLastMessageStatus(last, 'upgradedSendVoice');
             return sendVoice(data, last, batchingMessageId, mesName, params);
         };
 
@@ -322,7 +333,7 @@ export const createClientMethods = ({
             last?: boolean,
             messageId?: number,
         ) => ReturnType<typeof sendSettings> = (data, last, messageId) => {
-            checkLastMessageStatus(last);
+            checkLastMessageStatus(last, 'upgradedSendSettings');
             return sendSettings(data, last, messageId);
         };
 

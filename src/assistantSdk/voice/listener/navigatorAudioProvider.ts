@@ -1,46 +1,15 @@
 import { createAudioContext } from '../audioContext';
 
-/**
- * Понижает sample rate c inSampleRate до значения outSampleRate и преобразует Float32Array в ArrayBuffer
- * @param buffer Аудио
- * @param inSampleRate текущий sample rate
- * @param outSampleRate требуемый sample rate
- * @returns Аудио со значением sample rate = outSampleRate
- */
-const downsampleBuffer = (buffer: Float32Array, inSampleRate: number, outSampleRate: number): ArrayBuffer => {
-    if (outSampleRate > inSampleRate) {
-        throw new Error('downsampling rate show be smaller than original sample rate');
-    }
-    const sampleRateRatio = inSampleRate / outSampleRate;
-    const newLength = Math.round(buffer.length / sampleRateRatio);
-    const result = new Int16Array(newLength);
-
-    let offsetResult = 0;
-    let offsetBuffer = 0;
-
-    while (offsetResult < result.length) {
-        const nextOffsetBuffer = Math.round((offsetResult + 1) * sampleRateRatio);
-        let accum = 0;
-        let count = 0;
-        for (let i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i++) {
-            accum += buffer[i];
-            count++;
-        }
-
-        result[offsetResult] = Math.min(1, accum / count) * 0x7fff;
-        offsetResult++;
-        offsetBuffer = nextOffsetBuffer;
-    }
-
-    return result.buffer;
-};
+async function initWorklet(context: AudioContext) {
+    await context.audioWorklet.addModule(new URL('./worklet.js', import.meta.url));
+}
 
 const TARGET_SAMPLE_RATE = 16000;
 const IS_FIREFOX = typeof window !== 'undefined' && navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-const IS_SAFARI = typeof window !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 let context: AudioContext;
-let processor: ScriptProcessorNode;
+let pcmProcessingNode: AudioWorkletNode;
+let source: MediaStreamAudioSourceNode;
 let analyser: AnalyserNode | null = null;
 let destination: MediaStreamAudioDestinationNode | null;
 
@@ -53,13 +22,14 @@ let destination: MediaStreamAudioDestinationNode | null;
  */
 const createAudioRecorder = (
     stream: MediaStream,
-    cb: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
+    cb?: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
     targetSampleRate: number,
     useAnalyser?: boolean,
+    onGetPort?: (port: MessagePort) => void,
+    onError?: (error: Error) => void,
 ): Promise<() => void> =>
     new Promise((resolve) => {
         let state: 'inactive' | 'recording' = 'inactive';
-        let input: MediaStreamAudioSourceNode;
 
         const stop = () => {
             if (state === 'inactive') {
@@ -70,10 +40,10 @@ const createAudioRecorder = (
             stream.getTracks().forEach((track) => {
                 track.stop();
             });
-            input.disconnect();
+            source.disconnect(pcmProcessingNode);
         };
 
-        const start = () => {
+        const start = async () => {
             if (state !== 'inactive') {
                 throw new Error("Can't start not inactive recorder");
             }
@@ -85,57 +55,46 @@ const createAudioRecorder = (
                     // firefox не умеет выравнивать samplerate, будем делать это самостоятельно
                     sampleRate: IS_FIREFOX ? undefined : targetSampleRate,
                 });
+                await initWorklet(context);
             }
 
-            input = context.createMediaStreamSource(stream);
-
-            if (!processor) {
-                processor = context.createScriptProcessor(2048, 1, 1);
-            }
-
+            source = context.createMediaStreamSource(stream);
             if (!analyser && useAnalyser) {
                 analyser = context.createAnalyser();
                 analyser.fftSize = 1024;
             }
 
-            const listener = (e: AudioProcessingEvent) => {
-                const buffer = e.inputBuffer.getChannelData(0);
-                const data = downsampleBuffer(buffer, context.sampleRate, TARGET_SAMPLE_RATE);
-                const last = state === 'inactive';
+            pcmProcessingNode = new AudioWorkletNode(context, 'pcm-processor', {
+                processorOptions: { sampleRate: context.sampleRate },
+            });
+            if (onGetPort) {
+                setTimeout(() => resolve(stop));
+                onGetPort(pcmProcessingNode.port);
+            } else {
+                pcmProcessingNode.port.onmessage = (e) => {
+                    try {
+                        const { data } = e;
+                        const last = state === 'inactive';
 
-                // отсылаем только чанки где есть звук voiceData > 0, т.к.
-                // в safari первые несколько чанков со звуком пустые
-                if (!IS_SAFARI || new Uint8Array(data).some((voiceData) => voiceData > 0)) {
-                    let analyserArray: Uint8Array | null = null;
+                        let analyserArray: Uint8Array | null = null;
+                        if (analyser) {
+                            analyserArray = new Uint8Array(analyser.frequencyBinCount);
 
-                    if (analyser) {
-                        analyserArray = new Uint8Array(analyser.frequencyBinCount);
+                            analyser?.getByteTimeDomainData(analyserArray);
+                        }
 
-                        analyser?.getByteFrequencyData(analyserArray);
+                        cb && cb(data, analyserArray, last);
+                        resolve(stop);
+                    } catch (error) {
+                        stop();
+
+                        onError?.(error as Error);
                     }
-
-                    cb(data, analyserArray, last);
-                    resolve(stop);
-                }
-
-                if (last) {
-                    processor.removeEventListener('audioprocess', listener);
-                }
-            };
-
-            processor.addEventListener('audioprocess', listener);
-
-            input.connect(processor);
-
-            if (analyser) {
-                input.connect(analyser);
+                };
             }
 
-            if (!destination) {
-                destination = context.createMediaStreamDestination();
-            }
-
-            processor.connect(destination);
+            source.connect(pcmProcessingNode);
+            pcmProcessingNode.connect(context.destination);
         };
 
         start();
@@ -147,29 +106,21 @@ const createAudioRecorder = (
  * @param cb Callback, куда будут передаваться чанки с голосом пользователя
  * @returns Promise, который содержит функцию прерывающую слушание
  */
-export const createNavigatorAudioProvider = (
-    cb: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
+export const createNavigatorAudioProvider = async (
+    stream: MediaStream,
+    cb?: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
     useAnalyser?: boolean,
-    options: {
-        echoCancellation?: boolean;
-        noiseSuppression?: boolean;
-        targetSampleRate?: number;
-    } = {},
-): Promise<() => void> =>
-    navigator.mediaDevices
-        .getUserMedia({
-            audio: {
-                echoCancellation: options?.echoCancellation,
-                noiseSuppression: options?.noiseSuppression,
-            },
-        })
-        .then((stream) => {
-            return createAudioRecorder(stream, cb, options.targetSampleRate || TARGET_SAMPLE_RATE, useAnalyser);
-        })
-        .catch((err) => {
-            if (window.location.protocol === 'http:') {
-                throw new Error('Audio is supported only on a secure connection');
-            }
+    onGetPort?: (port: MessagePort) => void,
+    targetSampleRate?: number,
+    onError?: (error: Error) => void,
+): Promise<() => void> => {
+    try {
+        return createAudioRecorder(stream, cb, targetSampleRate || TARGET_SAMPLE_RATE, useAnalyser, onGetPort, onError);
+    } catch (err) {
+        if (window.location.protocol === 'http:') {
+            throw new Error('Audio is supported only on a secure connection');
+        }
 
-            throw err;
-        });
+        throw err;
+    }
+};

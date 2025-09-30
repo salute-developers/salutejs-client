@@ -129,13 +129,18 @@ export const createProtocol = (
                 send(message);
 
                 return;
-            } catch {
+            } catch (error) {
+                console.warn('Error in message sending', error);
                 /* игнорируем ошибку, ожидаем что ниже сообщение упадет в очередь */
             }
         }
 
         // накапливаем сообщения, отправим после успешного коннекта
         messageQueue.push(message);
+
+        if (messageQueue.length > 10) {
+            throw new Error('messageQueue length is over 10. It is mean that salutejs-client cant send messages.');
+        }
 
         if (status === 'closed' && !destroyed) {
             transport.open(url);
@@ -280,11 +285,11 @@ export const createProtocol = (
 
             status = 'connected';
 
-            window.clearTimeout(clearReadyTimer);
+            clearTimeout(clearReadyTimer);
 
             /// считаем коннект = ready, если по истечении таймаута сокет не был разорван
             /// т.к бек может разрывать сокет, если с settings что-то не так
-            clearReadyTimer = window.setTimeout(() => {
+            clearReadyTimer = setTimeout(() => {
                 if (status !== 'connected') {
                     return;
                 }
@@ -313,7 +318,7 @@ export const createProtocol = (
             emit('incoming', decodedMessage);
 
             if (decodedMessage.status) {
-                transport.close();
+                // transport.close();
             }
         }),
     );
@@ -349,7 +354,7 @@ export const createProtocol = (
         },
         init: () => {
             // в отличии от reconnect не обрывает коннект если он в порядке
-            if (status === 'ready' && window.navigator.onLine) {
+            if (status === 'ready' && (!window || window.navigator.onLine)) {
                 return Promise.resolve();
             }
 
@@ -362,9 +367,23 @@ export const createProtocol = (
                     }),
                 );
                 subs.push(
-                    transport.on('error', () => {
+                    transport.on('error', (error) => {
                         subs.map((sub) => sub());
-                        reject(new Error('Network error'));
+                        let errorString = '';
+
+                        if (error instanceof Error) {
+                            errorString = `Network error: [${error.name}] ${error.message}\n${
+                                error.stack ?? 'No stack trace'
+                            }`;
+                        } else {
+                            try {
+                                errorString = `Network error: ${typeof error}: ${JSON.stringify(error)}`;
+                            } catch {
+                                errorString = 'Network error: unparsed error';
+                            }
+                        }
+
+                        reject(new Error(errorString));
                     }),
                 );
 

@@ -48,7 +48,7 @@ export type AppEvent =
       };
 
 export type AssistantEvent = {
-    asr?: { text: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
+    asr?: { text: string; normalizedText: string; last?: boolean; mid?: OriginalMessageType['messageId'] }; // last и mid нужен для отправки исх бабла в чат
     /**
      * @deprecated Use the `on('assistant', { listener })` and `on('tts', tts)` subscriptions to receive voice events
      */
@@ -79,7 +79,7 @@ export type AssistantEvents = {
     actionCommand: (event: ActionCommandEvent) => void;
     command: (command: AssistantCommand) => void;
     status: (status: Status, mid: Mid) => void;
-    error: (error: AssistantError) => void;
+    error: (error: AssistantError | Error) => void;
     history: (history: HistoryMessages[]) => void;
     tts: (event: TtsEvent) => void;
 };
@@ -252,6 +252,9 @@ export const createAssistant = ({
             if (!settings.current.disableDubbing) {
                 protocol.changeSettings({ dubbing: 1 });
             }
+        },
+        (error: Error) => {
+            emit('error', error);
         },
     );
 
@@ -518,11 +521,6 @@ export const createAssistant = ({
         start,
         stop: () => {
             voice.stop();
-
-            if (lastMid !== 0) {
-                client.sendCancel(lastMid);
-            }
-
             setTimeout(() => {
                 protocol.clearQueue();
                 transport.close();
