@@ -1,3 +1,20 @@
+# v1.36.1 (Wed Oct 01 2025)
+
+#### 🐛 Bug Fix
+
+- fix: targetSampleRate не влияет на запись [#236](https://github.com/salute-developers/salutejs-client/pull/236) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.36.0 (Wed Sep 03 2025)
 
 #### 🚀 Enhancement
