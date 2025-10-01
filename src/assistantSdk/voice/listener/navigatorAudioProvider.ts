@@ -100,7 +100,7 @@ const createAudioRecorder = (
 
             const listener = (e: AudioProcessingEvent) => {
                 const buffer = e.inputBuffer.getChannelData(0);
-                const data = downsampleBuffer(buffer, context.sampleRate, TARGET_SAMPLE_RATE);
+                const data = downsampleBuffer(buffer, context.sampleRate, targetSampleRate);
                 const last = state === 'inactive';
 
                 // отсылаем только чанки где есть звук voiceData > 0, т.к.
