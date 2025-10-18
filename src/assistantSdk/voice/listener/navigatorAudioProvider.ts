@@ -155,21 +155,24 @@ export const createNavigatorAudioProvider = (
         noiseSuppression?: boolean;
         targetSampleRate?: number;
     } = {},
-): Promise<() => void> =>
-    navigator.mediaDevices
-        .getUserMedia({
-            audio: {
-                echoCancellation: options?.echoCancellation,
-                noiseSuppression: options?.noiseSuppression,
-            },
-        })
-        .then((stream) => {
-            return createAudioRecorder(stream, cb, options.targetSampleRate || TARGET_SAMPLE_RATE, useAnalyser);
-        })
-        .catch((err) => {
+    mediaStream?: MediaStream,
+): Promise<() => void> => {
+    const stream = mediaStream
+        ? Promise.resolve(mediaStream)
+        : navigator.mediaDevices.getUserMedia({
+              audio: {
+                  echoCancellation: options?.echoCancellation,
+                  noiseSuppression: options?.noiseSuppression,
+              },
+          });
+
+    return stream.then((s) => {
+        return createAudioRecorder(s, cb, options.targetSampleRate || TARGET_SAMPLE_RATE, useAnalyser).catch((err) => {
             if (window.location.protocol === 'http:') {
                 throw new Error('Audio is supported only on a secure connection');
             }
 
             throw err;
         });
+    });
+};
