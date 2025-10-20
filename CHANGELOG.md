@@ -1,3 +1,20 @@
+# v1.37.0 (Mon Oct 20 2025)
+
+#### 🚀 Enhancement
+
+- feat: Добавлен для рекордера кастомный медиа-стрим [#237](https://github.com/salute-developers/salutejs-client/pull/237) ([@evgeniysemin](https://github.com/evgeniysemin))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@evgeniysemin](https://github.com/evgeniysemin)
+- [@Salute-Eva](https://github.com/Salute-Eva)
+
+---
+
 # v1.36.1 (Wed Oct 01 2025)
 
 #### 🐛 Bug Fix
