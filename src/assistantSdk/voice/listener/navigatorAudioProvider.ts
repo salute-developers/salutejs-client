@@ -51,7 +51,7 @@ let destination: MediaStreamAudioDestinationNode | null;
  * @param cb callback, куда будут переданы чанки из потока
  * @returns Функция, вызов которой остановит передачу чанков
  */
-const createAudioRecorder = (
+export const createAudioRecorder = (
     stream: MediaStream,
     cb: (buffer: ArrayBuffer, analyserArray: Uint8Array | null, last: boolean) => void,
     targetSampleRate: number,
