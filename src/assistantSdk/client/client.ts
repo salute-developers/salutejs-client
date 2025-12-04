@@ -253,6 +253,7 @@ export const createClient = (
         destroy: () => {
             off.map((f) => f());
         },
+        close: protocol.close,
         init: protocol.init,
         createVoiceStream,
         sendData,
@@ -264,5 +265,11 @@ export const createClient = (
         sendMute,
         on,
         waitForAnswer,
+        get status() {
+            return protocol.status;
+        },
+        get currentMessageId() {
+            return protocol.currentMessageId;
+        },
     };
 };
