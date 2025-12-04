@@ -27,6 +27,7 @@ export interface ClientEvents {
     status: (status: Status, original: OriginalMessageType) => void;
     systemMessage: (systemMessage: SystemMessageDataType, original: OriginalMessageType) => void;
     history: (historyMessages: HistoryMessages[], original: OriginalMessageType) => void;
+    ready: () => void;
 }
 
 export type SystemMessage = SystemMessageDataType & {
@@ -207,45 +208,50 @@ export const createClient = (
         });
     };
 
-    const off = protocol.on('incoming', (message: OriginalMessageType) => {
-        if (message.systemMessage?.data) {
-            emit('systemMessage', JSON.parse(message.systemMessage.data), message);
-        }
+    const off = [
+        protocol.on('incoming', (message: OriginalMessageType) => {
+            if (message.systemMessage?.data) {
+                emit('systemMessage', JSON.parse(message.systemMessage.data), message);
+            }
 
-        if (message.voice) {
-            emit('voice', message.voice.data || new Uint8Array(), message);
-        }
+            if (message.voice) {
+                emit('voice', message.voice.data || new Uint8Array(), message);
+            }
 
-        if (message.status) {
-            emit('status', message.status as Status, message);
-        }
+            if (message.status) {
+                emit('status', message.status as Status, message);
+            }
 
-        if (message.messageName === 'TAKE_HISTORY' && message.bytes?.data) {
-            const history = GetHistoryResponse.decode(message.bytes?.data).historyMessages;
-            const parsedHistory: HistoryMessages[] = history.map((historyMessage) => ({
-                ...historyMessage,
-                content: JSON.parse(historyMessage.content || ''),
-            }));
+            if (message.messageName === 'TAKE_HISTORY' && message.bytes?.data) {
+                const history = GetHistoryResponse.decode(message.bytes?.data).historyMessages;
+                const parsedHistory: HistoryMessages[] = history.map((historyMessage) => ({
+                    ...historyMessage,
+                    content: JSON.parse(historyMessage.content || ''),
+                }));
 
-            emit('history', parsedHistory, message);
-        }
+                emit('history', parsedHistory, message);
+            }
 
-        if (message.messageName === MessageNames.STT && (message.text || message.bytes?.data?.length)) {
-            const response = message.bytes?.data?.length
-                ? PacketWrapperFromServer.decode(message.bytes.data)
-                : undefined;
+            if (message.messageName === MessageNames.STT && (message.text || message.bytes?.data?.length)) {
+                const response = message.bytes?.data?.length
+                    ? PacketWrapperFromServer.decode(message.bytes.data)
+                    : undefined;
 
-            emit('stt', { text: message.text, response }, message);
-        }
+                emit('stt', { text: message.text, response }, message);
+            }
 
-        if (message.messageName === MessageNames.MTT && message.bytes?.data?.length) {
-            emit('musicRecognition', Music2TrackProtocol.MttResponse.decode(message.bytes.data), message);
-        }
-    });
+            if (message.messageName === MessageNames.MTT && message.bytes?.data?.length) {
+                emit('musicRecognition', Music2TrackProtocol.MttResponse.decode(message.bytes.data), message);
+            }
+        }),
+        protocol.on('ready', () => {
+            emit('ready');
+        }),
+    ];
 
     return {
         destroy: () => {
-            off();
+            off.map((f) => f());
         },
         init: protocol.init,
         createVoiceStream,
