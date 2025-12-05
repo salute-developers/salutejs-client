@@ -1,3 +1,20 @@
+# v1.37.1 (Fri Dec 05 2025)
+
+#### 🐛 Bug Fix
+
+- fix: событие ready для createClient [#238](https://github.com/salute-developers/salutejs-client/pull/238) ([@sasha-tlt](https://github.com/sasha-tlt))
+
+#### ⚠️ Pushed to `master`
+
+- test: [autocommit] Save current bundle report ([@Salute-Eva](https://github.com/Salute-Eva))
+
+#### Authors: 2
+
+- [@Salute-Eva](https://github.com/Salute-Eva)
+- Alexander Salmin ([@sasha-tlt](https://github.com/sasha-tlt))
+
+---
+
 # v1.37.0 (Mon Oct 20 2025)
 
 #### 🚀 Enhancement
