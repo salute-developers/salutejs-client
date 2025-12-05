@@ -322,6 +322,10 @@ export const createProtocol = (
         clearQueue: () => {
             messageQueue.splice(0, messageQueue.length);
         },
+        close: () => {
+            transport.close();
+            messageQueue.splice(0, messageQueue.length);
+        },
         destroy: () => {
             destroyed = true;
             transport.close();
